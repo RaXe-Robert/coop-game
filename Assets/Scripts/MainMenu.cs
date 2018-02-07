@@ -22,7 +22,7 @@ public class MainMenu : MonoBehaviour {
         optionsPanel.SetActive(false);
     }
 
-    public void ExtiGame()
+    public void ExitGame()
     {
         Application.Quit();
     }
