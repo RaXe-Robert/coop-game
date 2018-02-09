@@ -7,6 +7,12 @@ public class MainMenu : MonoBehaviour {
 
     public GameObject optionsPanel;
 
+    private void Start()
+    {
+        //Initialize volume to 50% so people don't go deaf.
+        AudioListener.volume = 0.5f;
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene("Game");
@@ -24,6 +30,10 @@ public class MainMenu : MonoBehaviour {
 
     public void ExitGame()
     {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
 }
