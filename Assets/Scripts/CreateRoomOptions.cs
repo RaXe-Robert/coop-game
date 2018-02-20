@@ -18,7 +18,6 @@ public class CreateRoomOptions : MonoBehaviour
             IsVisible = roomVisibilityToggle.isOn,
             MaxPlayers = Convert.ToByte(playerCountDropdown.options[playerCountDropdown.value].text),
             IsOpen = true
-
         };
 
         if (PhotonNetwork.CreateRoom(roomNameText.text, roomOptions, TypedLobby.Default))

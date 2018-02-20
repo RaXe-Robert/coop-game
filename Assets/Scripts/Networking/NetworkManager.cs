@@ -3,9 +3,6 @@ using System.Collections;
 
 public class NetworkManager : MonoBehaviour
 {
-
-    #region MonoBehaviour
-
     private void Start()
     {
         if (!PhotonNetwork.connected)
@@ -14,8 +11,6 @@ public class NetworkManager : MonoBehaviour
             PhotonNetwork.ConnectUsingSettings("v0.1");
         }
     }
-
-    #endregion //MonoBehaviour
 
     #region Photon Callbacks
 

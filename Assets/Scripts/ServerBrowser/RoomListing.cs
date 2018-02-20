@@ -7,10 +7,6 @@ using System.Collections;
 public class RoomListing : MonoBehaviour
 {
     [SerializeField] private Text roomNameDisplayText;
-    public string RoomNameText
-    {
-        get { return roomNameDisplayText.text; }
-    }
 
     public string RoomName { get; private set; }
     public bool Updated { get; set; }

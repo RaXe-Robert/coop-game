@@ -2131,8 +2131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b550dfaebfa59274d9adae55b83f2d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _layoutGroup: {fileID: 1248941874622028}
-  _roomListingPrefab: {fileID: 1562663381077150, guid: 49904fa53a7d065459edd08c73b0d964,
+  layoutGroup: {fileID: 1248941874622028}
+  roomListingPrefab: {fileID: 1562663381077150, guid: 49904fa53a7d065459edd08c73b0d964,
     type: 2}
 --- !u!114 &114183441149642374
 MonoBehaviour:
@@ -3611,9 +3611,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e987d0fa1e4cd34a937af6d968c2274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roomNameText: {fileID: 114128726710021192}
-  _playerCountDropdown: {fileID: 114456088701200714}
-  _roomVisibilityToggle: {fileID: 114397229024994672}
+  roomNameText: {fileID: 114128726710021192}
+  playerCountDropdown: {fileID: 114456088701200714}
+  roomVisibilityToggle: {fileID: 114397229024994672}
 --- !u!114 &114562506134335792
 MonoBehaviour:
   m_ObjectHideFlags: 1
