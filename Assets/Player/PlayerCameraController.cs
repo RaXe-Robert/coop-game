@@ -7,8 +7,8 @@ public class PlayerCameraController : MonoBehaviour
 
     [SerializeField] private GameObject cameraPrefab;
 
-    [SerializeField] private Vector3 CenterOffset;
-    [SerializeField] private bool FollowOnStart;
+    [SerializeField] private Vector3 centerOffset;
+    [SerializeField] private bool followOnStart;
 
     private bool isFollowing;
     private Camera cameraReference = null;
@@ -22,7 +22,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private void Start()
     {
-        if (FollowOnStart)
+        if (followOnStart)
         {
             StartFollowing();
         }
@@ -35,7 +35,7 @@ public class PlayerCameraController : MonoBehaviour
 
         if (target)
         {
-            Vector3 targetPos = new Vector3(target.position.x + CenterOffset.x, target.position.y + CenterOffset.y, target.position.z + CenterOffset.z);
+            Vector3 targetPos = new Vector3(target.position.x + centerOffset.x, target.position.y + centerOffset.y, target.position.z + centerOffset.z);
             cameraReference.transform.position = targetPos;
             cameraReference.transform.LookAt(target);
         }
