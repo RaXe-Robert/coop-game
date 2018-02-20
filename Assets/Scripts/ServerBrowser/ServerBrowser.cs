@@ -4,18 +4,18 @@ using System.Collections.Generic;
 
 public class ServerBrowser : MonoBehaviour
 {
-    [SerializeField] private GameObject _layoutGroup;
+    [SerializeField] private GameObject layoutGroup;
     
-    [SerializeField] private GameObject _roomListingPrefab;
+    [SerializeField] private GameObject roomListingPrefab;
     public GameObject RoomListingPrefab
     {
-        get { return _roomListingPrefab; }
+        get { return roomListingPrefab; }
     }
 
-    private List<RoomListing> _roomListingButtons = new List<RoomListing>();
+    private List<RoomListing> roomListingButtons = new List<RoomListing>();
     public List<RoomListing> RoomListingButtons
     {
-        get { return _roomListingButtons; }
+        get { return roomListingButtons; }
     }
 
     #region MonoBehaviour
@@ -58,7 +58,7 @@ public class ServerBrowser : MonoBehaviour
         {
             if (room.IsVisible && room.PlayerCount < room.MaxPlayers)
             {
-                GameObject roomListingObj = Instantiate(RoomListingPrefab, _layoutGroup.transform, false);
+                GameObject roomListingObj = Instantiate(RoomListingPrefab, layoutGroup.transform, false);
 
                 RoomListing roomListing = roomListingObj.GetComponent<RoomListing>();
                 RoomListingButtons.Add(roomListing);

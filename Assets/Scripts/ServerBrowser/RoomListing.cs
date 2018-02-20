@@ -6,10 +6,10 @@ using System.Collections;
 [RequireComponent(typeof(Button))]
 public class RoomListing : MonoBehaviour
 {
-    [SerializeField] private Text _roomNameDisplayText;
+    [SerializeField] private Text roomNameDisplayText;
     public string RoomNameText
     {
-        get { return _roomNameDisplayText.text; }
+        get { return roomNameDisplayText.text; }
     }
 
     public string RoomName { get; private set; }
@@ -46,7 +46,7 @@ public class RoomListing : MonoBehaviour
     public void SetRoomNameText(string text)
     {
         RoomName = text;
-        _roomNameDisplayText.text = RoomName;
+        roomNameDisplayText.text = RoomName;
     }
 
     #endregion //Public Methods
