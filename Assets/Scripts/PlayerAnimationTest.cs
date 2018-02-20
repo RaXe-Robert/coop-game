@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class PlayerAnimationTest : MonoBehaviour
 {
-
     Animator animator;
 
     // Use this for initialization
     void Start()
     {
         animator = GetComponent<Animator>();
-        StartCoroutine("switchAnimator");
+        StartCoroutine("SwitchAnimator");
     }
 
-    IEnumerator switchAnimator()
+    IEnumerator SwitchAnimator()
     {
         while (true)
         {
