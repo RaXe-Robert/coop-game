@@ -35,6 +35,34 @@ ModelImporter:
     100054: Bone_R_003
     100056: //RootNode
     100058: Cube
+    100060: Ankle_L
+    100062: Ankle_R
+    100064: Feet_L
+    100066: Feet_R
+    100068: Hand_L
+    100070: Hand_R
+    100072: Head
+    100074: LowerArm_L
+    100076: LowerArm_R
+    100078: LowerLeg_L
+    100080: LowerLeg_R
+    100082: LowerSpine
+    100084: Neck
+    100086: Pelvis
+    100088: Shoulder_L
+    100090: Shoulder_R
+    100092: Thumb_L
+    100094: Thumb_R
+    100096: ThumbJoint_L
+    100098: ThumbJoint_R
+    100100: UpperArm_L
+    100102: UpperArm_R
+    100104: UpperLeg_L
+    100106: UpperLeg_R
+    100108: UpperSpine
+    100110: Wrist_L
+    100112: Wrist_R
+    100114: CharacterMesh
     400000: Armature
     400002: Bone
     400004: Bone_001
@@ -65,14 +93,44 @@ ModelImporter:
     400054: Bone_R_003
     400056: //RootNode
     400058: Cube
+    400060: Ankle_L
+    400062: Ankle_R
+    400064: Feet_L
+    400066: Feet_R
+    400068: Hand_L
+    400070: Hand_R
+    400072: Head
+    400074: LowerArm_L
+    400076: LowerArm_R
+    400078: LowerLeg_L
+    400080: LowerLeg_R
+    400082: LowerSpine
+    400084: Neck
+    400086: Pelvis
+    400088: Shoulder_L
+    400090: Shoulder_R
+    400092: Thumb_L
+    400094: Thumb_R
+    400096: ThumbJoint_L
+    400098: ThumbJoint_R
+    400100: UpperArm_L
+    400102: UpperArm_R
+    400104: UpperLeg_L
+    400106: UpperLeg_R
+    400108: UpperSpine
+    400110: Wrist_L
+    400112: Wrist_R
+    400114: CharacterMesh
     2100000: Material
     4300000: Cube
+    4300002: CharacterMesh
     7400000: Default Take
     7400002: IdleAnimation
     7400004: PoseLib
     7400006: RunCycle
     9500000: //RootNode
     13700000: Cube
+    13700002: CharacterMesh
   externalObjects: {}
   materials:
     importMaterials: 1
