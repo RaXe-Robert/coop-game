@@ -42,6 +42,8 @@ public class CreateRoomOptions : MonoBehaviour
     private void OnCreatedRoom()
     {
         print("Room created succesfully.");
+
+        PhotonNetwork.LoadLevel("Game");
     }
 
     #endregion //Photon Callbacks
