@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
+    public GameObject createRoomPanel;
+    public GameObject serverBrowserPanel;
     public GameObject optionsPanel;
 
     private void Start()
@@ -18,6 +20,26 @@ public class MainMenu : MonoBehaviour {
         SceneManager.LoadScene("Game");
     }
 
+    public void ShowCreateRoomPanel()
+    {
+        createRoomPanel.SetActive(true);
+    }
+
+    public void HideCeateRoomPanel()
+    {
+        createRoomPanel.SetActive(false);
+    }
+
+    public void ShowServerBrowser()
+    {
+        serverBrowserPanel.SetActive(true);
+    }
+
+    public void HideServerBrowser()
+    {
+        serverBrowserPanel.SetActive(false);
+    }
+    
     public void ShowOptions()
     {
         optionsPanel.SetActive(true);
