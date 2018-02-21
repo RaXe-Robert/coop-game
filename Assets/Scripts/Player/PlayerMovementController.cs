@@ -4,18 +4,23 @@ using System.Collections;
 public class PlayerMovementController : Photon.MonoBehaviour
 {
     Rigidbody rigidbodyComponent;
+    Animator animator;
 
     [SerializeField] private float movementSpeed;
     [SerializeField] private float mouseDeadZoneFromPlayer;
 
     private PlayerCameraController cameraController = null;
 
-    // Use this for initialization
-    void Start()
+    private void Awake()
     {
         rigidbodyComponent = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
+    }
 
+    // Use this for initialization
+    private void Start()
+    {
         if (photonView.isMine)
         {
             if (cameraController != null)
@@ -37,12 +42,11 @@ public class PlayerMovementController : Photon.MonoBehaviour
         RotatePlayer();
     }
     
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (!photonView.isMine) return;
-        
-        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
-            MovePlayer(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+        MovePlayer();
 
     }
 
@@ -66,13 +70,25 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// <summary>
     /// Moves the player based on horizontal en vertical input axis.
     /// </summary>
-    private void MovePlayer(float horizontal, float vertical)
+    private void MovePlayer()
     {
-        Vector3 movement = new Vector3(horizontal, 0.0f, vertical);
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
 
-        if (horizontal != 0 && vertical != 0)
-            rigidbodyComponent.AddForce(movement * movementSpeed * 0.7071f);
+        if (horizontal != 0 || vertical != 0)
+        {
+            Vector3 movement = new Vector3(horizontal, 0.0f, vertical);
+
+            if (horizontal != 0 && vertical != 0)
+                rigidbodyComponent.AddForce(movement * movementSpeed * 0.7071f);
+            else
+                rigidbodyComponent.AddForce(movement * movementSpeed);
+
+            animator.SetBool("IsRunning", true);
+        }
         else
-            rigidbodyComponent.AddForce(movement * movementSpeed);
+        {
+            animator.SetBool("IsRunning", false);
+        }
     }
 }
