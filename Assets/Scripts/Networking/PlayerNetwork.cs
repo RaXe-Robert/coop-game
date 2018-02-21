@@ -18,7 +18,7 @@ public class PlayerNetwork : MonoBehaviour
         //TODO: HARDCODED
         if (scene.name == "Game")
         {
-            PhotonNetwork.Instantiate("Player", Vector3.up * 2f, Quaternion.identity, 0);
+            PhotonNetwork.Instantiate("Player", Vector3.up, Quaternion.identity, 0);
         }
     }
 }
