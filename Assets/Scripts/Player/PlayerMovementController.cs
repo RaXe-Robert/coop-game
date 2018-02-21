@@ -91,20 +91,4 @@ public class PlayerMovementController : Photon.MonoBehaviour
             animator.SetBool("IsRunning", false);
         }
     }
-
-    #region Photon Callbacks
-
-    private void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.isWriting)
-        {
-            stream.SendNext(animator.GetBool("IsRunning"));
-        }
-        else
-        {
-            animator.SetBool("IsRunning", (bool)stream.ReceiveNext());
-        }
-    }
-
-    #endregion //Photon Callbacks
 }
