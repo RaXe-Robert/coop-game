@@ -11,13 +11,16 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
     private PlayerCameraController cameraController = null;
 
-    // Use this for initialization
-    private void Start()
+    private void Awake()
     {
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
+    }
 
+    // Use this for initialization
+    private void Start()
+    {
         if (photonView.isMine)
         {
             if (cameraController != null)
@@ -91,7 +94,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
     #region Photon Callbacks
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    private void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.isWriting)
         {
