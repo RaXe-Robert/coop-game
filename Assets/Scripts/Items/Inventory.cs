@@ -15,6 +15,8 @@ public class Inventory : MonoBehaviour {
     {
         Size = 20;
         items = new List<Item>();
+
+        
     }
 
     private void Update()
@@ -23,8 +25,10 @@ public class Inventory : MonoBehaviour {
             AddItem(testItem);
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Item.CreateWorldObject(testItem, Vector3.zero);
-            RemoveItem(testItem);
+            for (int i = 0; i < 1000; i++)
+            {
+                ItemFactory.CreateWorldObject(testItem, new Vector3(0, i, 0));
+            }
         }
     }
 
