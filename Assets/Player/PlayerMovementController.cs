@@ -12,7 +12,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private PlayerCameraController cameraController = null;
 
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
@@ -39,7 +39,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         RotatePlayer();
     }
     
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (!photonView.isMine) return;
 
@@ -80,7 +80,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
                 rigidbodyComponent.AddForce(movement * movementSpeed * 0.7071f);
             else
                 rigidbodyComponent.AddForce(movement * movementSpeed);
-            
+
             animator.SetBool("IsRunning", true);
         }
         else
@@ -88,4 +88,20 @@ public class PlayerMovementController : Photon.MonoBehaviour
             animator.SetBool("IsRunning", false);
         }
     }
+
+    #region Photon Callbacks
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            stream.SendNext(animator.GetBool("IsRunning"));
+        }
+        else
+        {
+            animator.SetBool("IsRunning", (bool)stream.ReceiveNext());
+        }
+    }
+
+    #endregion //Photon Callbacks
 }
