@@ -7,7 +7,7 @@ public class CreateRoomOptions : MonoBehaviour
 {
     [SerializeField] private Text roomNameText;
     [SerializeField] private Dropdown playerCountDropdown;
-    [SerializeField] private Toggle roomVisibilityToggle;
+    [SerializeField] private Dropdown roomVisibilityDropdown;
 
     #region Public Methods
 
@@ -15,8 +15,9 @@ public class CreateRoomOptions : MonoBehaviour
     {
         RoomOptions roomOptions = new RoomOptions()
         {
-            IsVisible = roomVisibilityToggle.isOn,
-            MaxPlayers = Convert.ToByte(playerCountDropdown.options[playerCountDropdown.value].text),
+
+            IsVisible = roomVisibilityDropdown.options[roomVisibilityDropdown.value].text == "PUBLIC" ? true : false,
+            MaxPlayers = Convert.ToByte(playerCountDropdown.options[playerCountDropdown.value].text.Substring(0, 1)),
             IsOpen = true
         };
 
