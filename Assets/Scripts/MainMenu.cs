@@ -5,21 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
-    public GameObject mainMenuPanel;
-
-    public GameObject newGameMenuPanel;
-    public GameObject singlePlayerPanel;
-    public GameObject hostGamePanel;
-
-    public GameObject serverBrowserMenuPanel;
-    public GameObject serverBrowserPanel;
-
-    public GameObject optionsMenuPanel;
-
-    public GameObject exitGamePanel;
-
-
-
+    [SerializeField] private GameObject mainMenuPanel;
+    [SerializeField] private GameObject newGameMenuPanel;
+    [SerializeField] private GameObject singlePlayerPanel;
+    [SerializeField] private GameObject hostGamePanel;
+    [SerializeField] private GameObject serverBrowserMenuPanel;
+    [SerializeField] private GameObject serverBrowserPanel;
+    [SerializeField] private GameObject optionsMenuPanel;
+    [SerializeField] private GameObject controlsPanel;
+    [SerializeField] private GameObject videoSettingsPanel;
+    [SerializeField] private GameObject audioSettingsPanel;
+    [SerializeField] private GameObject exitGamePanel;
 
     private void Start()
     {
@@ -69,6 +65,8 @@ public class MainMenu : MonoBehaviour {
     public void ShowOptionsMenuPanel()
     {
         optionsMenuPanel.SetActive(true);
+        ShowControlsPanel();
+        HideMainMenuPanel();
     }
 
     public void HideOptionsMenuPanel()
@@ -91,6 +89,7 @@ public class MainMenu : MonoBehaviour {
     {
         hostGamePanel.SetActive(true);
         HideSinglePlayerPanel();
+        HideServerBrowserPanel();
     }
 
     public void HideHostGamePanel()
@@ -101,42 +100,75 @@ public class MainMenu : MonoBehaviour {
     public void ShowServerBrowserPanel()
     {
         serverBrowserPanel.SetActive(true);
+        HideHostGamePanel();
     }
 
     public void HideServerBrowserPanel()
     {
         serverBrowserPanel.SetActive(false);
     }
-    
-    public void ShowOptionsMenu()
+
+    public void ShowControlsPanel()
     {
-        optionsMenuPanel.SetActive(true);
+        controlsPanel.SetActive(true);
+        HideVideoSettingsPanel();
+        HideAudioSettingsPanel();
     }
 
-    public void HideOptionsMenu()
+    public void HideControlsPanel()
     {
-        optionsMenuPanel.SetActive(false);
+        controlsPanel.SetActive(false);
+    }
+
+    public void ShowVideoSettingsPanel()
+    {
+        videoSettingsPanel.SetActive(true);
+        HideControlsPanel();
+        HideAudioSettingsPanel();
+    }
+
+    public void HideVideoSettingsPanel()
+    {
+        videoSettingsPanel.SetActive(false);
+    }
+
+    public void ShowAudioSettingsPanel()
+    {
+        audioSettingsPanel.SetActive(true);
+        HideControlsPanel();
+        HideVideoSettingsPanel();
+    }
+
+    public void HideAudioSettingsPanel()
+    {
+        audioSettingsPanel.SetActive(false);
     }
    
     public void ShowExitGamePanel()
     {
         exitGamePanel.SetActive(true);
+        HideMainMenuPanel();
     }
 
     public void HideExitGamePanel()
     {
         exitGamePanel.SetActive(false);
+        ShowMainMenuPanel();
     }
 
     public void HideAllPanelsExceptMain()
     {
-        mainMenuPanel.SetActive(true);
-        newGameMenuPanel.SetActive(false);
-        singlePlayerPanel.SetActive(false);
-        hostGamePanel.SetActive(false);
-        serverBrowserMenuPanel.SetActive(false);
-        optionsMenuPanel.SetActive(false);
-        exitGamePanel.SetActive(false);
+        ShowMainMenuPanel();
+        HideNewGameMenuPanel();
+        HideSinglePlayerPanel();
+        HideHostGamePanel();
+        HideServerBrowserMenuPanel();
+        HideServerBrowserPanel();
+        HideOptionsMenuPanel();
+        HideControlsPanel();
+        HideVideoSettingsPanel();
+        HideAudioSettingsPanel();
+        HideExitGamePanel();        
     }
 
     public void ExitGame()
