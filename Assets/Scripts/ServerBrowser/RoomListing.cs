@@ -3,10 +3,11 @@ using UnityEngine.UI;
 
 using System.Collections;
 
-[RequireComponent(typeof(Button))]
 public class RoomListing : MonoBehaviour
 {
-    [SerializeField] private Text roomNameDisplayText;
+    [SerializeField] private Text nameText;
+    [SerializeField] private Text playerCountText;
+    [SerializeField] private Button connectButton;
 
     public string RoomName { get; private set; }
     public bool Updated { get; set; }
@@ -15,8 +16,7 @@ public class RoomListing : MonoBehaviour
 
     private void Start()
     {
-        Button button = GetComponent<Button>();
-        button.onClick.AddListener(OnClick);
+        connectButton?.onClick.AddListener(OnClick);
     }
 
     #endregion //MonoBehaviour
@@ -39,11 +39,16 @@ public class RoomListing : MonoBehaviour
 
     #region Public Methods
 
-    public void SetRoomNameText(string text)
+    public void SetRoomName(string text)
     {
         RoomName = text;
-        roomNameDisplayText.text = RoomName;
+        nameText.text = RoomName;
     }
 
+    public void SetPlayerCount(int currentPlayers, int maxPlayers)
+    {
+        playerCountText.text = $"{currentPlayers}/{maxPlayers}";
+    }
+    
     #endregion //Public Methods
 }
