@@ -23,7 +23,7 @@ public class ItemFactory : MonoBehaviour {
     {
         var itemId = 0;
         var photonId = PhotonNetwork.AllocateViewID();
-        photonView.RPC("SpawnItemOnNetwork", PhotonTargets.MasterClient, position, photonId, itemId);
+        photonView.RPC("SpawnItemOnNetwork", PhotonTargets.AllBuffered, position, photonId, itemId);
     }
 
     [PunRPC]

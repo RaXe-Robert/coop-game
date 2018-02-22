@@ -21,6 +21,8 @@ public class Inventory : MonoBehaviour {
 
     private void Update()
     {
+        if (!GetComponent<PhotonView>().isMine)
+            return;
         if (Input.GetKeyDown(KeyCode.E))
             AddItem(testItem);
         if (Input.GetKeyDown(KeyCode.Q))
