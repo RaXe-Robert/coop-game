@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Test Helm
   sprite: {fileID: 21300000, guid: fe9e17c7b51bc6a43bf9853dd129cb7c, type: 3}
-  description: This is a helmet of testing
   model: {fileID: 100000, guid: 0755cafc4deea3948bae26388f5da178, type: 3}
+  description: This is a helmet of testing
   type: 0
   defense: 2

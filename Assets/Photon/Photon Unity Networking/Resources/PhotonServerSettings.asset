@@ -37,4 +37,5 @@ MonoBehaviour:
   - RequestForPickupItems
   - RequestForPickupTimes
   - SwitchAnimation
+  - SpawnItemOnNetwork
   DisableAutoOpenWizard: 1

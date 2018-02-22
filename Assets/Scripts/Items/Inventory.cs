@@ -25,9 +25,9 @@ public class Inventory : MonoBehaviour {
             AddItem(testItem);
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 1; i++)
             {
-                ItemFactory.CreateWorldObject(testItem, new Vector3(0, i, 0));
+                FindObjectOfType<ItemFactory>().CreateWorldObject(testItem, new Vector3(0, 2, 0));
             }
         }
     }
