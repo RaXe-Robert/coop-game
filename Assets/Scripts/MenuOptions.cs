@@ -25,7 +25,7 @@ public class MenuOptions : MonoBehaviour
     {
         //TODO: split into music and audio volume sliders using the audio mixer.
         AudioListener.volume = volume;
-        volumeAmount.text = (volume * 100).ToString("F0") + "%";
+        volumeAmount.text = (volume).ToString("F0") + "%";
     }
     
     public void SetFullScreen(bool isFullscreen)

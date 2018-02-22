@@ -57,7 +57,8 @@ public class ServerBrowser : MonoBehaviour
         if (index != -1)
         {
             RoomListing roomListing = roomListingButtons[index];
-            roomListing.SetRoomNameText(room.Name);
+            roomListing.SetRoomName(room.Name);
+            roomListing.SetPlayerCount(room.PlayerCount, room.MaxPlayers);
             roomListing.Updated = true;
         }
     }
