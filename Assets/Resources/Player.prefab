@@ -1045,8 +1045,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10496ef532eded54385cba73a56a5be9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testItem: {fileID: 11400000, guid: 0629cb9b7bec0b84a97e7741e59572cb, type: 2}
-  items: []
+  testItem: {fileID: 11400000, guid: eedb4b4d7d60c0b44bdd8028ba491398, type: 2}
+  inventoryItems: []
+  hotBarItems: []
 --- !u!114 &114801168947922496
 MonoBehaviour:
   m_ObjectHideFlags: 1

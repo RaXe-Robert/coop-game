@@ -23,15 +23,16 @@ public class Inventory : MonoBehaviour {
 
     private void Update()
     {
+        if (!GetComponent<PhotonView>().isMine)
+            return;
+
         if (Input.GetKeyDown(KeyCode.E))
             AddItem(testItem);
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            for (int i = 0; i < 1; i++)
-            {
+            FindObjectOfType<ItemFactory>().CreateWorldObject(testItem, transform.position + Vector3.up);
+            if(inventoryItems.Contains(testItem) || hotBarItems.Contains(testItem))
                 RemoveItem(testItem);
-                FindObjectOfType<ItemFactory>().CreateWorldObject(testItem, transform.position + Vector3.up);
-            }
         }
     }
 
@@ -81,6 +82,7 @@ public class Inventory : MonoBehaviour {
             if (hotBarItems.Contains(item))
             {
                 hotBarItems.Remove(item);
+                OnItemChangedCallback?.Invoke();
             }
             else
             {
