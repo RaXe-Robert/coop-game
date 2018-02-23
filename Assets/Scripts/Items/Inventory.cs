@@ -47,8 +47,8 @@ public class Inventory : MonoBehaviour {
         {
             if (inventoryItems.Count >= InventorySize)
             {
-                print($"Tried adding {item.name} but the inventory is full");
-                return false; //Inventory is full
+                print($"Inventory is full");
+                return false;
             }
             else
             {
@@ -73,7 +73,6 @@ public class Inventory : MonoBehaviour {
     {
         if (inventoryItems.Contains(item))
         {
-            print($"Removed {item.name} from the inventory");
             inventoryItems.Remove(item);
             OnItemChangedCallback?.Invoke();
         }
