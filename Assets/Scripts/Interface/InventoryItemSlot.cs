@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class InventoryItemSlot : MonoBehaviour {
-    private Inventory inventory;
     public Image icon;
     private Item item;
 

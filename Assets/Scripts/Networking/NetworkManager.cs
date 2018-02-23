@@ -9,6 +9,7 @@ public class NetworkManager : MonoBehaviour
         {
             print("Connecting to server...");
             PhotonNetwork.ConnectUsingSettings("v0.1");
+            PhotonNetwork.autoCleanUpPlayerObjects = false;
         }
     }
 

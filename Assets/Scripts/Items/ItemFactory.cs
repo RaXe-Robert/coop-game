@@ -21,9 +21,8 @@ public class ItemFactory : MonoBehaviour {
     /// <returns>The newly created gameObject</returns>
     public void CreateWorldObject(Item item, Vector3 position, Transform parent = null)
     {
-        var itemId = 0;
         var photonId = PhotonNetwork.AllocateViewID();
-        photonView.RPC("SpawnItemOnNetwork", PhotonTargets.AllBuffered, position, photonId, itemId);
+        photonView.RPC("SpawnItemOnNetwork", PhotonTargets.AllBuffered, position, photonId, item.Id);
     }
 
     [PunRPC]
@@ -37,10 +36,9 @@ public class ItemFactory : MonoBehaviour {
 
         //Get the mesh and materials from the referenced model.
         var itemMesh = item.Model.GetComponent<MeshFilter>().sharedMesh;
-        var itemMaterials = item.Model.GetComponent<MeshRenderer>().sharedMaterials;
 
         //Assign the mesh and materials to the new gameObject.
-        go.GetComponent<MeshRenderer>().sharedMaterials = itemMaterials;
+        go.GetComponent<MeshRenderer>().sharedMaterials = item.Model.GetComponent<MeshRenderer>().sharedMaterials;
         go.GetComponent<MeshFilter>().sharedMesh = itemMesh;
 
         //Create the collider and make it convex

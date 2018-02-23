@@ -6,29 +6,39 @@ using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour {
 
     [SerializeField] private GameObject inventoryUIGo;
+    [SerializeField] private GameObject hotbarUIGo;
     [SerializeField] private Inventory inventory;
 
-    private InventoryItemSlot[] itemSlots;
+    private InventoryItemSlot[] inventorySlots;
+    private InventoryItemSlot[] hotbarSlots;
 
-	void Start () {
-        //TODO: find a good way to get the right inventory when there are multiple players.
+    private void Start () {
         inventory = FindObjectOfType<Inventory>();
-        itemSlots = inventoryUIGo.GetComponentsInChildren<InventoryItemSlot>();
+        inventorySlots = inventoryUIGo.GetComponentsInChildren<InventoryItemSlot>();
+        hotbarSlots = hotbarUIGo.GetComponentsInChildren<InventoryItemSlot>();
+
         inventory.OnItemChangedCallback += UpdateUI;
 	}
 	
-	void Update () {
+	private void Update () {
         if (Input.GetKeyDown(KeyCode.B) || Input.GetKeyDown(KeyCode.I))
             inventoryUIGo.SetActive(!inventoryUIGo.activeSelf);
 	}
 
     private void UpdateUI()
     {
-        for (int i = 0; i < itemSlots.Length; i++)
+        for (int i = 0; i < inventorySlots.Length; i++)
         {
-            if (i < inventory.items.Count)
-                itemSlots[i].AddItem(inventory.items[i]);
-            else itemSlots[i].Clear();
+            if (i < inventory.inventoryItems.Count)
+                inventorySlots[i].AddItem(inventory.inventoryItems[i]);
+            else inventorySlots[i].Clear();
+        }
+
+        for (int i = 0; i < hotbarSlots.Length; i++)
+        {
+            if (i < inventory.hotBarItems.Count)
+                hotbarSlots[i].AddItem(inventory.hotBarItems[i]);
+            else hotbarSlots[i].Clear();
         }
     }
 }

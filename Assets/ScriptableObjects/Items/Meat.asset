@@ -8,12 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d11520a5ae26ca4f93acf2ea1753e64, type: 3}
-  m_Name: Helmet of Testing
+  m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
+  m_Name: Meat
   m_EditorClassIdentifier: 
-  itemName: Test Helm
+  itemName: Meat
   sprite: {fileID: 21300000, guid: fe9e17c7b51bc6a43bf9853dd129cb7c, type: 3}
   model: {fileID: 100000, guid: 0755cafc4deea3948bae26388f5da178, type: 3}
-  description: This is a helmet of testing
-  type: 0
-  defense: 2
+  description: Piece of Robert
+  stackSize: 64

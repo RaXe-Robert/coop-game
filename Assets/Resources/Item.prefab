@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 114904220988938578}
   - component: {fileID: 114774955469165838}
   m_Layer: 0
-  m_Name: Test Helm
+  m_Name: Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

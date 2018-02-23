@@ -5,31 +5,32 @@ using UnityEngine;
 public class Inventory : MonoBehaviour {
 
     public Item testItem;
-    public List<Item> items;
-    public int Size { get; private set; }
+    public List<Item> inventoryItems;
+    public List<Item> hotBarItems;
+    public int InventorySize { get; private set; }
+    public int HotbarSize { get; private set; }
 
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;
 
     private void Start()
     {
-        Size = 20;
-        items = new List<Item>();
-
-        
+        InventorySize = 20;
+        HotbarSize = 10;
+        inventoryItems = new List<Item>();
+        hotBarItems = new List<Item>();
     }
 
     private void Update()
     {
-        if (!GetComponent<PhotonView>().isMine)
-            return;
         if (Input.GetKeyDown(KeyCode.E))
             AddItem(testItem);
         if (Input.GetKeyDown(KeyCode.Q))
         {
             for (int i = 0; i < 1; i++)
             {
-                FindObjectOfType<ItemFactory>().CreateWorldObject(testItem, new Vector3(0, 2, 0));
+                RemoveItem(testItem);
+                FindObjectOfType<ItemFactory>().CreateWorldObject(testItem, transform.position + Vector3.up);
             }
         }
     }
@@ -41,14 +42,23 @@ public class Inventory : MonoBehaviour {
     /// <returns>Wether the item is added succesfully</returns>
     public bool AddItem(Item item)
     {
-        if (items.Count >= Size)
+        if(hotBarItems.Count >= HotbarSize)
         {
-            print($"Tried adding {item.name} but the inventory is full");
-            return false; //Inventory is full
+            if (inventoryItems.Count >= InventorySize)
+            {
+                print($"Tried adding {item.name} but the inventory is full");
+                return false; //Inventory is full
+            }
+            else
+            {
+                inventoryItems.Add(item);
+                OnItemChangedCallback?.Invoke();
+                return true;
+            }
         }
         else
         {
-            items.Add(item);
+            hotBarItems.Add(item);
             OnItemChangedCallback?.Invoke();
             return true;
         }
@@ -60,13 +70,22 @@ public class Inventory : MonoBehaviour {
     /// <param name="item"></param>
     public void RemoveItem(Item item)
     {
-        if (items.Contains(item))
+        if (inventoryItems.Contains(item))
         {
             print($"Removed {item.name} from the inventory");
-            items.Remove(item);
+            inventoryItems.Remove(item);
             OnItemChangedCallback?.Invoke();
         }
         else
-            print($"Tried removing {item.name} but it couldnt be found in the inventory");
+        {
+            if (hotBarItems.Contains(item))
+            {
+                hotBarItems.Remove(item);
+            }
+            else
+            {
+                print($"Tried removing {item.name} but it couldnt be found in the inventory");
+            }
+        }
     }
 }
