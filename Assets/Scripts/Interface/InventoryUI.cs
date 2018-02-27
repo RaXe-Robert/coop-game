@@ -30,14 +30,14 @@ public class InventoryUI : MonoBehaviour {
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             if (i < inventory.inventoryItems.Count)
-                inventorySlots[i].AddItem(inventory.inventoryItems[i]);
+                inventorySlots[i].Item = inventory.inventoryItems[i];
             else inventorySlots[i].Clear();
         }
 
         for (int i = 0; i < hotbarSlots.Length; i++)
         {
             if (i < inventory.hotBarItems.Count)
-                hotbarSlots[i].AddItem(inventory.hotBarItems[i]);
+                hotbarSlots[i].Item = inventory.hotBarItems[i];
             else hotbarSlots[i].Clear();
         }
     }
