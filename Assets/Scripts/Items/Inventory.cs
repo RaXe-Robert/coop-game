@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour {
-
+public class Inventory : MonoBehaviour
+{
     public Item testItem;
     public List<Item> inventoryItems;
-    public List<Item> hotBarItems;
+
     public int InventorySize { get; private set; }
     public int HotbarSize { get; private set; }
 
@@ -18,7 +18,6 @@ public class Inventory : MonoBehaviour {
         InventorySize = 20;
         HotbarSize = 10;
         inventoryItems = new List<Item>();
-        hotBarItems = new List<Item>();
     }
 
     private void Update()
@@ -28,12 +27,9 @@ public class Inventory : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.E))
             AddItem(testItem);
+
         if (Input.GetKeyDown(KeyCode.Q))
-        {
             FindObjectOfType<ItemFactory>().CreateWorldObject(testItem, transform.position + Vector3.up);
-            if(inventoryItems.Contains(testItem) || hotBarItems.Contains(testItem))
-                RemoveItem(testItem);
-        }
     }
 
     /// <summary>
@@ -43,23 +39,14 @@ public class Inventory : MonoBehaviour {
     /// <returns>Wether the item is added succesfully</returns>
     public bool AddItem(Item item)
     {
-        if(hotBarItems.Count >= HotbarSize)
+        if (inventoryItems.Count >= InventorySize)
         {
-            if (inventoryItems.Count >= InventorySize)
-            {
-                print($"Inventory is full");
-                return false;
-            }
-            else
-            {
-                inventoryItems.Add(item);
-                OnItemChangedCallback?.Invoke();
-                return true;
-            }
+            print("Inventory is full");
+            return false;
         }
         else
         {
-            hotBarItems.Add(item);
+            inventoryItems.Add(item);
             OnItemChangedCallback?.Invoke();
             return true;
         }
@@ -69,24 +56,14 @@ public class Inventory : MonoBehaviour {
     /// Removes an Item from the inventory
     /// </summary>
     /// <param name="item"></param>
-    public void RemoveItem(Item item)
+    public void RemoveItem(int index)
     {
-        if (inventoryItems.Contains(item))
+        if (index < inventoryItems.Count && inventoryItems[index] != null)
         {
-            inventoryItems.Remove(item);
+            inventoryItems.RemoveAt(index);
             OnItemChangedCallback?.Invoke();
         }
         else
-        {
-            if (hotBarItems.Contains(item))
-            {
-                hotBarItems.Remove(item);
-                OnItemChangedCallback?.Invoke();
-            }
-            else
-            {
-                print($"Tried removing {item.name} but it couldnt be found in the inventory");
-            }
-        }
+            print($"Tried removing item at index {index} but it couldnt be found in the inventory");
     }
 }

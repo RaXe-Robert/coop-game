@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
-    public Image icon;
+public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
+    [SerializeField] public InventoryUI inventoryUI;
+    [SerializeField] private Image image;
+    
     private Item item;
+    private Vector3 initialPosition;
 
     public Item Item
     {
@@ -18,20 +21,21 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         set
         {
             item = value;
-            icon.sprite = item.Sprite;
-            icon.enabled = true;
+            image.sprite = item?.Sprite;
+            image.enabled = item != null;
         }
     }
 
     public void Start()
     {
-        
+        initialPosition = transform.position;
+        image = GetComponent<Image>();
     }
 
     public void Clear()
     {
         item = null;
-        icon.sprite = null;
+        image.sprite = null;
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
@@ -50,5 +54,29 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         var tooltip = Tooltip.Instance;
         tooltip.Hide();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        transform.position = eventData.position;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        transform.position = initialPosition;
+        //image.raycastTarget = true;
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        var from = eventData.pointerDrag.GetComponent<InventoryItemSlot>();
+        Item = from.item;
+        from.Item = null;
+        inventoryUI.UpdateUI();
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        image.raycastTarget = false;
     }
 }

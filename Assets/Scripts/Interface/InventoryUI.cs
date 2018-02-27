@@ -25,9 +25,9 @@ public class InventoryUI : MonoBehaviour {
             inventoryUIGo.SetActive(!inventoryUIGo.activeSelf);
 	}
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
-        for (int i = 0; i < inventorySlots.Length; i++)
+        for (int i = hotbarSlots.Length; i < inventorySlots.Length; i++)
         {
             if (i < inventory.inventoryItems.Count)
                 inventorySlots[i].Item = inventory.inventoryItems[i];
@@ -36,8 +36,8 @@ public class InventoryUI : MonoBehaviour {
 
         for (int i = 0; i < hotbarSlots.Length; i++)
         {
-            if (i < inventory.hotBarItems.Count)
-                hotbarSlots[i].Item = inventory.hotBarItems[i];
+            if (i < inventory.inventoryItems.Count)
+                hotbarSlots[i].Item = inventory.inventoryItems[i];
             else hotbarSlots[i].Clear();
         }
     }
