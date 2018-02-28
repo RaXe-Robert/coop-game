@@ -22,8 +22,6 @@ public class GameMenuScript : MonoBehaviour {
 
     public void QuitGame()
     {
-        Debug.Log("Room cleanup... leaving");
-        PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.player.ID);
         PhotonNetwork.LeaveRoom();       
     }
 
