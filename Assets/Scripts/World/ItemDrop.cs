@@ -9,11 +9,6 @@ public class ItemDrop : MonoBehaviour {
     [SerializeField] private List<int> itemCount;
     [SerializeField] private int minRadius;
     [SerializeField] private int maxRadius;
-    
-    // Use this for initialization
-    void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -32,12 +27,10 @@ public class ItemDrop : MonoBehaviour {
 
     void spawnObject(GameObject go)
     {
-        Vector3 position = this.gameObject.transform.position;
-        Quaternion rotation = this.gameObject.transform.rotation;
-        rotation.x = 90;
+        Vector3 position = this.gameObject.transform.position;        
         position.x = Random.Range(minRadius, maxRadius);
         position.z = Random.Range(minRadius, maxRadius);
-        Instantiate(go, position, rotation);
+        Instantiate(go, position, Quaternion.identity);
     }
 
     void destroy()

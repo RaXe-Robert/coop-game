@@ -5,13 +5,8 @@ using UnityEngine;
 public class ObjectHealth : MonoBehaviour {
 
     [SerializeField] private int health;
-    [SerializeField] private bool broken = false;
+    private bool broken = false;
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
 	// Update is called once per frame
 	void Update () {
         if (health <= 0)
@@ -25,10 +20,24 @@ public class ObjectHealth : MonoBehaviour {
         return broken;
     }
 
-    void OnMouseDown()
+    public void minusHealth(int h)
     {
-        health -= 100;
-        Debug.Log(broken);
-        Debug.Log(health);
+        health -= h;
+    }
+
+    public void plusHealth(int h)
+    {
+        health += h;
+    }
+
+    public int getHealth()
+    {
+        return health;
+    }
+
+    public int setHealth(int h)
+    {
+        health = h;
+        return health;
     }
 }
