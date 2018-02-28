@@ -20,5 +20,9 @@ public class PlayerNetwork : MonoBehaviour
         {
             PhotonNetwork.Instantiate("Player", Vector3.up, Quaternion.identity, 0);
         }
+        else if (scene.name == "MainMenu")
+        {
+            Debug.Log("Returned to main menu");
+        }
     }
 }
