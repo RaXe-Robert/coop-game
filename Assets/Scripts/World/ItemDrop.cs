@@ -18,23 +18,24 @@ public class ItemDrop : MonoBehaviour {
             {
                 for (int y = 0; y < itemCount[x]; y++)
                 {
-                    spawnObject(itemObject[x]);
-                    destroy();
+                    spawnObject(itemObject[x]);                    
                 }
             }
+            destroy();
         }
 	}
 
     void spawnObject(GameObject go)
     {
-        Vector3 position = this.gameObject.transform.position;        
-        position.x = Random.Range(minRadius, maxRadius);
-        position.z = Random.Range(minRadius, maxRadius);
-        Instantiate(go, position, Quaternion.identity);
+        Vector3 position = this.gameObject.transform.position;
+        position.x = Random.Range(minRadius, maxRadius) + this.gameObject.transform.position.x;
+        position.z = Random.Range(minRadius, maxRadius) + this.gameObject.transform.position.z;
+        position.y = 0.5f;
+        Instantiate(go, position, Quaternion.Euler(90, Random.Range(0,180), 0));
     }
 
     void destroy()
     {
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 }
