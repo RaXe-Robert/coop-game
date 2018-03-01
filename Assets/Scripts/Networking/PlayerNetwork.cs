@@ -4,12 +4,23 @@ using System.Collections;
 
 public class PlayerNetwork : MonoBehaviour
 {
-    public string PlayerName { get; private set; }
+    public static string PlayerName
+    {
+        get
+        {
+            return PhotonNetwork.player.NickName;
+        }
+        set
+        {
+            PhotonNetwork.player.NickName = value;
+        }
+    }
+
+    public GameObject PlayerObject { get; private set; }
+
 
     private void Awake()
-    {
-        PlayerName = "User" + Random.Range(1000, 9999);
-
+    {  
         SceneManager.sceneLoaded += OnSceneFinishedLoading;
     }
 
@@ -18,7 +29,7 @@ public class PlayerNetwork : MonoBehaviour
         //TODO: HARDCODED
         if (scene.name == "Game")
         {
-            PhotonNetwork.Instantiate("Player", Vector3.up, Quaternion.identity, 0);
+            PlayerObject = PhotonNetwork.Instantiate("Player", Vector3.up, Quaternion.identity, 0);
         }
         else if (scene.name == "MainMenu")
         {
