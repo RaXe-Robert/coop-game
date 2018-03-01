@@ -6,17 +6,11 @@ public class PlayerNetwork : MonoBehaviour
 {
     public static string PlayerName
     {
-        get
-        {
-            return PhotonNetwork.player.NickName;
-        }
-        set
-        {
-            PhotonNetwork.player.NickName = value;
-        }
+        get { return PhotonNetwork.player.NickName; }
+        set { PhotonNetwork.player.NickName = value; }
     }
 
-    public GameObject PlayerObject { get; private set; }
+    public static GameObject PlayerObject { get; private set; } = null;
 
 
     private void Awake()

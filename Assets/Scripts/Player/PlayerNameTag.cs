@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Adds a nametag at the players position
+/// </summary>
 public class PlayerNameTag : Photon.MonoBehaviour {
 
     private PlayerCameraController cameraController;
@@ -24,7 +27,7 @@ public class PlayerNameTag : Photon.MonoBehaviour {
 
     private void Start()
     {
-        cameraController = FindObjectOfType<PlayerNetwork>().PlayerObject?.GetComponent<PlayerCameraController>();
+        cameraController = PlayerNetwork.PlayerObject?.GetComponent<PlayerCameraController>();
     }
 
     private void OnGUI()
@@ -32,7 +35,9 @@ public class PlayerNameTag : Photon.MonoBehaviour {
         if (cameraController?.CameraReference == null)
             return;
         
-        Vector3 screenPos = cameraController.CameraReference.WorldToScreenPoint(transform.position - positionOffset);
+        Vector3 screenPos = cameraController.CameraReference.WorldToScreenPoint(transform.position + positionOffset);
+        screenPos.y = Screen.height - screenPos.y;
+
         GUI.Label(new Rect(screenPos.x - (width / 2), screenPos.y - (height / 2), width, height), photonView.owner.NickName, guiStyle);
     }
 }

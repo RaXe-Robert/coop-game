@@ -933,7 +933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c6d90f3ee831704980ee066006273b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionOffset: {x: 0, y: 0, z: 5}
+  positionOffset: {x: 0, y: 5.5, z: 0}
   width: 50
   height: 5
 --- !u!114 &114267458168949994
