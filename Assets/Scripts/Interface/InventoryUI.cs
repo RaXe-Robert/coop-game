@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour {
+    public static readonly int inventorySize = 20;
+    public static readonly int hotbarSize = 10;
 
     [SerializeField] private GameObject inventorySlotPrefab;
 
@@ -43,7 +45,7 @@ public class InventoryUI : MonoBehaviour {
 
     public void UpdateUI()
     {
-        for (int i = hotbarSlots.Length; i < inventorySlots.Length; i++)
+        for (int i = hotbarSlots.Length; i < inventorySize; i++)
         {
             if (i < inventory.inventoryItems.Count)
                 inventorySlots[i].Item = inventory.inventoryItems[i];
