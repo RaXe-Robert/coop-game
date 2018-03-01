@@ -18,7 +18,7 @@ public class NetworkManager : MonoBehaviour
     {
         print("Connected to master.");
         PhotonNetwork.automaticallySyncScene = true;
-        PlayerNetwork.PlayerName = "User" + Random.Range(1000, 9999);
+        PlayerNetwork.PlayerName = SystemInfo.deviceName;
         PhotonNetwork.JoinLobby(TypedLobby.Default);
     }
 
