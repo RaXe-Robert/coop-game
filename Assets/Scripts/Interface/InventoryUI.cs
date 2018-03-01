@@ -15,23 +15,8 @@ public class InventoryUI : MonoBehaviour {
     private void Start () {
         inventory = FindObjectOfType<Inventory>();
         inventorySlots = new List<InventoryItemSlot>(Inventory.InventorySize + Inventory.HotbarSize);
-
-        //Setup hotbar
-        for (int i = 0; i < Inventory.HotbarSize; i++)
-        {
-            var go = Instantiate(inventorySlotPrefab, hotbarUIGo.transform);
-            inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
-            inventorySlots[i].Initialize(i, inventory, this);
-        }
-
-        //Setup inventory
-        for (int i = Inventory.HotbarSize; i < Inventory.HotbarSize + Inventory.InventorySize; i++)
-        {
-            var go = Instantiate(inventorySlotPrefab, inventoryUIGo.transform);
-            inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
-            inventorySlots[i].Initialize(i, inventory, this);
-        }
-
+        InitializeHotbar();
+        InitializeInventory();
         inventory.OnItemChangedCallback += UpdateUI;
 	}
 	
@@ -54,6 +39,26 @@ public class InventoryUI : MonoBehaviour {
             if (i < inventory.inventoryItems.Count)
                 inventorySlots[i].Item = inventory.inventoryItems[i];
             else inventorySlots[i].Clear();
+        }
+    }
+
+    private void InitializeHotbar()
+    {
+        for (int i = 0; i < Inventory.HotbarSize; i++)
+        {
+            var go = Instantiate(inventorySlotPrefab, hotbarUIGo.transform);
+            inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
+            inventorySlots[i].Initialize(i, inventory, this);
+        }
+    }
+
+    private void InitializeInventory()
+    {
+        for (int i = Inventory.HotbarSize; i < Inventory.HotbarSize + Inventory.InventorySize; i++)
+        {
+            var go = Instantiate(inventorySlotPrefab, inventoryUIGo.transform);
+            inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
+            inventorySlots[i].Initialize(i, inventory, this);
         }
     }
 }

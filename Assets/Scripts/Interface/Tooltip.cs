@@ -7,8 +7,8 @@ public class Tooltip : MonoBehaviour
 {
     public static Tooltip Instance { get; private set; }
 
-    [SerializeField] GameObject panel;
-    [SerializeField] Text text;
+    [SerializeField] private GameObject panel;
+    [SerializeField] private Text text;
 
     private void Awake()
     {
@@ -16,25 +16,27 @@ public class Tooltip : MonoBehaviour
             Instance = this;
     }
 
+    /// <summary>
+    /// Shows the tooltip with the given text
+    /// </summary>
     public void Show(string text)
     {
         panel.SetActive(true);
         this.text.text = text;
     }
 
+    /// <summary>
+    /// Hides the tooltip
+    /// </summary>
     public void Hide()
     {
+        text.text = "";
         panel.SetActive(false);
     }
 
-    // Use this for initialization
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        panel.transform.position = Input.mousePosition + new Vector3(0, 50, 0);
+        if(panel.activeSelf)
+            panel.transform.position = Input.mousePosition + new Vector3(0, 50, 0);
     }
 }

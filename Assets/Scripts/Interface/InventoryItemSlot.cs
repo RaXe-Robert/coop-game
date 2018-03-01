@@ -51,14 +51,12 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (item == null)
             return;
 
-        var tooltip = Tooltip.Instance;
-        tooltip.Show(item.Description);
+        Tooltip.Instance.Show(item.Description);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        var tooltip = Tooltip.Instance;
-        tooltip.Hide();
+        Tooltip.Instance.Hide();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
