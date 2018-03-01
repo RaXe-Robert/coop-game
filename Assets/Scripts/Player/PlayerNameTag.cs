@@ -32,7 +32,7 @@ public class PlayerNameTag : Photon.MonoBehaviour {
 
     private void OnGUI()
     {
-        if (cameraController?.CameraReference == null)
+        if (photonView.owner == null || cameraController?.CameraReference == null)
             return;
         
         Vector3 screenPos = cameraController.CameraReference.WorldToScreenPoint(transform.position + positionOffset);
