@@ -10,6 +10,8 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     
     private Item item;
     private Vector3 initialPosition;
+    private Inventory inventory;
+    private int index;
 
     public Item Item
     {
@@ -24,6 +26,12 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
             image.sprite = item?.Sprite;
             image.enabled = item != null;
         }
+    }
+
+    public void Initialize(int index, Inventory inventory)
+    {
+        this.index = index;
+        this.inventory = inventory;
     }
 
     public void Start()

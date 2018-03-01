@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour {
 
+    [SerializeField] private GameObject inventorySlotPrefab;
+
     [SerializeField] private GameObject inventoryUIGo;
     [SerializeField] private GameObject hotbarUIGo;
     [SerializeField] private Inventory inventory;
@@ -16,6 +18,20 @@ public class InventoryUI : MonoBehaviour {
         inventory = FindObjectOfType<Inventory>();
         inventorySlots = inventoryUIGo.GetComponentsInChildren<InventoryItemSlot>();
         hotbarSlots = hotbarUIGo.GetComponentsInChildren<InventoryItemSlot>();
+
+        //Setup hotbar
+        for (int i = 0; i < 10; i++)
+        {
+            var go = Instantiate(inventorySlotPrefab, hotbarUIGo.transform);
+            go.GetComponent<InventoryItemSlot>().Initialize(i, inventory);
+        }
+
+        //Setup inventory
+        for (int i = 0; i < 20; i++)
+        {
+            var go = Instantiate(inventorySlotPrefab, inventoryUIGo.transform);
+            go.GetComponent<InventoryItemSlot>().Initialize(i + 10, inventory);
+        }
 
         inventory.OnItemChangedCallback += UpdateUI;
 	}
