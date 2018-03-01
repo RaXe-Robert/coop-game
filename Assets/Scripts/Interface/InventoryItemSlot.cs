@@ -28,10 +28,11 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
     }
 
-    public void Initialize(int index, Inventory inventory)
+    public void Initialize(int index, Inventory inventory, InventoryUI ui)
     {
         this.index = index;
         this.inventory = inventory;
+        this.inventoryUI = ui;
     }
 
     public void Start()

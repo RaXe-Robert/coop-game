@@ -4,19 +4,16 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    public static readonly int InventorySize = 20;
+    public static readonly int HotbarSize = 10;
     public Item testItem;
     public List<Item> inventoryItems;
-
-    public int InventorySize { get; private set; }
-    public int HotbarSize { get; private set; }
 
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;
 
     private void Start()
     {
-        InventorySize = 20;
-        HotbarSize = 10;
         inventoryItems = new List<Item>();
     }
 
@@ -39,7 +36,7 @@ public class Inventory : MonoBehaviour
     /// <returns>Wether the item is added succesfully</returns>
     public bool AddItem(Item item)
     {
-        if (inventoryItems.Count >= InventorySize)
+        if (inventoryItems.Count >= InventorySize + HotbarSize)
         {
             print("Inventory is full");
             return false;
