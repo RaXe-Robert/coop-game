@@ -9,8 +9,9 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField] private Image image;
     
     private Item item;
-    private Vector3 initialPosition;
     private Inventory inventory;
+    private CanvasGroup canvasGroup;
+    private Transform initialParentTransform;
     private int index;
 
     public Item Item
@@ -24,7 +25,6 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
             item = value;
             image.sprite = item?.Sprite;
-            image.enabled = item != null;
         }
     }
 
@@ -37,8 +37,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void Start()
     {
-        initialPosition = transform.position;
-        image = GetComponent<Image>();
+        canvasGroup = GetComponent<CanvasGroup>();
     }
 
     public void Clear()
@@ -58,34 +57,48 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (item == null)
-            return;
-
         var tooltip = Tooltip.Instance;
         tooltip.Hide();
     }
 
-    public void OnDrag(PointerEventData eventData)
+    public void OnBeginDrag(PointerEventData eventData)
     {
-        transform.position = eventData.position;
+        if (item == null)
+        {
+            eventData.pointerDrag = null;
+            return;
+        }
+
+        initialParentTransform = transform.parent;
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
+        transform.SetParent(transform.parent.parent.parent);
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public void OnDrag(PointerEventData eventData)
     {
-        transform.position = initialPosition;
-        //image.raycastTarget = true;
+        if (item == null)
+            return;
+
+        transform.position = eventData.position;
     }
 
     public void OnDrop(PointerEventData eventData)
     {
         var from = eventData.pointerDrag.GetComponent<InventoryItemSlot>();
-        Item = from.item;
-        from.Item = null;
-        inventoryUI.UpdateUI();
+        inventory.SwapItem(index, from.index);
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void OnEndDrag(PointerEventData eventData)
     {
-        image.raycastTarget = false;
+        canvasGroup.blocksRaycasts = true;
+        canvasGroup.interactable = true;
+        transform.SetParent(initialParentTransform);
+        transform.localPosition  = Vector3.zero;
+
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            inventory.RemoveItem(index);
+        }
     }
 }

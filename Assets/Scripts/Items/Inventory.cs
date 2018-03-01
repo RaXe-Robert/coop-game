@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts.Utilities;
 
 public class Inventory : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
-        inventoryItems = new List<Item>();
+        inventoryItems = new List<Item>(new Item[InventorySize + HotbarSize]);
     }
 
     private void Update()
@@ -36,14 +37,15 @@ public class Inventory : MonoBehaviour
     /// <returns>Wether the item is added succesfully</returns>
     public bool AddItem(Item item)
     {
-        if (inventoryItems.Count >= InventorySize + HotbarSize)
+        var emptyIndex = inventoryItems.FirstNullIndexAt();
+        if (!emptyIndex.HasValue)
         {
             print("Inventory is full");
             return false;
         }
         else
         {
-            inventoryItems.Add(item);
+            inventoryItems[emptyIndex.Value] = item;
             OnItemChangedCallback?.Invoke();
             return true;
         }
@@ -57,10 +59,16 @@ public class Inventory : MonoBehaviour
     {
         if (index < inventoryItems.Count && inventoryItems[index] != null)
         {
-            inventoryItems.RemoveAt(index);
+            inventoryItems[index] = null;
             OnItemChangedCallback?.Invoke();
         }
         else
             print($"Tried removing item at index {index} but it couldnt be found in the inventory");
+    }
+
+    public void SwapItem(int indexA, int indexB)
+    {
+        inventoryItems.Swap(indexA, indexB);
+        OnItemChangedCallback?.Invoke();
     }
 }

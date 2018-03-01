@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 222443999489038226}
   - component: {fileID: 114661235224871454}
   - component: {fileID: 114461718169735740}
+  - component: {fileID: 225665276719301804}
   m_Layer: 5
   m_Name: InventorySlotItem
   m_TagString: Untagged
@@ -162,3 +163,14 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &225665276719301804
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1501091959027258}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
