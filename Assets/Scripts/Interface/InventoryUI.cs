@@ -4,19 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour {
+    [SerializeField] private GameObject inventorySlotPrefab;
 
     [SerializeField] private GameObject inventoryUIGo;
     [SerializeField] private GameObject hotbarUIGo;
     [SerializeField] private Inventory inventory;
 
-    private InventoryItemSlot[] inventorySlots;
-    private InventoryItemSlot[] hotbarSlots;
+    private List<InventoryItemSlot> inventorySlots;
 
     private void Start () {
         inventory = FindObjectOfType<Inventory>();
-        inventorySlots = inventoryUIGo.GetComponentsInChildren<InventoryItemSlot>();
-        hotbarSlots = hotbarUIGo.GetComponentsInChildren<InventoryItemSlot>();
-
+        inventorySlots = new List<InventoryItemSlot>(Inventory.InventorySize + Inventory.HotbarSize);
+        InitializeHotbar();
+        InitializeInventory();
         inventory.OnItemChangedCallback += UpdateUI;
 	}
 	
@@ -25,20 +25,40 @@ public class InventoryUI : MonoBehaviour {
             inventoryUIGo.SetActive(!inventoryUIGo.activeSelf);
 	}
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
-        for (int i = 0; i < inventorySlots.Length; i++)
+        for (int i = Inventory.HotbarSize; i < Inventory.InventorySize + Inventory.HotbarSize; i++)
         {
             if (i < inventory.inventoryItems.Count)
-                inventorySlots[i].AddItem(inventory.inventoryItems[i]);
+                inventorySlots[i].Item = inventory.inventoryItems[i];
             else inventorySlots[i].Clear();
         }
 
-        for (int i = 0; i < hotbarSlots.Length; i++)
+        for (int i = 0; i < Inventory.HotbarSize; i++)
         {
-            if (i < inventory.hotBarItems.Count)
-                hotbarSlots[i].AddItem(inventory.hotBarItems[i]);
-            else hotbarSlots[i].Clear();
+            if (i < inventory.inventoryItems.Count)
+                inventorySlots[i].Item = inventory.inventoryItems[i];
+            else inventorySlots[i].Clear();
+        }
+    }
+
+    private void InitializeHotbar()
+    {
+        for (int i = 0; i < Inventory.HotbarSize; i++)
+        {
+            var go = Instantiate(inventorySlotPrefab, hotbarUIGo.transform);
+            inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
+            inventorySlots[i].Initialize(i, inventory, this);
+        }
+    }
+
+    private void InitializeInventory()
+    {
+        for (int i = Inventory.HotbarSize; i < Inventory.HotbarSize + Inventory.InventorySize; i++)
+        {
+            var go = Instantiate(inventorySlotPrefab, inventoryUIGo.transform);
+            inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
+            inventorySlots[i].Initialize(i, inventory, this);
         }
     }
 }
