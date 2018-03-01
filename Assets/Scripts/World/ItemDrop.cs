@@ -31,11 +31,11 @@ public class ItemDrop : MonoBehaviour {
         position.x = Random.Range(minRadius, maxRadius) + this.gameObject.transform.position.x;
         position.z = Random.Range(minRadius, maxRadius) + this.gameObject.transform.position.z;
         position.y = 0.5f;
-        Instantiate(go, position, Quaternion.Euler(90, Random.Range(0,180), 0));
+        PhotonNetwork.Instantiate(go.name, position, Quaternion.Euler(90, Random.Range(0,180), 0), 0);
     }
 
     void destroy()
     {
-        Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
 }
