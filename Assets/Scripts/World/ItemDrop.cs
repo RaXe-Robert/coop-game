@@ -18,10 +18,11 @@ public class ItemDrop : MonoBehaviour {
             {
                 for (int y = 0; y < itemCount[x]; y++)
                 {
-                    spawnObject(itemObject[x]);                    
+                    spawnObject(itemObject[x]);
+                                      
                 }
             }
-            destroy();
+            destroy();  
         }
 	}
 

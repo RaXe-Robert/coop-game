@@ -6,12 +6,14 @@ public class AttackDistance : MonoBehaviour {
 
     [SerializeField] private GameObject objectToAttack;
     [SerializeField] private ObjectHealth health;
-    //[SerializeField] private Collider radius;
+
+    [SerializeField] private SphereCollider sphereCollider;
+    [SerializeField] private float distance;
     private bool clickable = false;
 
 	// Use this for initialization
 	void Start () {
-		
+        sphereCollider.radius = distance;
 	}
 	
 	// Update is called once per frame

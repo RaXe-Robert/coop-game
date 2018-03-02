@@ -26,7 +26,8 @@ GameObject:
   - component: {fileID: 114347680149990956}
   - component: {fileID: 114018819413505474}
   - component: {fileID: 114555864537350296}
-  - component: {fileID: 135128077398964784}
+  - component: {fileID: 135364266578576206}
+  - component: {fileID: 114196149243570130}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -41,7 +42,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1279232587840376}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.85, y: 0, z: 0}
+  m_LocalPosition: {x: -5.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -96,7 +97,7 @@ MeshCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1279232587840376}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Convex: 1
@@ -116,10 +117,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectHealth: {fileID: 114347680149990956}
   itemObject:
-  - {fileID: 0}
-  itemCount: 03000000
-  minRadius: 0
-  maxRadius: 10
+  - {fileID: 1528010306277536, guid: f4be66500dfb52a47951513f251ebdc0, type: 2}
+  - {fileID: 1451229787592790, guid: 18a1af4d3d2e5dd46ae3f8d786217944, type: 2}
+  itemCount: 0500000002000000
+  minRadius: -5
+  maxRadius: 5
+--- !u!114 &114196149243570130
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1279232587840376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 1
+  ObservedComponents:
+  - {fileID: 4628663815528310}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
 --- !u!114 &114347680149990956
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -131,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e72cf0bf08fedd4eac4dfea6b3dddcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1000
+  health: 200
 --- !u!114 &114555864537350296
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -145,7 +173,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToAttack: {fileID: 1279232587840376}
   health: {fileID: 114347680149990956}
---- !u!135 &135128077398964784
+  sphereCollider: {fileID: 135364266578576206}
+  distance: 4
+--- !u!135 &135364266578576206
 SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -155,7 +185,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 3.7930212
+  m_Radius: 0.00001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!193 &193050754440203882
 Tree:
