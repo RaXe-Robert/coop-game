@@ -21,7 +21,9 @@ public class CreateRoomOptions : MonoBehaviour
             IsOpen = true            
         };
 
-        if (PhotonNetwork.CreateRoom(roomNameText.text, roomOptions, TypedLobby.Default))
+        string roomName = string.IsNullOrEmpty(roomNameText?.text) ? PlayerNetwork.PlayerName : roomNameText.text;
+
+        if (PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default))
         {
             print("Succesfully requested a room");
         }
