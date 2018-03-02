@@ -28,149 +28,6 @@ public class MainMenu : MonoBehaviour {
         SceneManager.LoadScene("Game");
     }
 
-    public void ShowMainMenuPanel()
-    {
-        mainMenuPanel.SetActive(true);
-    }
-
-    public void HideMainMenuPanel()
-    {
-        mainMenuPanel.SetActive(false);
-    }
-
-    public void ShowNewGameMenuPanel()
-    {
-        newGameMenuPanel.SetActive(true);
-        ShowSinglePlayerPanel();
-        HideMainMenuPanel();
-    }
-
-    public void HideNewGameMenuPanel()
-    {
-        newGameMenuPanel.SetActive(false);
-    }
-
-    public void ShowServerBrowserMenuPanel()
-    {
-        serverBrowserMenuPanel.SetActive(true);
-        ShowServerBrowserPanel();
-        HideMainMenuPanel();
-    }
-
-    public void HideServerBrowserMenuPanel()
-    {
-        serverBrowserMenuPanel.SetActive(false);
-    }
-
-    public void ShowOptionsMenuPanel()
-    {
-        optionsMenuPanel.SetActive(true);
-        ShowControlsPanel();
-        HideMainMenuPanel();
-    }
-
-    public void HideOptionsMenuPanel()
-    {
-        optionsMenuPanel.SetActive(false);
-    }
-
-    public void ShowSinglePlayerPanel()
-    {
-        singlePlayerPanel.SetActive(true);
-        HideHostGamePanel();
-    }
-
-    public void HideSinglePlayerPanel()
-    {
-        singlePlayerPanel.SetActive(false);
-    }
-
-    public void ShowHostGamePanel()
-    {
-        hostGamePanel.SetActive(true);
-        HideSinglePlayerPanel();
-        HideServerBrowserPanel();
-    }
-
-    public void HideHostGamePanel()
-    {
-        hostGamePanel.SetActive(false);
-    }
-
-    public void ShowServerBrowserPanel()
-    {
-        serverBrowserPanel.SetActive(true);
-        HideHostGamePanel();
-    }
-
-    public void HideServerBrowserPanel()
-    {
-        serverBrowserPanel.SetActive(false);
-    }
-
-    public void ShowControlsPanel()
-    {
-        controlsPanel.SetActive(true);
-        HideVideoSettingsPanel();
-        HideAudioSettingsPanel();
-    }
-
-    public void HideControlsPanel()
-    {
-        controlsPanel.SetActive(false);
-    }
-
-    public void ShowVideoSettingsPanel()
-    {
-        videoSettingsPanel.SetActive(true);
-        HideControlsPanel();
-        HideAudioSettingsPanel();
-    }
-
-    public void HideVideoSettingsPanel()
-    {
-        videoSettingsPanel.SetActive(false);
-    }
-
-    public void ShowAudioSettingsPanel()
-    {
-        audioSettingsPanel.SetActive(true);
-        HideControlsPanel();
-        HideVideoSettingsPanel();
-    }
-
-    public void HideAudioSettingsPanel()
-    {
-        audioSettingsPanel.SetActive(false);
-    }
-   
-    public void ShowExitGamePanel()
-    {
-        exitGamePanel.SetActive(true);
-        HideMainMenuPanel();
-    }
-
-    public void HideExitGamePanel()
-    {
-        exitGamePanel.SetActive(false);
-        ShowMainMenuPanel();
-    }
-
-    public void HideAllPanelsExceptMain()
-    {
-        ShowMainMenuPanel();
-        HideNewGameMenuPanel();
-        HideSinglePlayerPanel();
-        HideHostGamePanel();
-        HideServerBrowserMenuPanel();
-        HideServerBrowserPanel();
-        HideOptionsMenuPanel();
-        HideControlsPanel();
-        HideVideoSettingsPanel();
-        HideAudioSettingsPanel();
-        HideExitGamePanel();        
-    }
-
     public void ExitGame()
     {
 #if UNITY_EDITOR
@@ -179,4 +36,137 @@ public class MainMenu : MonoBehaviour {
         Application.Quit();
 #endif
     }
+
+    public void ChangePlayerName(string name)
+    {
+        PlayerNetwork.PlayerName = name.Length == 0 ? SystemInfo.deviceName : name;
+    }
+
+    #region Panel Navigation
+
+    public void ShowMainMenuPanel(bool state)
+    {
+        mainMenuPanel.SetActive(state);
+    }
+
+    public void ShowNewGameMenuPanel(bool state)
+    {
+        newGameMenuPanel.SetActive(state);
+
+        if (state)
+        {
+            ShowSinglePlayerPanel(true);
+            ShowMainMenuPanel(false);
+        }
+    }
+
+    public void ShowServerBrowserMenuPanel(bool state)
+    {
+        serverBrowserMenuPanel.SetActive(state);
+
+        if (state)
+        {
+            ShowServerBrowserPanel(true);
+            ShowMainMenuPanel(false);
+        }
+    }
+
+    public void ShowOptionsMenuPanel(bool state)
+    {
+        optionsMenuPanel.SetActive(state);
+
+        if (state)
+        {
+            ShowControlsPanel(true);
+            ShowMainMenuPanel(false);
+        }
+    }
+
+    public void ShowSinglePlayerPanel(bool state)
+    {
+        singlePlayerPanel.SetActive(state);
+
+        if (state)
+        {
+            ShowHostGamePanel(false);
+        }
+    }
+
+    public void ShowHostGamePanel(bool state)
+    {
+        hostGamePanel.SetActive(state);
+
+        if (state)
+        {
+            ShowSinglePlayerPanel(false);
+            ShowServerBrowserPanel(false);
+        }
+    }
+
+    public void ShowServerBrowserPanel(bool state)
+    {
+        serverBrowserPanel.SetActive(state);
+
+        if (state)
+        {
+            ShowHostGamePanel(false);
+        }
+    }
+
+    public void ShowControlsPanel(bool state)
+    {
+        controlsPanel.SetActive(state);
+
+        if (state)
+        {
+            ShowVideoSettingsPanel(false);
+            ShowAudioSettingsPanel(false);
+        }
+    }
+
+    public void ShowVideoSettingsPanel(bool state)
+    {
+        videoSettingsPanel.SetActive(state);
+
+        if (state)
+        {
+            ShowControlsPanel(false);
+            ShowAudioSettingsPanel(false);
+        }
+    }
+
+    public void ShowAudioSettingsPanel(bool state)
+    {
+        audioSettingsPanel.SetActive(state);
+
+        if (state)
+        {
+            ShowControlsPanel(false);
+            ShowVideoSettingsPanel(false);
+        }
+    }
+   
+    public void ShowExitGamePanel(bool state)
+    {
+        exitGamePanel.SetActive(state);
+        ShowMainMenuPanel(!state);
+    }
+
+    public void HideAllPanelsExceptMain()
+    {
+        ShowNewGameMenuPanel(false);
+        ShowSinglePlayerPanel(false);
+        ShowHostGamePanel(false);
+        ShowServerBrowserMenuPanel(false);
+        ShowServerBrowserPanel(false);
+        ShowOptionsMenuPanel(false);
+        ShowControlsPanel(false);
+        ShowVideoSettingsPanel(false);
+        ShowAudioSettingsPanel(false);
+        ShowExitGamePanel(false);
+
+        ShowMainMenuPanel(true);
+    }
+
+    #endregion // Panel Navigation
 }
