@@ -38,4 +38,8 @@ MonoBehaviour:
   - RequestForPickupTimes
   - SwitchAnimation
   - SpawnItemOnNetwork
+  - ReduceHealth
+  - DestroyObject
+  - SpawnMultipleObjects
+  - SpawnObject
   DisableAutoOpenWizard: 1

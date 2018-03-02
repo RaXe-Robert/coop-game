@@ -6,21 +6,15 @@ public class SpawnNetworkTree : MonoBehaviour {
 
     [SerializeField] private GameObject go;
 
-
-	// Use this for initialization
 	void Start () {
-        for(int i = 0; i < 1000; i+=10)
+        if (PhotonNetwork.isMasterClient)
         {
-            Vector3 position;
-            position.x = Random.Range(i,-100);
-            position.z = Random.Range(-100, i);
-            position.y = 0f;
-            PhotonNetwork.Instantiate(go.name, position, Quaternion.Euler(0, Random.Range(0, 180),0), 0);
+            for (int i = 0; i < 1000; i += 10)
+            {
+                Vector3 position = new Vector3(Random.Range(i, -100), 0f, Random.Range(-100, i));
+                PhotonNetwork.InstantiateSceneObject(go.name, position, Quaternion.Euler(0, Random.Range(0, 180), 0), 0, null);
+            }
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    
 }
