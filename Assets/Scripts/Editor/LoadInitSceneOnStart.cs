@@ -6,6 +6,29 @@ using UnityEditor.SceneManagement;
 
 [InitializeOnLoad]
 public class LoadInitSceneOnStart : MonoBehaviour {
+    // Properties are remembered as editor preferences.
+    private const string cEditorPrefLoadMasterOnPlay = "LoadMasterOnPlay";
+    private const string cEditorPrefMasterScene = "MasterScene";
+    private const string cEditorPrefPreviousScene = "PreviousScene";
+
+    private static bool LoadMasterOnPlay
+    {
+        get { return EditorPrefs.GetBool(cEditorPrefLoadMasterOnPlay, false); }
+        set { EditorPrefs.SetBool(cEditorPrefLoadMasterOnPlay, value); }
+    }
+
+    private static string MasterScene
+    {
+        get { return EditorPrefs.GetString(cEditorPrefMasterScene, "Master.unity"); }
+        set { EditorPrefs.SetString(cEditorPrefMasterScene, value); }
+    }
+
+    private static string PreviousScene
+    {
+        get { return EditorPrefs.GetString(cEditorPrefPreviousScene, EditorSceneManager.GetActiveScene().path); }
+        set { EditorPrefs.SetString(cEditorPrefPreviousScene, value); }
+    }
+
     // Static constructor binds a playmode-changed callback.
     // [InitializeOnLoad] above makes sure this gets executed.
     static LoadInitSceneOnStart()
@@ -14,7 +37,7 @@ public class LoadInitSceneOnStart : MonoBehaviour {
     }
 
     // Menu items to select the "master" scene and control whether or not to load it.
-    [MenuItem("File/Scene Autoload/Select Master Scene...")]
+    [MenuItem("Testing/Scene Autoload/Select Master Scene...")]
     private static void SelectMasterScene()
     {
         string masterScene = EditorUtility.OpenFilePanel("Select Master Scene", Application.dataPath, "unity");
@@ -25,23 +48,23 @@ public class LoadInitSceneOnStart : MonoBehaviour {
         }
     }
 
-    [MenuItem("File/Scene Autoload/Load Master On Play", true)]
+    [MenuItem("Testing/Scene Autoload/Load Init On Play", true)]
     private static bool ShowLoadMasterOnPlay()
     {
         return !LoadMasterOnPlay;
     }
-    [MenuItem("File/Scene Autoload/Load Master On Play")]
+    [MenuItem("Testing/Scene Autoload/Load Init On Play")]
     private static void EnableLoadMasterOnPlay()
     {
         LoadMasterOnPlay = true;
     }
 
-    [MenuItem("File/Scene Autoload/Don't Load Master On Play", true)]
+    [MenuItem("Testing/Scene Autoload/Don't Load Init On Play", true)]
     private static bool ShowDontLoadMasterOnPlay()
     {
         return LoadMasterOnPlay;
     }
-    [MenuItem("File/Scene Autoload/Don't Load Master On Play")]
+    [MenuItem("Testing/Scene Autoload/Don't Load Init On Play")]
     private static void DisableLoadMasterOnPlay()
     {
         LoadMasterOnPlay = false;
@@ -75,28 +98,5 @@ public class LoadInitSceneOnStart : MonoBehaviour {
             // User pressed stop -- reload previous scene.
             EditorSceneManager.OpenScene(PreviousScene);
         }
-    }
-
-    // Properties are remembered as editor preferences.
-    private const string cEditorPrefLoadMasterOnPlay = "SceneAutoLoader.LoadMasterOnPlay";
-    private const string cEditorPrefMasterScene = "SceneAutoLoader.MasterScene";
-    private const string cEditorPrefPreviousScene = "SceneAutoLoader.PreviousScene";
-
-    private static bool LoadMasterOnPlay
-    {
-        get { return EditorPrefs.GetBool(cEditorPrefLoadMasterOnPlay, false); }
-        set { EditorPrefs.SetBool(cEditorPrefLoadMasterOnPlay, value); }
-    }
-
-    private static string MasterScene
-    {
-        get { return EditorPrefs.GetString(cEditorPrefMasterScene, "Master.unity"); }
-        set { EditorPrefs.SetString(cEditorPrefMasterScene, value); }
-    }
-
-    private static string PreviousScene
-    {
-        get { return EditorPrefs.GetString(cEditorPrefPreviousScene, EditorSceneManager.GetActiveScene().path); }
-        set { EditorPrefs.SetString(cEditorPrefPreviousScene, value); }
     }
 }
