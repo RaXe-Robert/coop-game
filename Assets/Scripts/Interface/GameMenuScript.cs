@@ -6,14 +6,9 @@ using UnityEngine.SceneManagement;
 public class GameMenuScript : MonoBehaviour {
 
     [SerializeField] private GameObject escapeMenu;
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
+    
 	// Update is called once per frame
-	void Update () {
+	private void Update () {
         if (Input.GetKeyDown("escape"))
         {
             escapeMenu.SetActive(!escapeMenu.GetActive());
@@ -28,6 +23,16 @@ public class GameMenuScript : MonoBehaviour {
     public void QuitGame()
     {
         PhotonNetwork.LeaveRoom();       
-        SceneManager.LoadScene("MainMenu");
     }
+
+    #region Photon Callbacks
+
+    private void OnLeftRoom()
+    {
+        Debug.Log("Succesfully left the room");
+        PhotonNetwork.LoadLevel("MainMenu");
+    }
+
+    #endregion //Photon Callbacks
+
 }

@@ -4,12 +4,17 @@ using System.Collections;
 
 public class PlayerNetwork : MonoBehaviour
 {
-    public string PlayerName { get; private set; }
+    public static string PlayerName
+    {
+        get { return PhotonNetwork.player.NickName; }
+        set { PhotonNetwork.player.NickName = value; }
+    }
+
+    public static GameObject PlayerObject { get; private set; } = null;
+
 
     private void Awake()
-    {
-        PlayerName = "User" + Random.Range(1000, 9999);
-
+    {  
         SceneManager.sceneLoaded += OnSceneFinishedLoading;
     }
 
@@ -19,7 +24,11 @@ public class PlayerNetwork : MonoBehaviour
         if (scene.name == "Game")
         {
             Vector3 position = new Vector3(0, 0.5f, 0);
-            PhotonNetwork.Instantiate("Player", position, Quaternion.identity, 0);
+            PlayerObject = PhotonNetwork.Instantiate("Player", position, Quaternion.identity, 0);
+        }
+        else if (scene.name == "MainMenu")
+        {
+            Debug.Log("Returned to main menu");
         }
     }
 }

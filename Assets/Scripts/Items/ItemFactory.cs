@@ -31,9 +31,7 @@ public class ItemFactory : MonoBehaviour {
         GameObject go = Resources.Load<GameObject>("Item");
 
         var item = itemLookUpTable[itemId];
-
-        go.name = item.name;
-
+        
         //Get the mesh and materials from the referenced model.
         var itemMesh = item.Model.GetComponent<MeshFilter>().sharedMesh;
 
@@ -49,6 +47,8 @@ public class ItemFactory : MonoBehaviour {
         go.GetComponent<ItemWorldObject>().item = item;
 
         var gameObj = Instantiate(go, position, Quaternion.identity);
+        gameObj.name = item.name;
+
         PhotonView[] nViews = gameObj.GetComponentsInChildren<PhotonView>();
         nViews[0].viewID = photonId;
     }
