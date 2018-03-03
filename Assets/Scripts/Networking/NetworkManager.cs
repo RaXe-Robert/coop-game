@@ -45,15 +45,7 @@ public class NetworkManager : MonoBehaviour
         }
 #endif
     }
-
-#if UNITY_EDITOR
-    private void OnCreatedRoom()
-    {
-        print("Succesfully created a room");
-        PhotonNetwork.LoadLevel("Game");
-    }
-#endif
-
+    
     private void OnJoinedLobby()
     {
         print("Joined lobby.");
