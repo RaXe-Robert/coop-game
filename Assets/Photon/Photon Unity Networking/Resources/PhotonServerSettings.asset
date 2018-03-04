@@ -42,4 +42,5 @@ MonoBehaviour:
   - DestroyObject
   - SpawnMultipleObjects
   - SpawnObject
+  - DestroyWorldObject
   DisableAutoOpenWizard: 1
