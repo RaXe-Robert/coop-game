@@ -25,9 +25,9 @@ GameObject:
   - component: {fileID: 23930578616111410}
   - component: {fileID: 114347680149990956}
   - component: {fileID: 114018819413505474}
-  - component: {fileID: 114555864537350296}
   - component: {fileID: 135364266578576206}
   - component: {fileID: 114196149243570130}
+  - component: {fileID: 114193253001775062}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -121,6 +121,19 @@ MonoBehaviour:
   gameObjectCountPerObject: 0500000006000000
   minRadius: -5
   maxRadius: 5
+--- !u!114 &114193253001775062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1279232587840376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee515faafad84b45bd0cdd95da334be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Tree
+  interactDistance: 5
 --- !u!114 &114196149243570130
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -159,21 +172,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 2000
---- !u!114 &114555864537350296
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1279232587840376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 117690a3bebb8eb43941681532ab0eb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: {fileID: 114347680149990956}
-  itemsToDrop: {fileID: 114018819413505474}
-  sphereCollider: {fileID: 135364266578576206}
-  radius: 4
 --- !u!135 &135364266578576206
 SphereCollider:
   m_ObjectHideFlags: 1

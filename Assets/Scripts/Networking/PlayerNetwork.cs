@@ -12,7 +12,6 @@ public class PlayerNetwork : MonoBehaviour
 
     public static GameObject PlayerObject { get; private set; } = null;
 
-
     private void Awake()
     {  
         SceneManager.sceneLoaded += OnSceneFinishedLoading;

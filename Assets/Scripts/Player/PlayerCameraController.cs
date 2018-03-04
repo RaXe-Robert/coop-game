@@ -16,7 +16,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private void Awake()
     {
-        target = this.gameObject.transform;
+        target = gameObject.transform;
         isFollowing = false;
     }
 

@@ -2,15 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemWorldObject : MonoBehaviour {
+public class ItemWorldObject : MonoBehaviour, IInteractable
+{
     public Item item;
+    public float pickupDistance = 3f;
 
-    /// <summary>
-    /// Picks the item up and removes it from the world
-    /// </summary>
-    public void PickUp()
+    private PhotonView photonView;
+
+    public void Start()
     {
-        Debug.Log($"Picking up {item.name}");
+        photonView = GetComponent<PhotonView>();
+    }
+
+    public void Interact(Vector3 invokerPosition)
+    {
+        if (Vector3.Distance(transform.position, invokerPosition) > pickupDistance)
+            return;
+
+        if (PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItem(item))
+        {
+            photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
+        }
+    }
+
+    [PunRPC]
+    public void DestroyWorldObject()
+    {
         Destroy(gameObject);
+    }
+
+    public bool IsInteractable()
+    {
+        return true;
     }
 }
