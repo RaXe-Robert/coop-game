@@ -406,6 +406,7 @@ GameObject:
   - component: {fileID: 136892308541336462}
   - component: {fileID: 114218818572688634}
   - component: {fileID: 114062429764284952}
+  - component: {fileID: 114443901816051506}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1029,6 +1030,18 @@ MonoBehaviour:
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0
+--- !u!114 &114443901816051506
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1816867026278206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83b2222a5db86a145a4cab4cf3ffb60a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCamera: {fileID: 0}
 --- !u!114 &114492785987082522
 MonoBehaviour:
   m_ObjectHideFlags: 1

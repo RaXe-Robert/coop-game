@@ -5,12 +5,11 @@ using UnityEngine;
 public class ItemWorldObject : MonoBehaviour {
     public Item item;
 
-    /// <summary>
-    /// Picks the item up and removes it from the world
-    /// </summary>
-    public void PickUp()
+    public void Interact()
     {
-        Debug.Log($"Picking up {item.name}");
-        Destroy(gameObject);
+        if (PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItem(item))
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
     }
 }

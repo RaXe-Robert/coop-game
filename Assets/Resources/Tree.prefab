@@ -25,7 +25,6 @@ GameObject:
   - component: {fileID: 23930578616111410}
   - component: {fileID: 114347680149990956}
   - component: {fileID: 114018819413505474}
-  - component: {fileID: 114555864537350296}
   - component: {fileID: 135364266578576206}
   - component: {fileID: 114196149243570130}
   m_Layer: 0
@@ -143,8 +142,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 4628663815528310}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 2
+  instantiationId: 2
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114347680149990956
@@ -159,21 +158,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 2000
---- !u!114 &114555864537350296
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1279232587840376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 117690a3bebb8eb43941681532ab0eb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: {fileID: 114347680149990956}
-  itemsToDrop: {fileID: 114018819413505474}
-  sphereCollider: {fileID: 135364266578576206}
-  radius: 4
 --- !u!135 &135364266578576206
 SphereCollider:
   m_ObjectHideFlags: 1
