@@ -1,5 +1,8 @@
-﻿public interface IInteractable
+﻿using UnityEngine;
+
+public interface IInteractable
 {
-    void Interact();
+    void Interact(Vector3 invokerPosition);
+    bool IsInteractable();
 }
 
