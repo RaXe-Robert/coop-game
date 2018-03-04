@@ -12,11 +12,18 @@ public class WorldResource : MonoBehaviour, IInteractable
         if (Vector3.Distance(transform.position, invokerPosition) > interactDistance)
             return;
 
-        PhotonNetwork.Destroy(gameObject);
+        PhotonView photonView = PhotonView.Get(this);
+        photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }
 
     public bool IsInteractable()
     {
         return true;
     }
+
+   [PunRPC]
+   void DestroyObject()
+   {    
+       PhotonNetwork.Destroy(gameObject);    
+   }   
 }

@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Tree
-  interactDistance: 10
+  interactDistance: 5
 --- !u!114 &114196149243570130
 MonoBehaviour:
   m_ObjectHideFlags: 1

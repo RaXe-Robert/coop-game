@@ -11,7 +11,7 @@ public class MouseController : MonoBehaviour
 
     private void Start()
     {
-        playerCamera = GetComponentInChildren<Camera>();
+        playerCamera = GetComponent<PlayerCameraController>().CameraReference;
         isMine = GetComponent<PhotonView>().isMine;
     }
 
