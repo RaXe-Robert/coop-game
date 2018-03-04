@@ -96,6 +96,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
+            FindObjectOfType<ItemFactory>().CreateWorldObject(item, PlayerNetwork.PlayerObject.transform.position);
             inventory.RemoveItem(index);
         }
     }

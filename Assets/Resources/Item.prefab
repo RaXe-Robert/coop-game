@@ -153,5 +153,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2cf00808aab201448d3e1807a03afab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionRange: 10
   item: {fileID: 11400000, guid: eedb4b4d7d60c0b44bdd8028ba491398, type: 2}
+  pickupDistance: 3

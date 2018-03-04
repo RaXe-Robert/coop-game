@@ -2,14 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemWorldObject : MonoBehaviour {
+public class ItemWorldObject : MonoBehaviour, IInteractable
+{
     public Item item;
+    public float pickupDistance = 3f;
 
-    public void Interact()
+    private PhotonView photonView;
+
+    public void Start()
     {
+        photonView = GetComponent<PhotonView>();
+    }
+
+    public void Interact(Vector3 invokerPosition)
+    {
+        if (Vector3.Distance(transform.position, invokerPosition) > pickupDistance)
+            return;
+
         if (PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItem(item))
         {
-            PhotonNetwork.Destroy(gameObject);
+            photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
         }
+    }
+
+    [PunRPC]
+    public void DestroyWorldObject()
+    {
+        Destroy(gameObject);
+    }
+
+    public bool IsInteractable()
+    {
+        return true;
     }
 }
