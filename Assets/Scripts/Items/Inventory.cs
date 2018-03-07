@@ -10,6 +10,9 @@ public class Inventory : MonoBehaviour
     public Item testItem;
     public List<Item> inventoryItems;
 
+
+    public CraftingList cRes;
+
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;
 
