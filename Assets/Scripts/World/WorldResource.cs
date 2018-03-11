@@ -6,14 +6,25 @@ public class WorldResource : MonoBehaviour, IInteractable
 {
     new public string name;
     public float interactDistance = 10f;
+    Animator anim;
+
+    void Start()
+    {
+        anim = GetComponent<Animator>();
+    }
 
     public void Interact(Vector3 invokerPosition)
     {
         if (Vector3.Distance(transform.position, invokerPosition) > interactDistance)
             return;
+        
+        anim.SetBool("isFalling", true);
 
-        PhotonView photonView = PhotonView.Get(this);
-        photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
+        
+
+
+        //PhotonView photonView = PhotonView.Get(this);
+        //photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }
 
     public bool IsInteractable()
@@ -24,6 +35,7 @@ public class WorldResource : MonoBehaviour, IInteractable
    [PunRPC]
    void DestroyObject()
    {    
-       PhotonNetwork.Destroy(gameObject);    
+       
+       PhotonNetwork.Destroy(gameObject);
    }   
 }

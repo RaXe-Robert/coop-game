@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ee515faafad84b45bd0cdd95da334be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Tree
+  name: TreeOld
   interactDistance: 5
 --- !u!114 &114196149243570130
 MonoBehaviour:

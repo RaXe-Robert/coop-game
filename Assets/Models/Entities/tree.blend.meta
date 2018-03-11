@@ -27,6 +27,8 @@ ModelImporter:
     400018: //RootNode
     2100000: Material_003
     2100002: Material_004
+    2100004: Base
+    2100006: Leaves
     4300000: Tree
     4300002: Leaves
     7400000: Default Take
@@ -152,7 +154,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
