@@ -10,4 +10,12 @@ public class Armor : Item
 
     public ArmorType Type { get { return type; } }
     public float Defence { get { return defense; } }
+
+    public static Armor CreateArmor(Armor armorData)
+    {
+        Armor armor = CreateInstance(armorData) as Armor;
+        armor.type = armorData.Type;
+        armor.defense = armorData.Defence;
+        return armor;
+    }
 }

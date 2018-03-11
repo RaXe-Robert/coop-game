@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 public class CraftingRecipe
 {
     public CraftingItem[] requiredItems;
-    public Item resultItem;
-    public int resultAmount;
+    public CraftingItem resultItem;
+    public int amountToCraft;
     public float craftingTime;
 }

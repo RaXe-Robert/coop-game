@@ -152,5 +152,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2cf00808aab201448d3e1807a03afab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+  item: {fileID: 0}
   pickupDistance: 3

@@ -12,6 +12,25 @@ public class ItemFactory : MonoBehaviour {
         photonView = GetComponent<PhotonView>();
     }
 
+    public Item CreateNewItem(int itemId, int stackSize = 1)
+    {
+        Item itemData = itemLookUpTable[itemId];
+
+        if (itemData.GetType() == typeof(Item))
+            Item item = Item.CreateInstance(itemData);
+        else if (itemData.GetType() == typeof(Resource))
+        {
+            item = Resource.CreateResource(itemData as Resource) as Resource;
+            if (item.GetType() == typeof(Resource))
+                item.StackSize = 5;
+        }
+        else if (itemData.GetType() == typeof(Armor))
+            item = Armor.CreateArmor(itemData as Armor);
+        else item = Weapon.CreateWeapon(itemData as Weapon);
+
+        return item;
+    }
+
     /// <summary>
     /// Creates a new item in the world
     /// </summary>
@@ -30,8 +49,11 @@ public class ItemFactory : MonoBehaviour {
     {
         GameObject go = Resources.Load<GameObject>("Item");
 
-        var item = itemLookUpTable[itemId];
+        Item itemData = itemLookUpTable[itemId];
+        Item item;
+
         
+
         //Get the mesh and materials from the referenced model.
         var itemMesh = item.Model.GetComponent<MeshFilter>().sharedMesh;
 

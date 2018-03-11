@@ -10,7 +10,6 @@ public class Inventory : MonoBehaviour
     public Item testItem;
     public List<Item> inventoryItems;
 
-
     public CraftingList cRes;
 
     public delegate void OnItemChanged();
@@ -73,5 +72,85 @@ public class Inventory : MonoBehaviour
     {
         inventoryItems.Swap(indexA, indexB);
         OnItemChangedCallback?.Invoke();
+    }
+
+    public int GetItemAmountById(int itemId)
+    {
+        int temp = 0;
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            if(inventoryItems[i].Id == itemId)
+            {
+                if (inventoryItems[i].GetType() == typeof(Resource))
+                    temp += ((Resource)inventoryItems[i]).StackSize;
+                else temp += 1;
+            }
+        }
+        return temp;
+    }
+
+    public bool CheckAmountById(int itemId, int amountNeeded)
+    {
+        return (GetItemAmountById(itemId) >= amountNeeded);
+    }
+
+    /// <summary>
+    /// Removes items based on the item id and the amount of items to remove.
+    /// THE ITEMS GET DESTROYED!!
+    /// </summary>
+    /// <param name="itemId">The id of the item to remove</param>
+    /// <param name="amountToRemove">The amount of items to remove</param>
+    public void RemoveItemById(int itemId, int amountToRemove)
+    {
+        if (!CheckAmountById(itemId, amountToRemove))
+        {
+            Debug.Log($"Inventory -- Trying to remove {amountToRemove} x item {itemId}, but we dont have that many");
+            return;
+        }
+
+        //Remove items from inventory, start at the back of the inventory.
+        for (int i = inventoryItems.Count; i > 0; --i)
+        {
+            if (amountToRemove == 0)
+                return;
+
+            if(inventoryItems[i].Id == itemId)
+            {
+                if (inventoryItems[i].GetType() == typeof(Resource))
+                {
+                    Resource temp = (Resource)inventoryItems[i];
+                    if (amountToRemove >= temp.StackSize)
+                    {
+                        amountToRemove -= temp.StackSize;
+                        RemoveItem(i);
+                    }
+                    else
+                    {
+                        temp.StackSize -= amountToRemove;
+                        OnItemChangedCallback?.Invoke();
+                        return;
+                    }
+                }
+                else
+                {
+                    amountToRemove--;
+                    RemoveItem(i);
+                    OnItemChangedCallback?.Invoke();
+                }
+            }
+        }
+    }
+
+    public void AddItemById(int itemId, int amountToAdd)
+    {
+        if (!inventoryItems.FirstNullIndexAt().HasValue)
+        {
+            //Inventory is full, dropping the items that should be added to the inventory.
+            //TODO: Drop items
+        }
+        else
+        {
+
+        }
     }
 }
