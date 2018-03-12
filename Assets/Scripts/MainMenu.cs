@@ -17,15 +17,37 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] private GameObject audioSettingsPanel;
     [SerializeField] private GameObject exitGamePanel;
 
+    private NetworkManager networkManager;
+
     private void Start()
     {
         //Initialize volume to 50% so people don't go deaf.
         AudioListener.volume = 0.5f;
+
+        //TODO: There should be a better way to get the netweork manager
+        networkManager = FindObjectOfType<NetworkManager>();
     }
 
     public void StartGame()
     {
         SceneManager.LoadScene("Game");
+    }
+
+    public void StartSinglePlayerGame()
+    {
+        PhotonNetwork.offlineMode = true;
+
+        //TODO Move all room creation scripts to the NetworkManager
+        RoomOptions options = new RoomOptions()
+        {
+            IsOpen = false,
+            MaxPlayers = 1,
+            IsVisible = false,
+            CleanupCacheOnLeave = true
+        };
+        PhotonNetwork.CreateRoom("Singleplayer Game", options, TypedLobby.Default);
+
+        StartGame();
     }
 
     public void ExitGame()
@@ -84,6 +106,9 @@ public class MainMenu : MonoBehaviour {
 
     public void ShowSinglePlayerPanel(bool state)
     {
+        print("ShowSingle");
+        Connect(true);
+
         singlePlayerPanel.SetActive(state);
 
         if (state)
@@ -94,6 +119,8 @@ public class MainMenu : MonoBehaviour {
 
     public void ShowHostGamePanel(bool state)
     {
+        Connect();
+
         hostGamePanel.SetActive(state);
 
         if (state)
@@ -105,6 +132,8 @@ public class MainMenu : MonoBehaviour {
 
     public void ShowServerBrowserPanel(bool state)
     {
+        Connect();
+
         serverBrowserPanel.SetActive(state);
 
         if (state)
@@ -154,6 +183,8 @@ public class MainMenu : MonoBehaviour {
 
     public void HideAllPanelsExceptMain()
     {
+        //Disconnect();
+
         ShowNewGameMenuPanel(false);
         ShowSinglePlayerPanel(false);
         ShowHostGamePanel(false);
@@ -166,6 +197,23 @@ public class MainMenu : MonoBehaviour {
         ShowExitGamePanel(false);
 
         ShowMainMenuPanel(true);
+    }
+
+    private void Connect(bool offlineMode = false)
+    {
+        print("Menu Connect");
+        if (networkManager.Connected)
+            Disconnect();
+
+        networkManager.SetOfflineMode(offlineMode);
+        networkManager.Connect();
+    }
+
+    private void Disconnect()
+    {
+        print("Menu Disconnect");
+        if (networkManager.Connected)
+            networkManager.Disconnect();
     }
 
     #endregion // Panel Navigation
