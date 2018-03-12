@@ -7,6 +7,6 @@ using UnityEditor;
 [Serializable]
 public class CraftingItem
 {
-    public Item item;   
+    public ItemData item;   
     public int amount;
 }

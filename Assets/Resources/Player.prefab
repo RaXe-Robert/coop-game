@@ -1100,8 +1100,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testItem: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-  inventoryItems: []
-  cRes: {fileID: 0}
 --- !u!114 &114801168947922496
 MonoBehaviour:
   m_ObjectHideFlags: 1

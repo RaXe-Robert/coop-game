@@ -36,7 +36,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
         {
             var go = Instantiate(requiredItemPrefab, requiredItems);
             go.GetComponent<Image>().sprite = craftingRecipe.requiredItems[i].item.Sprite;
-            go.GetComponentInChildren<Text>().text = $"x / {craftingRecipe.requiredItems[i].Amount * amountToCraft}";
+            go.GetComponentInChildren<Text>().text = $"x / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
         }
     }
 

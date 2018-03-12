@@ -7,10 +7,8 @@ public class Inventory : MonoBehaviour
 {
     public static readonly int InventorySize = 20;
     public static readonly int HotbarSize = 10;
-    public Item testItem;
+    public ItemData testItem;
     public List<Item> inventoryItems;
-
-    public CraftingList cRes;
 
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;
@@ -26,10 +24,10 @@ public class Inventory : MonoBehaviour
             return;
 
         if (Input.GetKeyDown(KeyCode.E))
-            AddItem(testItem);
+            AddItem(ItemFactory.CreateNewItem(testItem.Id));
 
         if (Input.GetKeyDown(KeyCode.Q))
-            FindObjectOfType<ItemFactory>().CreateWorldObject(testItem, transform.position + Vector3.up);
+            FindObjectOfType<ItemFactory>().CreateWorldObject(ItemFactory.CreateNewItem(testItem.Id), transform.position + Vector3.up);
     }
 
     /// <summary>
@@ -116,7 +114,7 @@ public class Inventory : MonoBehaviour
 
             if(inventoryItems[i].Id == itemId)
             {
-                if (inventoryItems[i].GetType() == typeof(Resource))
+                if (inventoryItems[i].GetType() == typeof(ResourceData))
                 {
                     Resource temp = (Resource)inventoryItems[i];
                     if (amountToRemove >= temp.StackSize)

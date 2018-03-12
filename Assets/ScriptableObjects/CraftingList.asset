@@ -14,11 +14,11 @@ MonoBehaviour:
   recipes:
   - requiredItems:
     - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      Amount: 3
+      amount: 3
     - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      Amount: 2
+      amount: 2
     resultItem:
       item: {fileID: 11400000, guid: aa4584050ed9b5b419271ab8f75236c6, type: 2}
-      Amount: 1
+      amount: 0
     amountToCraft: 0
     craftingTime: 2

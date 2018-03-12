@@ -4,29 +4,35 @@ using UnityEngine;
 
 public class ItemFactory : MonoBehaviour {
 
-    public Item[] itemLookUpTable;
+    private static ItemData[] itemLookUpTable;
     private PhotonView photonView;
+    public Item test;
 
     private void Start()
     {
         photonView = GetComponent<PhotonView>();
+
+        itemLookUpTable = Resources.LoadAll<ItemData>("Items");
+        //test = CreateNewItem(0,5);
     }
 
-    public Item CreateNewItem(int itemId, int stackSize = 1)
+    public static Item CreateNewItem(int itemId, int stackSize = 1)
     {
-        Item itemData = itemLookUpTable[itemId];
+        var itemData = itemLookUpTable[itemId];
+        var type = itemData.GetType();
+        Item item;
 
-        if (itemData.GetType() == typeof(Item))
-            Item item = Item.CreateInstance(itemData);
-        else if (itemData.GetType() == typeof(Resource))
+        if(type == typeof(ItemData))
+            item = new Item(itemData);
+        else if (type == typeof(ResourceData))
         {
-            item = Resource.CreateResource(itemData as Resource) as Resource;
-            if (item.GetType() == typeof(Resource))
-                item.StackSize = 5;
+            item = new Resource(itemData as ResourceData);
+            ((Resource)item).StackSize = stackSize;
         }
-        else if (itemData.GetType() == typeof(Armor))
-            item = Armor.CreateArmor(itemData as Armor);
-        else item = Weapon.CreateWeapon(itemData as Weapon);
+        else if (type == typeof(ArmorData))
+            item = new Armor(itemData as ArmorData);
+        else
+            item = new Weapon(itemData as WeaponData);
 
         return item;
     }
@@ -38,10 +44,10 @@ public class ItemFactory : MonoBehaviour {
     /// <param name="position">The position for the item to spawn at</param>
     /// <param name="parent">The parent gameObject for the instantiated item</param>
     /// <returns>The newly created gameObject</returns>
-    public void CreateWorldObject(Item item, Vector3 position, Transform parent = null)
+    public void CreateWorldObject(Item itemData, Vector3 position, Transform parent = null)
     {
         var photonId = PhotonNetwork.AllocateViewID();
-        photonView.RPC("SpawnItemOnNetwork", PhotonTargets.AllBuffered, position, photonId, item.Id);
+        photonView.RPC("SpawnItemOnNetwork", PhotonTargets.AllBuffered, position, photonId, itemData.Id);
     }
 
     [PunRPC]
@@ -49,10 +55,8 @@ public class ItemFactory : MonoBehaviour {
     {
         GameObject go = Resources.Load<GameObject>("Item");
 
-        Item itemData = itemLookUpTable[itemId];
-        Item item;
-
-        
+        //ItemData item = CreateNewItem(itemId);
+        Item item = CreateNewItem(itemId);
 
         //Get the mesh and materials from the referenced model.
         var itemMesh = item.Model.GetComponent<MeshFilter>().sharedMesh;
@@ -69,7 +73,7 @@ public class ItemFactory : MonoBehaviour {
         go.GetComponent<ItemWorldObject>().item = item;
 
         var gameObj = Instantiate(go, position, Quaternion.identity);
-        gameObj.name = item.name;
+        gameObj.name = item.Name;
 
         PhotonView[] nViews = gameObj.GetComponentsInChildren<PhotonView>();
         nViews[0].viewID = photonId;
