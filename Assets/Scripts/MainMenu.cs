@@ -26,6 +26,10 @@ public class MainMenu : MonoBehaviour {
 
         //TODO: There should be a better way to get the netweork manager
         networkManager = FindObjectOfType<NetworkManager>();
+
+        //When the player returns from the game to the main menu, the photon is still connected
+        if (networkManager.Connected)
+            networkManager.Disconnect();
     }
 
     public void StartGame()
@@ -199,11 +203,14 @@ public class MainMenu : MonoBehaviour {
     /// <param name="offlineMode">Whether it should connect in offline mode or not</param>
     private void Connect(bool offlineMode = false)
     {
-        if (networkManager.Connected)
-            Disconnect();
-
-        networkManager.SetOfflineMode(offlineMode);
-        networkManager.Connect();
+        //If connected to photon and offline mode is not correct, disconnect and reconnect
+        if (!networkManager.Connected || networkManager.OfflineMode != offlineMode)
+        {
+            if(networkManager.Connected)
+                Disconnect();
+            networkManager.SetOfflineMode(offlineMode);
+            networkManager.Connect();
+        }
     }
 
     /// <summary>
