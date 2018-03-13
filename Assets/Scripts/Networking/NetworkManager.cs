@@ -59,31 +59,6 @@ public class NetworkManager : MonoBehaviour
             return;
 
         PhotonNetwork.JoinLobby(TypedLobby.Default);
-
-#if UNITY_EDITOR
-        if (UnityEditor.EditorPrefs.GetBool("AutoStartRoom"))
-        {
-            return;
-            RoomOptions roomOptions = new RoomOptions()
-            {
-                CleanupCacheOnLeave = false,
-                IsVisible = true,
-                MaxPlayers = 0,
-                IsOpen = true
-            };
-
-            string roomName = "Testing";
-
-            if (PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default))
-            {
-                print("Succesfully requested a room");
-            }
-            else
-            {
-                print("Failed to send a room request!");
-            }
-        }
-#endif
     }
 
     private void OnJoinedLobby()
