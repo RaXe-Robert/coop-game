@@ -7,7 +7,8 @@ public class Inventory : MonoBehaviour
 {
     public static readonly int InventorySize = 20;
     public static readonly int HotbarSize = 10;
-    public ItemData testItem;
+    public ItemData diamond;
+    public ItemData stick;
     public List<Item> inventoryItems;
 
     public delegate void OnItemChanged();
@@ -16,6 +17,7 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         inventoryItems = new List<Item>(new Item[InventorySize + HotbarSize]);
+        print($"{stick.Id}, {diamond.Id}");
     }
 
     private void Update()
@@ -24,10 +26,13 @@ public class Inventory : MonoBehaviour
             return;
 
         if (Input.GetKeyDown(KeyCode.E))
-            AddItem(ItemFactory.CreateNewItem(testItem.Id));
+        {
+            AddItem(ItemFactory.CreateNewItem(stick.Id));
+            AddItem(ItemFactory.CreateNewItem(diamond.Id));
+        }
 
         if (Input.GetKeyDown(KeyCode.Q))
-            FindObjectOfType<ItemFactory>().CreateWorldObject(ItemFactory.CreateNewItem(testItem.Id), transform.position + Vector3.up);
+            FindObjectOfType<ItemFactory>().CreateWorldObject(ItemFactory.CreateNewItem(diamond.Id), transform.position + Vector3.up);
     }
 
     /// <summary>
@@ -77,7 +82,7 @@ public class Inventory : MonoBehaviour
         int temp = 0;
         for (int i = 0; i < inventoryItems.Count; i++)
         {
-            if(inventoryItems[i].Id == itemId)
+            if(inventoryItems[i]?.Id == itemId)
             {
                 if (inventoryItems[i].GetType() == typeof(Resource))
                     temp += ((Resource)inventoryItems[i]).StackSize;
@@ -107,12 +112,12 @@ public class Inventory : MonoBehaviour
         }
 
         //Remove items from inventory, start at the back of the inventory.
-        for (int i = inventoryItems.Count; i > 0; --i)
+        for (int i = inventoryItems.Capacity - 1; i > 0; i--)
         {
             if (amountToRemove == 0)
                 return;
 
-            if(inventoryItems[i].Id == itemId)
+            if(inventoryItems[i]?.Id == itemId)
             {
                 if (inventoryItems[i].GetType() == typeof(ResourceData))
                 {
@@ -148,7 +153,35 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-
+            AddItem(ItemFactory.CreateNewItem(itemId, amountToAdd));
+            OnItemChangedCallback?.Invoke();
         }
+    }
+
+
+    /// <summary>
+    /// Removes the required items for the craftingRecipe
+    /// </summary>
+    /// <param name="recipe">The recipe to craft</param>
+    /// <returns>Whether there are enough materials to craft this recipe</returns>
+    public bool RemoveItemsForCrafting(CraftingRecipe recipe)
+    {
+        for (int i = 0; i < recipe.requiredItems.Length; i++)
+        {
+            var requiredItem = recipe.requiredItems[i];
+            if (!CheckAmountById(requiredItem.item.Id, requiredItem.amount))
+            {
+                Debug.Log($"Not enough {requiredItem.item.name} to craft {recipe.resultItem.item.name}");
+                return false;
+            }
+        }
+
+        for (int i = 0; i < recipe.requiredItems.Length; i++)
+        {
+            var requiredItem = recipe.requiredItems[i];
+            RemoveItemById(requiredItem.item.Id, requiredItem.amount);
+        }
+
+        return true;
     }
 }

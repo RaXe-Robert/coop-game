@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ItemFactory : MonoBehaviour {
 
@@ -13,12 +14,11 @@ public class ItemFactory : MonoBehaviour {
         photonView = GetComponent<PhotonView>();
 
         itemLookUpTable = Resources.LoadAll<ItemData>("Items");
-        //test = CreateNewItem(0,5);
     }
 
     public static Item CreateNewItem(int itemId, int stackSize = 1)
     {
-        var itemData = itemLookUpTable[itemId];
+        var itemData = itemLookUpTable.First(x => x.Id == itemId);
         var type = itemData.GetType();
         Item item;
 

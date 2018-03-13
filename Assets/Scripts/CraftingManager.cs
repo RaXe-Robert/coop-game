@@ -1,13 +1,17 @@
 ﻿using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Inventory))]
 public class CraftingManager : MonoBehaviour
 {
     public CraftingList availableRecipes;
-    private CraftingQueue craftingQueue = new CraftingQueue();
+    private CraftingQueue craftingQueue;
+    private Inventory inventory;
 
     private void Start()
     {
+        inventory = GetComponent<Inventory>();
+        craftingQueue = new CraftingQueue(inventory);
     }
 
     private void Update()
@@ -21,6 +25,7 @@ public class CraftingManager : MonoBehaviour
     /// <param name="recipe"></param>
     public void AddToQueue(CraftingRecipe recipe)
     {
-        craftingQueue.AddRecipe(recipe);
+        if (inventory.RemoveItemsForCrafting(recipe))
+            craftingQueue.AddRecipe(recipe);
     }
 }

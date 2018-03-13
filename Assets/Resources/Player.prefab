@@ -1099,7 +1099,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10496ef532eded54385cba73a56a5be9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testItem: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+  diamond: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+  stick: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
 --- !u!114 &114801168947922496
 MonoBehaviour:
   m_ObjectHideFlags: 1

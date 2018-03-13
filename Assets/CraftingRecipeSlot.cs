@@ -12,12 +12,14 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
     public CraftingRecipe craftingRecipe;
 
+    private CraftingManager craftingManager;
     private int amountToCraft = 1;
     private Inventory inventory;
     private InputField amountText;
 
     public void Initialize(CraftingRecipe recipe, Inventory inventory)
     {
+        craftingManager = FindObjectOfType<CraftingManager>();
         amountText = GetComponentInChildren<InputField>();
 
         craftingRecipe = recipe;
@@ -27,16 +29,24 @@ public class CraftingRecipeSlot : MonoBehaviour {
         recipeResultImage.sprite = craftingRecipe.resultItem.item.Sprite;
         recipeResultText.text = craftingRecipe.resultItem.item.name;
 
-        UpdateRequiredItems();
+        InitializeRequiredItems();
     }
 
-    private void UpdateRequiredItems()
+    private void InitializeRequiredItems()
     {
         for (int i = 0; i < craftingRecipe.requiredItems.Length; i++)
         {
             var go = Instantiate(requiredItemPrefab, requiredItems);
             go.GetComponent<Image>().sprite = craftingRecipe.requiredItems[i].item.Sprite;
             go.GetComponentInChildren<Text>().text = $"x / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
+        }
+    }
+
+    private void UpdateRequiredItems()
+    {
+        for (int i = 0; i < craftingRecipe.requiredItems.Length; i++)
+        {
+            requiredItems.GetChild(i).gameObject.GetComponentInChildren<Text>().text = $"x / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
         }
     }
 
@@ -71,6 +81,6 @@ public class CraftingRecipeSlot : MonoBehaviour {
     {
         CraftingRecipe a = craftingRecipe;
         a.amountToCraft = amountToCraft;
-        FindObjectOfType<CraftingManager>().AddToQueue(a);
+        craftingManager.AddToQueue(a);
     }
 }

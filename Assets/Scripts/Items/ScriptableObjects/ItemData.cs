@@ -13,6 +13,6 @@ public class ItemData : ScriptableObject
     public Sprite Sprite { get { return sprite; } }
     public GameObject Model { get { return model; } }
     public string Description { get { return description; } }
-    public int Id { get; private set; }
+    public int Id { get { return id; } }
 }
 

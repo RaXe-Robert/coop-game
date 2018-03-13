@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class CraftingQueue
 {
+    public CraftingQueue(Inventory inventory)
+    {
+        this.inventory = inventory;
+    }
+
     private Queue<CraftingRecipe> craftQueue = new Queue<CraftingRecipe>();
     private CraftingRecipe currentCraft;
     private float craftingProgress;
+    private Inventory inventory;
 
     public void AddRecipe(CraftingRecipe recipe)
     {
@@ -43,6 +49,7 @@ public class CraftingQueue
                 craftingProgress -= Time.deltaTime;
                 if (craftingProgress <= 0)
                 {
+                    inventory.AddItemById(currentCraft.resultItem.item.Id, currentCraft.resultItem.amount);
                     currentCraft.amountToCraft--;
                 }
             }
