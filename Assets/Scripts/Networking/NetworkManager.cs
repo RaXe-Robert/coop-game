@@ -9,8 +9,12 @@ public class NetworkManager : MonoBehaviour
     public bool Connected { get { return PhotonNetwork.connected; } }
     public bool OfflineMode { get { return PhotonNetwork.offlineMode; } }
 
+    /// <summary>
+    /// Connects photon, will skip if already connected
+    /// </summary>
     public void Connect()
     {
+        print("NM Connect");
         if (!PhotonNetwork.connected)
         {
             print("Connecting to server...");
@@ -18,8 +22,12 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Disconnects photon, will skip if already disconnected
+    /// </summary>
     public void Disconnect()
     {
+        print("NM Disconnect");
         if (PhotonNetwork.connected)
         {
             PhotonNetwork.Disconnect();
@@ -27,6 +35,10 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the offline mode of photon, will throw if photon is already connected
+    /// </summary>
+    /// <param name="state"></param>
     public void SetOfflineMode(bool state)
     {
         if (PhotonNetwork.connected)

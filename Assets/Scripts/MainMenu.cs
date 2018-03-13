@@ -106,25 +106,22 @@ public class MainMenu : MonoBehaviour {
 
     public void ShowSinglePlayerPanel(bool state)
     {
-        print("ShowSingle");
-        Connect(true);
-
         singlePlayerPanel.SetActive(state);
 
         if (state)
         {
+            Connect(true);
             ShowHostGamePanel(false);
         }
     }
 
     public void ShowHostGamePanel(bool state)
     {
-        Connect();
-
         hostGamePanel.SetActive(state);
 
         if (state)
         {
+            Connect();
             ShowSinglePlayerPanel(false);
             ShowServerBrowserPanel(false);
         }
@@ -132,12 +129,11 @@ public class MainMenu : MonoBehaviour {
 
     public void ShowServerBrowserPanel(bool state)
     {
-        Connect();
-
         serverBrowserPanel.SetActive(state);
 
         if (state)
         {
+            Connect();
             ShowHostGamePanel(false);
         }
     }
@@ -183,8 +179,6 @@ public class MainMenu : MonoBehaviour {
 
     public void HideAllPanelsExceptMain()
     {
-        //Disconnect();
-
         ShowNewGameMenuPanel(false);
         ShowSinglePlayerPanel(false);
         ShowHostGamePanel(false);
@@ -199,9 +193,12 @@ public class MainMenu : MonoBehaviour {
         ShowMainMenuPanel(true);
     }
 
+    /// <summary>
+    /// Connects to photon via the NetworkManager if photon is not connected
+    /// </summary>
+    /// <param name="offlineMode">Whether it should connect in offline mode or not</param>
     private void Connect(bool offlineMode = false)
     {
-        print("Menu Connect");
         if (networkManager.Connected)
             Disconnect();
 
@@ -209,9 +206,11 @@ public class MainMenu : MonoBehaviour {
         networkManager.Connect();
     }
 
+    /// <summary>
+    /// Disconnects the NetworkManager is it is conencted
+    /// </summary>
     private void Disconnect()
     {
-        print("Menu Disconnect");
         if (networkManager.Connected)
             networkManager.Disconnect();
     }
