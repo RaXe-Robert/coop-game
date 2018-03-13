@@ -4,6 +4,9 @@ using System.Collections;
 [RequireComponent(typeof(HealthComponent))]
 public class HungerComponent : Photon.MonoBehaviour, IPunObservable
 {
+    public delegate void OnValueChanged(float value);
+    public OnValueChanged OnValueChangedCallback;
+
     [SerializeField] private float MaxValue = 100f;
     [SerializeField] private float MinValue = 0f;
 
@@ -11,7 +14,11 @@ public class HungerComponent : Photon.MonoBehaviour, IPunObservable
     public float Hunger
     {
         get { return hunger; }
-        set { hunger = Mathf.Clamp(value, MinValue, MaxValue); }
+        set
+        {
+            hunger = Mathf.Clamp(value, MinValue, MaxValue);
+            OnValueChangedCallback?.Invoke(hunger);
+        }
     }
 
     public void OnEnable()
