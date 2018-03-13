@@ -338,7 +338,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f8e5049fb39ff04196c0aace0b7e2c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  go: {fileID: 100018, guid: 9172200ceecc09548a26a47f97f75dd0, type: 3}
+  tree: {fileID: 1296203204362048, guid: cea2ad25b4540224a86b529aa39547f6, type: 2}
+  rock: {fileID: 1695406501947972, guid: 00e52d555c867374690f2256513d9e5a, type: 2}
+  maxTrees: 10
+  maxRocks: 10
 --- !u!1 &1148808650
 GameObject:
   m_ObjectHideFlags: 0

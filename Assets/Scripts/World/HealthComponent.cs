@@ -34,7 +34,7 @@ public class HealthComponent : MonoBehaviour {
         return health;
     }
 
-    public bool IsBroken()
+    public bool IsDepleted()
     {
         if (health <= 0)
         {

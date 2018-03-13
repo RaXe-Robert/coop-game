@@ -1,18 +1,16 @@
 fileFormatVersion: 2
-guid: 6c207fea7c0b12e449fce75b310c0517
-timeCreated: 1520851006
+guid: 0c636770a08d26e4ab7ca57ffe776b5c
+timeCreated: 1520956315
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Stone
-    2100002: Rock
+    2100000: Pebble
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Icosphere
-    4300002: Rock
+    4300000: Pebble
     7400000: Default Take
     9500000: //RootNode
   externalObjects: {}

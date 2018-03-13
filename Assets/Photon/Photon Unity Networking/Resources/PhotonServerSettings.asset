@@ -43,4 +43,6 @@ MonoBehaviour:
   - SpawnMultipleObjects
   - SpawnObject
   - DestroyWorldObject
+  - SpawnObjectInRadius
+  - SpawnObjectOnParent
   DisableAutoOpenWizard: 1
