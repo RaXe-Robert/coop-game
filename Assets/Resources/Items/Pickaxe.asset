@@ -15,5 +15,5 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 08e2fb8510c58d145b001e8325bf15e6, type: 3}
   model: {fileID: 100000, guid: e143afe216cca7c4396116f3dbcc8a01, type: 3}
   description: Diamond Pickaxe
-  id: 3
+  id: 2
   stackSize: 1

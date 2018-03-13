@@ -15,5 +15,5 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 7fec1b4917e4283439d2c7e5d152d8f1, type: 3}
   model: {fileID: 1528010306277536, guid: f4be66500dfb52a47951513f251ebdc0, type: 2}
   description: Stick
-  id: 2
+  id: 1
   stackSize: 1
