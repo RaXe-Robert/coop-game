@@ -2,11 +2,13 @@
 
 public class Resource : Item
 {
+    public const int STACKSIZE = 64;
+
     public Resource(ResourceData resourceData) : base(resourceData)
     {
-        stackSize = resourceData.StackSize;
+        amount = resourceData.Amount;
     }
 
-    private int stackSize;
-    public int StackSize { get { return stackSize; } set { stackSize = value; } }
+    private int amount;
+    public int Amount { get { return amount; } set { amount = value; } }
 }

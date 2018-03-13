@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Utilities;
+using System.Linq;
 
 public class Inventory : MonoBehaviour
 {
@@ -17,7 +18,6 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         inventoryItems = new List<Item>(new Item[InventorySize + HotbarSize]);
-        print($"{stick.Id}, {diamond.Id}");
     }
 
     private void Update()
@@ -45,8 +45,57 @@ public class Inventory : MonoBehaviour
         var emptyIndex = inventoryItems.FirstNullIndexAt();
         if (!emptyIndex.HasValue)
         {
+            //TODO: drop newly added item to the floor
             print("Inventory is full");
             return false;
+        }
+        if (item.GetType() == typeof(Resource))
+        {
+            int itemsToAdd = ((Resource)item).Amount;
+
+            //If we already have an item with this id in inventory we can check if we can add it to that item.
+            if (CheckAmountById(item.Id, 1))
+            {
+                var notCompleteStacks = inventoryItems.Where(x => x?.Id == item.Id).ToArray();
+
+                //There are uncompleted stacks, we can add some items to them.
+                if (notCompleteStacks != null)
+                {
+                    for (int i = 0; i < notCompleteStacks.Length; i++)
+                    {
+                        if (itemsToAdd == 0)
+                            return true;
+
+                        Resource currentStack = inventoryItems[i] as Resource;
+                        int availableAmount = Resource.STACKSIZE - currentStack.Amount;
+                        if (availableAmount >= itemsToAdd)
+                        {
+                            currentStack.Amount += itemsToAdd;
+                            itemsToAdd = 0;
+                            OnItemChangedCallback?.Invoke();
+                        }
+                        else
+                        {
+                            currentStack.Amount = Resource.STACKSIZE;
+                            itemsToAdd -= availableAmount;
+                        }
+                    }
+                    return true;
+                }
+                //There are currenctly no uncompleted stacks, create a new stack.
+                else
+                {
+                    inventoryItems[emptyIndex.Value] = item;
+                    OnItemChangedCallback?.Invoke();
+                    return true;
+                }
+            }
+            else
+            {
+                inventoryItems[emptyIndex.Value] = item;
+                OnItemChangedCallback?.Invoke();
+                return true;
+            }
         }
         else
         {
@@ -82,10 +131,10 @@ public class Inventory : MonoBehaviour
         int temp = 0;
         for (int i = 0; i < inventoryItems.Count; i++)
         {
-            if(inventoryItems[i]?.Id == itemId)
+            if (inventoryItems[i]?.Id == itemId)
             {
                 if (inventoryItems[i].GetType() == typeof(Resource))
-                    temp += ((Resource)inventoryItems[i]).StackSize;
+                    temp += ((Resource)inventoryItems[i]).Amount;
                 else temp += 1;
             }
         }
@@ -112,28 +161,31 @@ public class Inventory : MonoBehaviour
         }
 
         //Remove items from inventory, start at the back of the inventory.
-        for (int i = inventoryItems.Capacity - 1; i > 0; i--)
+        for (int i = inventoryItems.Count - 1; i > 0; i--)
         {
+            //If all the items are removed we can stop
             if (amountToRemove == 0)
                 return;
 
-            if(inventoryItems[i]?.Id == itemId)
+            if (inventoryItems[i]?.Id == itemId)
             {
+                //Check if the item is a resource if so, we can take items of the stacksize.
                 if (inventoryItems[i].GetType() == typeof(ResourceData))
                 {
                     Resource temp = (Resource)inventoryItems[i];
-                    if (amountToRemove >= temp.StackSize)
+                    if (amountToRemove >= temp.Amount)
                     {
-                        amountToRemove -= temp.StackSize;
+                        amountToRemove -= temp.Amount;
                         RemoveItem(i);
                     }
                     else
                     {
-                        temp.StackSize -= amountToRemove;
+                        temp.Amount -= amountToRemove;
                         OnItemChangedCallback?.Invoke();
                         return;
                     }
                 }
+                //If it aint a resource we just get the single item.
                 else
                 {
                     amountToRemove--;

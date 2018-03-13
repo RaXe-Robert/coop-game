@@ -27,7 +27,7 @@ public class ItemFactory : MonoBehaviour {
         else if (type == typeof(ResourceData))
         {
             item = new Resource(itemData as ResourceData);
-            ((Resource)item).StackSize = stackSize;
+            ((Resource)item).Amount = stackSize;
         }
         else if (type == typeof(ArmorData))
             item = new Armor(itemData as ArmorData);
