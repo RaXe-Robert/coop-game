@@ -9,6 +9,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
     [SerializeField] private Transform requiredItems;
     [SerializeField] private Image recipeResultImage;
     [SerializeField] private Text recipeResultText;
+    [SerializeField] private Text craftingTimeText;
 
     public CraftingRecipe craftingRecipe;
 
@@ -28,6 +29,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
         //Set result
         recipeResultImage.sprite = craftingRecipe.resultItem.item.Sprite;
         recipeResultText.text = craftingRecipe.resultItem.item.name;
+        craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
 
         InitializeRequiredItems();
     }
@@ -58,6 +60,8 @@ public class CraftingRecipeSlot : MonoBehaviour {
     public void SetAmount(string amount)
     {
         amountToCraft = int.Parse(amount);
+        if (amountToCraft <= 0)
+            amountToCraft = 1;
         UpdateAmountText();
         UpdateRequiredItems();
     }
@@ -79,8 +83,8 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
     public void OnClick_Craft()
     {
-        CraftingRecipe a = craftingRecipe;
-        a.amountToCraft = amountToCraft;
-        craftingManager.AddToQueue(a);
+        //TODO: check if this results in bugs.
+        craftingRecipe.amountToCraft = amountToCraft;
+        craftingManager.AddToQueue(craftingRecipe);
     }
 }

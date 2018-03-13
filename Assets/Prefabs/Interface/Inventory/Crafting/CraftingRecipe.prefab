@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 222010826972969060}
   - component: {fileID: 114794795167339760}
   m_Layer: 5
-  m_Name: ResultName
+  m_Name: CraftingTime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -286,6 +286,23 @@ GameObject:
   - component: {fileID: 114272601961090736}
   m_Layer: 5
   m_Name: Craft
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1975831135909066
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 224019387160759804}
+  - component: {fileID: 222645431231059690}
+  - component: {fileID: 114860130719130168}
+  m_Layer: 5
+  m_Name: ResultName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1006,13 +1023,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 2
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Crafting Recipe Result
+  m_Text: 'Crafting Time : {x}s'
 --- !u!114 &114848369165395464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1028,7 +1045,8 @@ MonoBehaviour:
     type: 2}
   requiredItems: {fileID: 224544078932411198}
   recipeResultImage: {fileID: 114986774477546096}
-  recipeResultText: {fileID: 114794795167339760}
+  recipeResultText: {fileID: 114860130719130168}
+  craftingTimeText: {fileID: 114794795167339760}
   craftingRecipe:
     requiredItems: []
     resultItem:
@@ -1069,6 +1087,39 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 1
+--- !u!114 &114860130719130168
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1975831135909066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 15
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Crafting Recipe Result
 --- !u!114 &114894594689305712
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1234,6 +1285,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1429192158528456}
+--- !u!222 &222645431231059690
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1975831135909066}
 --- !u!222 &222693917135148868
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -1258,6 +1315,24 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1072335149698972}
+--- !u!224 &224019387160759804
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1975831135909066}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 224899364286896640}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.2, y: 0.93333334}
+  m_AnchorMax: {x: 0.8432984, y: 0.9633333}
+  m_AnchoredPosition: {x: -37.5, y: -3}
+  m_SizeDelta: {x: -85, y: 17}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224154589442862118
 RectTransform:
   m_ObjectHideFlags: 1
@@ -1510,13 +1585,14 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224618589225508988}
-  - {fileID: 224923495209194314}
+  - {fileID: 224019387160759804}
   - {fileID: 224544078932411198}
   - {fileID: 224178231846360620}
   - {fileID: 224470004549076734}
   - {fileID: 224330015207787126}
   - {fileID: 224974152646571974}
   - {fileID: 224583413430695260}
+  - {fileID: 224923495209194314}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1531,17 +1607,17 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1571415102359490}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0000021, y: 1.0000021, z: 1.0000021}
   m_Children: []
   m_Father: {fileID: 224899364286896640}
-  m_RootOrder: 1
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.2, y: 0.93333334}
   m_AnchorMax: {x: 0.8432984, y: 0.9633333}
-  m_AnchoredPosition: {x: 2.5, y: -3}
-  m_SizeDelta: {x: -5, y: 17}
+  m_AnchoredPosition: {x: 148.91869, y: -3.0003471}
+  m_SizeDelta: {x: -157.86, y: 17}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224960492289957660
 RectTransform:

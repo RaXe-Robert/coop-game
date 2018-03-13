@@ -8,12 +8,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
-  m_Name: Pickaxe
+  m_Script: {fileID: 11500000, guid: 3360136a058e1df4e820a7f66dc0db70, type: 3}
+  m_Name: PickAxe
   m_EditorClassIdentifier: 
   itemName: Diamond Pickaxe
   sprite: {fileID: 21300000, guid: 08e2fb8510c58d145b001e8325bf15e6, type: 3}
   model: {fileID: 100000, guid: e143afe216cca7c4396116f3dbcc8a01, type: 3}
   description: Diamond Pickaxe
   id: 2
-  stackSize: 1
+  type: 1
+  damage: 10

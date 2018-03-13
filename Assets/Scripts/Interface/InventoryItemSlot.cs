@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
     [SerializeField] public InventoryUI inventoryUI;
     [SerializeField] private Image image;
+    [SerializeField] private Text stackSizeText;
+    [SerializeField] private Image textBackground;
     
     private Item item;
     private Inventory inventory;
@@ -25,6 +27,16 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
             item = value;
             image.sprite = item?.Sprite;
+            if (item?.GetType() == typeof(Resource))
+            {
+                stackSizeText.text = ((Resource)item).Amount.ToString();
+                textBackground.enabled = true;
+            }
+            else
+            {
+                textBackground.enabled = false;
+                stackSizeText.text = "";
+            }
         }
     }
 

@@ -66,7 +66,7 @@ public class Inventory : MonoBehaviour
                         if (itemsToAdd == 0)
                             return true;
 
-                        Resource currentStack = inventoryItems[i] as Resource;
+                        Resource currentStack = notCompleteStacks[i] as Resource;
                         int availableAmount = Resource.STACKSIZE - currentStack.Amount;
                         if (availableAmount >= itemsToAdd)
                         {
@@ -80,7 +80,15 @@ public class Inventory : MonoBehaviour
                             itemsToAdd -= availableAmount;
                         }
                     }
-                    return true;
+
+                    if(itemsToAdd == 0)
+                        return true;
+                    else
+                    {
+                        inventoryItems[emptyIndex.Value] = item;
+                        OnItemChangedCallback?.Invoke();
+                        return true;
+                    }
                 }
                 //There are currenctly no uncompleted stacks, create a new stack.
                 else
@@ -156,12 +164,13 @@ public class Inventory : MonoBehaviour
     {
         if (!CheckAmountById(itemId, amountToRemove))
         {
-            Debug.Log($"Inventory -- Trying to remove {amountToRemove} x item {itemId}, but we dont have that many");
+            Debug.LogError($"Inventory -- Trying to remove {amountToRemove} x item {itemId}, but we dont have that many");
             return;
         }
 
         //Remove items from inventory, start at the back of the inventory.
-        for (int i = inventoryItems.Count - 1; i > 0; i--)
+        //TODO: Only check the items with the required ID have to refactored removeItems and other things aswell
+        for (int i = inventoryItems.Count -1; i >= 0; i--)
         {
             //If all the items are removed we can stop
             if (amountToRemove == 0)
@@ -170,17 +179,18 @@ public class Inventory : MonoBehaviour
             if (inventoryItems[i]?.Id == itemId)
             {
                 //Check if the item is a resource if so, we can take items of the stacksize.
-                if (inventoryItems[i].GetType() == typeof(ResourceData))
+                if (inventoryItems[i].GetType() == typeof(Resource))
                 {
-                    Resource temp = (Resource)inventoryItems[i];
-                    if (amountToRemove >= temp.Amount)
+                    Resource currentStack = (Resource)inventoryItems[i];
+                    if (amountToRemove >= currentStack.Amount)
                     {
-                        amountToRemove -= temp.Amount;
+                        amountToRemove -= currentStack.Amount;
                         RemoveItem(i);
                     }
                     else
                     {
-                        temp.Amount -= amountToRemove;
+                        currentStack.Amount -= amountToRemove;
+                        amountToRemove = 0;
                         OnItemChangedCallback?.Invoke();
                         return;
                     }
@@ -221,7 +231,7 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < recipe.requiredItems.Length; i++)
         {
             var requiredItem = recipe.requiredItems[i];
-            if (!CheckAmountById(requiredItem.item.Id, requiredItem.amount))
+            if (!CheckAmountById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft))
             {
                 Debug.Log($"Not enough {requiredItem.item.name} to craft {recipe.resultItem.item.name}");
                 return false;
@@ -231,7 +241,7 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < recipe.requiredItems.Length; i++)
         {
             var requiredItem = recipe.requiredItems[i];
-            RemoveItemById(requiredItem.item.Id, requiredItem.amount);
+            RemoveItemById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft);
         }
 
         return true;
