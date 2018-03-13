@@ -62,6 +62,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
         amountToCraft = int.Parse(amount);
         if (amountToCraft <= 0)
             amountToCraft = 1;
+
         UpdateAmountText();
         UpdateRequiredItems();
     }
