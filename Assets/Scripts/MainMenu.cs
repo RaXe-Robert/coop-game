@@ -17,15 +17,41 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] private GameObject audioSettingsPanel;
     [SerializeField] private GameObject exitGamePanel;
 
+    private NetworkManager networkManager;
+
     private void Start()
     {
         //Initialize volume to 50% so people don't go deaf.
         AudioListener.volume = 0.5f;
+
+        //TODO: There should be a better way to get the netweork manager
+        networkManager = FindObjectOfType<NetworkManager>();
+
+        //When the player returns from the game to the main menu, the photon is still connected
+        if (networkManager.Connected)
+            networkManager.Disconnect();
     }
 
     public void StartGame()
     {
         SceneManager.LoadScene("Game");
+    }
+
+    public void StartSinglePlayerGame()
+    {
+        PhotonNetwork.offlineMode = true;
+
+        //TODO Move all room creation scripts to the NetworkManager
+        RoomOptions options = new RoomOptions()
+        {
+            IsOpen = false,
+            MaxPlayers = 1,
+            IsVisible = false,
+            CleanupCacheOnLeave = true
+        };
+        PhotonNetwork.CreateRoom("Singleplayer Game", options, TypedLobby.Default);
+
+        StartGame();
     }
 
     public void ExitGame()
@@ -88,6 +114,7 @@ public class MainMenu : MonoBehaviour {
 
         if (state)
         {
+            Connect(true);
             ShowHostGamePanel(false);
         }
     }
@@ -98,6 +125,7 @@ public class MainMenu : MonoBehaviour {
 
         if (state)
         {
+            Connect();
             ShowSinglePlayerPanel(false);
             ShowServerBrowserPanel(false);
         }
@@ -109,6 +137,7 @@ public class MainMenu : MonoBehaviour {
 
         if (state)
         {
+            Connect();
             ShowHostGamePanel(false);
         }
     }
@@ -166,6 +195,31 @@ public class MainMenu : MonoBehaviour {
         ShowExitGamePanel(false);
 
         ShowMainMenuPanel(true);
+    }
+
+    /// <summary>
+    /// Connects to photon via the NetworkManager if photon is not connected
+    /// </summary>
+    /// <param name="offlineMode">Whether it should connect in offline mode or not</param>
+    private void Connect(bool offlineMode = false)
+    {
+        //If connected to photon and offline mode is not correct, disconnect and reconnect
+        if (!networkManager.Connected || networkManager.OfflineMode != offlineMode)
+        {
+            if(networkManager.Connected)
+                Disconnect();
+            networkManager.SetOfflineMode(offlineMode);
+            networkManager.Connect();
+        }
+    }
+
+    /// <summary>
+    /// Disconnects the NetworkManager is it is conencted
+    /// </summary>
+    private void Disconnect()
+    {
+        if (networkManager.Connected)
+            networkManager.Disconnect();
     }
 
     #endregion // Panel Navigation
