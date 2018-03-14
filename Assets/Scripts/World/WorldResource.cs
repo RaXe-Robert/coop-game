@@ -24,7 +24,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
 
         if (!healthComponent.IsDepleted()){
 
-            healthComponent.RPCReduceHealth(50);
+            healthComponent.Health -= 50;
         }
         else
         {
