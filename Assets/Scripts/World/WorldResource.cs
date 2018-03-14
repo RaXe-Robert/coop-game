@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,27 +25,33 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
         if (!healthComponent.IsDepleted()){
 
             healthComponent.RPCReduceHealth(50);
-
         }
         else
         {
-            if (animator != null)
-            {
-                animator.SetBool("isDepleted", true);
-                //Find a way to wait for animation here
-                
-
-            }
-
-            if (spawnOnDepleted != null)
-            {
-                itemsToDrop.SpawnObjectOnParent(spawnOnDepleted);
-            }
-            itemsToDrop.SpawnObjectsOnDepleted();
-            
-
-            photonView.RPC("DestroyObject", PhotonTargets.MasterClient);                     
+            StartCoroutine(PlayDepletedAnimation());
         }
+    }
+
+    private IEnumerator PlayDepletedAnimation()
+    {
+
+        if (animator != null)
+        {
+            animator.SetBool("isDepleted", true);
+
+            AnimatorStateInfo animation = animator.GetCurrentAnimatorStateInfo(0);
+
+            yield return new WaitForSeconds(animation.length);
+        }
+        
+        if (spawnOnDepleted != null)
+        {
+            itemsToDrop.SpawnObjectOnParent(spawnOnDepleted);
+        }
+
+        itemsToDrop.SpawnObjectsOnDepleted();
+
+        photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }
 
     public bool IsInteractable()
