@@ -34,14 +34,10 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
 
     private IEnumerator PlayDepletedAnimation()
     {
-
         if (animator != null)
         {
             animator.SetBool("isDepleted", true);
-
-            AnimatorStateInfo animation = animator.GetCurrentAnimatorStateInfo(0);
-
-            yield return new WaitForSeconds(animation.length);
+            yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
         }
         
         if (spawnOnDepleted != null)
