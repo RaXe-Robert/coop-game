@@ -43,4 +43,6 @@ MonoBehaviour:
   - SpawnMultipleObjects
   - SpawnObject
   - DestroyWorldObject
+  - OnHealthChanged
+  - TakeDamage
   DisableAutoOpenWizard: 1
