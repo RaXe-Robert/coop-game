@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemsToDropComponent : MonoBehaviour {
+public class ItemsToDropComponent : Photon.MonoBehaviour {
     
     [SerializeField] private List<GameObject> gameObjectToSpawn;
     [SerializeField] private List<int> gameObjectCountPerObject;
@@ -11,7 +11,6 @@ public class ItemsToDropComponent : MonoBehaviour {
     
     public void SpawnObjectsOnDepleted()
     {
-        PhotonView photonView = PhotonView.Get(this);
         for (int x = 0; x < gameObjectToSpawn.Count; x++)
         {
             for (int y = 0; y < gameObjectCountPerObject[x]; y++)
@@ -21,10 +20,10 @@ public class ItemsToDropComponent : MonoBehaviour {
         }
     }
 
-    public void SpawnObjectOnParent(GameObject gameObject)
+    public void SpawnObjectOnParent(GameObject objectToSpawn)
     {
-        PhotonView photonView = PhotonView.Get(this);
-        photonView.RPC("SpawnObjectOnParent", PhotonTargets.MasterClient, gameObject.name);
+        Quaternion objectToSpawnRotation = transform.rotation * objectToSpawn.transform.rotation;
+        photonView.RPC("SpawnObjectOnParent", PhotonTargets.MasterClient, objectToSpawn.name, objectToSpawnRotation);
     }
 
     [PunRPC]
@@ -35,9 +34,8 @@ public class ItemsToDropComponent : MonoBehaviour {
     }
 
     [PunRPC]
-    void SpawnObjectOnParent(string go)
+    void SpawnObjectOnParent(string go, Quaternion objectToSpawnRotation)
     {
-        Vector3 position = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, this.gameObject.transform.position.z);
-        PhotonNetwork.InstantiateSceneObject(go, position, Quaternion.Euler(this.gameObject.transform.rotation.x, this.gameObject.transform.rotation.y, this.gameObject.transform.rotation.z), 0, null);
+        PhotonNetwork.InstantiateSceneObject(go, transform.position, objectToSpawnRotation, 0, null);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldResource : MonoBehaviour, IInteractable
+public class WorldResource : Photon.MonoBehaviour, IInteractable
 {
     new public string name;
     public float interactDistance = 5f;
@@ -22,7 +22,9 @@ public class WorldResource : MonoBehaviour, IInteractable
             return;
 
         if (!healthComponent.IsDepleted()){
-            healthComponent.RPCReduceHealth(50);   
+
+            healthComponent.RPCReduceHealth(50);
+
         }
         else
         {
@@ -30,16 +32,17 @@ public class WorldResource : MonoBehaviour, IInteractable
             {
                 animator.SetBool("isDepleted", true);
                 //Find a way to wait for animation here
+                
+
             }
 
             if (spawnOnDepleted != null)
             {
                 itemsToDrop.SpawnObjectOnParent(spawnOnDepleted);
             }
-
             itemsToDrop.SpawnObjectsOnDepleted();
+            
 
-            PhotonView photonView = PhotonView.Get(this);
             photonView.RPC("DestroyObject", PhotonTargets.MasterClient);                     
         }
     }
