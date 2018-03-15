@@ -36,7 +36,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
     {
         if (animator != null)
         {
-            animator.SetBool("isDepleted", true);
+            photonView.RPC("CallAnimation", PhotonTargets.All);
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
         }
         
@@ -53,6 +53,12 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
     public bool IsInteractable()
     {
         return true;
+    }
+
+    [PunRPC]
+    void CallAnimation()
+    {
+        animator.SetBool("isDepleted", true);
     }
 
    [PunRPC]

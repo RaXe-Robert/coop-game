@@ -47,4 +47,5 @@ MonoBehaviour:
   - TakeDamage
   - SpawnObjectInRadius
   - SpawnObjectOnParent
+  - CallAnimation
   DisableAutoOpenWizard: 1
