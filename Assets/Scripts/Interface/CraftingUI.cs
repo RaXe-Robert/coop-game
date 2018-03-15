@@ -17,8 +17,7 @@ public class CraftingUI : MonoBehaviour
 
         for (int i = 0; i < craftingManager.availableRecipes.recipes.Count; i++)
         {
-            var slot = Instantiate(recipeSlotPrefab, recipeSlotParent.transform);
-            CraftingRecipeSlot recipeSlot = slot.GetComponent<CraftingRecipeSlot>();
+            CraftingRecipeSlot recipeSlot = Instantiate(recipeSlotPrefab, recipeSlotParent.transform).GetComponent<CraftingRecipeSlot>();
             recipeSlot.Initialize(craftingManager.availableRecipes.recipes[i], inventory);
         }
     }

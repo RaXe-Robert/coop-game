@@ -9,7 +9,7 @@ using UnityEngine;
 public class CraftingRecipe
 {
     public CraftingItem[] requiredItems;
-    public CraftingItem resultItem;
+    public CraftingItem result;
     [HideInInspector]
     public int amountToCraft;
     public float craftingTime;

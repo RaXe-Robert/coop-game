@@ -30,15 +30,10 @@ public class Inventory : MonoBehaviour
             AddItemById(stick.Id, 10);
             AddItemById(diamond.Id, 10);
         }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-            FindObjectOfType<ItemFactory>().CreateWorldObject(ItemFactory.CreateNewItem(diamond.Id), transform.position + Vector3.up);
     }
 
     private void AddNewItemStackById(int itemId, int stackSize)
     {
-        //TODO: What if we add a resource with >64 stacksize??
-
         Item item = ItemFactory.CreateNewItem(itemId, stackSize);
         var emptyIndex = inventoryItems.FirstNullIndexAt();
 
@@ -48,7 +43,6 @@ public class Inventory : MonoBehaviour
 
     private void FillItemStacksById(int itemId, int stackSize)
     {
-        //TODO: What if we add a resource with >64 stacksize??
         Item item = ItemFactory.CreateNewItem(itemId, stackSize);
 
         //Check if the item to add is a Resource item.
@@ -56,44 +50,36 @@ public class Inventory : MonoBehaviour
         {
             int itemsToAdd = ((Resource)item).Amount;
 
-            //If we already have an item with this id in inventory we can check if we can add it to that item.
-            if (CheckAmountById(item.Id, 1))
+            //Get all the items in the inventory where the id is the same as the item to add id.
+            var existingItems = inventoryItems.Where(x => x?.Id == item.Id && ((Resource)item).Amount < Resource.STACKSIZE).ToArray();
+
+            //There are uncompleted stacks, we can add items to them.
+            if (existingItems != null)
             {
-                //Get all the items in the inventory where the id is the same as the item to add id.
-                var existingItems = inventoryItems.Where(x => x?.Id == item.Id &&((Resource)item).Amount < Resource.STACKSIZE).ToArray();
-
-                //There are uncompleted stacks, we can add items to them.
-                if (existingItems != null)
+                //Loop through all the existing item stacks and check if there is any room.
+                for (int i = 0; i < existingItems.Length; i++)
                 {
-                    //Loop through all the existing item stacks and check if there is any room.
-                    for (int i = 0; i < existingItems.Length; i++)
+                    //We should be done adding items, return
+                    if (itemsToAdd == 0)
+                        return;
+
+                    Resource currentStack = existingItems[i] as Resource;
+                    int availableAmount = Resource.STACKSIZE - currentStack.Amount;
+                    if (availableAmount >= itemsToAdd)
                     {
-                        //We should be done adding items, return
-                        if (itemsToAdd == 0)
-                            return;
-
-                        Resource currentStack = existingItems[i] as Resource;
-                        int availableAmount = Resource.STACKSIZE - currentStack.Amount;
-                        if (availableAmount >= itemsToAdd)
-                        {
-                            currentStack.Amount += itemsToAdd;
-                            itemsToAdd = 0;
-                            OnItemChangedCallback?.Invoke();
-                        }
-                        else
-                        {
-                            currentStack.Amount = Resource.STACKSIZE;
-                            itemsToAdd -= availableAmount;
-                            OnItemChangedCallback?.Invoke();
-                        }
+                        currentStack.Amount += itemsToAdd;
+                        itemsToAdd = 0;
+                        OnItemChangedCallback?.Invoke();
                     }
-                    if(itemsToAdd > 0)
-                        AddNewItemStackById(itemId, itemsToAdd);
+                    else
+                    {
+                        currentStack.Amount = Resource.STACKSIZE;
+                        itemsToAdd -= availableAmount;
+                        OnItemChangedCallback?.Invoke();
+                    }
                 }
-                else
-                {
+                if (itemsToAdd > 0)
                     AddNewItemStackById(itemId, itemsToAdd);
-                }
             }
             else
             {
@@ -232,7 +218,7 @@ public class Inventory : MonoBehaviour
             var requiredItem = recipe.requiredItems[i];
             if (!CheckAmountById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft))
             {
-                Debug.Log($"Not enough {requiredItem.item.name} to craft {recipe.resultItem.item.name}");
+                Debug.Log($"Not enough {requiredItem.item.name} to craft {recipe.result.item.name}");
                 return false;
             }
         }

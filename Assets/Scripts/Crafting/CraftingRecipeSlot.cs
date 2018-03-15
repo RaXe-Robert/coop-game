@@ -28,8 +28,8 @@ public class CraftingRecipeSlot : MonoBehaviour {
         this.inventory = inventory;
 
         //Set result
-        recipeResultImage.sprite = craftingRecipe.resultItem.item.Sprite;
-        recipeResultText.text = craftingRecipe.resultItem.item.name;
+        recipeResultImage.sprite = craftingRecipe.result.item.Sprite;
+        recipeResultText.text = craftingRecipe.result.item.name;
         craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
 
         InitializeRequiredItems();

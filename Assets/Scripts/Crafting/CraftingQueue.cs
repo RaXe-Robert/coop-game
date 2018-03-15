@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class CraftingQueue
 {
-    public CraftingQueue(Inventory inventory)
-    {
-        this.inventory = inventory;
-    }
-
     private Queue<CraftingRecipe> craftQueue = new Queue<CraftingRecipe>();
     private CraftingRecipe currentCraft;
     private float craftingProgress;
-    private Inventory inventory;
 
     private int amountToCraft = 1;
 
@@ -21,7 +15,7 @@ public class CraftingQueue
 
     public void AddRecipe(CraftingRecipe recipe)
     {
-        Debug.Log($"Added {recipe.resultItem.item.name} x {recipe.amountToCraft} to the crafting queue");
+        Debug.Log($"Added {recipe.result.item.name} x {recipe.amountToCraft} to the crafting queue");
         craftQueue.Enqueue(recipe);
     }
 
