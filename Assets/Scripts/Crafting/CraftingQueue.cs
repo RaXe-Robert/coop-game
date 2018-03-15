@@ -14,13 +14,18 @@ public class CraftingQueue
     private float craftingProgress;
     private Inventory inventory;
 
+    private int amountToCraft = 1;
+
+    public delegate void OnCraftCompleted(CraftingRecipe recipe);
+    public OnCraftCompleted OnCraftCompletedCallback;
+
     public void AddRecipe(CraftingRecipe recipe)
     {
         Debug.Log($"Added {recipe.resultItem.item.name} x {recipe.amountToCraft} to the crafting queue");
         craftQueue.Enqueue(recipe);
     }
 
-    public void Update()
+    public void UpdateQueue()
     {
         //Nothing to craft
         if (craftQueue.Count == 0 && currentCraft == null)
@@ -30,28 +35,22 @@ public class CraftingQueue
         if(currentCraft == null)
         {
             currentCraft = craftQueue.Dequeue();
-            Debug.Log($"Current craft is now {currentCraft.resultItem.item.name}");
+            amountToCraft = currentCraft.amountToCraft;
+            craftingProgress = currentCraft.craftingTime;
         }
         else
         {
-            if(currentCraft.amountToCraft > 0 && craftingProgress <= 0)
+            craftingProgress -= Time.deltaTime;
+            //Done with a craft.
+            if(craftingProgress <= 0)
             {
-                craftingProgress = currentCraft.craftingTime;
-                Debug.Log($"Starting new craft: {currentCraft.amountToCraft} {currentCraft.resultItem.item.name} remaining");
-            }
-            else if(currentCraft.amountToCraft == 0 && craftingProgress <= 0)
-            {
-                Debug.Log("Done crafting");
-                currentCraft = null;
-            }
-            else
-            {
-                craftingProgress -= Time.deltaTime;
-                if (craftingProgress <= 0)
-                {
-                    inventory.AddItemById(currentCraft.resultItem.item.Id, currentCraft.resultItem.amount);
-                    currentCraft.amountToCraft--;
-                }
+                amountToCraft--;
+                OnCraftCompletedCallback?.Invoke(currentCraft);
+
+                if (amountToCraft > 0)
+                    craftingProgress = currentCraft.craftingTime;
+                else
+                    currentCraft = null;
             }
         }
     }

@@ -14,7 +14,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
     public CraftingRecipe craftingRecipe;
 
     private CraftingManager craftingManager;
-    private int amountToCraft = 1;
+    private int amountToCraft;
     private Inventory inventory;
     private InputField amountText;
 
@@ -22,6 +22,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
     {
         craftingManager = FindObjectOfType<CraftingManager>();
         amountText = GetComponentInChildren<InputField>();
+        amountToCraft = 1;
 
         craftingRecipe = recipe;
         this.inventory = inventory;
@@ -59,10 +60,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
     public void SetAmount(string amount)
     {
-        amountToCraft = int.Parse(amount);
-        if (amountToCraft <= 0)
-            amountToCraft = 1;
-
+        amountToCraft = int.Parse(amount) < 0 ? 1 : int.Parse(amount);
         UpdateAmountText();
         UpdateRequiredItems();
     }
@@ -79,13 +77,14 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
     public void OnClick_MaxCrafts()
     {
-        //Set amountToCraft to maximum amount that is possible based on inventory items.
+        SetAmount(inventory.GetMaxCrafts(craftingRecipe).ToString());
     }
 
     public void OnClick_Craft()
     {
         //TODO: check if this results in bugs.
-        craftingRecipe.amountToCraft = amountToCraft;
-        craftingManager.AddToQueue(craftingRecipe);
+        var a = craftingRecipe;
+        a.amountToCraft = amountToCraft;
+        craftingManager.AddToQueue(a);
     }
 }

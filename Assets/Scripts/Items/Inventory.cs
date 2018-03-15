@@ -27,28 +27,31 @@ public class Inventory : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            AddItem(ItemFactory.CreateNewItem(stick.Id));
-            AddItem(ItemFactory.CreateNewItem(diamond.Id));
+            AddItemById(stick.Id, 10);
+            AddItemById(diamond.Id, 10);
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
             FindObjectOfType<ItemFactory>().CreateWorldObject(ItemFactory.CreateNewItem(diamond.Id), transform.position + Vector3.up);
     }
 
-    /// <summary>
-    /// Adds an Item to the inventory
-    /// </summary>
-    /// <param name="item">The Item to add</param>
-    /// <returns>Wether the item is added succesfully</returns>
-    public bool AddItem(Item item)
+    private void AddNewItemStackById(int itemId, int stackSize)
     {
+        //TODO: What if we add a resource with >64 stacksize??
+
+        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
         var emptyIndex = inventoryItems.FirstNullIndexAt();
-        if (!emptyIndex.HasValue)
-        {
-            //TODO: drop newly added item to the floor
-            print("Inventory is full");
-            return false;
-        }
+
+        inventoryItems[emptyIndex.Value] = item;
+        OnItemChangedCallback?.Invoke();
+    }
+
+    private void FillItemStacksById(int itemId, int stackSize)
+    {
+        //TODO: What if we add a resource with >64 stacksize??
+        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
+
+        //Check if the item to add is a Resource item.
         if (item.GetType() == typeof(Resource))
         {
             int itemsToAdd = ((Resource)item).Amount;
@@ -56,17 +59,20 @@ public class Inventory : MonoBehaviour
             //If we already have an item with this id in inventory we can check if we can add it to that item.
             if (CheckAmountById(item.Id, 1))
             {
-                var notCompleteStacks = inventoryItems.Where(x => x?.Id == item.Id).ToArray();
+                //Get all the items in the inventory where the id is the same as the item to add id.
+                var existingItems = inventoryItems.Where(x => x?.Id == item.Id &&((Resource)item).Amount < Resource.STACKSIZE).ToArray();
 
-                //There are uncompleted stacks, we can add some items to them.
-                if (notCompleteStacks != null)
+                //There are uncompleted stacks, we can add items to them.
+                if (existingItems != null)
                 {
-                    for (int i = 0; i < notCompleteStacks.Length; i++)
+                    //Loop through all the existing item stacks and check if there is any room.
+                    for (int i = 0; i < existingItems.Length; i++)
                     {
+                        //We should be done adding items, return
                         if (itemsToAdd == 0)
-                            return true;
+                            return;
 
-                        Resource currentStack = notCompleteStacks[i] as Resource;
+                        Resource currentStack = existingItems[i] as Resource;
                         int availableAmount = Resource.STACKSIZE - currentStack.Amount;
                         if (availableAmount >= itemsToAdd)
                         {
@@ -78,38 +84,25 @@ public class Inventory : MonoBehaviour
                         {
                             currentStack.Amount = Resource.STACKSIZE;
                             itemsToAdd -= availableAmount;
+                            OnItemChangedCallback?.Invoke();
                         }
                     }
-
-                    if(itemsToAdd == 0)
-                        return true;
-                    else
-                    {
-                        inventoryItems[emptyIndex.Value] = item;
-                        OnItemChangedCallback?.Invoke();
-                        return true;
-                    }
+                    if(itemsToAdd > 0)
+                        AddNewItemStackById(itemId, itemsToAdd);
                 }
-                //There are currenctly no uncompleted stacks, create a new stack.
                 else
                 {
-                    inventoryItems[emptyIndex.Value] = item;
-                    OnItemChangedCallback?.Invoke();
-                    return true;
+                    AddNewItemStackById(itemId, itemsToAdd);
                 }
             }
             else
             {
-                inventoryItems[emptyIndex.Value] = item;
-                OnItemChangedCallback?.Invoke();
-                return true;
+                AddNewItemStackById(itemId, itemsToAdd);
             }
         }
         else
         {
-            inventoryItems[emptyIndex.Value] = item;
-            OnItemChangedCallback?.Invoke();
-            return true;
+            AddNewItemStackById(itemId, stackSize);
         }
     }
 
@@ -170,7 +163,7 @@ public class Inventory : MonoBehaviour
 
         //Remove items from inventory, start at the back of the inventory.
         //TODO: Only check the items with the required ID have to refactored removeItems and other things aswell
-        for (int i = inventoryItems.Count -1; i >= 0; i--)
+        for (int i = inventoryItems.Count - 1; i >= 0; i--)
         {
             //If all the items are removed we can stop
             if (amountToRemove == 0)
@@ -206,7 +199,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddItemById(int itemId, int amountToAdd)
+    public void AddItemById(int itemId, int stackSize)
     {
         if (!inventoryItems.FirstNullIndexAt().HasValue)
         {
@@ -215,11 +208,17 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            AddItem(ItemFactory.CreateNewItem(itemId, amountToAdd));
-            OnItemChangedCallback?.Invoke();
+            Item item = ItemFactory.CreateNewItem(itemId, stackSize);
+            if (item.GetType() == typeof(Resource))
+            {
+                FillItemStacksById(itemId, stackSize);
+            }
+            else
+            {
+                AddNewItemStackById(itemId, stackSize);
+            }
         }
     }
-
 
     /// <summary>
     /// Removes the required items for the craftingRecipe
@@ -245,5 +244,17 @@ public class Inventory : MonoBehaviour
         }
 
         return true;
+    }
+
+    public int GetMaxCrafts(CraftingRecipe recipe)
+    {
+        int maxCrafts = int.MaxValue;
+        foreach (var craftingItem in recipe.requiredItems)
+        {
+            int temp = GetItemAmountById(craftingItem.item.Id) / craftingItem.amount;
+            if (temp < maxCrafts)
+                maxCrafts = temp;
+        }
+        return maxCrafts;
     }
 }
