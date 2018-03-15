@@ -9,11 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
-  m_Name: Meat
+  m_Name: Stick
   m_EditorClassIdentifier: 
-  itemName: Steak, made out of robert
-  sprite: {fileID: 21300000, guid: fe9e17c7b51bc6a43bf9853dd129cb7c, type: 3}
-  model: {fileID: 100000, guid: e143afe216cca7c4396116f3dbcc8a01, type: 3}
-  description: Steak, made out of robert
+  itemName: Stick
+  sprite: {fileID: 21300000, guid: 7fec1b4917e4283439d2c7e5d152d8f1, type: 3}
+  model: {fileID: 1528010306277536, guid: f4be66500dfb52a47951513f251ebdc0, type: 2}
+  description: Stick
   id: 1
   stackSize: 1

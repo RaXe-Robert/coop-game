@@ -3,11 +3,11 @@
 public enum ArmorType { Head, Chest, Legs, Feet}
 
 [CreateAssetMenu(fileName = "New Armor", menuName = "Items/Armor")]
-public class Armor : Item
+public class ArmorData : ItemData
 {
     [SerializeField] private ArmorType type;
     [SerializeField] private float defense;
 
     public ArmorType Type { get { return type; } }
-    public float Defence { get { return defense; } }
+    public float Defense { get { return defense; } }
 }

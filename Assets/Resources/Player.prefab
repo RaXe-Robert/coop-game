@@ -407,6 +407,7 @@ GameObject:
   - component: {fileID: 114218818572688634}
   - component: {fileID: 114062429764284952}
   - component: {fileID: 114443901816051506}
+  - component: {fileID: 114743512028800480}
   - component: {fileID: 114008824672380572}
   - component: {fileID: 114836521450446672}
   m_Layer: 0
@@ -1091,6 +1092,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 75
   mouseDeadZoneFromPlayer: 0.1
+--- !u!114 &114743512028800480
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1816867026278206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fb6f70817089f7459d7c6530ae23607, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableRecipes: {fileID: 11400000, guid: f6e6f11ee42c65045b0ad429c0983faa, type: 2}
 --- !u!114 &114792932905430074
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1102,8 +1115,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10496ef532eded54385cba73a56a5be9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testItem: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-  inventoryItems: []
+  diamond: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+  stick: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
 --- !u!114 &114801168947922496
 MonoBehaviour:
   m_ObjectHideFlags: 1
