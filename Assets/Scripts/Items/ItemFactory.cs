@@ -62,9 +62,9 @@ public class ItemFactory : MonoBehaviour {
         coll.sharedMesh = itemMesh;
         coll.convex = true;
 
-        go.GetComponent<ItemWorldObject>().item = item;
 
         var gameObj = Instantiate(go, position, Quaternion.identity);
+        gameObj.GetComponent<ItemWorldObject>().item = item;
         gameObj.name = item.Name;
 
         PhotonView[] nViews = gameObj.GetComponentsInChildren<PhotonView>();

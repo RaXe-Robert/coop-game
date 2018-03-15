@@ -19,7 +19,7 @@ public class ItemWorldObject : MonoBehaviour, IInteractable
         if (Vector3.Distance(transform.position, invokerPosition) > pickupDistance)
             return;
 
-        PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(item.Id, 1);
+        PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(item.Id, (item.GetType() == typeof(Resource) ? ((Resource)item).Amount : 1));
         photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
     }
 
