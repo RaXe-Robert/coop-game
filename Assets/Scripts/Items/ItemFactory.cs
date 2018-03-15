@@ -6,7 +6,7 @@ using System.Linq;
 public class ItemFactory : MonoBehaviour {
 
     private static ItemData[] itemLookUpTable;
-    private PhotonView photonView;
+    private static PhotonView photonView;
     public Item test;
 
     private void Start()
@@ -37,26 +37,18 @@ public class ItemFactory : MonoBehaviour {
         return item;
     }
 
-    /// <summary>
-    /// Creates a new item in the world
-    /// </summary>
-    /// <param name="item">The item to instantiate a world object of</param>
-    /// <param name="position">The position for the item to spawn at</param>
-    /// <param name="parent">The parent gameObject for the instantiated item</param>
-    /// <returns>The newly created gameObject</returns>
-    public void CreateWorldObject(Item itemData, Vector3 position, Transform parent = null)
+    public static void CreateWorldObject(Vector3 position, int itemId, int stackSize = 1)
     {
         var photonId = PhotonNetwork.AllocateViewID();
-        photonView.RPC("SpawnItemOnNetwork", PhotonTargets.AllBuffered, position, photonId, itemData.Id);
+        photonView.RPC("SpawnItemOnNetwork", PhotonTargets.AllBuffered, position, photonId, itemId, stackSize);
     }
 
     [PunRPC]
-    void SpawnItemOnNetwork(Vector3 position, int photonId, int itemId)
+    private void SpawnItemOnNetwork(Vector3 position, int photonId, int itemId, int stackSize = 1)
     {
         GameObject go = Resources.Load<GameObject>("Item");
 
-        //ItemData item = CreateNewItem(itemId);
-        Item item = CreateNewItem(itemId);
+        Item item = CreateNewItem(itemId, stackSize);
 
         //Get the mesh and materials from the referenced model.
         var itemMesh = item.Model.GetComponent<MeshFilter>().sharedMesh;

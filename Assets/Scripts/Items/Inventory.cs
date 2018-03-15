@@ -11,6 +11,7 @@ public class Inventory : MonoBehaviour
     public ItemData diamond;
     public ItemData stick;
     public List<Item> inventoryItems;
+    private PhotonView photonView;
 
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;
@@ -18,11 +19,12 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         inventoryItems = new List<Item>(new Item[InventorySize + HotbarSize]);
+        photonView = GetComponent<PhotonView>();
     }
 
     private void Update()
     {
-        if (!GetComponent<PhotonView>().isMine)
+        if (!photonView.isMine)
             return;
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -187,14 +189,16 @@ public class Inventory : MonoBehaviour
 
     public void AddItemById(int itemId, int stackSize)
     {
+        if (!photonView.isMine)
+            return;
+
+        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
         if (!inventoryItems.FirstNullIndexAt().HasValue)
         {
-            //Inventory is full, dropping the items that should be added to the inventory.
-            //TODO: Drop items
+            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);
         }
         else
         {
-            Item item = ItemFactory.CreateNewItem(itemId, stackSize);
             if (item.GetType() == typeof(Resource))
             {
                 FillItemStacksById(itemId, stackSize);

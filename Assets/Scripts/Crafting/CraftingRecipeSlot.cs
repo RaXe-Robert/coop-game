@@ -60,7 +60,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
     public void SetAmount(string amount)
     {
-        amountToCraft = int.Parse(amount) < 0 ? 1 : int.Parse(amount);
+        amountToCraft = int.Parse(amount) <= 0 ? 1 : int.Parse(amount);
         UpdateAmountText();
         UpdateRequiredItems();
     }

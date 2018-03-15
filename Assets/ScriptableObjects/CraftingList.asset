@@ -17,8 +17,8 @@ MonoBehaviour:
       amount: 3
     - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
       amount: 2
-    resultItem:
+    result:
       item: {fileID: 11400000, guid: 9b984738be4bab148b16baebddcefb0e, type: 2}
       amount: 1
-    amountToCraft: 0
+    amountToCraft: 6
     craftingTime: 2

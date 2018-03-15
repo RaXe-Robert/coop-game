@@ -95,8 +95,12 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnDrop(PointerEventData eventData)
     {
-        var from = eventData.pointerDrag.GetComponent<InventoryItemSlot>();
-        inventory.SwapItem(index, from.index);
+        InventoryItemSlot from;
+        //Check what gets dropped on this.
+        if((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
+        {
+            inventory.SwapItem(index, from.index);
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -108,7 +112,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            FindObjectOfType<ItemFactory>().CreateWorldObject(item, PlayerNetwork.PlayerObject.transform.position);
+            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, (item.GetType() == typeof(Resource) ? ((Resource)item).Amount : 1));
             inventory.RemoveItem(index);
         }
     }
