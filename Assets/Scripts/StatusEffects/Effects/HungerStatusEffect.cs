@@ -3,14 +3,14 @@ using System.Collections;
 
 public class HungerStatusEffect : StatusEffectBase
 {
-    private HungerStatusEffectData healthStatusEffect;
+    private HungerStatusEffectData hungerStatusEffectData;
 
     private HungerComponent hungerComponent;
 
     public HungerStatusEffect(ScriptableStatusEffect statusEffect, GameObject gameObj) : base(statusEffect, gameObj)
     {
         hungerComponent = gameObj.GetComponent<HungerComponent>();
-        healthStatusEffect = (HungerStatusEffectData)statusEffect;
+        hungerStatusEffectData = (HungerStatusEffectData)statusEffect;
     }
 
     public override void OnActivate()
@@ -19,7 +19,7 @@ public class HungerStatusEffect : StatusEffectBase
 
     public override void OnTick(float delta)
     {
-        hungerComponent.Hunger += healthStatusEffect.HungerIncrease * delta;
+        hungerComponent.Hunger += hungerStatusEffectData.HungerIncrease / Duration * delta;
     }
 
     public override void OnEnd()

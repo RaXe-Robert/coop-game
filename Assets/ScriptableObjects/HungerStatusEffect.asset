@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Name: HungerStatusEffect
   m_EditorClassIdentifier: 
   Duration: 3
-  HungerIncrease: 30
+  hungerIncrease: 20
