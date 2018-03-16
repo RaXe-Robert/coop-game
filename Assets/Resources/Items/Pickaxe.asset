@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3360136a058e1df4e820a7f66dc0db70, type: 3}
+  m_Name: Pickaxe
+  m_EditorClassIdentifier: 
+  itemName: Meat Pickaxe
+  sprite: {fileID: 21300000, guid: 08e2fb8510c58d145b001e8325bf15e6, type: 3}
+  model: {fileID: 1451229787592790, guid: 18a1af4d3d2e5dd46ae3f8d786217944, type: 2}
+  description: Meat Pickaxe
+  id: 2
+  type: 1
+  damage: 10

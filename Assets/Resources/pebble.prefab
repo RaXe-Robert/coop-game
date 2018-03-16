@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33456668862686862}
   - component: {fileID: 23508696076341826}
   - component: {fileID: 114782622692418174}
+  - component: {fileID: 114430368787656126}
   m_Layer: 0
   m_Name: pebble
   m_TagString: Untagged
@@ -37,7 +38,7 @@ Transform:
   m_GameObject: {fileID: 1653132889676536}
   m_LocalRotation: {x: 6.4262822e-12, y: 1, z: -0.0000018318508, w: 0.0000035952676}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -83,6 +84,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1653132889676536}
   m_Mesh: {fileID: 4300000, guid: 0c636770a08d26e4ab7ca57ffe776b5c, type: 3}
+--- !u!114 &114430368787656126
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1653132889676536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2cf00808aab201448d3e1807a03afab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupDistance: 3
 --- !u!114 &114782622692418174
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -3,7 +3,7 @@
 public enum WeaponType { Sword, Axe, Mace, Bow }
 
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Items/Weapon")]
-public class Weapon : Item
+public class WeaponData : ItemData
 {
     [SerializeField] private WeaponType type;
     [SerializeField] private float damage;

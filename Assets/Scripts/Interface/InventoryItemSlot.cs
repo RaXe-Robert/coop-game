@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
     [SerializeField] public InventoryUI inventoryUI;
     [SerializeField] private Image image;
+    [SerializeField] private Text stackSizeText;
+    [SerializeField] private Image textBackground;
     
     private Item item;
     private Inventory inventory;
@@ -25,6 +27,16 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
             item = value;
             image.sprite = item?.Sprite;
+            if (item?.GetType() == typeof(Resource))
+            {
+                stackSizeText.text = ((Resource)item).Amount.ToString();
+                textBackground.enabled = true;
+            }
+            else
+            {
+                textBackground.enabled = false;
+                stackSizeText.text = "";
+            }
         }
     }
 
@@ -83,8 +95,12 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnDrop(PointerEventData eventData)
     {
-        var from = eventData.pointerDrag.GetComponent<InventoryItemSlot>();
-        inventory.SwapItem(index, from.index);
+        InventoryItemSlot from;
+        //Check what gets dropped on this.
+        if((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
+        {
+            inventory.SwapItem(index, from.index);
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -96,7 +112,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            FindObjectOfType<ItemFactory>().CreateWorldObject(item, PlayerNetwork.PlayerObject.transform.position);
+            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, (item.GetType() == typeof(Resource) ? ((Resource)item).Amount : 1));
             inventory.RemoveItem(index);
         }
     }
