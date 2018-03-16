@@ -45,7 +45,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
             itemsToDrop.SpawnObjectOnParent(spawnOnDepleted);
         }
 
-        itemsToDrop.SpawnObjectsOnDepleted();
+        itemsToDrop.SpawnItemsOnDepleted();
 
         photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }
