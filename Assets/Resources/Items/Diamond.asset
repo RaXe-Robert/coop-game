@@ -11,9 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
   m_Name: Diamond
   m_EditorClassIdentifier: 
-  itemName: Diamond
+  itemName: Pebble
   sprite: {fileID: 21300000, guid: 1d5d2ef0f1b609e40a77017b5670ee63, type: 3}
-  model: {fileID: 100000, guid: e143afe216cca7c4396116f3dbcc8a01, type: 3}
-  description: Diamond
+  model: {fileID: 100000, guid: 0c636770a08d26e4ab7ca57ffe776b5c, type: 3}
+  description: Pebble diamond
   id: 0
-  stackSize: 1
+  amount: 0

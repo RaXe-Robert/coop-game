@@ -2,29 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemsToDropComponent : MonoBehaviour {
-    
-    [SerializeField] private List<GameObject> gameObjectToSpawn;
-    [SerializeField] private List<int> gameObjectCountPerObject;
+public class ItemsToDropComponent : Photon.MonoBehaviour {
+
+    [SerializeField] private List<ItemData> ItemsToSpawn;
+    [SerializeField] private List<int> ItemCountPerItem;
     [SerializeField] private int minRadius;
     [SerializeField] private int maxRadius;	
     
-    public void SpawnMultipleObjects()
+    public void SpawnItemsOnDepleted()
     {
-        PhotonView photonView = PhotonView.Get(this);
-        for (int x = 0; x < gameObjectToSpawn.Count; x++)
+        for (int x = 0; x < ItemsToSpawn.Count; x++)
         {
-            for (int y = 0; y < gameObjectCountPerObject[x]; y++)
-            {                
-                photonView.RPC("SpawnObject", PhotonTargets.MasterClient, gameObjectToSpawn[x].name);
+            for (int y = 0; y < ItemCountPerItem[x]; y++)
+            {
+                ItemFactory.CreateWorldObject(new Vector3(Random.Range(minRadius, maxRadius) + transform.position.x, 0f, Random.Range(minRadius, maxRadius) + transform.position.z), ItemsToSpawn[x].Id , quaternion: Quaternion.Euler(0, Random.Range(0, 180), 0));
             }
         }
     }
 
-    [PunRPC]
-    void SpawnObject(string go)
+    public void SpawnObjectOnParent(GameObject objectToSpawn)
     {
-        Vector3 position = new Vector3(Random.Range(minRadius, maxRadius) + this.gameObject.transform.position.x, 0.5f, Random.Range(minRadius, maxRadius) + this.gameObject.transform.position.z);
-        PhotonNetwork.InstantiateSceneObject(go, position, Quaternion.Euler(90, Random.Range(0,180), 0), 0, null);
-    }    
+        Quaternion objectToSpawnRotation = transform.rotation * objectToSpawn.transform.rotation;
+        photonView.RPC("SpawnObjectOnParent", PhotonTargets.MasterClient, objectToSpawn.name, objectToSpawnRotation);
+    }
+
+    [PunRPC]
+    void SpawnObjectOnParent(string go, Quaternion objectToSpawnRotation)
+    {
+        PhotonNetwork.InstantiateSceneObject(go, transform.position, objectToSpawnRotation, 0, null);
+    }
 }

@@ -45,4 +45,10 @@ MonoBehaviour:
   - DestroyWorldObject
   - OnHealthChanged
   - TakeDamage
+  - SpawnObjectInRadius
+  - SpawnObjectOnParent
+  - CallAnimation
+  - SetParent
+  - SetStoneParent
+  - SetTreeParent
   DisableAutoOpenWizard: 1

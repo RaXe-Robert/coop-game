@@ -408,7 +408,7 @@ GameObject:
   - component: {fileID: 114062429764284952}
   - component: {fileID: 114443901816051506}
   - component: {fileID: 114743512028800480}
-  - component: {fileID: 114008824672380572}
+  - component: {fileID: 114723616231544790}
   - component: {fileID: 114836521450446672}
   m_Layer: 0
   m_Name: Player
@@ -928,20 +928,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114008824672380572
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1816867026278206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e72cf0bf08fedd4eac4dfea6b3dddcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxValue: 100
-  MinValue: 0
-  health: 100
 --- !u!114 &114062429764284952
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1092,6 +1078,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 75
   mouseDeadZoneFromPlayer: 0.1
+--- !u!114 &114723616231544790
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1816867026278206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71619f749ec3df04f8dc57baed5cd491, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxValue: 100
+  MinValue: 0
+  health: 100
 --- !u!114 &114743512028800480
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1139,7 +1139,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 114402216659252926}
   - {fileID: 114492785987082522}
-  - {fileID: 114008824672380572}
+  - {fileID: 0}
   - {fileID: 114836521450446672}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0

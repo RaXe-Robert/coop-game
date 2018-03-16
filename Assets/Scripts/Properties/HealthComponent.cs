@@ -33,7 +33,7 @@ public class HealthComponent : Photon.MonoBehaviour, IPunObservable
         }
     }
     
-    public bool IsBroken()
+    public bool IsDepleted()
     {
         if (health <= 0)
         {

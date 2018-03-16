@@ -11,9 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
   m_Name: Stick
   m_EditorClassIdentifier: 
-  itemName: Stick
+  itemName: Log
   sprite: {fileID: 21300000, guid: 7fec1b4917e4283439d2c7e5d152d8f1, type: 3}
-  model: {fileID: 1528010306277536, guid: f4be66500dfb52a47951513f251ebdc0, type: 2}
-  description: Stick
+  model: {fileID: 100000, guid: 4c944c55fd4d0844c90a245184fc9ed6, type: 3}
+  description: Log
   id: 1
-  stackSize: 1
+  amount: 0
