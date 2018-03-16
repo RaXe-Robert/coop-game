@@ -6,12 +6,14 @@ public class SpawnNetworkTree : Photon.MonoBehaviour {
 
     [SerializeField] private GameObject tree;
     [SerializeField] private GameObject rock;
+    private GameObject TreeCollection;
+    private GameObject RockCollection;
     public int maxTrees = 10;
     public int maxRocks = 10;
 
     void Start() {
-        GameObject TreeCollection = new GameObject("Spawned Trees");        
-        GameObject RockCollection = new GameObject("Spawned Stones");
+        TreeCollection = new GameObject("Spawned Trees");
+        RockCollection = new GameObject("Spawned Stones");
 
         if (PhotonNetwork.isMasterClient)
         {
@@ -32,13 +34,13 @@ public class SpawnNetworkTree : Photon.MonoBehaviour {
     [PunRPC]
     void SetTreeParent(int id)
     {
-        PhotonView.Find(id).gameObject.transform.SetParent(GameObject.Find("Spawned Trees").transform);
+        PhotonView.Find(id).gameObject.transform.SetParent(TreeCollection.transform);
     }
 
     [PunRPC]
     void SetStoneParent(int id)
     {
-        PhotonView.Find(id).gameObject.transform.SetParent(GameObject.Find("Spawned Stones").transform);
+        PhotonView.Find(id).gameObject.transform.SetParent(RockCollection.transform);
     }
 }
 

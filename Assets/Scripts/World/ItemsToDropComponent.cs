@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemsToDropComponent : Photon.MonoBehaviour {
-    
-    [SerializeField] private List<GameObject> gameObjectToSpawn;
-    [SerializeField] private List<int> gameObjectCountPerObject;
+
+    [SerializeField] private List<int> ItemsToSpawn;
+    [SerializeField] private List<int> ItemCountPerItem;
     [SerializeField] private int minRadius;
     [SerializeField] private int maxRadius;	
     
     public void SpawnObjectsOnDepleted()
     {
-        for (int x = 0; x < gameObjectToSpawn.Count; x++)
+        for (int x = 0; x < ItemsToSpawn.Count; x++)
         {
-            for (int y = 0; y < gameObjectCountPerObject[x]; y++)
-            {                
-                photonView.RPC("SpawnObjectInRadius", PhotonTargets.MasterClient, gameObjectToSpawn[x].name);
+            for (int y = 0; y < ItemCountPerItem[x]; y++)
+            {
+                ItemFactory.CreateWorldObject(new Vector3(Random.Range(minRadius, maxRadius) + transform.position.x, 0f, Random.Range(minRadius, maxRadius) + transform.position.z), ItemsToSpawn[x], quaternion: Quaternion.Euler(0, Random.Range(0, 180), 0));
             }
         }
     }
@@ -24,13 +24,6 @@ public class ItemsToDropComponent : Photon.MonoBehaviour {
     {
         Quaternion objectToSpawnRotation = transform.rotation * objectToSpawn.transform.rotation;
         photonView.RPC("SpawnObjectOnParent", PhotonTargets.MasterClient, objectToSpawn.name, objectToSpawnRotation);
-    }
-
-    [PunRPC]
-    void SpawnObjectInRadius(string go)
-    {
-        Vector3 position = new Vector3(Random.Range(minRadius, maxRadius) + this.gameObject.transform.position.x, 0f, Random.Range(minRadius, maxRadius) + this.gameObject.transform.position.z);
-        PhotonNetwork.InstantiateSceneObject(go, position, Quaternion.Euler(0, Random.Range(0,180), 0), 0, null);
     }
 
     [PunRPC]

@@ -126,9 +126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObjectToSpawn:
-  - {fileID: 1653132889676536, guid: e73f512ab7bf3ea46adcd03686f64e97, type: 2}
-  gameObjectCountPerObject: 04000000
+  ItemsToSpawn: 00000000
+  ItemCountPerItem: 04000000
   minRadius: -2
   maxRadius: 2
 --- !u!114 &114655443740691952
@@ -168,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ee515faafad84b45bd0cdd95da334be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  name: Rock
   interactDistance: 5
   spawnOnDepleted: {fileID: 0}
   healthComponent: {fileID: 114056808189935048}

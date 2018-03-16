@@ -128,9 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObjectToSpawn:
-  - {fileID: 1140323845838248, guid: da07592b30d42c64bacbc6d3ee452a63, type: 2}
-  gameObjectCountPerObject: 01000000
+  ItemsToSpawn: 01000000
+  ItemCountPerItem: 01000000
   minRadius: -1
   maxRadius: 1
 --- !u!114 &114507743761744092
