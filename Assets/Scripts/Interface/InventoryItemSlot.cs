@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
+public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
     [SerializeField] public InventoryUI inventoryUI;
     [SerializeField] private Image image;
     [SerializeField] private Text stackSizeText;
@@ -69,6 +69,27 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public void OnPointerExit(PointerEventData eventData)
     {
         Tooltip.Instance.Hide();
+    }
+    
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (item == null)
+            return;
+
+        switch (eventData.button)
+        {
+            case PointerEventData.InputButton.Left:
+                if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
+                {
+                    PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
+                }
+                break;
+            case PointerEventData.InputButton.Right:
+                break;
+            case PointerEventData.InputButton.Middle:
+                break;
+        }
+        
     }
 
     public void OnBeginDrag(PointerEventData eventData)

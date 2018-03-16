@@ -22,17 +22,23 @@ public class ItemFactory : MonoBehaviour {
         var type = itemData.GetType();
         Item item;
 
-        if(type == typeof(ItemData))
+        if (type == typeof(ItemData))
+        {
             item = new Item(itemData);
+        }
         else if (type == typeof(ResourceData))
         {
             item = new Resource(itemData as ResourceData);
             ((Resource)item).Amount = stackSize;
         }
         else if (type == typeof(ArmorData))
+        {
             item = new Armor(itemData as ArmorData);
+        }
         else
+        {
             item = new Weapon(itemData as WeaponData);
+        }
 
         return item;
     }
