@@ -7,10 +7,10 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
 {
     new public string name;
     public float interactDistance = 5f;
-    [SerializeField] GameObject spawnOnDepleted;
-    [SerializeField] HealthComponent healthComponent;
-    [SerializeField] ItemsToDropComponent itemsToDrop;
-    Animator animator;
+    [SerializeField] private GameObject spawnOnDepleted;
+    [SerializeField] private HealthComponent healthComponent;
+    [SerializeField] private ItemsToDropComponent itemsToDrop;
+    private Animator animator;
 
     void Start()
     {
