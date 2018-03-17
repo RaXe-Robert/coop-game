@@ -7,8 +7,10 @@ using System.Collections;
 public abstract class StatusEffectBase
 {
     protected GameObject gameObj; // The target object for this status effect
-    protected ScriptableStatusEffectData statusEffect; // Contains specific data for the status effect
-    public float Duration => statusEffect.Duration; // Total duration of this effect
+
+    protected ScriptableStatusEffectData statusEffectData; // Contains specific data for the status effect
+    public ScriptableStatusEffectData StatusEffectData { get { return statusEffectData; } }
+    public float Duration => statusEffectData.Duration; // Total duration of this effect
 
     protected float timeRemaining;
     public float TimeRemaing { get { return timeRemaining; } }
@@ -18,10 +20,13 @@ public abstract class StatusEffectBase
         get { return timeRemaining <= 0 ? true : false; }
     }
 
+    public delegate void StatusEffectTick();
+    public StatusEffectTick OnStatusEffectTick;
+
     public StatusEffectBase(ScriptableStatusEffectData statusEffect, GameObject gameObj)
     {
         this.gameObj = gameObj;
-        this.statusEffect = statusEffect;
+        this.statusEffectData = statusEffect;
         this.timeRemaining = statusEffect.Duration;
     }
 
@@ -35,7 +40,9 @@ public abstract class StatusEffectBase
 
         timeRemaining -= delta;
         if (timeRemaining <= 0)
-            OnEnd();
+            End();
+
+        OnStatusEffectTick?.Invoke();
     }
 
     public void Merge(StatusEffectBase statusEffectToMerge)
@@ -46,11 +53,11 @@ public abstract class StatusEffectBase
     /// <summary>
     /// Gets called when this is added to a <see cref="StatusEffectComponent"/>
     /// </summary>
-    public abstract void OnActivate();
-    
-    public abstract void OnTick(float delta);
-    
-    public abstract void OnEnd();
+    public abstract void Activate();
+
+    protected abstract void OnTick(float delta);
+
+    public abstract void End();
 
     public abstract override string ToString();
 }

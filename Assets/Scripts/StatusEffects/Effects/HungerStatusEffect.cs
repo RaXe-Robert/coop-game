@@ -16,17 +16,17 @@ public class HungerStatusEffect : StatusEffectBase
         hungerStatusEffectData = (HungerStatusEffectData)statusEffect;
     }
 
-    public override void OnActivate()
+    public override void Activate()
     {
         hungerComponent.HungerDegenerationActive = false;
     }
 
-    public override void OnTick(float delta)
+    protected override void OnTick(float delta)
     {
         hungerComponent.Hunger += hungerStatusEffectData.HungerModification / Duration * delta;
     }
 
-    public override void OnEnd()
+    public override void End()
     {
         hungerComponent.HungerDegenerationActive = true;
     }

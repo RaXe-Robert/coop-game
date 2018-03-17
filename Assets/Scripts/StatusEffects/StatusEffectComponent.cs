@@ -10,6 +10,9 @@ public class StatusEffectComponent : MonoBehaviour
 {
     [SerializeField] private bool MergeEffectsOfSameType = true;
     public List<StatusEffectBase> CurrentStatusEffects = new List<StatusEffectBase>();
+    
+    public delegate void StatusEffectAdded(StatusEffectBase statusEffect);
+    public StatusEffectAdded OnstatusEffectAdded;
 
     private void Update()
     {
@@ -26,7 +29,7 @@ public class StatusEffectComponent : MonoBehaviour
     /// <summary>
     /// Add a new status effect to this component.
     /// </summary>
-    /// <param name="statusEffects">The status effect to add</param>
+    /// <param name="statusEffects">The status effect to add.</param>
     public void AddStatusEffect(ScriptableStatusEffectData statusEffectData)
     {
         StatusEffectBase statusEffect = statusEffectData.InitializeStatusEffect(gameObject);
@@ -35,7 +38,7 @@ public class StatusEffectComponent : MonoBehaviour
 
         if (MergeEffectsOfSameType)
         {
-            // Todo: not efficient if there are many status effects on an object
+            // Todo: not efficient if there are many status effects active
             System.Type statusEffectType = statusEffect.GetType();
             foreach (StatusEffectBase activeStatusEffect in CurrentStatusEffects)
             {
@@ -43,6 +46,7 @@ public class StatusEffectComponent : MonoBehaviour
                 {
                     activeStatusEffect.Merge(statusEffect);
                     hasMerged = true;
+                    break;
                 }
             }
         }
@@ -50,15 +54,16 @@ public class StatusEffectComponent : MonoBehaviour
         if (hasMerged == false)
         { 
             CurrentStatusEffects.Add(statusEffect);
-            statusEffect.OnActivate();
-        }
+            OnstatusEffectAdded?.Invoke(statusEffect);
 
+            statusEffect.Activate();
+        }
     }
 
     /// <summary>
     /// Add a list of new status effects to this component.
     /// </summary>
-    /// <param name="statusEffectsData">The list of status effects to add</param>
+    /// <param name="statusEffectsData">The list of status effects to add.</param>
     public void AddStatusEffect(List<ScriptableStatusEffectData> statusEffectsData)
     {
         for (int i = 0; i < statusEffectsData.Count; i++)

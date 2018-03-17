@@ -16,17 +16,17 @@ public class HealthStatusEffect : StatusEffectBase
         healthStatusEffectData = (HealthStatusEffectData)statusEffect;
     }
 
-    public override void OnActivate()
+    public override void Activate()
     {
         Debug.Log(this.ToString());
     }
 
-    public override void OnTick(float delta)
+    protected override void OnTick(float delta)
     {
         healthComponent.Health += healthStatusEffectData.HealthModification / Duration * delta;
     }
 
-    public override void OnEnd()
+    public override void End()
     {
     }
 

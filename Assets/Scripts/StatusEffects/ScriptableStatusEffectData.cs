@@ -9,6 +9,7 @@ using UnityEngine;
 public abstract class ScriptableStatusEffectData : ScriptableObject
 {
     [SerializeField] private Sprite icon;
+    public Sprite Icon { get { return icon; } }
 
     // The duration of the status effect
     public float Duration;
