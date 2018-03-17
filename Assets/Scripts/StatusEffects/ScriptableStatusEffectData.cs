@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Base class for all status effects data objects.
 /// </summary>
-public abstract class ScriptableStatusEffect : ScriptableObject
+public abstract class ScriptableStatusEffectData : ScriptableObject
 { 
     // The duration of the status effect
     public float Duration;

@@ -26,7 +26,7 @@ public class StatusEffectComponent : MonoBehaviour
     /// Add a new status effect to this component.
     /// </summary>
     /// <param name="statusEffects">The status effect to add</param>
-    public void AddStatusEffect(ScriptableStatusEffect statusEffectData)
+    public void AddStatusEffect(ScriptableStatusEffectData statusEffectData)
     {
         var statusEffect = statusEffectData.InitializeStatusEffect(gameObject);
 
@@ -38,7 +38,7 @@ public class StatusEffectComponent : MonoBehaviour
     /// Add a list of new status effects to this component.
     /// </summary>
     /// <param name="statusEffectsData">The list of status effects to add</param>
-    public void AddStatusEffect(List<ScriptableStatusEffect> statusEffectsData)
+    public void AddStatusEffect(List<ScriptableStatusEffectData> statusEffectsData)
     {
         for (int i = 0; i < statusEffectsData.Count; i++)
         {

@@ -10,7 +10,7 @@ public class HungerStatusEffect : StatusEffectBase
 
     private HungerComponent hungerComponent;
 
-    public HungerStatusEffect(ScriptableStatusEffect statusEffect, GameObject gameObj) : base(statusEffect, gameObj)
+    public HungerStatusEffect(ScriptableStatusEffectData statusEffect, GameObject gameObj) : base(statusEffect, gameObj)
     {
         hungerComponent = gameObj.GetComponent<HungerComponent>();
         hungerStatusEffectData = (HungerStatusEffectData)statusEffect;

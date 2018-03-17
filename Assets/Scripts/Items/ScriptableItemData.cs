@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
-public class ItemData : ScriptableObject
+public abstract class ScriptableItemData : ScriptableObject
 {
     [SerializeField] private string itemName;
     [SerializeField] private Sprite sprite;
     [SerializeField] private GameObject model;
     [SerializeField] private string description;
     [SerializeField] private bool isConsumable;
-    [SerializeField] private List<ScriptableStatusEffect> onConsumedEffects;
+    [SerializeField] private List<ScriptableStatusEffectData> onConsumedEffects;
     [SerializeField] private int id;
 
     //No capital to override the existing Object.name
@@ -17,7 +18,8 @@ public class ItemData : ScriptableObject
     public GameObject Model { get { return model; } }
     public string Description { get { return description; } }
     public bool IsConsumable { get { return isConsumable; } }
-    public List<ScriptableStatusEffect> OnConsumedEffects { get { return onConsumedEffects; } }
+    public List<ScriptableStatusEffectData> OnConsumedEffects { get { return onConsumedEffects; } }
     public int Id { get { return id; } }
-}
 
+    public abstract ItemBase InitializeItem();
+}

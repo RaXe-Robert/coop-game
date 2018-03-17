@@ -10,7 +10,7 @@ public class HealthStatusEffect : StatusEffectBase
 
     private HealthComponent healthComponent;
 
-    public HealthStatusEffect(ScriptableStatusEffect statusEffect, GameObject gameObj) : base(statusEffect, gameObj)
+    public HealthStatusEffect(ScriptableStatusEffectData statusEffect, GameObject gameObj) : base(statusEffect, gameObj)
     {
         healthComponent = gameObj.GetComponent<HealthComponent>();
         healthStatusEffectData = (HealthStatusEffectData)statusEffect;

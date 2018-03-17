@@ -10,13 +10,13 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField] private Text stackSizeText;
     [SerializeField] private Image textBackground;
     
-    private Item item;
+    private ItemBase item;
     private Inventory inventory;
     private CanvasGroup canvasGroup;
     private Transform initialParentTransform;
     private int index;
 
-    public Item Item
+    public ItemBase Item
     {
         get
         {

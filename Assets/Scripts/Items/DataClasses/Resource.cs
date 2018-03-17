@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-public class Resource : Item
+public class Resource : ItemBase
 {
     public const int STACKSIZE = 64;
 
-    public Resource(ResourceData resourceData) : base(resourceData)
+    public Resource(ResourceData resourceData, int stacksize = 1) : base(resourceData)
     {
         amount = resourceData.Amount;
     }

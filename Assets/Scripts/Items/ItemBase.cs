@@ -1,11 +1,9 @@
-﻿using System.Linq;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
-using UnityEngine;
-
-public class Item
+public class ItemBase
 {
-    public Item(ItemData itemData)
+    public ItemBase(ScriptableItemData itemData)
     {
         itemName = itemData.name;
         sprite = itemData.Sprite;
@@ -21,7 +19,7 @@ public class Item
     private GameObject model;
     private string description;
     private bool isConsumable;
-    private List<ScriptableStatusEffect> onConsumedEffects;
+    private List<ScriptableStatusEffectData> onConsumedEffects;
     private int id;
 
     public string Name { get { return itemName; } }
@@ -29,6 +27,6 @@ public class Item
     public GameObject Model { get { return model; } }
     public string Description { get { return description; } }
     public bool IsConsumable { get { return isConsumable; } }
-    public List<ScriptableStatusEffect> OnConsumedEffects { get { return onConsumedEffects; } }
+    public List<ScriptableStatusEffectData> OnConsumedEffects { get { return onConsumedEffects; } }
     public int Id { get { return id; } }
 }

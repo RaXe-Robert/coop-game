@@ -2,7 +2,7 @@
 using System.Collections;
 
 [CreateAssetMenu(menuName = "StatusEffects/HealthStatusEffect")]
-public class HealthStatusEffectData : ScriptableStatusEffect
+public class HealthStatusEffectData : ScriptableStatusEffectData
 {
     [Tooltip("Total health modification, can be positive or negative")]
     [SerializeField] private float healthIncrease;

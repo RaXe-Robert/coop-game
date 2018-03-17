@@ -6,6 +6,6 @@ using UnityEngine;
 [Serializable]
 public class CraftingItem
 {
-    public ItemData item;   
+    public ScriptableItemData item;   
     public int amount;
 }

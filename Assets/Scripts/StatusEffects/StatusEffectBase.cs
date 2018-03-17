@@ -7,7 +7,7 @@ using System.Collections;
 public abstract class StatusEffectBase
 {
     protected GameObject gameObj; // The target object for this status effect
-    protected ScriptableStatusEffect statusEffect; // Contains specific data for the status effect
+    protected ScriptableStatusEffectData statusEffect; // Contains specific data for the status effect
     public float Duration => statusEffect.Duration; // Total duration of this effect
 
     protected float timeRemaining;
@@ -18,7 +18,7 @@ public abstract class StatusEffectBase
         get { return timeRemaining <= 0 ? true : false; }
     }
 
-    public StatusEffectBase(ScriptableStatusEffect statusEffect, GameObject gameObj)
+    public StatusEffectBase(ScriptableStatusEffectData statusEffect, GameObject gameObj)
     {
         this.gameObj = gameObj;
         this.statusEffect = statusEffect;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemWorldObject : MonoBehaviour, IInteractable
 {
-    public Item item;
+    public ItemBase item;
     public float pickupDistance = 3f;
 
     private PhotonView photonView;

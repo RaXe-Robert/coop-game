@@ -2,7 +2,7 @@
 using System.Collections;
 
 [CreateAssetMenu(menuName = "StatusEffects/HungerStatusEffect")]
-public class HungerStatusEffectData : ScriptableStatusEffect
+public class HungerStatusEffectData : ScriptableStatusEffectData
 {
     [Tooltip("Total hunger modification, can be positive or negative")]
     [SerializeField] private float hungerModification;
