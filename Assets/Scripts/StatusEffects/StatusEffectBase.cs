@@ -38,6 +38,11 @@ public abstract class StatusEffectBase
             OnEnd();
     }
 
+    public void Merge(StatusEffectBase statusEffectToMerge)
+    {
+        timeRemaining += statusEffectToMerge.TimeRemaing;
+    }
+
     /// <summary>
     /// Gets called when this is added to a <see cref="StatusEffectComponent"/>
     /// </summary>

@@ -5,8 +5,8 @@ using System.Collections;
 public class HealthStatusEffectData : ScriptableStatusEffectData
 {
     [Tooltip("Total health modification, can be positive or negative")]
-    [SerializeField] private float healthIncrease;
-    public float Modification { get { return healthIncrease; } }
+    [SerializeField] private float healthModification;
+    public float HealthModification { get { return healthModification; } }
 
     public override StatusEffectBase InitializeStatusEffect(GameObject gameObj)
     {

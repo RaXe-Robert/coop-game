@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class StatusEffectComponent : MonoBehaviour
 {
+    [SerializeField] private bool MergeEffectsOfSameType = true;
     public List<StatusEffectBase> CurrentStatusEffects = new List<StatusEffectBase>();
 
     private void Update()
@@ -28,10 +29,30 @@ public class StatusEffectComponent : MonoBehaviour
     /// <param name="statusEffects">The status effect to add</param>
     public void AddStatusEffect(ScriptableStatusEffectData statusEffectData)
     {
-        var statusEffect = statusEffectData.InitializeStatusEffect(gameObject);
+        StatusEffectBase statusEffect = statusEffectData.InitializeStatusEffect(gameObject);
 
-        CurrentStatusEffects.Add(statusEffect);
-        statusEffect.OnActivate();
+        bool hasMerged = false;
+
+        if (MergeEffectsOfSameType)
+        {
+            // Todo: not efficient if there are many status effects on an object
+            System.Type statusEffectType = statusEffect.GetType();
+            foreach (StatusEffectBase activeStatusEffect in CurrentStatusEffects)
+            {
+                if (activeStatusEffect.GetType() == statusEffectType)
+                {
+                    activeStatusEffect.Merge(statusEffect);
+                    hasMerged = true;
+                }
+            }
+        }
+
+        if (hasMerged == false)
+        { 
+            CurrentStatusEffects.Add(statusEffect);
+            statusEffect.OnActivate();
+        }
+
     }
 
     /// <summary>

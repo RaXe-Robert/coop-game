@@ -23,7 +23,7 @@ public class HealthStatusEffect : StatusEffectBase
 
     public override void OnTick(float delta)
     {
-        healthComponent.Health += healthStatusEffectData.Modification / Duration * delta;
+        healthComponent.Health += healthStatusEffectData.HealthModification / Duration * delta;
     }
 
     public override void OnEnd()
@@ -32,6 +32,6 @@ public class HealthStatusEffect : StatusEffectBase
 
     public override string ToString()
     {
-        return $"Modifies {gameObj.name} health by {healthStatusEffectData.Modification} over {healthStatusEffectData.Duration} seconds.";
+        return $"Modifies {gameObj.name} health by {healthStatusEffectData.HealthModification} over {healthStatusEffectData.Duration} seconds.";
     }
 }

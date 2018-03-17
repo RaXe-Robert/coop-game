@@ -7,7 +7,9 @@ using UnityEngine;
 /// Base class for all status effects data objects.
 /// </summary>
 public abstract class ScriptableStatusEffectData : ScriptableObject
-{ 
+{
+    [SerializeField] private Sprite icon;
+
     // The duration of the status effect
     public float Duration;
 
