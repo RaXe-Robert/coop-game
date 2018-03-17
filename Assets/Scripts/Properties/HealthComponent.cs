@@ -18,7 +18,6 @@ public class HealthComponent : Photon.MonoBehaviour, IPunObservable
         {
             health = Mathf.Clamp(value, MinValue, MaxValue);
             OnValueChangedCallback?.Invoke(health);
-            Debug.Log(health);
         }
     }
     

@@ -5,8 +5,8 @@ using System.Collections;
 public class HungerStatusEffectData : ScriptableStatusEffect
 {
     [Tooltip("Total hunger modification, can be positive or negative")]
-    [SerializeField] private float hungerIncrease;
-    public float HungerIncrease { get { return hungerIncrease; } }
+    [SerializeField] private float hungerModification;
+    public float HungerModification { get { return hungerModification; } }
 
     public override StatusEffectBase InitializeStatusEffect(GameObject gameObj)
     {

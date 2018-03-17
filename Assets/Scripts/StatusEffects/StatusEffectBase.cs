@@ -46,4 +46,6 @@ public abstract class StatusEffectBase
     public abstract void OnTick(float delta);
     
     public abstract void OnEnd();
+
+    public abstract override string ToString();
 }

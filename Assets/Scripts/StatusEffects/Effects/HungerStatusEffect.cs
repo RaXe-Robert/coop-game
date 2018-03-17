@@ -18,14 +18,20 @@ public class HungerStatusEffect : StatusEffectBase
 
     public override void OnActivate()
     {
+        Debug.Log(this.ToString());
     }
 
     public override void OnTick(float delta)
     {
-        hungerComponent.Hunger += hungerStatusEffectData.HungerIncrease / Duration * delta;
+        hungerComponent.Hunger += hungerStatusEffectData.HungerModification / Duration * delta;
     }
 
     public override void OnEnd()
     {
+    }
+
+    public override string ToString()
+    {
+        return $"Modifies {gameObj.name} health by {hungerStatusEffectData.HungerModification} over {hungerStatusEffectData.Duration} seconds.";
     }
 }
