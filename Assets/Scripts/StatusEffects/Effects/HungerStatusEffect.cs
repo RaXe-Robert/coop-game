@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Status effect that modifies hunger of a given object over time.
+/// </summary>
 public class HungerStatusEffect : StatusEffectBase
 {
     private HungerStatusEffectData hungerStatusEffectData;

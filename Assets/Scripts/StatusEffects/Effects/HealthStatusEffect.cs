@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Status effect that modifies health of a given object over time.
+/// </summary>
 public class HealthStatusEffect : StatusEffectBase
 {
     private HealthStatusEffectData healthStatusEffectData;
