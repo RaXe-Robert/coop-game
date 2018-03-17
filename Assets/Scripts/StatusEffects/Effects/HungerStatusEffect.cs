@@ -32,6 +32,6 @@ public class HungerStatusEffect : StatusEffectBase
 
     public override string ToString()
     {
-        return $"Modifies {gameObj.name} health by {hungerStatusEffectData.HungerModification} over {hungerStatusEffectData.Duration} seconds.";
+        return $"Modifies {gameObj.name} hunger by {hungerStatusEffectData.HungerModification} over {hungerStatusEffectData.Duration} seconds.";
     }
 }

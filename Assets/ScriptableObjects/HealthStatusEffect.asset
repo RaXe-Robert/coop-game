@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebd4a31ecca61e42b51fe8b12f200b3, type: 3}
   m_Name: HealthStatusEffect
   m_EditorClassIdentifier: 
-  Duration: 5
+  Duration: 10
   healthIncrease: 10
