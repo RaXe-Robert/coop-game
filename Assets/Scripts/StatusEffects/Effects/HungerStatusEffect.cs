@@ -18,7 +18,7 @@ public class HungerStatusEffect : StatusEffectBase
 
     public override void OnActivate()
     {
-        Debug.Log(this.ToString());
+        hungerComponent.HungerDegenerationActive = false;
     }
 
     public override void OnTick(float delta)
@@ -28,6 +28,7 @@ public class HungerStatusEffect : StatusEffectBase
 
     public override void OnEnd()
     {
+        hungerComponent.HungerDegenerationActive = true;
     }
 
     public override string ToString()
