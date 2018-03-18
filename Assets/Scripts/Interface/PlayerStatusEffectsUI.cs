@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerStatusEffectsUI : MonoBehaviour
 {
-    [SerializeField] private StatusEffectDisplay statusEffectDisplayResource;
+    [SerializeField] private GameObject statusEffectDisplayPrefab;
 
     private List<StatusEffectDisplay> activeStatusEffectsDisplays;
 
@@ -25,7 +25,9 @@ public class PlayerStatusEffectsUI : MonoBehaviour
     
     private void AddNewStatusEffectDisplay(StatusEffectBase statusEffect)
     {
-        StatusEffectDisplay statusEffectDisplay = Instantiate(statusEffectDisplayResource, transform);
+        GameObject newStatusEffectDisplay = Instantiate(statusEffectDisplayPrefab, transform);
+
+        StatusEffectDisplay statusEffectDisplay = newStatusEffectDisplay.GetComponent<StatusEffectDisplay>();
         statusEffectDisplay.InitializeDisplay(statusEffect);
 
         activeStatusEffectsDisplays.Add(statusEffectDisplay);

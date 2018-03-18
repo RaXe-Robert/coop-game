@@ -1077,6 +1077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4738ce1998c8143974a3ec3ade1c5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MergeEffectsOfSameType: 1
 --- !u!114 &114692401914651078
 MonoBehaviour:
   m_ObjectHideFlags: 1
