@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Patrol : NPCBaseFSM {
-    
+public class Flee : NPCBaseFSM {
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         base.OnStateEnter(animator, stateInfo, layerIndex);
-    }   
+    }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (Vector3.Distance(Waypoint, NPC.transform.position) < accuracy)
+        
+        if (Vector3.Distance(Waypoint, NPC.transform.position) < accuracy || Vector3.Distance(Opponent.transform.position, NPC.transform.position) < accuracy)
         {
-            Waypoint = CreateWaypoint();
+            Debug.Log("Calculating waypoint...");
+            Waypoint = CalculateFleeWaypoint();
         }
 
         agent.SetDestination(Waypoint);
+        // agent.SetDestination(Opponent.transform.position);
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -24,10 +27,8 @@ public class Patrol : NPCBaseFSM {
         agent.SetDestination(NPC.transform.position);
     }
 
-    Vector3 CreateWaypoint()
+    Vector3 CalculateFleeWaypoint()
     {
-        return NPC.transform.position + new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+        return Opponent.transform.rotation * NPC.transform.position + Opponent.transform.position + NPC.transform.position * 5;
     }
-
-   
 }
