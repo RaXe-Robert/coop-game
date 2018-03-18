@@ -16,6 +16,5 @@ public class NPCBaseFSM : StateMachineBehaviour {
         NPC = animator.gameObject;
         Opponent = PlayerNetwork.PlayerObject;
         agent = NPC.GetComponent<UnityEngine.AI.NavMeshAgent>();
-     }
-    
+     }    
 }

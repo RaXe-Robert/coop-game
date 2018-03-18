@@ -13,6 +13,18 @@ ModelImporter:
     100010: LowerBone_002
     100012: UpperBone
     100014: UpperBone_001
+    100016: Arm
+    100018: Arm1
+    100020: ArmInner
+    100022: Base
+    100024: Hand
+    100026: Hand1
+    100028: Hand2
+    100030: Hand3
+    100032: LeftBody
+    100034: LeftEar
+    100036: RightBody
+    100038: RightEar
     400000: Armature
     400002: //RootNode
     400004: carl
@@ -21,11 +33,24 @@ ModelImporter:
     400010: LowerBone_002
     400012: UpperBone
     400014: UpperBone_001
+    400016: Arm
+    400018: Arm1
+    400020: ArmInner
+    400022: Base
+    400024: Hand
+    400026: Hand1
+    400028: Hand2
+    400030: Hand3
+    400032: LeftBody
+    400034: LeftEar
+    400036: RightBody
+    400038: RightEar
     2100000: Material
     4300000: carl
     7400000: Default Take
     7400002: Idle
     7400004: Move
+    7400006: Attack
     9500000: //RootNode
     13700000: carl
   externalObjects: {}
@@ -86,6 +111,34 @@ ModelImporter:
     - serializedVersion: 16
       name: Move
       takeName: Move
+      firstFrame: -1
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Attack
+      takeName: Attack
       firstFrame: -1
       lastFrame: 59
       wrapMode: 0
