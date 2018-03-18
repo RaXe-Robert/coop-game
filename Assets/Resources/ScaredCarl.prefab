@@ -113,6 +113,11 @@ GameObject:
   - component: {fileID: 195991344137575116}
   - component: {fileID: 114186898373795776}
   - component: {fileID: 64190916656937536}
+  - component: {fileID: 114118434449334906}
+  - component: {fileID: 114780369903076048}
+  - component: {fileID: 114175295519325148}
+  - component: {fileID: 114578715119365350}
+  - component: {fileID: 114304246863543792}
   m_Layer: 0
   m_Name: ScaredCarl
   m_TagString: Untagged
@@ -278,7 +283,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1559031737579132}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.6, y: 0, z: 0}
+  m_LocalPosition: {x: -15.11, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4763267684740656}
@@ -481,6 +486,36 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114118434449334906
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1559031737579132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71619f749ec3df04f8dc57baed5cd491, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxValue: 100
+  MinValue: 0
+  health: 99
+--- !u!114 &114175295519325148
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1559031737579132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee515faafad84b45bd0cdd95da334be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: ScaredCarl
+  interactDistance: 5
+  spawnOnDepleted: {fileID: 0}
+  healthComponent: {fileID: 114118434449334906}
+  itemsToDrop: {fileID: 114780369903076048}
 --- !u!114 &114186898373795776
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -492,6 +527,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca5057371c02a646af929ddf1533631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114304246863543792
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1559031737579132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: isMoving
+  - Type: 1
+    SynchronizeType: 2
+    Name: Distance
+  m_SynchronizeLayers:
+  - SynchronizeType: 2
+    LayerIndex: 0
+--- !u!114 &114578715119365350
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1559031737579132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 4321886421854308}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114780369903076048
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1559031737579132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemsToSpawn:
+  - {fileID: 11400000, guid: 9b984738be4bab148b16baebddcefb0e, type: 2}
+  ItemCountPerItem: 05000000
+  minRadius: -2
+  maxRadius: 2
 --- !u!137 &137694614882859118
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

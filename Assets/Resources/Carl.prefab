@@ -143,6 +143,11 @@ GameObject:
   - component: {fileID: 114161448037325554}
   - component: {fileID: 195352717974431406}
   - component: {fileID: 64609005104138986}
+  - component: {fileID: 114305619081064444}
+  - component: {fileID: 114856251444921530}
+  - component: {fileID: 114357573752806218}
+  - component: {fileID: 114918395143774818}
+  - component: {fileID: 114552770308090306}
   m_Layer: 0
   m_Name: Carl
   m_TagString: Untagged
@@ -492,6 +497,101 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3388bcc3b306b56458feaf183283fa90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114305619081064444
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386452222050776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 1
+  ObservedComponents:
+  - {fileID: 4905756326830184}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114357573752806218
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386452222050776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71619f749ec3df04f8dc57baed5cd491, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxValue: 100
+  MinValue: 0
+  health: 100
+--- !u!114 &114552770308090306
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386452222050776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee515faafad84b45bd0cdd95da334be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Carl
+  interactDistance: 5
+  spawnOnDepleted: {fileID: 0}
+  healthComponent: {fileID: 114357573752806218}
+  itemsToDrop: {fileID: 114918395143774818}
+--- !u!114 &114856251444921530
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386452222050776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: isMoving
+  - Type: 1
+    SynchronizeType: 2
+    Name: Distance
+  m_SynchronizeLayers:
+  - SynchronizeType: 2
+    LayerIndex: 0
+--- !u!114 &114918395143774818
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386452222050776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemsToSpawn:
+  - {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+  ItemCountPerItem: 0a000000
+  minRadius: -3
+  maxRadius: 3
 --- !u!137 &137403146959230912
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

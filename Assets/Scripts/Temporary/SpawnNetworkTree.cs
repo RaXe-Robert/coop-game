@@ -6,6 +6,8 @@ public class SpawnNetworkTree : Photon.MonoBehaviour {
 
     [SerializeField] private GameObject tree;
     [SerializeField] private GameObject rock;
+    [SerializeField] private GameObject carl;
+    [SerializeField] private GameObject carlScared;
     private GameObject TreeCollection;
     private GameObject RockCollection;
     public int maxTrees = 10;
@@ -28,6 +30,10 @@ public class SpawnNetworkTree : Photon.MonoBehaviour {
                 var newRock = PhotonNetwork.InstantiateSceneObject(rock.name, new Vector3(Random.Range(-50, 50), 0f, Random.Range(-50, 50)), Quaternion.Euler(0, Random.Range(0, 180), 0), 0, null);
                 photonView.RPC("SetStoneParent", PhotonTargets.AllBufferedViaServer, newRock.GetPhotonView().instantiationId);
             }
+
+            PhotonNetwork.InstantiateSceneObject(carl.name, new Vector3(0, 0, 0), new Quaternion(), 0, null);
+            PhotonNetwork.InstantiateSceneObject(carlScared.name, new Vector3(0, 0, 0), new Quaternion(), 0, null);
+
         }
     }
 
