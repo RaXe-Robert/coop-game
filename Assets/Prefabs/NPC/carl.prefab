@@ -142,8 +142,9 @@ GameObject:
   - component: {fileID: 95194930049602910}
   - component: {fileID: 114161448037325554}
   - component: {fileID: 195352717974431406}
+  - component: {fileID: 64609005104138986}
   m_Layer: 0
-  m_Name: carl
+  m_Name: Carl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -449,6 +450,20 @@ Transform:
   m_Father: {fileID: 4584567827467856}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &64609005104138986
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386452222050776}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: de064ee2fbc21b549928d1c6a340cebd, type: 3}
 --- !u!95 &95194930049602910
 Animator:
   serializedVersion: 3

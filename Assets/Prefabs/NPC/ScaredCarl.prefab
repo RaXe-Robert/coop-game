@@ -112,8 +112,9 @@ GameObject:
   - component: {fileID: 95661989249650220}
   - component: {fileID: 195991344137575116}
   - component: {fileID: 114186898373795776}
+  - component: {fileID: 64190916656937536}
   m_Layer: 0
-  m_Name: friendlycarl
+  m_Name: ScaredCarl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -449,6 +450,20 @@ Transform:
   m_Father: {fileID: 4307582487406246}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &64190916656937536
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1559031737579132}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: 8bf54b3791c828243a9fd66b5b8f9b4b, type: 3}
 --- !u!95 &95661989249650220
 Animator:
   serializedVersion: 3
