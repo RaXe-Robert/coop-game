@@ -13,7 +13,7 @@ public abstract class StatusEffectBase
     public float Duration => statusEffectData.Duration; // Total duration of this effect
 
     protected float timeRemaining;
-    public float TimeRemaing { get { return timeRemaining; } }
+    public float TimeRemaining { get { return timeRemaining; } }
 
     public bool IsFinished
     {
@@ -47,7 +47,7 @@ public abstract class StatusEffectBase
 
     public void Merge(StatusEffectBase statusEffectToMerge)
     {
-        timeRemaining += statusEffectToMerge.TimeRemaing;
+        timeRemaining += statusEffectToMerge.TimeRemaining;
     }
 
     /// <summary>

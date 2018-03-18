@@ -12,7 +12,7 @@ public class StatusEffectDisplay : MonoBehaviour
     {
         this.statusEffect = statusEffect;
 
-        timeRemaining.text = statusEffect.TimeRemaing.ToString();
+        timeRemaining.text = statusEffect.TimeRemaining.ToString();
         image.sprite = statusEffect.StatusEffectData.Icon;
 
         statusEffect.OnStatusEffectTick += UpdateDisplay;
@@ -26,6 +26,6 @@ public class StatusEffectDisplay : MonoBehaviour
             Destroy(gameObject);
         }
 
-        timeRemaining.text = ((int)statusEffect.TimeRemaing).ToString();
+        timeRemaining.text = ((int)statusEffect.TimeRemaining).ToString();
     }
 }
