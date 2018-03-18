@@ -17,9 +17,10 @@ public class Patrol : NPCBaseFSM {
             Waypoint = createWaypoint();
         }
 
-        var direction = Waypoint - NPC.transform.position;
-        NPC.transform.rotation = Quaternion.Slerp(NPC.transform.rotation, Quaternion.LookRotation(direction), rotSpeed * Time.deltaTime);
-        NPC.transform.Translate(0, 0, Time.deltaTime * speed);
+        agent.SetDestination(Waypoint);
+        //var direction = Waypoint - NPC.transform.position;
+        //NPC.transform.rotation = Quaternion.Slerp(NPC.transform.rotation, Quaternion.LookRotation(direction), rotSpeed * Time.deltaTime);
+        //NPC.transform.Translate(0, 0, Time.deltaTime * speed);
 
     }
 

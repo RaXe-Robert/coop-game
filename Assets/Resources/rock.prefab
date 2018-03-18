@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 114056808189935048}
   - component: {fileID: 114400987669569362}
   - component: {fileID: 64629248837855744}
+  - component: {fileID: 208407444410447410}
   m_Layer: 0
   m_Name: rock
   m_TagString: Untagged
@@ -173,3 +174,18 @@ MonoBehaviour:
   spawnOnDepleted: {fileID: 0}
   healthComponent: {fileID: 114056808189935048}
   itemsToDrop: {fileID: 114400987669569362}
+--- !u!208 &208407444410447410
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1695406501947972}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.83500004, y: 0.614, z: 0.9710001}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.035, y: 0.17600001, z: 0.029000001}
+  m_TimeToStationary: 0.5

@@ -6,6 +6,7 @@ public class NPCBaseFSM : StateMachineBehaviour {
 
     public GameObject NPC;
     public GameObject Opponent;
+    public UnityEngine.AI.NavMeshAgent agent;
     public float speed = 2.0f;
     public float rotSpeed = 1.0f;
     public float accuracy = 1.0f;
@@ -14,6 +15,7 @@ public class NPCBaseFSM : StateMachineBehaviour {
     {
         NPC = animator.gameObject;
         Opponent = PlayerNetwork.PlayerObject;
+        agent = NPC.GetComponent<UnityEngine.AI.NavMeshAgent>();
      }
     
 }
