@@ -515,7 +515,7 @@ MonoBehaviour:
   synchronization: 3
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
-  ownershipTransfer: 1
+  ownershipTransfer: 0
   ObservedComponents:
   - {fileID: 4905756326830184}
   ObservedComponentsFoldoutOpen: 1
