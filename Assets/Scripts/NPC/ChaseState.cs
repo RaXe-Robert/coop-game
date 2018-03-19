@@ -11,12 +11,12 @@ public class ChaseState : NPCBaseFSM {
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        agent.SetDestination(Opponent.transform.position);
+        agent.SetDestination(Opponent.transform.position);        
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        agent.SetDestination(NPC.transform.position);
+        agent.SetDestination(NPC.transform.position);       
     }
     
 }

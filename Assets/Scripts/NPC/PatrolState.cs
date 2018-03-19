@@ -15,14 +15,14 @@ public class PatrolState : NPCBaseFSM {
         if (Vector3.Distance(Waypoint, NPC.transform.position) < accuracy || !agent.hasPath)
         {
             Waypoint = CreateWaypoint();
-        } 
-        
+        }
+
         agent.SetDestination(Waypoint);
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        agent.SetDestination(NPC.transform.position);
+       agent.SetDestination(NPC.transform.position);        
     }
 
     Vector3 CreateWaypoint()

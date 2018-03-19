@@ -13,7 +13,21 @@ public class NPCBaseFSM : StateMachineBehaviour {
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         NPC = animator.gameObject;
-        Opponent = PlayerNetwork.PlayerObject;
+        Opponent = GetClosestOpponent();
         agent = NPC.GetComponent<UnityEngine.AI.NavMeshAgent>();
-     }    
+     }
+    
+    GameObject GetClosestOpponent()
+    {
+        //foreach(PhotonPlayer p in PhotonNetwork.playerList)
+        //{
+        //    p.
+        //}
+
+
+
+        return PlayerNetwork.PlayerObject;
+    }
+
+
 }

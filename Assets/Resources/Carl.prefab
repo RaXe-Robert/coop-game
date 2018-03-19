@@ -144,6 +144,7 @@ GameObject:
   - component: {fileID: 195352717974431406}
   - component: {fileID: 64609005104138986}
   - component: {fileID: 114305619081064444}
+  - component: {fileID: 114765503467221414}
   - component: {fileID: 114856251444921530}
   - component: {fileID: 114357573752806218}
   - component: {fileID: 114918395143774818}
@@ -517,7 +518,9 @@ MonoBehaviour:
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 4905756326830184}
+  - {fileID: 114765503467221414}
+  - {fileID: 114856251444921530}
+  - {fileID: 114357573752806218}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -553,6 +556,71 @@ MonoBehaviour:
   spawnOnDepleted: {fileID: 0}
   healthComponent: {fileID: 114357573752806218}
   itemsToDrop: {fileID: 114918395143774818}
+--- !u!114 &114765503467221414
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386452222050776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PositionModel:
+    SynchronizeEnabled: 1
+    TeleportEnabled: 1
+    TeleportIfDistanceGreaterThan: 3
+    InterpolateOption: 2
+    InterpolateMoveTowardsSpeed: 1
+    InterpolateLerpSpeed: 1
+    InterpolateMoveTowardsAcceleration: 2
+    InterpolateMoveTowardsDeceleration: 2
+    InterpolateSpeedCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 2
+        time: -1
+        value: 0
+        inSlope: 0
+        outSlope: Infinity
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 4
+        value: 4
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ExtrapolateOption: 0
+    ExtrapolateSpeed: 1
+    ExtrapolateIncludingRoundTripTime: 1
+    ExtrapolateNumberOfStoredPositions: 1
+    DrawErrorGizmo: 1
+  m_RotationModel:
+    SynchronizeEnabled: 1
+    InterpolateOption: 2
+    InterpolateRotateTowardsSpeed: 180
+    InterpolateLerpSpeed: 5
+  m_ScaleModel:
+    SynchronizeEnabled: 1
+    InterpolateOption: 2
+    InterpolateMoveTowardsSpeed: 1
+    InterpolateLerpSpeed: 10
 --- !u!114 &114856251444921530
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -573,6 +641,9 @@ MonoBehaviour:
   - Type: 1
     SynchronizeType: 2
     Name: Distance
+  - Type: 4
+    SynchronizeType: 2
+    Name: isDepleted
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
