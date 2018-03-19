@@ -25,9 +25,7 @@ public class PlayerStatusEffectsUI : MonoBehaviour
     
     private void AddNewStatusEffectDisplay(StatusEffectBase statusEffect)
     {
-        GameObject newStatusEffectDisplay = Instantiate(statusEffectDisplayPrefab, transform);
-
-        StatusEffectDisplay statusEffectDisplay = newStatusEffectDisplay.GetComponent<StatusEffectDisplay>();
+        StatusEffectDisplay statusEffectDisplay = Instantiate(statusEffectDisplayPrefab, transform).GetComponent<StatusEffectDisplay>();
         statusEffectDisplay.InitializeDisplay(statusEffect);
 
         activeStatusEffectsDisplays.Add(statusEffectDisplay);
