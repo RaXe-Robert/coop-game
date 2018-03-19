@@ -8,9 +8,9 @@ public class Inventory : MonoBehaviour
 {
     public static readonly int InventorySize = 20;
     public static readonly int HotbarSize = 10;
-    public ItemData diamond;
-    public ItemData stick;
-    public List<Item> inventoryItems;
+    public ScriptableItemData diamond;
+    public ScriptableItemData stick;
+    public List<ItemBase> inventoryItems;
     private PhotonView photonView;
 
     public delegate void OnItemChanged();
@@ -18,7 +18,7 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
-        inventoryItems = new List<Item>(new Item[InventorySize + HotbarSize]);
+        inventoryItems = new List<ItemBase>(new ItemBase[InventorySize + HotbarSize]);
         photonView = GetComponent<PhotonView>();
     }
 
@@ -36,7 +36,7 @@ public class Inventory : MonoBehaviour
 
     private void AddNewItemStackById(int itemId, int stackSize)
     {
-        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
+        ItemBase item = ItemFactory.CreateNewItem(itemId, stackSize);
         var emptyIndex = inventoryItems.FirstNullIndexAt();
 
         inventoryItems[emptyIndex.Value] = item;
@@ -45,7 +45,7 @@ public class Inventory : MonoBehaviour
 
     private void FillItemStacksById(int itemId, int stackSize)
     {
-        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
+        ItemBase item = ItemFactory.CreateNewItem(itemId, stackSize);
 
         //Check if the item to add is a Resource item.
         if (item.GetType() == typeof(Resource))
@@ -192,7 +192,7 @@ public class Inventory : MonoBehaviour
         if (!photonView.isMine)
             return;
 
-        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
+        ItemBase item = ItemFactory.CreateNewItem(itemId, stackSize);
         if (!inventoryItems.FirstNullIndexAt().HasValue)
         {
             ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);

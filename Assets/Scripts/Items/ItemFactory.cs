@@ -5,35 +5,28 @@ using System.Linq;
 
 public class ItemFactory : MonoBehaviour {
 
-    private static ItemData[] itemLookUpTable;
+    private static ScriptableItemData[] itemLookUpTable;
     private static PhotonView photonView;
-    public Item test;
+    public ItemBase test;
 
     private void Start()
     {
         photonView = GetComponent<PhotonView>();
 
-        itemLookUpTable = Resources.LoadAll<ItemData>("Items");
+        itemLookUpTable = Resources.LoadAll<ScriptableItemData>("Items");
     }
 
-    public static Item CreateNewItem(int itemId, int stackSize = 1)
+    public static ItemBase CreateNewItem(int itemId, int stackSize = 1)
     {
         var itemData = itemLookUpTable.First(x => x.Id == itemId);
-        var type = itemData.GetType();
-        Item item;
 
-        if(type == typeof(ItemData))
-            item = new Item(itemData);
-        else if (type == typeof(ResourceData))
+        ItemBase item = itemData.InitializeItem();
+
+        if (item is Resource)
         {
-            item = new Resource(itemData as ResourceData);
             ((Resource)item).Amount = stackSize;
         }
-        else if (type == typeof(ArmorData))
-            item = new Armor(itemData as ArmorData);
-        else
-            item = new Weapon(itemData as WeaponData);
-
+        
         return item;
     }
 
@@ -48,7 +41,7 @@ public class ItemFactory : MonoBehaviour {
     {
         GameObject go = Resources.Load<GameObject>("Item");
 
-        Item item = CreateNewItem(itemId, stackSize);
+        ItemBase item = CreateNewItem(itemId, stackSize);
 
         //Get the mesh and materials from the referenced model.
         var itemMesh = item.Model.GetComponent<MeshFilter>().sharedMesh;
