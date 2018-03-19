@@ -70,28 +70,21 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         Tooltip.Instance.Hide();
     }
-    
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (item == null)
             return;
 
-        switch (eventData.button)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            case PointerEventData.InputButton.Left:
-                if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
-                {
-                    PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
-                    inventory.RemoveItem(index);
-                    Tooltip.Instance.Hide();
-                }
-                break;
-            case PointerEventData.InputButton.Right:
-                break;
-            case PointerEventData.InputButton.Middle:
-                break;
+            if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
+            {
+                PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
+                inventory.RemoveItem(index);
+                Tooltip.Instance.Hide();
+            }
         }
-        
     }
 
     public void OnBeginDrag(PointerEventData eventData)
