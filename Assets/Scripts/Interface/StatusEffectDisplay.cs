@@ -26,6 +26,6 @@ public class StatusEffectDisplay : MonoBehaviour
             Destroy(gameObject);
         }
 
-        timeRemaining.text = ((int)statusEffect.TimeRemaining).ToString();
+        timeRemaining.text = statusEffect.TimeRemaining.ToString("F0");
     }
 }
