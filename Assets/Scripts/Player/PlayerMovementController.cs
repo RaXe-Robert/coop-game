@@ -11,11 +11,15 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
     private PlayerCameraController cameraController = null;
 
+    private MeshCollider raycastPlaneCollider = null;
+
     private void Awake()
     {
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
+
+        CreateRaycastPlane();
     }
 
     // Use this for initialization
@@ -34,17 +38,19 @@ public class PlayerMovementController : Photon.MonoBehaviour
         }
 
     }
-    
+
     private void Update()
     {
-        if (!photonView.isMine) return;
+        if (!photonView.isMine)
+            return;
 
         RotatePlayer();
     }
     
     private void FixedUpdate()
     {
-        if (!photonView.isMine) return;
+        if (!photonView.isMine)
+            return;
 
         MovePlayer();
 
@@ -57,14 +63,16 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
         Ray ray = cameraController.CameraReference.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        Physics.Raycast(ray, out hit);
-
-        Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
-        if (Vector3.Distance(transform.position, lookPos) > mouseDeadZoneFromPlayer)
+        if (raycastPlaneCollider.Raycast(ray, out hit, 500f))
         {
-            transform.LookAt(lookPos);
+            Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+
+            if (Vector3.Distance(transform.position, lookPos) > mouseDeadZoneFromPlayer)
+            {
+                transform.LookAt(lookPos);
+            }
         }
+        
     }
 
     /// <summary>
@@ -90,5 +98,23 @@ public class PlayerMovementController : Photon.MonoBehaviour
         {
             animator.SetBool("IsRunning", false);
         }
+    }
+
+    private void CreateRaycastPlane()
+    {
+        if (raycastPlaneCollider != null)
+            return;
+
+        GameObject raycastPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+
+        raycastPlaneCollider = raycastPlane.GetComponent<MeshCollider>();
+        Destroy(raycastPlane.GetComponent<MeshRenderer>());
+
+        raycastPlane.transform.localScale += new Vector3(10f, 0f, 10f);
+        raycastPlane.gameObject.name = "PlayerRaycastPlane";
+        raycastPlaneCollider.convex = true;
+        raycastPlaneCollider.isTrigger = true;
+
+        raycastPlane.transform.SetParent(transform);
     }
 }
