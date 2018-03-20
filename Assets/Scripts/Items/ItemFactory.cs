@@ -21,11 +21,7 @@ public class ItemFactory : MonoBehaviour {
         var itemData = itemLookUpTable.First(x => x.Id == itemId);
 
         ItemBase item = itemData.InitializeItem();
-
-        if (item is Resource)
-        {
-            ((Resource)item).Amount = stackSize;
-        }
+        item.StackSize = stackSize;
         
         return item;
     }
