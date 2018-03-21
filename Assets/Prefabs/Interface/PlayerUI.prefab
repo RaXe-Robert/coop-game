@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 222810041155934086}
   - component: {fileID: 114368134989325132}
   m_Layer: 5
-  m_Name: TooltipName
+  m_Name: TooltipTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -846,7 +846,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 5
-  m_Text: Object Information
+  m_Text: Description
 --- !u!114 &114313163515383902
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -859,8 +859,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 1873902394499478}
-  textObjectName: {fileID: 114368134989325132}
-  textObjectInformation: {fileID: 114282937721888740}
+  title: {fileID: 114368134989325132}
+  description: {fileID: 114282937721888740}
 --- !u!114 &114314137913149922
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -955,7 +955,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 5
-  m_Text: Object Name
+  m_Text: Title
 --- !u!114 &114393077410995294
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1556,8 +1556,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
+    m_Left: 5
+    m_Right: 5
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 1

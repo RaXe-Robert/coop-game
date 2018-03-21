@@ -8,8 +8,8 @@ public class Tooltip : MonoBehaviour
     public static Tooltip Instance { get; private set; }
 
     [SerializeField] private GameObject panel;
-    [SerializeField] private Text textObjectName;
-    [SerializeField] private Text textObjectInformation;
+    [SerializeField] private Text title;
+    [SerializeField] private Text description;
 
     //Makes sure that only one object at a time can control the tooltip
     private object focusLock = null;
@@ -38,11 +38,11 @@ public class Tooltip : MonoBehaviour
             return;
 
         panel.SetActive(true);
-        textObjectName.text = title;
-        textObjectInformation.text = description;
+        this.title.text = title;
+        this.description.text = description;
 
         if (description == string.Empty)
-            textObjectInformation.gameObject.SetActive(false);
+            this.description.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public class Tooltip : MonoBehaviour
 
         focusLock = null;
 
-        textObjectName.text = "";
+        title.text = "";
         panel.SetActive(false);
     }
 

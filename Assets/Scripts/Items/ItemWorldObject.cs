@@ -33,7 +33,7 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
 
     public string TooltipText()
     {
-        return item.Name;
+        return $"{item.Name} ({item.StackSize})";
     }
 
     #endregion //IInteractable Implementation
