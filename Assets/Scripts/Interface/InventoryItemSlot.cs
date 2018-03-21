@@ -29,7 +29,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
             image.sprite = item?.Sprite;
             if (item?.GetType() == typeof(Resource))
             {
-                stackSizeText.text = ((Resource)item).Amount.ToString();
+                stackSizeText.text = item.StackSize.ToString();
                 textBackground.enabled = true;
             }
             else
@@ -128,7 +128,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, (item.GetType() == typeof(Resource) ? ((Resource)item).Amount : 1));
+            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, item.StackSize);
             inventory.RemoveItem(index);
         }
     }
