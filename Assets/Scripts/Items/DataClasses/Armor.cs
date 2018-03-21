@@ -1,20 +1,19 @@
-﻿class Armor : ItemBase
+﻿public class Armor : ItemBase
 {
-    public Armor(ArmorData armoData) : base(armoData)
+    public Armor(ArmorData armorData) : base(armorData)
     {
-        type = armoData.Type;
-        defense = Defense;
+        armorType = armorData.Type;
+        defense = armorData.Defense;
     }
 
-    private ArmorType type;
+    private ArmorType armorType;
     private float defense;
 
-    public ArmorType Type { get { return type; } }
+    public ArmorType ArmorType { get { return armorType; } }
     public float Defense { get { return defense; } }
 
     public override void Equip()
     {
         base.Equip();
-
     }
 }

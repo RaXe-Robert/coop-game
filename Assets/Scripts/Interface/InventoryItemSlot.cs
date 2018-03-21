@@ -11,6 +11,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     
     protected ItemBase item;
     protected Inventory inventory;
+    protected EquipmentManager equipmentManager;
     private CanvasGroup canvasGroup;
     private Transform initialParentTransform;
     private int index;
@@ -39,10 +40,11 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
     }
 
-    public void Initialize(int index, Inventory inventory)
+    public void Initialize(int index, Inventory inventory, EquipmentManager equipmentManager)
     {
         this.index = index;
         this.inventory = inventory;
+        this.equipmentManager = equipmentManager;
     }
 
     public void Start()

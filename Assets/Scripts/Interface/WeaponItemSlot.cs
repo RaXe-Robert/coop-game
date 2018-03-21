@@ -6,15 +6,14 @@ public class WeaponItemSlot : InventoryItemSlot
 {
     [SerializeField] private WeaponType slotType;
 
-    public override void OnPointerClick(PointerEventData eventData)
-    {
-        //We clicked an equipment slot... What now ?
-        base.OnPointerClick(eventData);
-    }
-
     public override void OnDrop(PointerEventData eventData)
     {
-        base.OnDrop(eventData);
+        InventoryItemSlot from;
+        if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
+        {
+            if (from.Item.GetType() == typeof(Weapon))
+                equipmentManager.EquipWeapon(from.Item as Weapon);
+        }
     }
 }
 
