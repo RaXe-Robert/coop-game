@@ -3,8 +3,10 @@ using System.Collections;
 
 public class PlayerMovementController : Photon.MonoBehaviour
 {
-    Rigidbody rigidbodyComponent;
-    Animator animator;
+    private Rigidbody rigidbodyComponent;
+    private Animator animator;
+
+    [SerializeField] private LayerMask rotationLayerMask;
 
     [SerializeField] private float movementSpeed;
     [SerializeField] private float mouseDeadZoneFromPlayer;
@@ -34,17 +36,19 @@ public class PlayerMovementController : Photon.MonoBehaviour
         }
 
     }
-    
+
     private void Update()
     {
-        if (!photonView.isMine) return;
+        if (!photonView.isMine)
+            return;
 
         RotatePlayer();
     }
     
     private void FixedUpdate()
     {
-        if (!photonView.isMine) return;
+        if (!photonView.isMine)
+            return;
 
         MovePlayer();
 
@@ -57,14 +61,16 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
         Ray ray = cameraController.CameraReference.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        Physics.Raycast(ray, out hit);
-
-        Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
-        if (Vector3.Distance(transform.position, lookPos) > mouseDeadZoneFromPlayer)
+        if (Physics.Raycast(ray, out hit, 1000f, rotationLayerMask.value))
         {
-            transform.LookAt(lookPos);
+            Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+
+            if (Vector3.Distance(transform.position, lookPos) > mouseDeadZoneFromPlayer)
+            {
+                transform.LookAt(lookPos);
+            }
         }
+        
     }
 
     /// <summary>
