@@ -1,17 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class ItemWorldObject : MonoBehaviour, IInteractable
+[RequireComponent(typeof(PhotonView))]
+public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
 {
     public ItemBase item;
     public float pickupDistance = 3f;
 
-    private PhotonView photonView;
-
-    public void Start()
+    [PunRPC]
+    public void DestroyWorldObject()
     {
-        photonView = GetComponent<PhotonView>();
+        Destroy(gameObject);
+    }
+
+    #region IInteractable Implementation
+
+    public bool IsInteractable()
+    {
+        return true;
     }
 
     public void Interact(Vector3 invokerPosition)
@@ -23,14 +31,10 @@ public class ItemWorldObject : MonoBehaviour, IInteractable
         photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
     }
 
-    [PunRPC]
-    public void DestroyWorldObject()
+    public string TooltipText()
     {
-        Destroy(gameObject);
+        return $"{item.Name} ({item.StackSize})";
     }
 
-    public bool IsInteractable()
-    {
-        return true;
-    }
+    #endregion //IInteractable Implementation
 }
