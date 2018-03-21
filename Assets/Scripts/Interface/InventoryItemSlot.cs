@@ -87,7 +87,8 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
             else if(item.Equippable)
             {
-                item.Equip();
+                equipmentManager.EquipItem(item);
+                Tooltip.Instance.Hide();
             }
         }
     }

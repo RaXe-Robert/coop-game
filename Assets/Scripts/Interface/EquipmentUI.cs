@@ -64,7 +64,7 @@ public class EquipmentUI : MonoBehaviour {
         {
             if (equipmentManager.HasArmorEquipped(armorSlots[i].SlotType))
             {
-                armorSlots[i].Item = equipmentManager.GetEquippedArmor(armorSlots[i].SlotType);
+                armorSlots[i].Item = equipmentManager.GetEquippedArmorByType(armorSlots[i].SlotType);
             }
             else armorSlots[i].Clear();
         }

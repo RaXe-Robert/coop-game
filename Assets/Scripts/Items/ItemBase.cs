@@ -34,14 +34,4 @@ public class ItemBase
     public List<ScriptableStatusEffectData> OnConsumedEffects { get { return onConsumedEffects; } }
     public int Id { get { return id; } }
     public bool Equippable { get { return GetType() == typeof(Armor) || GetType() == typeof(Tool) || GetType() == typeof(Weapon); } }
-
-    public virtual void Equip()
-    {
-        if (!Equippable)
-        {
-            Debug.LogError("Trying to equip a non equippable item");
-            return;
-        }
-        else Debug.Log($"Equipping the {GetType()} called {Name}");
-    }
 }

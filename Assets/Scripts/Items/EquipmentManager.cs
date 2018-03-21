@@ -11,6 +11,7 @@ public class EquipmentManager : MonoBehaviour
     private Inventory inventory;
     private EquipmentUI equipmentUI;
 
+    //TODO: add stats to player
     public delegate void OnItemEquipped();
     public OnItemEquipped OnItemEquippedCallBack;
 
@@ -27,9 +28,11 @@ public class EquipmentManager : MonoBehaviour
     {
         if (HasToolEquipped(toolToEquip.ToolType))
         {
-            equippedTools.Remove(GetEquippedTool(toolToEquip.ToolType));
-            inventory.AddItemById(toolToEquip.Id, 1);
-            inventory.RemoveItemById(GetEquippedTool(toolToEquip.ToolType).Id);
+            var currentEquipped = GetEquippedTool(toolToEquip.ToolType);
+            inventory.AddItemById(currentEquipped.Id, 1);
+            equippedTools.Remove(currentEquipped);
+
+            inventory.RemoveItemById(toolToEquip.Id);
             equippedTools.Add(toolToEquip);
             OnItemEquippedCallBack?.Invoke();
         }
@@ -45,8 +48,10 @@ public class EquipmentManager : MonoBehaviour
     {
         if (HasWeaponEquipped)
         {
-            inventory.AddItemById(equippedWeapon.Id);
+            var currentEquipped = equippedWeapon;
+            inventory.AddItemById(currentEquipped.Id);
             equippedWeapon = null;
+
             equippedWeapon = weaponToEquip;
             inventory.RemoveItemById(weaponToEquip.Id);
             OnItemEquippedCallBack?.Invoke();
@@ -63,9 +68,13 @@ public class EquipmentManager : MonoBehaviour
     {
         if (HasArmorEquipped(armorToEquip.ArmorType))
         {
-            equippedArmor.Remove(GetEquippedArmor(armorToEquip.ArmorType));
+            //Add currently equipped item to the inventory
+            var currentEquipped = GetEquippedArmorByType(armorToEquip.ArmorType);
+            equippedArmor.Remove(currentEquipped);
+            inventory.AddItemById(currentEquipped.Id);
+
+            //Remove new armor from inventory and equip it
             inventory.RemoveItemById(armorToEquip.Id);
-            inventory.AddItemById(armorToEquip.Id, 1);
             equippedArmor.Add(armorToEquip);
             OnItemEquippedCallBack?.Invoke();
         }
@@ -75,6 +84,19 @@ public class EquipmentManager : MonoBehaviour
             inventory.RemoveItemById(armorToEquip.Id);
             OnItemEquippedCallBack?.Invoke();
         }
+    }
+
+    public void EquipItem(ItemBase item)
+    {
+        if (!item.Equippable)
+            return;
+
+        if (item.GetType() == typeof(Armor))
+            EquipArmor(item as Armor);
+        else if (item.GetType() == typeof(Weapon))
+            EquipWeapon(item as Weapon);
+        else if (item.GetType() == typeof(Tool))
+            EquipTool(item as Tool);
     }
 
     public bool HasToolEquipped(ToolType toolType)
@@ -112,7 +134,7 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
-    public Armor GetEquippedArmor(ArmorType armorType)
+    public Armor GetEquippedArmorByType(ArmorType armorType)
     {
         if (!HasArmorEquipped(armorType))
             return null;

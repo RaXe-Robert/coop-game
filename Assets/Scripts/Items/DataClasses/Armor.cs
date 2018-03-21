@@ -11,9 +11,4 @@
 
     public ArmorType ArmorType { get { return armorType; } }
     public float Defense { get { return defense; } }
-
-    public override void Equip()
-    {
-        base.Equip();
-    }
 }

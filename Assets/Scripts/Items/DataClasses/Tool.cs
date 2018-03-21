@@ -9,9 +9,4 @@ public class Tool : ItemBase
 
     [SerializeField] private ToolType toolType;
     public ToolType ToolType { get { return toolType; } }
-
-    public override void Equip()
-    {
-        base.Equip();
-    }
 }
