@@ -8,8 +8,9 @@ public class Tooltip : MonoBehaviour
     public static Tooltip Instance { get; private set; }
 
     [SerializeField] private GameObject panel;
-    [SerializeField] private Text text;
-    
+    [SerializeField] private Text textObjectName;
+    [SerializeField] private Text textObjectInformation;
+
     //Makes sure that only one object at a time can control the tooltip
     private object focusLock = null;
 
@@ -28,7 +29,7 @@ public class Tooltip : MonoBehaviour
     /// <summary>
     /// Shows the tooltip with the given text if the focus request is succesfull
     /// </summary>
-    public void Show(object requestor, string text)
+    public void Show(object requestor, string title, string description = "")
     {
         if (focusLock != null && focusLock != requestor)
             return;
@@ -37,7 +38,11 @@ public class Tooltip : MonoBehaviour
             return;
 
         panel.SetActive(true);
-        this.text.text = text;
+        textObjectName.text = title;
+        textObjectInformation.text = description;
+
+        if (description == string.Empty)
+            textObjectInformation.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -50,7 +55,7 @@ public class Tooltip : MonoBehaviour
 
         focusLock = null;
 
-        text.text = "";
+        textObjectName.text = "";
         panel.SetActive(false);
     }
 
