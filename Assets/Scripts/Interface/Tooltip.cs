@@ -9,6 +9,8 @@ public class Tooltip : MonoBehaviour
 
     [SerializeField] private GameObject panel;
     [SerializeField] private Text text;
+    
+    private object focusLock = null;
 
     private void Awake()
     {
@@ -19,8 +21,14 @@ public class Tooltip : MonoBehaviour
     /// <summary>
     /// Shows the tooltip with the given text
     /// </summary>
-    public void Show(string text)
+    public void Show(object requestor, string text)
     {
+        if (focusLock != null && focusLock != requestor)
+            return;
+
+        if (RequestFocus(requestor) == false)
+            return;
+
         panel.SetActive(true);
         this.text.text = text;
     }
@@ -28,13 +36,29 @@ public class Tooltip : MonoBehaviour
     /// <summary>
     /// Hides the tooltip
     /// </summary>
-    public void Hide()
+    public void Hide(object requestor)
     {
+        if (focusLock != null && focusLock != requestor)
+            return;
+
+        focusLock = null;
+
         text.text = "";
         panel.SetActive(false);
     }
 
-    void Update()
+    private bool RequestFocus(object focusObject)
+    {
+        if (focusLock == null)
+        {
+            focusLock = focusObject;
+            return true;
+        }
+
+        return false;
+    }
+
+    private void LateUpdate()
     {
         if(panel.activeSelf)
             panel.transform.position = Input.mousePosition + new Vector3(0, 50, 0);
