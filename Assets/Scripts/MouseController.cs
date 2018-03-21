@@ -39,7 +39,7 @@ public class MouseController : MonoBehaviour
                     }
                 }
 
-                if (interactable.HasTooltip())
+                if (interactable.TooltipText() != string.Empty)
                 {
                     Tooltip.Instance.Show(this, interactable.TooltipText());
                 }

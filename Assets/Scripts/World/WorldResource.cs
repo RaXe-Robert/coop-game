@@ -71,11 +71,6 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
         }
     }
 
-    public bool HasTooltip()
-    {
-        return false;
-    }
-
     public string TooltipText()
     {
         return "";

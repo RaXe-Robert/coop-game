@@ -31,11 +31,6 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
         photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
     }
 
-    public bool HasTooltip()
-    {
-        return true;
-    }
-
     public string TooltipText()
     {
         return item.Name;
