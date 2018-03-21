@@ -10,6 +10,7 @@ public class Tooltip : MonoBehaviour
     [SerializeField] private GameObject panel;
     [SerializeField] private Text text;
     
+    //Makes sure that only one object at a time can control the tooltip
     private object focusLock = null;
 
     private void Awake()
@@ -18,8 +19,14 @@ public class Tooltip : MonoBehaviour
             Instance = this;
     }
 
+    private void LateUpdate()
+    {
+        if (panel.activeSelf)
+            panel.transform.position = Input.mousePosition + new Vector3(0, 50, 0);
+    }
+
     /// <summary>
-    /// Shows the tooltip with the given text
+    /// Shows the tooltip with the given text if the focus request is succesfull
     /// </summary>
     public void Show(object requestor, string text)
     {
@@ -34,7 +41,7 @@ public class Tooltip : MonoBehaviour
     }
 
     /// <summary>
-    /// Hides the tooltip
+    /// Hides the tooltip and removes the focus lock
     /// </summary>
     public void Hide(object requestor)
     {
@@ -47,6 +54,12 @@ public class Tooltip : MonoBehaviour
         panel.SetActive(false);
     }
 
+
+    /// <summary>
+    /// Request the focus of this tooltip instance. And makes sure no other objects can access the tooltip at the same time.
+    /// </summary>
+    /// <param name="focusObject">The object that wants to take control.</param>
+    /// <returns>True if focus was succesfully granted.</returns>
     private bool RequestFocus(object focusObject)
     {
         if (focusLock == null)
@@ -56,11 +69,5 @@ public class Tooltip : MonoBehaviour
         }
 
         return false;
-    }
-
-    private void LateUpdate()
-    {
-        if(panel.activeSelf)
-            panel.transform.position = Input.mousePosition + new Vector3(0, 50, 0);
     }
 }
