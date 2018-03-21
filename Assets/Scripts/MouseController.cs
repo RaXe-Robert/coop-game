@@ -31,12 +31,9 @@ public class MouseController : MonoBehaviour
             }
             else
             {
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetMouseButtonDown(0) && interactable.IsInteractable())
                 {
-                    if (interactable.IsInteractable())
-                    {
-                        interactable.Interact(gameObject.transform.position);
-                    }
+                    interactable.Interact(gameObject.transform.position);
                 }
 
                 if (interactable.TooltipText() != string.Empty)
