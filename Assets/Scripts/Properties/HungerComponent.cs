@@ -20,6 +20,7 @@ public class HungerComponent : Photon.MonoBehaviour, IPunObservable
             OnValueChangedCallback?.Invoke(hunger);
         }
     }
+    public bool HungerDegenerationActive { get; set; } = true;
 
     public void OnEnable()
     {
@@ -37,6 +38,13 @@ public class HungerComponent : Photon.MonoBehaviour, IPunObservable
 
         while (true)
         {
+            yield return waitForSeconds;
+
+            if (HungerDegenerationActive == false)
+            {
+                continue;
+            }
+
             if (hunger == 0)
             {
                 cachedHealthComponent.Health -= 1;
@@ -48,8 +56,6 @@ public class HungerComponent : Photon.MonoBehaviour, IPunObservable
             }
 
             Hunger -= 1;
-
-            yield return waitForSeconds;
         }
     }
 

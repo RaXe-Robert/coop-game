@@ -410,6 +410,7 @@ GameObject:
   - component: {fileID: 114743512028800480}
   - component: {fileID: 114723616231544790}
   - component: {fileID: 114836521450446672}
+  - component: {fileID: 114641208777587000}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1065,6 +1066,18 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
+--- !u!114 &114641208777587000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1816867026278206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4738ce1998c8143974a3ec3ade1c5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MergeEffectsOfSameType: 1
 --- !u!114 &114692401914651078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1091,7 +1104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxValue: 100
   MinValue: 0
-  health: 100
+  health: 50
 --- !u!114 &114743512028800480
 MonoBehaviour:
   m_ObjectHideFlags: 1

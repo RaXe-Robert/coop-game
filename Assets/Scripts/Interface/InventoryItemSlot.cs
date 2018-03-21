@@ -4,19 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
+public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
     [SerializeField] public InventoryUI inventoryUI;
     [SerializeField] private Image image;
     [SerializeField] private Text stackSizeText;
     [SerializeField] private Image textBackground;
     
-    private Item item;
+    private ItemBase item;
     private Inventory inventory;
     private CanvasGroup canvasGroup;
     private Transform initialParentTransform;
     private int index;
 
-    public Item Item
+    public ItemBase Item
     {
         get
         {
@@ -29,7 +29,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
             image.sprite = item?.Sprite;
             if (item?.GetType() == typeof(Resource))
             {
-                stackSizeText.text = ((Resource)item).Amount.ToString();
+                stackSizeText.text = item.StackSize.ToString();
                 textBackground.enabled = true;
             }
             else
@@ -69,6 +69,22 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public void OnPointerExit(PointerEventData eventData)
     {
         Tooltip.Instance.Hide();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (item == null)
+            return;
+
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
+            {
+                PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
+                inventory.RemoveItem(index);
+                Tooltip.Instance.Hide();
+            }
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -112,7 +128,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, (item.GetType() == typeof(Resource) ? ((Resource)item).Amount : 1));
+            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, item.StackSize);
             inventory.RemoveItem(index);
         }
     }
