@@ -4,17 +4,69 @@ using UnityEngine;
 
 public class EquipmentUI : MonoBehaviour {
 
-    private InventoryItemSlot[] armorSlots;
-    private InventoryItemSlot weaponSlot;
-    private InventoryItemSlot[] toolSlots;
+    [SerializeField] private ArmorItemSlot[] armorSlots;
+    [SerializeField] private WeaponItemSlot weaponSlot;
+    [SerializeField] private ToolItemSlot[] toolSlots;
 
-	// Use this for initialization
+    private EquipmentManager equipmentManager;
+    private Inventory inventory;
+
 	void Start () {
-		
-	}
+        equipmentManager = FindObjectOfType<EquipmentManager>();
+        inventory = FindObjectOfType<Inventory>();
+        equipmentManager.OnItemEquippedCallBack += UpdateUI;
+
+        //Initialize all the equipment slots so they have a reference to the equipmentManager
+        for (int i = 0; i < armorSlots.Length; i++)
+        {
+            armorSlots[i].Initialize(-1, inventory, equipmentManager);
+        }
+        for (int i = 0; i < toolSlots.Length; i++)
+        {
+            toolSlots[i].Initialize(-1, inventory, equipmentManager);
+        }
+        weaponSlot.Initialize(-1, inventory, equipmentManager);
+    }
 	
-	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    void UpdateUI()
+    {
+        UpdateTools();
+        UpdateWeapon();
+        UpdateArmor();
+    }
+
+    void UpdateTools()
+    {
+        for (int i = 0; i < toolSlots.Length; i++)
+        {
+            if (equipmentManager.HasToolEquipped(toolSlots[i].SlotType))
+            {
+                toolSlots[i].Item = equipmentManager.GetEquippedTool(toolSlots[i].SlotType);
+            }
+            else toolSlots[i].Clear();
+        }
+    }
+    
+    void UpdateWeapon()
+    {
+        if (equipmentManager.HasWeaponEquipped)
+            weaponSlot.Item = equipmentManager.GetEquippedWeapon();
+        else weaponSlot.Clear();
+    }
+
+    void UpdateArmor()
+    {
+        for (int i = 0; i < armorSlots.Length; i++)
+        {
+            if (equipmentManager.HasArmorEquipped(armorSlots[i].SlotType))
+            {
+                armorSlots[i].Item = equipmentManager.GetEquippedArmor(armorSlots[i].SlotType);
+            }
+            else armorSlots[i].Clear();
+        }
+    }
 }

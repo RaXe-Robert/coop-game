@@ -10,12 +10,14 @@ public class InventoryUI : MonoBehaviour {
     [SerializeField] private GameObject craftingUIGo;
     [SerializeField] private GameObject equipmentUIGo;
     [SerializeField] private GameObject hotbarUIGo;
-    [SerializeField] private Inventory inventory;
+    private Inventory inventory;
+    private EquipmentManager equipmentManager;
 
     private List<InventoryItemSlot> inventorySlots;
 
     private void Start () {
         inventory = FindObjectOfType<Inventory>();
+        equipmentManager = FindObjectOfType<EquipmentManager>();
         inventorySlots = new List<InventoryItemSlot>(Inventory.InventorySize + Inventory.HotbarSize);
         InitializeHotbar();
         InitializeInventory();
@@ -55,7 +57,7 @@ public class InventoryUI : MonoBehaviour {
         {
             var go = Instantiate(inventorySlotPrefab, hotbarUIGo.transform);
             inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
-            inventorySlots[i].Initialize(i, inventory);
+            inventorySlots[i].Initialize(i, inventory, equipmentManager);
         }
     }
 
@@ -65,7 +67,7 @@ public class InventoryUI : MonoBehaviour {
         {
             var go = Instantiate(inventorySlotPrefab, inventoryUIGo.transform);
             inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
-            inventorySlots[i].Initialize(i, inventory);
+            inventorySlots[i].Initialize(i, inventory, equipmentManager);
         }
     }
 }

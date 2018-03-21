@@ -40,7 +40,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
     }
 
-    public void Initialize(int index, Inventory inventory, EquipmentManager equipmentManager)
+    public virtual void Initialize(int index, Inventory inventory, EquipmentManager equipmentManager)
     {
         this.index = index;
         this.inventory = inventory;

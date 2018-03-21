@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public class ToolItemSlot : InventoryItemSlot
 {
     [SerializeField] private ToolType slotType;
+    public ToolType SlotType { get { return slotType; } }
 
     public override void OnDrop(PointerEventData eventData)
     {

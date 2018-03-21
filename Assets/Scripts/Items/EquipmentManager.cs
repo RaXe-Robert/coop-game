@@ -11,12 +11,16 @@ public class EquipmentManager : MonoBehaviour
     private Inventory inventory;
     private EquipmentUI equipmentUI;
 
+    public delegate void OnItemEquipped();
+    public OnItemEquipped OnItemEquippedCallBack;
+
     public bool HasWeaponEquipped { get { return equippedWeapon != null; } }
 
     void Start()
     {
         equippedTools = new List<Tool>(2);
         equippedArmor = new List<Armor>(4);
+        inventory = FindObjectOfType<Inventory>();
     }
 
     public void EquipTool(Tool toolToEquip)
@@ -27,11 +31,13 @@ public class EquipmentManager : MonoBehaviour
             inventory.AddItemById(toolToEquip.Id, 1);
             inventory.RemoveItemById(GetEquippedTool(toolToEquip.ToolType).Id);
             equippedTools.Add(toolToEquip);
+            OnItemEquippedCallBack?.Invoke();
         }
         else
         {
             equippedTools.Add(toolToEquip);
             inventory.RemoveItemById(toolToEquip.Id);
+            OnItemEquippedCallBack?.Invoke();
         }
     }
 
@@ -43,14 +49,14 @@ public class EquipmentManager : MonoBehaviour
             equippedWeapon = null;
             equippedWeapon = weaponToEquip;
             inventory.RemoveItemById(weaponToEquip.Id);
-
+            OnItemEquippedCallBack?.Invoke();
         }
         else
         {
             inventory.RemoveItemById(weaponToEquip.Id);
             equippedWeapon = weaponToEquip;
+            OnItemEquippedCallBack?.Invoke();
         }
-
     }
 
     public void EquipArmor(Armor armorToEquip)
@@ -58,14 +64,16 @@ public class EquipmentManager : MonoBehaviour
         if (HasArmorEquipped(armorToEquip.ArmorType))
         {
             equippedArmor.Remove(GetEquippedArmor(armorToEquip.ArmorType));
-            inventory.RemoveItemById(GetEquippedArmor(armorToEquip.ArmorType).Id);
+            inventory.RemoveItemById(armorToEquip.Id);
             inventory.AddItemById(armorToEquip.Id, 1);
             equippedArmor.Add(armorToEquip);
+            OnItemEquippedCallBack?.Invoke();
         }
         else
         {
             equippedArmor.Add(armorToEquip);
             inventory.RemoveItemById(armorToEquip.Id);
+            OnItemEquippedCallBack?.Invoke();
         }
     }
 
@@ -117,6 +125,13 @@ public class EquipmentManager : MonoBehaviour
             }
             return null;
         }
+    }
+
+    public Weapon GetEquippedWeapon()
+    {
+        if (HasWeaponEquipped)
+            return equippedWeapon;
+        else return null;
     }
 }
 
