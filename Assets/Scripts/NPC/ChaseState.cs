@@ -6,17 +6,27 @@ public class ChaseState : NPCBaseFSM {
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        base.OnStateEnter(animator, stateInfo, layerIndex);
+        if (PhotonNetwork.isMasterClient)
+        {
+            base.OnStateEnter(animator, stateInfo, layerIndex);
+        }
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        agent.SetDestination(Opponent.transform.position);        
+        if (PhotonNetwork.isMasterClient)
+        {
+            base.OnStateUpdate(animator, stateInfo, layerIndex);
+            agent.SetDestination(opponent.transform.position);
+        }
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        agent.SetDestination(NPC.transform.position);       
+        if (PhotonNetwork.isMasterClient)
+        {
+            agent.SetDestination(npc.transform.position);
+        }
     }
     
 }

@@ -51,4 +51,5 @@ MonoBehaviour:
   - SetParent
   - SetStoneParent
   - SetTreeParent
+  - SetDistance
   DisableAutoOpenWizard: 1

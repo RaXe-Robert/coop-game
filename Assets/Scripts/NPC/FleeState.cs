@@ -6,29 +6,39 @@ public class FleeState : NPCBaseFSM {
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        base.OnStateEnter(animator, stateInfo, layerIndex);
+        if (PhotonNetwork.isMasterClient)
+        {
+            base.OnStateEnter(animator, stateInfo, layerIndex);
+        }
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (Vector3.Distance(Waypoint, NPC.transform.position) < accuracy || Vector3.Distance(Opponent.transform.position, NPC.transform.position) < accuracy)
+        if (PhotonNetwork.isMasterClient)
         {
-            Waypoint = CalculateFleeWaypoint();
+            base.OnStateUpdate(animator, stateInfo, layerIndex);
+            if (Vector3.Distance(Waypoint, npc.transform.position) < accuracy || Vector3.Distance(opponent.transform.position, npc.transform.position) < accuracy)
+            {
+                Waypoint = CalculateFleeWaypoint();
+            }
+            agent.SetDestination(Waypoint);
         }
-        agent.SetDestination(Waypoint);
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        agent.SetDestination(NPC.transform.position);
+        if (PhotonNetwork.isMasterClient)
+        {
+            agent.SetDestination(npc.transform.position);
+        }
     }
 
     Vector3 CalculateFleeWaypoint()
     {
-        var heading = NPC.transform.position - Opponent.transform.position;
+        var heading = npc.transform.position - opponent.transform.position;
         var distance = heading.magnitude;
         var direction = heading / distance;
         direction.y = 0f;
-        return NPC.transform.position + direction * 10;
+        return npc.transform.position + direction * 10;
     }
 }
