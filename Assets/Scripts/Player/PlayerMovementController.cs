@@ -3,23 +3,21 @@ using System.Collections;
 
 public class PlayerMovementController : Photon.MonoBehaviour
 {
-    Rigidbody rigidbodyComponent;
-    Animator animator;
+    private Rigidbody rigidbodyComponent;
+    private Animator animator;
+
+    [SerializeField] private LayerMask rotationLayerMask;
 
     [SerializeField] private float movementSpeed;
     [SerializeField] private float mouseDeadZoneFromPlayer;
 
     private PlayerCameraController cameraController = null;
 
-    private MeshCollider raycastPlaneCollider = null;
-
     private void Awake()
     {
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
-
-        CreateRaycastPlane();
     }
 
     // Use this for initialization
@@ -63,7 +61,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
         Ray ray = cameraController.CameraReference.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (raycastPlaneCollider.Raycast(ray, out hit, 500f))
+        if (Physics.Raycast(ray, out hit, 1000f, rotationLayerMask.value))
         {
             Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
 
@@ -98,23 +96,5 @@ public class PlayerMovementController : Photon.MonoBehaviour
         {
             animator.SetBool("IsRunning", false);
         }
-    }
-
-    private void CreateRaycastPlane()
-    {
-        if (raycastPlaneCollider != null)
-            return;
-
-        GameObject raycastPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-
-        raycastPlaneCollider = raycastPlane.GetComponent<MeshCollider>();
-        Destroy(raycastPlane.GetComponent<MeshRenderer>());
-
-        raycastPlane.transform.localScale += new Vector3(10f, 0f, 10f);
-        raycastPlane.gameObject.name = "PlayerRaycastPlane";
-        raycastPlaneCollider.convex = true;
-        raycastPlaneCollider.isTrigger = true;
-
-        raycastPlane.transform.SetParent(transform);
     }
 }

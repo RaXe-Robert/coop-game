@@ -1089,6 +1089,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f867d5f311953d449f9ee17be087631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
   movementSpeed: 75
   mouseDeadZoneFromPlayer: 0.1
 --- !u!114 &114723616231544790
@@ -1152,7 +1155,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 114402216659252926}
   - {fileID: 114492785987082522}
-  - {fileID: 0}
+  - {fileID: 114723616231544790}
   - {fileID: 114836521450446672}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
