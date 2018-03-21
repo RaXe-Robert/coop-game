@@ -8,6 +8,7 @@ public class InventoryUI : MonoBehaviour {
 
     [SerializeField] private GameObject inventoryUIGo;
     [SerializeField] private GameObject craftingUIGo;
+    [SerializeField] private GameObject equipmentUIGo;
     [SerializeField] private GameObject hotbarUIGo;
     [SerializeField] private Inventory inventory;
 
@@ -24,8 +25,11 @@ public class InventoryUI : MonoBehaviour {
 	private void Update () {
         if (Input.GetKeyDown(KeyCode.B) || Input.GetKeyDown(KeyCode.I))
             inventoryUIGo.SetActive(!inventoryUIGo.activeSelf);
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.F))
             craftingUIGo.SetActive(!craftingUIGo.activeSelf);
+        if (Input.GetKeyDown(KeyCode.C))
+            equipmentUIGo.SetActive(!equipmentUIGo.activeSelf);
+
     }
 
     public void UpdateUI()
@@ -51,7 +55,7 @@ public class InventoryUI : MonoBehaviour {
         {
             var go = Instantiate(inventorySlotPrefab, hotbarUIGo.transform);
             inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
-            inventorySlots[i].Initialize(i, inventory, this);
+            inventorySlots[i].Initialize(i, inventory);
         }
     }
 
@@ -61,7 +65,7 @@ public class InventoryUI : MonoBehaviour {
         {
             var go = Instantiate(inventorySlotPrefab, inventoryUIGo.transform);
             inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
-            inventorySlots[i].Initialize(i, inventory, this);
+            inventorySlots[i].Initialize(i, inventory);
         }
     }
 }

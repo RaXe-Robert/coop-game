@@ -5,13 +5,12 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
-    [SerializeField] public InventoryUI inventoryUI;
-    [SerializeField] private Image image;
+    [SerializeField] protected Image image;
     [SerializeField] private Text stackSizeText;
     [SerializeField] private Image textBackground;
     
-    private ItemBase item;
-    private Inventory inventory;
+    protected ItemBase item;
+    protected Inventory inventory;
     private CanvasGroup canvasGroup;
     private Transform initialParentTransform;
     private int index;
@@ -27,7 +26,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
             item = value;
             image.sprite = item?.Sprite;
-            if (item?.GetType() == typeof(Resource))
+            if (item?.StackSize > 1)
             {
                 stackSizeText.text = item.StackSize.ToString();
                 textBackground.enabled = true;
@@ -40,11 +39,10 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
     }
 
-    public void Initialize(int index, Inventory inventory, InventoryUI ui)
+    public void Initialize(int index, Inventory inventory)
     {
         this.index = index;
         this.inventory = inventory;
-        this.inventoryUI = ui;
     }
 
     public void Start()
@@ -71,7 +69,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         Tooltip.Instance.Hide();
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         if (item == null)
             return;
@@ -83,6 +81,11 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
                 PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
                 inventory.RemoveItem(index);
                 Tooltip.Instance.Hide();
+            }
+
+            else if(item.Equippable)
+            {
+                item.Equip();
             }
         }
     }
@@ -109,7 +112,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         transform.position = eventData.position;
     }
 
-    public void OnDrop(PointerEventData eventData)
+    public virtual void OnDrop(PointerEventData eventData)
     {
         InventoryItemSlot from;
         //Check what gets dropped on this.
@@ -119,7 +122,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public virtual void OnEndDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
