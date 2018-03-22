@@ -5,7 +5,7 @@ AnimatorController:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: ScaredNPCAC
+  m_Name: NPC_Flee
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: isMoving
@@ -51,8 +51,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npc: {fileID: 0}
-  opponent: {fileID: 0}
-  agent: {fileID: 0}
   Waypoint: {x: 0, y: 0, z: 0}
   accuracy: 4
 --- !u!114 &114948328954410344
@@ -67,8 +65,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npc: {fileID: 0}
-  opponent: {fileID: 0}
-  agent: {fileID: 0}
   Waypoint: {x: 0, y: 0, z: 0}
   accuracy: 1
 --- !u!1101 &1101044700188645652

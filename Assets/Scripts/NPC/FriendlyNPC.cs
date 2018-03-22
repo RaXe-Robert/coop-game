@@ -8,7 +8,7 @@ public class FriendlyNPC : NPCBase {
     [PunRPC]
     void SetDistance()
     {
-        animator.SetFloat("Distance", Vector3.Distance(transform.position, opponent.transform.position));
+        Animator.SetFloat("Distance", Vector3.Distance(transform.position, Opponent.transform.position));
     }
 }
 

@@ -140,8 +140,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4905756326830184}
   - component: {fileID: 95194930049602910}
-  - component: {fileID: 114161448037325554}
   - component: {fileID: 195352717974431406}
+  - component: {fileID: 114161448037325554}
   - component: {fileID: 64609005104138986}
   - component: {fileID: 114305619081064444}
   - component: {fileID: 114765503467221414}
@@ -498,6 +498,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3388bcc3b306b56458feaf183283fa90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  opponent: {fileID: 0}
+  agent: {fileID: 0}
+  distance: 0
 --- !u!114 &114305619081064444
 MonoBehaviour:
   m_ObjectHideFlags: 1

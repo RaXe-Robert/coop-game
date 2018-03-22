@@ -4,21 +4,27 @@ using UnityEngine;
 
 public class NPCBase : Photon.MonoBehaviour {
 
-    public Animator animator;
-    public GameObject opponent;
-    public float distance;
+    public Animator Animator { get; private set; }
+    public GameObject Opponent { get; private set; }
+    public UnityEngine.AI.NavMeshAgent Agent { get; private set; }
+    public float DistanceToOpponent { get; private set; }
 
-    void Start()
+    private void Awake()
     {
-        animator = GetComponent<Animator>();
+        Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        Animator = GetComponent<Animator>();
+        foreach (var x in Animator.GetBehaviours<NPCBaseFSM>())
+        {
+            x.npc = this;
+        }
     }
 
-    void Update()
+    private void Update()
     {
         if (PhotonNetwork.isMasterClient)
         {
-            opponent = GetClosestOpponent();
-            distance = Vector3.Distance(transform.position, opponent.transform.position);
+            Opponent = GetClosestOpponent();
+            DistanceToOpponent = Vector3.Distance(transform.position, Opponent.transform.position);
             //if (distance < animator.GetFloat("Distance"))
             //{
                 photonView.RPC("SetDistance", PhotonTargets.MasterClient);
@@ -27,10 +33,10 @@ public class NPCBase : Photon.MonoBehaviour {
         //animator.SetFloat("Distance", Vector3.Distance(transform.position, PlayerNetwork.PlayerObject.transform.position));
     }
 
-    GameObject GetClosestOpponent()
+    private GameObject GetClosestOpponent()
     {
         PlayerNameTag[] players = FindObjectsOfType<PlayerNameTag>();
-        GameObject ClosestOpponent = players[0].gameObject;
+        GameObject closestOpponent = players[0].gameObject;
 
         for (int i = 0; i < players.Length; i++)
         {
@@ -38,16 +44,16 @@ public class NPCBase : Photon.MonoBehaviour {
             {
                 if (Vector3.Distance(players[i - 1].gameObject.transform.position, gameObject.transform.position) > Vector3.Distance(players[i].gameObject.transform.position, gameObject.transform.position))
                 {
-                    ClosestOpponent = players[i].gameObject;
+                    closestOpponent = players[i].gameObject;
                 }
             }
         }
-        return ClosestOpponent;
+        return closestOpponent;
     }
 
     [PunRPC]
     void SetDistance()
     {
-        animator.SetFloat("Distance", Vector3.Distance(gameObject.transform.position, opponent.transform.position));
+        Animator.SetFloat("Distance", Vector3.Distance(gameObject.transform.position, Opponent.transform.position));
     }
 }

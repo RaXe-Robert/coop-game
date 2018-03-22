@@ -1,14 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class PatrolState : NPCBaseFSM {
-
-    public override void OnStateMachineEnter(Animator animator, int stateMachinePathHash)
-    {
-        base.OnStateMachineEnter(animator, stateMachinePathHash);
-    }
+public class ChaseState : NPCBaseFSM {
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -23,12 +17,7 @@ public class PatrolState : NPCBaseFSM {
         if (PhotonNetwork.isMasterClient)
         {
             base.OnStateUpdate(animator, stateInfo, layerIndex);
-            if (Vector3.Distance(Waypoint, npc.transform.position) < accuracy || !agent.hasPath)
-            {
-                Waypoint = CreateWaypoint();
-            }
-
-            agent.SetDestination(Waypoint);
+            npc.Agent.SetDestination(npc.Opponent.transform.position);
         }
     }
 
@@ -36,14 +25,8 @@ public class PatrolState : NPCBaseFSM {
     {
         if (PhotonNetwork.isMasterClient)
         {
-            agent.SetDestination(npc.transform.position);
+            npc.Agent.SetDestination(npc.transform.position);
         }
     }
-
-    Vector3 CreateWaypoint()
-    {
-        return npc.transform.position + new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
-    }
-
-   
+    
 }

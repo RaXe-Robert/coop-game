@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 114780369903076048}
   - component: {fileID: 114175295519325148}
   m_Layer: 0
-  m_Name: ScaredCarl
+  m_Name: Carl_Scared
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -528,6 +528,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca5057371c02a646af929ddf1533631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  opponent: {fileID: 0}
+  agent: {fileID: 0}
+  distance: 0
 --- !u!114 &114257805978908996
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseState : NPCBaseFSM {
+public class FleeState : NPCBaseFSM {
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -17,7 +17,11 @@ public class ChaseState : NPCBaseFSM {
         if (PhotonNetwork.isMasterClient)
         {
             base.OnStateUpdate(animator, stateInfo, layerIndex);
-            agent.SetDestination(opponent.transform.position);
+            if (Vector3.Distance(Waypoint, npc.transform.position) < accuracy || Vector3.Distance(npc.Opponent.transform.position, npc.transform.position) < accuracy)
+            {
+                Waypoint = CalculateFleeWaypoint();
+            }
+            npc.Agent.SetDestination(Waypoint);
         }
     }
 
@@ -25,8 +29,16 @@ public class ChaseState : NPCBaseFSM {
     {
         if (PhotonNetwork.isMasterClient)
         {
-            agent.SetDestination(npc.transform.position);
+            npc.Agent.SetDestination(npc.transform.position);
         }
     }
-    
+
+    Vector3 CalculateFleeWaypoint()
+    {
+        var heading = npc.transform.position - npc.Opponent.transform.position;
+        var distance = heading.magnitude;
+        var direction = heading / distance;
+        direction.y = 0f;
+        return npc.transform.position + direction * 10;
+    }
 }
