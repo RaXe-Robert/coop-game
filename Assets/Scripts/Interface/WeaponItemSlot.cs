@@ -27,10 +27,7 @@ public class WeaponItemSlot : InventoryItemSlot
         transform.localPosition = Vector3.zero;
 
         if (!EventSystem.current.IsPointerOverGameObject())
-        {
-            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, item.StackSize);
             equipmentManager.DropEquippedItem(Item);
-        }
     }
 }
 
