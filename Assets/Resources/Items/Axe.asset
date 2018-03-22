@@ -8,15 +8,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d11520a5ae26ca4f93acf2ea1753e64, type: 3}
-  m_Name: Leather Helmet
+  m_Script: {fileID: 11500000, guid: 80064babb00250949a949aa52544650b, type: 3}
+  m_Name: Axe
   m_EditorClassIdentifier: 
-  itemName: Leather Helmet
-  sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  itemName: Axe
+  sprite: {fileID: 21300000, guid: f62c679d5fb4e9741934c71739f8e94c, type: 3}
   model: {fileID: 100000, guid: 4c944c55fd4d0844c90a245184fc9ed6, type: 3}
-  description: A leather helmet
+  description: An axe
   isConsumable: 0
   onConsumedEffects: []
-  id: 10
-  type: 0
-  defense: 5
+  id: 95
+  toolType: 0

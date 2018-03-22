@@ -29,10 +29,10 @@ public class EquipmentManager : MonoBehaviour
         if (HasToolEquipped(toolToEquip.ToolType))
         {
             var currentEquipped = GetEquippedTool(toolToEquip.ToolType);
-            inventory.AddItemById(currentEquipped.Id, 1);
+            inventory.RemoveItemById(toolToEquip.Id);
             equippedTools.Remove(currentEquipped);
 
-            inventory.RemoveItemById(toolToEquip.Id);
+            inventory.AddItemById(currentEquipped.Id, 1);
             equippedTools.Add(toolToEquip);
             OnItemEquippedCallBack?.Invoke();
         }
@@ -49,11 +49,11 @@ public class EquipmentManager : MonoBehaviour
         if (HasWeaponEquipped)
         {
             var currentEquipped = equippedWeapon;
-            inventory.AddItemById(currentEquipped.Id);
+            inventory.RemoveItemById(weaponToEquip.Id);
             equippedWeapon = null;
 
             equippedWeapon = weaponToEquip;
-            inventory.RemoveItemById(weaponToEquip.Id);
+            inventory.AddItemById(currentEquipped.Id);
             OnItemEquippedCallBack?.Invoke();
         }
         else
@@ -71,10 +71,10 @@ public class EquipmentManager : MonoBehaviour
             //Add currently equipped item to the inventory
             var currentEquipped = GetEquippedArmorByType(armorToEquip.ArmorType);
             equippedArmor.Remove(currentEquipped);
-            inventory.AddItemById(currentEquipped.Id);
+            inventory.RemoveItemById(armorToEquip.Id);
 
             //Remove new armor from inventory and equip it
-            inventory.RemoveItemById(armorToEquip.Id);
+            inventory.AddItemById(currentEquipped.Id);
             equippedArmor.Add(armorToEquip);
             OnItemEquippedCallBack?.Invoke();
         }
@@ -154,6 +154,70 @@ public class EquipmentManager : MonoBehaviour
         if (HasWeaponEquipped)
             return equippedWeapon;
         else return null;
+    }
+
+    public void UnEquipItem(ItemBase itemToUnequip, int index)
+    {
+        if(itemToUnequip.GetType() == typeof(Armor))
+        {
+            Armor equippedItem;
+            if((equippedItem = equippedArmor.Find(x => x.Id == itemToUnequip.Id)) != null)
+            {
+                inventory.AddItemAtIndex(equippedItem.Id, index);
+                equippedArmor.Remove(equippedItem);
+                OnItemEquippedCallBack?.Invoke();
+            }
+        }
+
+        else if (itemToUnequip.GetType() == typeof(Tool))
+        {
+            Tool equippedItem;
+            if ((equippedItem = equippedTools.Find(x => x.Id == itemToUnequip.Id)) != null)
+            {
+                inventory.AddItemById(equippedItem.Id);
+                equippedTools.Remove(equippedItem);
+                OnItemEquippedCallBack?.Invoke();
+            }
+        }
+
+        else if(itemToUnequip.GetType() == typeof(Weapon))
+        {
+            inventory.AddItemById(equippedWeapon.Id);
+            equippedWeapon = null;
+            OnItemEquippedCallBack?.Invoke();
+        }
+    }
+
+    public void DropEquippedItem(ItemBase itemToUnequip)
+    {
+        if (itemToUnequip.GetType() == typeof(Armor))
+        {
+            Armor equippedItem;
+            if ((equippedItem = equippedArmor.Find(x => x.Id == itemToUnequip.Id)) != null)
+            {
+                ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedItem.Id);
+                equippedArmor.Remove(equippedItem);
+                OnItemEquippedCallBack?.Invoke();
+            }
+        }
+
+        else if (itemToUnequip.GetType() == typeof(Tool))
+        {
+            Tool equippedItem;
+            if ((equippedItem = equippedTools.Find(x => x.Id == itemToUnequip.Id)) != null)
+            {
+                ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedItem.Id);
+                equippedTools.Remove(equippedItem);
+                OnItemEquippedCallBack?.Invoke();
+            }
+        }
+
+        else if (itemToUnequip.GetType() == typeof(Weapon))
+        {
+            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedWeapon.Id);
+            equippedWeapon = null;
+            OnItemEquippedCallBack?.Invoke();
+        }
     }
 }
 

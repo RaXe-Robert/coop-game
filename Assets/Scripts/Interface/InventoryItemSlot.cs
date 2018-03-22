@@ -12,8 +12,8 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     protected ItemBase item;
     protected Inventory inventory;
     protected EquipmentManager equipmentManager;
-    private CanvasGroup canvasGroup;
-    private Transform initialParentTransform;
+    protected CanvasGroup canvasGroup;
+    protected Transform initialParentTransform;
     private int index;
 
     public ItemBase Item
@@ -25,6 +25,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         
         set
         {
+            image.enabled = true;
             item = value;
             image.sprite = item?.Sprite;
             if (item?.StackSize > 1)
@@ -56,6 +57,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         item = null;
         image.sprite = null;
+        image.enabled = false;
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
@@ -121,7 +123,37 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         //Check what gets dropped on this.
         if((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
-            inventory.SwapItem(index, from.index);
+            //We got an item from our equipment.
+            if(from.index == -1 && Item != null)
+            {
+                //We cant equip a non equippable item.
+                if (!item.Equippable)
+                    return;
+
+                //We cant swap the items it they arent the same type
+                if (from.Item.GetType() == Item.GetType())
+                    return;
+
+                //Check if our item is an Armor and see if it's the same type of armor, if so we can swap the items around.
+                if ((from.Item.GetType() == typeof(Armor) && ((Armor)from.Item).ArmorType == ((Armor)Item).ArmorType))
+                    equipmentManager.EquipArmor(Item as Armor);
+
+                //Check if our item is a Tool and see if it's the same type of tool, if so we can swap the items around.
+                else if ((from.Item.GetType() == typeof(Tool) && ((Tool)from.Item).ToolType == ((Tool)Item).ToolType))
+                    equipmentManager.EquipTool(Item as Tool);
+
+                //Check if we both have weapons if so we can swap them around.
+                else if ((from.Item.GetType() == typeof(Weapon) && Item.GetType() == typeof(Weapon)))
+                    equipmentManager.EquipWeapon(Item as Weapon);
+            }
+            else if(from.index == -1 && Item == null)
+            {
+                //We are dragging an equipment piece on an empty inventory slot.
+                equipmentManager.UnEquipItem(from.Item, index);
+            }
+
+            else 
+                inventory.SwapItem(index, from.index);
         }
     }
 

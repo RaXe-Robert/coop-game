@@ -212,6 +212,21 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void AddItemAtIndex(int itemId, int index, int stackSize = 1)
+    {
+        if(index < 0 || inventoryItems[index] != null)
+        {
+            Debug.LogError("Inventory -- AddItemAtIndex -- invalid index");
+            AddItemById(itemId, stackSize);
+        }
+        else
+        {
+            ItemBase item = ItemFactory.CreateNewItem(itemId, stackSize);
+            inventoryItems[index] = item;
+            OnItemChangedCallback?.Invoke();
+        }
+    }
+
     /// <summary>
     /// Removes the required items for the craftingRecipe
     /// </summary>
