@@ -8,21 +8,35 @@ using UnityEngine;
 /// </summary>
 public class StatusEffectComponent : MonoBehaviour
 {
-    [SerializeField] private bool MergeEffectsOfSameType = true;
+    [SerializeField] private bool mergeEffectsOfSameType = true;
+    [Range(0.1f, 1f)]
+    [SerializeField] private float tickInterval = 1f;
     public List<StatusEffectBase> CurrentStatusEffects = new List<StatusEffectBase>();
     
     public delegate void StatusEffectAdded(StatusEffectBase statusEffect);
     public StatusEffectAdded OnstatusEffectAdded;
 
-    private void Update()
+    private void OnEnable()
     {
-        foreach (StatusEffectBase statusEffect in CurrentStatusEffects.ToArray())
+        StartCoroutine(ProcessActiveEffects());
+    }
+
+    private IEnumerator ProcessActiveEffects()
+    {
+        WaitForSeconds waitForInverval = new WaitForSeconds(tickInterval);
+
+        while (true)
         {
-            statusEffect.Tick(Time.deltaTime);
-            if (statusEffect.IsFinished)
+            foreach (StatusEffectBase statusEffect in CurrentStatusEffects.ToArray())
             {
-                CurrentStatusEffects.Remove(statusEffect);
+                statusEffect.Tick(tickInterval);
+                if (statusEffect.IsFinished)
+                {
+                    CurrentStatusEffects.Remove(statusEffect);
+                }
             }
+
+            yield return waitForInverval;
         }
     }
     
@@ -36,7 +50,7 @@ public class StatusEffectComponent : MonoBehaviour
 
         bool hasMerged = false;
 
-        if (MergeEffectsOfSameType)
+        if (mergeEffectsOfSameType)
         {
             // Todo: not efficient if there are many status effects active
             System.Type statusEffectType = statusEffect.GetType();

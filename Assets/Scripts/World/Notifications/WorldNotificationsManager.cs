@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExitGames.Client.Photon;
+using System.IO;
+using System;
+
 /// <summary>
 /// Responsible for showing, and keeping track off, world notifications.
 /// </summary>
@@ -34,16 +38,19 @@ public class WorldNotificationsManager : Photon.MonoBehaviour
         }
     }
 
-    public void NewNotification(Vector3 position, string text, float duration)
-    {
-        photonView.RPC("CreateWorldNotification", PhotonTargets.All, position, text, duration);
-    }
-
-    [PunRPC]
-    private void CreateWorldNotification(Vector3 position, string text, float duration)
+    public void NewNotification(WorldNotificationArgs worldNotificationArgs)
     {
         GameObject worldNotificationObj = Instantiate(worldNotificationPrefab);
         WorldNotification worldNotification = worldNotificationObj.GetComponent<WorldNotification>();
-        worldNotification.InitializeAndStart(position, text, duration);
+        worldNotification.InitializeAndStart(worldNotificationArgs);
+        //photonView.RPC("CreateWorldNotification", PhotonTargets.All, new object[] { worldNotificationArgs.Position, worldNotificationArgs.Text, worldNotificationArgs.Duration, worldNotificationArgs.Color});
+    }
+
+    [PunRPC]
+    private void CreateWorldNotification(Vector3 position, string text, float duration, Color color)
+    {
+        GameObject worldNotificationObj = Instantiate(worldNotificationPrefab);
+        WorldNotification worldNotification = worldNotificationObj.GetComponent<WorldNotification>();
+        worldNotification.InitializeAndStart(new WorldNotificationArgs(position, text, duration, color));
     }
 }

@@ -25,7 +25,16 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
             {
                 OnValueChangedCallback?.Invoke(this.value);
 
-                WorldNotificationsManager.Instance?.NewNotification(transform.position, $"{previousValue - this.value}", 0.4f);
+                float changedAmount = this.value - previousValue;
+
+                WorldNotificationsManager.Instance?.NewNotification(
+                    new WorldNotificationArgs(
+                        transform.position, 
+                        Mathf.Abs(changedAmount).ToString(),
+                        0.4f,
+                        changedAmount < 0 ? Color.red : Color.green
+                        )
+                );
             }
         }
     }
@@ -42,7 +51,7 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
         }
         else
         {
-            value = (float)stream.ReceiveNext();
+            Value = (float)stream.ReceiveNext();
         }
     }
 
