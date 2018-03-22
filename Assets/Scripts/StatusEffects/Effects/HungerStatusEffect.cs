@@ -23,7 +23,7 @@ public class HungerStatusEffect : StatusEffectBase
 
     protected override void OnTick(float delta)
     {
-        hungerComponent.Hunger += hungerStatusEffectData.HungerModification / Duration * delta;
+        hungerComponent.IncreaseValue(hungerStatusEffectData.HungerModification / Duration * delta);
     }
 
     public override void End()

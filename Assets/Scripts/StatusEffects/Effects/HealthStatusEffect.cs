@@ -23,7 +23,7 @@ public class HealthStatusEffect : StatusEffectBase
 
     protected override void OnTick(float delta)
     {
-        healthComponent.Health += healthStatusEffectData.HealthModification / Duration * delta;
+        healthComponent.IncreaseValue(healthStatusEffectData.HealthModification / Duration * delta);
     }
 
     public override void End()

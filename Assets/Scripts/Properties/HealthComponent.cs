@@ -1,45 +1,28 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class HealthComponent : Photon.MonoBehaviour, IPunObservable
+public class HealthEventArgs : EventArgs
 {
-    public delegate void OnValueChanged(float value);
-    public OnValueChanged OnValueChangedCallback;
+    public float Damage { get; }
 
-    [SerializeField] private float MaxValue = 100;
-    [SerializeField] private float MinValue = 0;
+    public HealthEventArgs(float damage)
+    {
+        Damage = damage;
+    }
+}
 
-    [SerializeField] private float health;
-    public float Health
-    {
-        get { return health; }
-        set
-        {
-            health = Mathf.Clamp(value, MinValue, MaxValue);
-            OnValueChangedCallback?.Invoke(health);
-        }
-    }
-    
-    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.isWriting)
-        {
-            stream.SendNext(health);
-        }
-        else
-        {
-            health = (float)stream.ReceiveNext();
-        }
-    }
-    
-    public bool IsDepleted()
-    {
-        if (health <= 0)
-        {
-            return true;
-        }
-        return false;
-    }
+public class HealthComponent : PropertyComponentBase
+{
+    public delegate void HealthEventHandler(object sender, HealthEventArgs eventArgs);
+    public event HealthEventHandler HealthEvent;
 
+    public void TakeDamage(float damage)
+    {
+        HealthEventArgs healthArgs = new HealthEventArgs(damage);
+
+        HealthEvent(this, healthArgs);
+    }
 }

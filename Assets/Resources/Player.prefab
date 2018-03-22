@@ -1106,8 +1106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxValue: 100
-  MinValue: 0
-  health: 50
+  value: 100
 --- !u!114 &114743512028800480
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1174,8 +1173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxValue: 100
-  MinValue: 0
-  hunger: 100
+  value: 100
 --- !u!136 &136892308541336462
 CapsuleCollider:
   m_ObjectHideFlags: 1
