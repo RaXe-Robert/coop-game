@@ -27,10 +27,6 @@ public class EquipmentUI : MonoBehaviour {
         }
         weaponSlot.Initialize(-1, inventory, equipmentManager);
     }
-	
-	void Update () {
-		
-	}
 
     void UpdateUI()
     {

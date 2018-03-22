@@ -9,9 +9,7 @@ public class EquipmentManager : MonoBehaviour
     private List<Armor> equippedArmor;
 
     private Inventory inventory;
-    private EquipmentUI equipmentUI;
 
-    //TODO: add stats to player
     public delegate void OnItemEquipped();
     public OnItemEquipped OnItemEquippedCallBack;
 
