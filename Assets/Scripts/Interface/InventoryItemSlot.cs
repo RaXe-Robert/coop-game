@@ -63,12 +63,12 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (item == null)
             return;
 
-        Tooltip.Instance.Show(item.Description);
+        Tooltip.Instance.Show(this, item.Name, item.Description);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Tooltip.Instance.Hide();
+        Tooltip.Instance.Hide(this);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -82,7 +82,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
             {
                 PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
                 inventory.RemoveItem(index);
-                Tooltip.Instance.Hide();
+                Tooltip.Instance.Hide(this);
             }
         }
     }
