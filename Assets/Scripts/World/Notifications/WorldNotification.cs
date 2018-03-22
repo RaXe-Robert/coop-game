@@ -2,9 +2,9 @@
 using System.Collections;
 
 [RequireComponent(typeof(TextMesh))]
-public class DamageIndicator : MonoBehaviour
+public class WorldNotification : MonoBehaviour
 {
-    TextMesh textMesh;
+    private TextMesh textMesh;
 
     [Range(0.01f, 2f)]
     [SerializeField] private float duration = 2f;
@@ -14,9 +14,13 @@ public class DamageIndicator : MonoBehaviour
     {
         textMesh = GetComponent<TextMesh>();
     }
-
-    public void Start()
+    
+    public void InitializeAndStart(Vector3 startingPosition, string text, float duration)
     {
+        transform.position = startingPosition;
+        textMesh.text = text;
+        this.duration = duration;
+
         StartCoroutine(PlayEffect());
     }
 
@@ -43,7 +47,5 @@ public class DamageIndicator : MonoBehaviour
         }
         
         Destroy(this.gameObject);
-
-        yield return null;
     }
 }

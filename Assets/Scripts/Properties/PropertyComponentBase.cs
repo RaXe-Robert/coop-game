@@ -19,6 +19,7 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
         {
             this.value = Mathf.Clamp(value, 0f, MaxValue);
             OnValueChangedCallback?.Invoke(this.value);
+            FindObjectOfType<WorldNotificationsManager>().NewNotification(transform.position, "test", 0.6f);
         }
     }
     public bool IsDepleted ()

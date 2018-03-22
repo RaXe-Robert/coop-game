@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 102494064666500878}
   - component: {fileID: 114123319934729300}
   m_Layer: 0
-  m_Name: DamageIndicator
+  m_Name: WorldNotification
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
