@@ -5,10 +5,9 @@ using System.Collections;
 public class WorldNotification : MonoBehaviour
 {
     private TextMesh textMesh;
-
-    [Range(0.01f, 2f)]
-    [SerializeField] private float duration = 2f;
-    [SerializeField] private float animationVelocity = 5f;
+    
+    private float duration;
+    private float animationVelocity = 6f;
 
     public void Awake()
     {
@@ -21,29 +20,21 @@ public class WorldNotification : MonoBehaviour
         textMesh.text = text;
         this.duration = duration;
 
-        StartCoroutine(PlayEffect());
+        StartCoroutine(PlayDefaultAnimation());
     }
 
-    private IEnumerator PlayEffect()
+    private IEnumerator PlayDefaultAnimation()
     {
         float remaining = duration;
 
         Vector3 animationDirection = Vector3.forward;
 
-        //Animation section 1
-        while (remaining > duration / 2)
+        while (remaining > 0)
         {
             transform.position += (Vector3.up + animationDirection) * Time.deltaTime * animationVelocity;
             remaining -= Time.deltaTime;
             yield return new WaitForEndOfFrame();
 
-        }
-        //Animation section 2
-        while (remaining > 0)
-        {
-            transform.position += (Vector3.down + animationDirection) * Time.deltaTime * animationVelocity;
-            remaining -= Time.deltaTime;
-            yield return new WaitForEndOfFrame();
         }
         
         Destroy(this.gameObject);

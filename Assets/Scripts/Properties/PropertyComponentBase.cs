@@ -17,9 +17,16 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
         get { return value; }
         private set
         {
+            float previousValue = this.value;
+
             this.value = Mathf.Clamp(value, 0f, MaxValue);
-            OnValueChangedCallback?.Invoke(this.value);
-            FindObjectOfType<WorldNotificationsManager>().NewNotification(transform.position, "test", 0.6f);
+
+            if (previousValue != this.value)
+            {
+                OnValueChangedCallback?.Invoke(this.value);
+
+                WorldNotificationsManager.Instance?.NewNotification(transform.position, $"{previousValue - this.value}", 0.4f);
+            }
         }
     }
     public bool IsDepleted ()

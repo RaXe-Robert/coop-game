@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 23051926977579660}
   - component: {fileID: 102494064666500878}
   - component: {fileID: 114123319934729300}
+  - component: {fileID: 114964865224028176}
   m_Layer: 0
   m_Name: WorldNotification
   m_TagString: Untagged
@@ -36,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1968218064812564}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.430494, y: 9.205944, z: 9.476814}
+  m_LocalPosition: {x: 12.031345, y: -4.552761e-17, z: 20.50381}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -90,7 +91,7 @@ TextMesh:
   m_Anchor: 4
   m_Alignment: 1
   m_TabSize: 4
-  m_FontSize: 35
+  m_FontSize: 14
   m_FontStyle: 1
   m_RichText: 0
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
@@ -108,5 +109,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8ffafcdc6b5484ebc87bffa93312fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.5
-  animationVelocity: 6
+--- !u!114 &114964865224028176
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1968218064812564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b215f6a393d694f8388929b3531bc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flip: 1

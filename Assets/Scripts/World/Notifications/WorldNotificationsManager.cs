@@ -9,9 +9,22 @@ using UnityEngine;
 /// <remarks>World notifcations can be anything, ranging from damage indicators to markers.</remarks>
 public class WorldNotificationsManager : Photon.MonoBehaviour
 {
+    public static WorldNotificationsManager Instance
+    {
+        get; private set;
+    }
+
     [SerializeField] private GameObject worldNotificationPrefab;
 
     private List<WorldNotification> currentWorldNotifactions = new List<WorldNotification>();
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this);
+    }
 
     private void Update()
     {
@@ -32,7 +45,5 @@ public class WorldNotificationsManager : Photon.MonoBehaviour
         GameObject worldNotificationObj = Instantiate(worldNotificationPrefab);
         WorldNotification worldNotification = worldNotificationObj.GetComponent<WorldNotification>();
         worldNotification.InitializeAndStart(position, text, duration);
-
-        Debug.Log($"{text} - {duration}");
     }
 }

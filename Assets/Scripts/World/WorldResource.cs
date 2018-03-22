@@ -19,7 +19,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
 
     private IEnumerator PlayDepletedAnimation()
     {
-        if (animator != null)
+        if (animator != null && !animator.GetBool("isDepleted"))
         {
             photonView.RPC("CallAnimation", PhotonTargets.All);
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
@@ -35,18 +35,6 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
         photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }
 
-    [PunRPC]
-    void CallAnimation()
-    {
-        animator.SetBool("isDepleted", true);
-    }
-
-    [PunRPC]
-    void DestroyObject()
-    {
-        PhotonNetwork.Destroy(gameObject);
-    }
-
     #region IInteractable Implementation
 
     public bool IsInteractable()
@@ -59,11 +47,9 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
         if (Vector3.Distance(transform.position, invokerPosition) > interactDistance)
             return;
 
-        if (!healthComponent.IsDepleted())
-        {
-            healthComponent.DecreaseValue(50f);
-        }
-        else
+        healthComponent.DecreaseValue(50f);
+
+        if (healthComponent.IsDepleted())
         {
             StartCoroutine(PlayDepletedAnimation());
         }
@@ -75,4 +61,16 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
     }
 
     #endregion //IInteractable Implementation
+
+    [PunRPC]
+    void CallAnimation()
+    {
+        animator.SetBool("isDepleted", true);
+    }
+
+    [PunRPC]
+    void DestroyObject()
+    {
+        PhotonNetwork.Destroy(gameObject);
+    }
 }
