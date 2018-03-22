@@ -15,7 +15,7 @@ public class NPCBase : Photon.MonoBehaviour {
         Animator = GetComponent<Animator>();
         foreach (var x in Animator.GetBehaviours<NPCBaseFSM>())
         {
-            x.npc = this;
+            x.Npc = this;
         }
     }
 
@@ -25,24 +25,22 @@ public class NPCBase : Photon.MonoBehaviour {
         {
             Opponent = GetClosestOpponent();
             DistanceToOpponent = Vector3.Distance(transform.position, Opponent.transform.position);
-            //if (distance < animator.GetFloat("Distance"))
-            //{
-                photonView.RPC("SetDistance", PhotonTargets.MasterClient);
-            //}
+
+            UpdateDistanceToOpponent();
         }
-        //animator.SetFloat("Distance", Vector3.Distance(transform.position, PlayerNetwork.PlayerObject.transform.position));
     }
 
     private GameObject GetClosestOpponent()
     {
         PlayerNameTag[] players = FindObjectsOfType<PlayerNameTag>();
-        GameObject closestOpponent = players[0].gameObject;
+        GameObject closestOpponent = null;
 
         for (int i = 0; i < players.Length; i++)
         {
+            closestOpponent = players[0].gameObject;
             if (i != 0)
             {
-                if (Vector3.Distance(players[i - 1].gameObject.transform.position, gameObject.transform.position) > Vector3.Distance(players[i].gameObject.transform.position, gameObject.transform.position))
+                if (Vector3.Distance(players[i - 1].transform.position, transform.position) > Vector3.Distance(players[i].transform.position, transform.position))
                 {
                     closestOpponent = players[i].gameObject;
                 }
@@ -51,9 +49,8 @@ public class NPCBase : Photon.MonoBehaviour {
         return closestOpponent;
     }
 
-    [PunRPC]
-    void SetDistance()
+    protected void UpdateDistanceToOpponent()
     {
-        Animator.SetFloat("Distance", Vector3.Distance(gameObject.transform.position, Opponent.transform.position));
+        Animator.SetFloat("Distance", Vector3.Distance(transform.position, Opponent.transform.position));
     }
 }

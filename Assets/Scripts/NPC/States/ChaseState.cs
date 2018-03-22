@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChaseState : NPCBaseFSM {
 
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (PhotonNetwork.isMasterClient)
         {
@@ -12,21 +12,20 @@ public class ChaseState : NPCBaseFSM {
         }
     }
 
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (PhotonNetwork.isMasterClient)
         {
             base.OnStateUpdate(animator, stateInfo, layerIndex);
-            npc.Agent.SetDestination(npc.Opponent.transform.position);
+            Npc.Agent.SetDestination(Npc.Opponent.transform.position);
         }
     }
 
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (PhotonNetwork.isMasterClient)
         {
-            npc.Agent.SetDestination(npc.transform.position);
+            Npc.Agent.SetDestination(Npc.transform.position);
         }
     }
-    
 }

@@ -23,12 +23,12 @@ public class PatrolState : NPCBaseFSM {
         if (PhotonNetwork.isMasterClient)
         {
             base.OnStateUpdate(animator, stateInfo, layerIndex);
-            if (Vector3.Distance(Waypoint, npc.transform.position) < accuracy || !npc.Agent.hasPath)
+            if (Vector3.Distance(Waypoint, Npc.transform.position) < Range || !Npc.Agent.hasPath)
             {
                 Waypoint = CreateWaypoint();
             }
 
-            npc.Agent.SetDestination(Waypoint);
+            Npc.Agent.SetDestination(Waypoint);
         }
     }
 
@@ -36,14 +36,15 @@ public class PatrolState : NPCBaseFSM {
     {
         if (PhotonNetwork.isMasterClient)
         {
-            npc.Agent.SetDestination(npc.transform.position);
+            Npc.Agent.SetDestination(Npc.transform.position);
         }
     }
 
     Vector3 CreateWaypoint()
     {
-        return npc.transform.position + new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+        return Npc.transform.position + new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
     }
 
+   
    
 }

@@ -18,10 +18,4 @@ public class EnemyNPC : NPCBase {
     {
         CancelInvoke("Attack");
     }
-
-    [PunRPC]
-    void SetDistance()
-    {
-        Animator.SetFloat("Distance", Vector3.Distance(transform.position, Opponent.transform.position));
-    }
 }
