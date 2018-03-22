@@ -6,13 +6,6 @@ public class NPCBaseFSM : StateMachineBehaviour {
 
     public NPCBase Npc { get; set; }
     public Vector3 Waypoint;
-    public float Range { get; set; } = 1.0f;
+    public float WaypointReachedRange { get; set; } = 1.0f; // The distance this has to be from the agent waypoint to reach it
 
-    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-    }
-
-    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-    }
 }

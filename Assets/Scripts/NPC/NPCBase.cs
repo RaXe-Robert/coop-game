@@ -5,7 +5,7 @@ using UnityEngine;
 public class NPCBase : Photon.MonoBehaviour {
 
     public Animator Animator { get; private set; }
-    public GameObject Opponent { get; private set; }
+    public GameObject Opponent { get; set; }
     public UnityEngine.AI.NavMeshAgent Agent { get; private set; }
     public float DistanceToOpponent { get; private set; }
 
@@ -25,7 +25,7 @@ public class NPCBase : Photon.MonoBehaviour {
         {
             Opponent = GetClosestOpponent();
             DistanceToOpponent = Vector3.Distance(transform.position, Opponent.transform.position);
-
+        
             UpdateDistanceToOpponent();
         }
     }

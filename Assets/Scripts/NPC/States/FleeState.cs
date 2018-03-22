@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FleeState : NPCBaseFSM {
 
+    [SerializeField] private float fleeRange = 5f; // The range away from the opponent for it to start fleeing.
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (PhotonNetwork.isMasterClient)
@@ -17,7 +19,7 @@ public class FleeState : NPCBaseFSM {
         if (PhotonNetwork.isMasterClient)
         {
             base.OnStateUpdate(animator, stateInfo, layerIndex);
-            if (Vector3.Distance(Waypoint, Npc.transform.position) < Range || Vector3.Distance(Npc.Opponent.transform.position, Npc.transform.position) < Range)
+            if (Vector3.Distance(Waypoint, Npc.transform.position) < WaypointReachedRange || Vector3.Distance(Npc.Opponent.transform.position, Npc.transform.position) < fleeRange)
             {
                 Waypoint = CalculateFleeWaypoint();
             }

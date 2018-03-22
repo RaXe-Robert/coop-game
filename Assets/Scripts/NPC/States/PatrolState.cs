@@ -23,7 +23,7 @@ public class PatrolState : NPCBaseFSM {
         if (PhotonNetwork.isMasterClient)
         {
             base.OnStateUpdate(animator, stateInfo, layerIndex);
-            if (Vector3.Distance(Waypoint, Npc.transform.position) < Range || !Npc.Agent.hasPath)
+            if (Vector3.Distance(Waypoint, Npc.transform.position) < WaypointReachedRange || !Npc.Agent.hasPath)
             {
                 Waypoint = CreateWaypoint();
             }
