@@ -5,6 +5,11 @@ using UnityEngine.AI;
 
 public class PatrolState : NPCBaseFSM {
 
+    public override void OnStateMachineEnter(Animator animator, int stateMachinePathHash)
+    {
+        base.OnStateMachineEnter(animator, stateMachinePathHash);
+    }
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (PhotonNetwork.isMasterClient)
@@ -17,6 +22,7 @@ public class PatrolState : NPCBaseFSM {
     {
         if (PhotonNetwork.isMasterClient)
         {
+            base.OnStateUpdate(animator, stateInfo, layerIndex);
             if (Vector3.Distance(Waypoint, npc.transform.position) < accuracy || !agent.hasPath)
             {
                 Waypoint = CreateWaypoint();

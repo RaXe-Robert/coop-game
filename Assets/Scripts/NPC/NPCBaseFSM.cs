@@ -15,11 +15,13 @@ public class NPCBaseFSM : StateMachineBehaviour {
         npc = animator.gameObject;
         opponent = GetClosestOpponent();
         agent = npc.GetComponent<UnityEngine.AI.NavMeshAgent>();
-     }
+    }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        npc = animator.gameObject;
         opponent = GetClosestOpponent();
+        agent = npc.GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
     GameObject GetClosestOpponent()

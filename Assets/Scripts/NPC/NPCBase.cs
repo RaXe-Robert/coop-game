@@ -10,7 +10,6 @@ public class NPCBase : Photon.MonoBehaviour {
 
     void Start()
     {
-        //opponent = PlayerNetwork.PlayerObject;
         animator = GetComponent<Animator>();
     }
 
