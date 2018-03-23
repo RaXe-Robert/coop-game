@@ -8,8 +8,7 @@ public class AttackState : NPCBaseFSM
     {
         if (PhotonNetwork.isMasterClient)
         {
-            base.OnStateEnter(animator, stateInfo, layerIndex);
-            ((EnemyNPC)Npc).StartAttack();
+            ((EnemyNPC)NPCScript).StartAttack();
         }
     }
 
@@ -17,8 +16,7 @@ public class AttackState : NPCBaseFSM
     {
         if (PhotonNetwork.isMasterClient)
         {
-            base.OnStateUpdate(animator, stateInfo, layerIndex);
-            Npc.transform.LookAt(Npc.Opponent.transform.position);
+            NPCScript.Npc.transform.LookAt(NPCScript.Opponent.transform.position);
         }
     }
 
@@ -26,7 +24,7 @@ public class AttackState : NPCBaseFSM
     {
         if (PhotonNetwork.isMasterClient)
         {
-            ((EnemyNPC)Npc).StopAttack();
+            ((EnemyNPC)NPCScript).StopAttack();
         }
     }
 }
