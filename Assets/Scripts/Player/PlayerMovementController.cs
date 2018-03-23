@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(MovementSpeedComponent))]
 public class PlayerMovementController : Photon.MonoBehaviour
 {
     private Rigidbody rigidbodyComponent;
@@ -8,16 +9,17 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
     [SerializeField] private LayerMask rotationLayerMask;
 
-    [SerializeField] private float movementSpeed;
     [SerializeField] private float mouseDeadZoneFromPlayer;
 
     private PlayerCameraController cameraController = null;
+    private MovementSpeedComponent movementSpeedComponent = null;
 
     private void Awake()
     {
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
+        movementSpeedComponent = GetComponent<MovementSpeedComponent>();
     }
 
     // Use this for initialization
@@ -86,9 +88,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
             Vector3 movement = new Vector3(horizontal, 0.0f, vertical);
 
             if (horizontal != 0 && vertical != 0)
-                rigidbodyComponent.AddForce(movement * movementSpeed * 0.7071f);
+                rigidbodyComponent.AddForce(movement * movementSpeedComponent.Value * 0.7071f);
             else
-                rigidbodyComponent.AddForce(movement * movementSpeed);
+                rigidbodyComponent.AddForce(movement * movementSpeedComponent.Value);
 
             animator.SetBool("IsRunning", true);
         }

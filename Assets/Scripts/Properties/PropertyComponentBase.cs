@@ -3,18 +3,28 @@ using System.Collections;
 
 using UnityEngine;
 
+/// <summary>
+/// Base class for all properties, the main purpose of these properties are to keep track of a single Value and to be able to modify this value.
+/// </summary>
 [RequireComponent(typeof(PhotonView))]
 public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservable
 {
     public delegate void OnValueChanged(float value);
     public event OnValueChanged OnValueChangedCallback;
 
-    [SerializeField] protected float MaxValue = 100f;
+    [Tooltip("Completely disable world notifications for this object.")]
+    [SerializeField] protected bool ShowNotifications = true;
+    [Tooltip("Don't show notifications for this object if it's a local object.")]
+    [SerializeField] protected bool ShowNotificationsIfLocal = true;
 
+    [SerializeField] protected float MaxValue = 100f;
     [SerializeField] protected float value;
     public float Value
     {
-        get { return value; }
+        get
+        {
+            return ValueRequestAction();
+        }
         private set
         {
             float previousValue = this.value;
@@ -24,20 +34,15 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
             if (previousValue != this.value)
             {
                 OnValueChangedCallback?.Invoke(this.value);
-
-                float changedAmount = this.value - previousValue;
-
-                WorldNotificationsManager.Instance?.NewNotification(
-                    new WorldNotificationArgs(
-                        transform.position, 
-                        Mathf.Abs(changedAmount).ToString(),
-                        0.4f,
-                        changedAmount < 0 ? Color.red : Color.green
-                        )
-                );
+                
+                if (ShowNotifications && photonView.isMine)
+                {
+                    ValueChangedNotification(previousValue, this.value);
+                }
             }
         }
     }
+
     public bool IsDepleted ()
     {
         return Value <= 0f;
@@ -78,4 +83,16 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
 
         Value -= amount;
     }
+
+    /// <summary>
+    /// If an outside class calls the getter of this Value apply certain effects to this value first
+    /// </summary>
+    /// <returns>A modified Value.</returns>
+    protected abstract float ValueRequestAction();
+    /// <summary>
+    /// If an outside class calls the setter of this Value perform certain actions
+    /// </summary>
+    /// <param name="previousValue">The value before the setter was applied.</param>
+    /// <param name="currentValue">The current Value.</param>
+    protected abstract void ValueChangedNotification(float previousValue, float currentValue);
 }

@@ -1,30 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public struct WorldNotificationArgs
-{
-    public Vector3 Position { get; }
-    public string Text { get; }
-    public float Duration { get; }
-    public Color Color { get; }
-
-    public WorldNotificationArgs(Vector3 position, string text, float duration)
-    {
-        this.Position = position;
-        this.Text = text;
-        this.Duration = duration;
-        this.Color = Color.red;
-    }
-    
-    public WorldNotificationArgs(Vector3 position, string text, float duration, Color color)
-    {
-        this.Position = position;
-        this.Text = text;
-        this.Duration = duration;
-        this.Color = color;
-    }
-}
-
 [RequireComponent(typeof(TextMesh))]
 public class WorldNotification : MonoBehaviour
 {
@@ -42,7 +18,7 @@ public class WorldNotification : MonoBehaviour
     {
         transform.position = worldNotificationArgs.Position;
         textMesh.text = worldNotificationArgs.Text;
-        //textMesh.color = worldNotificationArgs.Color;
+        textMesh.color = GetColorByName(worldNotificationArgs.Color);
         duration = worldNotificationArgs.Duration;
         
         StartCoroutine(PlayDefaultAnimation());
@@ -61,7 +37,35 @@ public class WorldNotification : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
         }
-        
         Destroy(this.gameObject);
+    }
+
+    private Color GetColorByName(string color)
+    {
+        switch (color)
+        {
+            case "cyan":
+                return Color.cyan;
+            case "green":
+                return Color.green;
+            case "red":
+                return Color.red;
+            case "yellow":
+                return Color.yellow;
+            case "blue":
+                return Color.blue;
+            case "magenta":
+                return Color.magenta;
+            case "gray":
+                return Color.gray;
+            case "white":
+                return Color.white;
+            case "grey":
+                return Color.grey;
+            //case "black":
+            //case "clear":
+            default:
+                return Color.black;
+        }
     }
 }

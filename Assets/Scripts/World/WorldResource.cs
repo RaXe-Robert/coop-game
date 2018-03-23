@@ -19,7 +19,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
 
     private IEnumerator PlayDepletedAnimation()
     {
-        if (animator != null && !animator.GetBool("isDepleted"))
+        if (animator != null)
         {
             photonView.RPC("CallAnimation", PhotonTargets.All);
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);

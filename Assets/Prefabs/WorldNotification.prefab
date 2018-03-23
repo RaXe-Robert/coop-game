@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4336220070362372}
   - component: {fileID: 23051926977579660}
   - component: {fileID: 102494064666500878}
-  - component: {fileID: 114123319934729300}
+  - component: {fileID: 114765879496672036}
   - component: {fileID: 114964865224028176}
   m_Layer: 0
   m_Name: WorldNotification
@@ -98,7 +98,7 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190335
---- !u!114 &114123319934729300
+--- !u!114 &114765879496672036
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

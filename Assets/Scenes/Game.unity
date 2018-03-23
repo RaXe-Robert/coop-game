@@ -341,8 +341,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tree: {fileID: 1296203204362048, guid: cea2ad25b4540224a86b529aa39547f6, type: 2}
   rock: {fileID: 1695406501947972, guid: 00e52d555c867374690f2256513d9e5a, type: 2}
-  carl: {fileID: 0}
-  carlScared: {fileID: 0}
   maxTrees: 10
   maxRocks: 10
 --- !u!114 &865845542
@@ -663,17 +661,17 @@ Prefab:
     - target: {fileID: 224976038624272000, guid: 6d49260cd6ddcb2479f377f1f45b3dd8,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 39.948666
+      value: 37.715816
       objectReference: {fileID: 0}
     - target: {fileID: 224976038624272000, guid: 6d49260cd6ddcb2479f377f1f45b3dd8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 224976038624272000, guid: 6d49260cd6ddcb2479f377f1f45b3dd8,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 69.89733
+      value: 65.43163
       objectReference: {fileID: 0}
     - target: {fileID: 224172943688348480, guid: 6d49260cd6ddcb2479f377f1f45b3dd8,
         type: 2}
@@ -688,27 +686,27 @@ Prefab:
     - target: {fileID: 224172943688348480, guid: 6d49260cd6ddcb2479f377f1f45b3dd8,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 39.948666
+      value: 37.715816
       objectReference: {fileID: 0}
     - target: {fileID: 224172943688348480, guid: 6d49260cd6ddcb2479f377f1f45b3dd8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -45
       objectReference: {fileID: 0}
     - target: {fileID: 224172943688348480, guid: 6d49260cd6ddcb2479f377f1f45b3dd8,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 69.89733
+      value: 65.43163
       objectReference: {fileID: 0}
     - target: {fileID: 224785784702047964, guid: 6d49260cd6ddcb2479f377f1f45b3dd8,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 79.89733
+      value: 75.43163
       objectReference: {fileID: 0}
     - target: {fileID: 224785784702047964, guid: 6d49260cd6ddcb2479f377f1f45b3dd8,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 224425133125209346, guid: 6d49260cd6ddcb2479f377f1f45b3dd8,
         type: 2}

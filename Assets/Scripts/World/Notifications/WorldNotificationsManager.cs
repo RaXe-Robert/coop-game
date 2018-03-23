@@ -20,8 +20,8 @@ public class WorldNotificationsManager : Photon.MonoBehaviour
 
     [SerializeField] private GameObject worldNotificationPrefab;
 
-    private List<WorldNotification> currentWorldNotifactions = new List<WorldNotification>();
-
+    private List<WorldNotification> currentWorldNotifications = new List<WorldNotification>();
+    
     private void Awake()
     {
         if (Instance == null)
@@ -32,22 +32,22 @@ public class WorldNotificationsManager : Photon.MonoBehaviour
 
     private void Update()
     {
-        foreach (WorldNotification worldNotification in currentWorldNotifactions)
+        foreach (WorldNotification worldNotification in currentWorldNotifications)
         {
             //worldNotification.Tick();
         }
     }
 
-    public void NewNotification(WorldNotificationArgs worldNotificationArgs)
+    public void ShowNotification(WorldNotificationArgs worldNotificationArgs, bool includeLocal)
     {
-        GameObject worldNotificationObj = Instantiate(worldNotificationPrefab);
-        WorldNotification worldNotification = worldNotificationObj.GetComponent<WorldNotification>();
-        worldNotification.InitializeAndStart(worldNotificationArgs);
-        //photonView.RPC("CreateWorldNotification", PhotonTargets.All, new object[] { worldNotificationArgs.Position, worldNotificationArgs.Text, worldNotificationArgs.Duration, worldNotificationArgs.Color});
+        if (includeLocal)
+            photonView.RPC("CreateNotification", PhotonTargets.All, new object[] { worldNotificationArgs.Position, worldNotificationArgs.Text, worldNotificationArgs.Duration, worldNotificationArgs.Color});
+        else
+            photonView.RPC("CreateNotification", PhotonTargets.Others, new object[] { worldNotificationArgs.Position, worldNotificationArgs.Text, worldNotificationArgs.Duration, worldNotificationArgs.Color });
     }
 
     [PunRPC]
-    private void CreateWorldNotification(Vector3 position, string text, float duration, Color color)
+    private void CreateNotification(Vector3 position, string text, float duration, string color)
     {
         GameObject worldNotificationObj = Instantiate(worldNotificationPrefab);
         WorldNotification worldNotification = worldNotificationObj.GetComponent<WorldNotification>();

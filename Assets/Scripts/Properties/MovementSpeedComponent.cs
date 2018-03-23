@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 
-public class HealthComponent : PropertyComponentBase
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class MovementSpeedComponent : PropertyComponentBase
 {
     protected override void ValueChangedNotification(float previousValue, float currentValue)
-    {        
+    {
         float changedAmount = currentValue - previousValue;
 
         WorldNotificationsManager.Instance?.ShowNotification(
             new WorldNotificationArgs(
                 transform.position,
-                Mathf.Abs(changedAmount).ToString("F0"),
+                changedAmount < 0 ? "Gotta go fast!" : "Slowed!",
                 0.4f,
                 changedAmount < 0 ? "red" : "green"
                 ), ShowNotificationsIfLocal
