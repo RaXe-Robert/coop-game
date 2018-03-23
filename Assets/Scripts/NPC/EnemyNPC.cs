@@ -4,24 +4,27 @@ using UnityEngine;
 
 public class EnemyNPC : NPCBase {
        
+    /// <summary>
+    /// Handle attacking when the enemy reaches this state.
+    /// </summary>
     void Attack()
     {
-       // Debug.Log("Npc is attacking the player");
+        Opponent.gameObject.GetComponent<HealthComponent>().Health -= 3;
     }
 
+    /// <summary>
+    /// Starts the attack method.
+    /// </summary>
     public void StartAttack()
     {
         InvokeRepeating("Attack", 0.5f, 0.5f);
     }
 
+    /// <summary>
+    /// Cancels the attack method.
+    /// </summary>
     public void StopAttack()
     {
         CancelInvoke("Attack");
-    }
-
-    [PunRPC]
-    void SetDistance()
-    {
-        animator.SetFloat("Distance", Vector3.Distance(transform.position, opponent.transform.position));
     }
 }

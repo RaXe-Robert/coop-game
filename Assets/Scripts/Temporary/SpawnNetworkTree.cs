@@ -12,6 +12,7 @@ public class SpawnNetworkTree : Photon.MonoBehaviour {
     private GameObject RockCollection;
     public int maxTrees = 10;
     public int maxRocks = 10;
+    public int maxNPCs = 10;
 
     void Start() {
         TreeCollection = new GameObject("Spawned Trees");
@@ -31,9 +32,11 @@ public class SpawnNetworkTree : Photon.MonoBehaviour {
                 photonView.RPC("SetStoneParent", PhotonTargets.AllBufferedViaServer, newRock.GetPhotonView().instantiationId);
             }
 
-            PhotonNetwork.InstantiateSceneObject(carl.name, new Vector3(0, 0, 0), new Quaternion(), 0, null);
-            PhotonNetwork.InstantiateSceneObject(carlScared.name, new Vector3(0, 0, 0), new Quaternion(), 0, null);
-
+            for (int i = 0; i < maxNPCs / 2; i++)
+            {
+                PhotonNetwork.InstantiateSceneObject(carl.name, new Vector3(0, 0, 0), new Quaternion(), 0, null);
+                PhotonNetwork.InstantiateSceneObject(carlScared.name, new Vector3(0, 0, 0), new Quaternion(), 0, null);
+            }
         }
     }
 

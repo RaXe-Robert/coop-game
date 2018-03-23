@@ -4,41 +4,25 @@ using UnityEngine;
 
 public class FleeState : NPCBaseFSM {
 
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        if (PhotonNetwork.isMasterClient)
-        {
-            base.OnStateEnter(animator, stateInfo, layerIndex);
-        }
-    }
+    [SerializeField] private float fleeRange = 4f; // The range away from the opponent for it to start fleeing.
 
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (PhotonNetwork.isMasterClient)
         {
-            base.OnStateUpdate(animator, stateInfo, layerIndex);
-            if (Vector3.Distance(Waypoint, npc.transform.position) < accuracy || Vector3.Distance(opponent.transform.position, npc.transform.position) < accuracy)
+            if (Vector3.Distance(NPCScript.Waypoint, NPCScript.Npc.transform.position) < NPCScript.NearWaypointRange || Vector3.Distance(NPCScript.Opponent.transform.position, NPCScript.Npc.transform.position) < fleeRange)
             {
-                Waypoint = CalculateFleeWaypoint();
+                NPCScript.SetFleeWaypoint();
             }
-            agent.SetDestination(Waypoint);
+            NPCScript.Agent.SetDestination(NPCScript.Waypoint);
         }
     }
 
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (PhotonNetwork.isMasterClient)
         {
-            agent.SetDestination(npc.transform.position);
+            NPCScript.Agent.SetDestination(NPCScript.Npc.transform.position);
         }
-    }
-
-    Vector3 CalculateFleeWaypoint()
-    {
-        var heading = npc.transform.position - opponent.transform.position;
-        var distance = heading.magnitude;
-        var direction = heading / distance;
-        direction.y = 0f;
-        return npc.transform.position + direction * 10;
     }
 }

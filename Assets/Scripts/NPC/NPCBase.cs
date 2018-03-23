@@ -4,50 +4,82 @@ using UnityEngine;
 
 public class NPCBase : Photon.MonoBehaviour {
 
-    public Animator animator;
-    public GameObject opponent;
-    public float distance;
-
-    void Start()
+    public GameObject Npc { get; private set; }
+    public GameObject Opponent { get; private set; }
+    public UnityEngine.AI.NavMeshAgent Agent { get; private set; }
+    public Animator Animator { get; private set; } 
+    public Vector3 Waypoint { get; private set; }
+    public float NearWaypointRange { get; set; } = 4.0f; // The distance this has to be from the agent waypoint to reach it
+    
+    private void Awake()
     {
-        animator = GetComponent<Animator>();
+        Npc = gameObject;
+        Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        Animator = GetComponent<Animator>();
+        foreach (NPCBaseFSM fsm in Animator.GetBehaviours<NPCBaseFSM>())
+        {
+            fsm.NPCScript = this;
+        }       
     }
 
-    void Update()
+    private void Update()
     {
         if (PhotonNetwork.isMasterClient)
         {
-            opponent = GetClosestOpponent();
-            distance = Vector3.Distance(transform.position, opponent.transform.position);
-            //if (distance < animator.GetFloat("Distance"))
-            //{
-                photonView.RPC("SetDistance", PhotonTargets.MasterClient);
-            //}
+            SetClosestOpponent();
+            UpdateDistanceToOpponent();
         }
-        //animator.SetFloat("Distance", Vector3.Distance(transform.position, PlayerNetwork.PlayerObject.transform.position));
     }
 
-    GameObject GetClosestOpponent()
+    /// <summary>
+    /// Finds all player objects and calculates which player is the closest to the npc, making this its opponent.
+    /// </summary>
+    public void SetClosestOpponent()
     {
         PlayerNameTag[] players = FindObjectsOfType<PlayerNameTag>();
-        GameObject ClosestOpponent = players[0].gameObject;
+        GameObject closestOpponent = null;
 
         for (int i = 0; i < players.Length; i++)
         {
-            if (i != 0)
+            if(i == 0)
             {
-                if (Vector3.Distance(players[i - 1].gameObject.transform.position, gameObject.transform.position) > Vector3.Distance(players[i].gameObject.transform.position, gameObject.transform.position))
+                closestOpponent = players[0].gameObject;
+            }
+            else
+            {
+                if (Vector3.Distance(players[i - 1].transform.position, transform.position) > Vector3.Distance(players[i].transform.position, transform.position))
                 {
-                    ClosestOpponent = players[i].gameObject;
+                    closestOpponent = players[i].gameObject;
                 }
             }
         }
-        return ClosestOpponent;
+        Opponent = closestOpponent;
     }
 
-    [PunRPC]
-    void SetDistance()
+    /// <summary>
+    /// Calculates and sets the waypoint on the hand of the player position. The npc will run the opposite way.
+    /// </summary>
+    public void SetFleeWaypoint()
     {
-        animator.SetFloat("Distance", Vector3.Distance(gameObject.transform.position, opponent.transform.position));
+        Vector3 heading = Npc.transform.position - Opponent.transform.position;
+        Vector3 direction = heading / heading.magnitude;
+        direction.y = 0f;
+        Waypoint = Npc.transform.position + direction * 10;
+    }
+
+    /// <summary>
+    /// Creates and sets a random waypoint away from the npc position.
+    /// </summary>
+    public void SetRandomWaypoint()
+    {
+        Waypoint = Npc.transform.position + new Vector3(Random.Range(-20, 20), 0, Random.Range(-20, 20));
+    }
+    
+    /// <summary>
+    /// Sets the distance paremeter in the animator.
+    /// </summary>
+    protected void UpdateDistanceToOpponent()
+    {
+        Animator.SetFloat("Distance", Vector3.Distance(transform.position, Opponent.transform.position));
     }
 }
