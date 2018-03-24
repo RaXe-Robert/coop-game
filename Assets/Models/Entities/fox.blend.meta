@@ -36,6 +36,26 @@ ModelImporter:
     100056: TailSegment3
     100058: TailSegment4
     100060: TailSegment5
+    100062: Chest
+    100064: Chest_001
+    100066: Chest_002
+    100068: Chest_003
+    100070: LeftBackFoot
+    100072: LeftBackLeg_IK
+    100074: LeftBackLowerLeg
+    100076: LeftBackUpperLeg
+    100078: LeftFrontFoot
+    100080: LeftFrontLeg_IK
+    100082: LeftFrontLowerLeg
+    100084: LeftFrontUpperLeg_001
+    100086: RightBackFoot
+    100088: RightBackLeg_IK
+    100090: RightBackLowerLeg
+    100092: RightBackUpperLeg
+    100094: RightFrontFoot
+    100096: RightFrontLeg_IK
+    100098: RightFrontLowerLeg
+    100100: RightFrontUpperLeg
     400000: Armature
     400002: BackFoot_L
     400004: BackFoot_R
@@ -67,15 +87,44 @@ ModelImporter:
     400056: TailSegment3
     400058: TailSegment4
     400060: TailSegment5
+    400062: Chest
+    400064: Chest_001
+    400066: Chest_002
+    400068: Chest_003
+    400070: LeftBackFoot
+    400072: LeftBackLeg_IK
+    400074: LeftBackLowerLeg
+    400076: LeftBackUpperLeg
+    400078: LeftFrontFoot
+    400080: LeftFrontLeg_IK
+    400082: LeftFrontLowerLeg
+    400084: LeftFrontUpperLeg_001
+    400086: RightBackFoot
+    400088: RightBackLeg_IK
+    400090: RightBackLowerLeg
+    400092: RightBackUpperLeg
+    400094: RightFrontFoot
+    400096: RightFrontLeg_IK
+    400098: RightFrontLowerLeg
+    400100: RightFrontUpperLeg
     2100000: PrimaryFur
     2100002: SecondaryFur
     2100004: DarkFur
+    2300000: //RootNode
+    2300002: Fox
+    3300000: //RootNode
+    3300002: Fox
     4300000: Fox
     7400000: Default Take
     7400002: Idle
     7400004: Running
     7400006: Walking
     7400008: Depleted
+    7400010: Depleted
+    7400012: Idle
+    7400014: Running
+    7400016: Walking
+    7400018: Walking
     9500000: //RootNode
     13700000: Fox
   externalObjects: {}
@@ -106,10 +155,38 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
+      name: Depleted
+      takeName: Depleted
+      firstFrame: -1
+      lastFrame: 87
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
       name: Idle
       takeName: Idle
       firstFrame: -1
-      lastFrame: 64
+      lastFrame: 58
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -137,7 +214,7 @@ ModelImporter:
       name: Running
       takeName: Running
       firstFrame: -1
-      lastFrame: 47
+      lastFrame: 57
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -165,35 +242,7 @@ ModelImporter:
       name: Walking
       takeName: Walking
       firstFrame: -1
-      lastFrame: 70
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Depleted
-      takeName: Depleted
-      firstFrame: -1
-      lastFrame: 47
+      lastFrame: 57
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
