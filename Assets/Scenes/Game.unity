@@ -502,7 +502,7 @@ MonoBehaviour:
   rock: {fileID: 1695406501947972, guid: 00e52d555c867374690f2256513d9e5a, type: 2}
   carl: {fileID: 1386452222050776, guid: 6ec3b42c643222f43a50d22a8629f246, type: 2}
   carlScared: {fileID: 1559031737579132, guid: 263ef742dba3c944abdc9eb1917e0da7, type: 2}
-  fox: {fileID: 1658311582439692, guid: 7e7ad8f354e52cb4aae5607286bca369, type: 2}
+  fox: {fileID: 1731566292436872, guid: 30ba0189b1de9094b85526fb1ce512e1, type: 2}
   maxTrees: 10
   maxRocks: 10
   maxNPCs: 10
