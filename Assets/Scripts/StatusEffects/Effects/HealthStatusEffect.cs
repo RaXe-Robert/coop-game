@@ -10,15 +10,14 @@ public class HealthStatusEffect : StatusEffectBase
 
     private HealthComponent healthComponent;
 
-    public HealthStatusEffect(ScriptableStatusEffectData statusEffect, GameObject gameObj) : base(statusEffect, gameObj)
+    public HealthStatusEffect(ScriptableStatusEffectData statusEffect, StatusEffectComponent statusEffectComponent) : base(statusEffect, statusEffectComponent)
     {
-        healthComponent = gameObj.GetComponent<HealthComponent>();
+        healthComponent = statusEffectComponent.GetComponent<HealthComponent>();
         healthStatusEffectData = (HealthStatusEffectData)statusEffect;
     }
 
     public override void Activate()
     {
-        Debug.Log(this.ToString());
     }
 
     protected override void OnTick(float delta)
@@ -32,6 +31,6 @@ public class HealthStatusEffect : StatusEffectBase
 
     public override string ToString()
     {
-        return $"Modifies {gameObj.name} health by {healthStatusEffectData.HealthModification} over {healthStatusEffectData.Duration} seconds.";
+        return $"Modifies {statusEffectComponent.name} health by {healthStatusEffectData.HealthModification} over {healthStatusEffectData.Duration} seconds.";
     }
 }

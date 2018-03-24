@@ -6,7 +6,7 @@ using System.Collections;
 /// </summary>
 public abstract class StatusEffectBase
 {
-    protected GameObject gameObj; // The target object for this status effect
+    protected StatusEffectComponent statusEffectComponent; // The target object for this status effect
 
     protected ScriptableStatusEffectData statusEffectData; // Contains specific data for the status effect
     public ScriptableStatusEffectData StatusEffectData { get { return statusEffectData; } }
@@ -23,9 +23,9 @@ public abstract class StatusEffectBase
     public delegate void StatusEffectTick();
     public StatusEffectTick OnStatusEffectTick;
 
-    public StatusEffectBase(ScriptableStatusEffectData statusEffect, GameObject gameObj)
+    public StatusEffectBase(ScriptableStatusEffectData statusEffect, StatusEffectComponent statusEffectComponent)
     {
-        this.gameObj = gameObj;
+        this.statusEffectComponent = statusEffectComponent;
         this.statusEffectData = statusEffect;
         this.timeRemaining = statusEffect.Duration;
     }
@@ -37,12 +37,12 @@ public abstract class StatusEffectBase
     public void Tick(float delta)
     {
         OnTick(delta);
-
         timeRemaining -= delta;
-        if (timeRemaining <= 0)
-            End();
 
         OnStatusEffectTick?.Invoke();
+
+        if (IsFinished)
+            statusEffectComponent.OnStatusEffectFinished?.Invoke(this);
     }
 
     public void Merge(StatusEffectBase statusEffectToMerge)
@@ -54,10 +54,12 @@ public abstract class StatusEffectBase
     /// Gets called when this is added to a <see cref="StatusEffectComponent"/>
     /// </summary>
     public abstract void Activate();
-
-    protected abstract void OnTick(float delta);
-
+    /// <summary>
+    /// Gets called when this is removed from a <see cref="StatusEffectComponent"/>
+    /// </summary>
     public abstract void End();
 
+    protected abstract void OnTick(float delta);
+    
     public abstract override string ToString();
 }

@@ -56,6 +56,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Rotates the player object towards the mouse.
+    /// </summary>
     private void RotatePlayer()
     {
         if (cameraController.CameraReference == null)
@@ -80,17 +83,11 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// </summary>
     private void MovePlayer()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+        Vector3 movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0.0f, Input.GetAxisRaw("Vertical"));
 
-        if (horizontal != 0 || vertical != 0)
+        if (movementInput != Vector3.zero)
         {
-            Vector3 movement = new Vector3(horizontal, 0.0f, vertical);
-
-            if (horizontal != 0 && vertical != 0)
-                rigidbodyComponent.AddForce(movement * movementSpeedComponent.Value * 0.7071f);
-            else
-                rigidbodyComponent.AddForce(movement * movementSpeedComponent.Value);
+            rigidbodyComponent.AddForce(movementInput.normalized * movementSpeedComponent.Value * 0.7071f);
 
             animator.SetBool("IsRunning", true);
         }
