@@ -27,6 +27,8 @@ public class EquipmentManager : MonoBehaviour
         if (HasToolEquipped(toolToEquip.ToolType))
         {
             var currentEquipped = GetEquippedTool(toolToEquip.ToolType);
+            if (currentEquipped == toolToEquip)
+                return;
             inventory.RemoveItemById(toolToEquip.Id);
             equippedTools.Remove(currentEquipped);
 
@@ -47,6 +49,8 @@ public class EquipmentManager : MonoBehaviour
         if (HasWeaponEquipped)
         {
             var currentEquipped = equippedWeapon;
+            if (currentEquipped == weaponToEquip)
+                return;
             inventory.RemoveItemById(weaponToEquip.Id);
             equippedWeapon = null;
 
@@ -67,6 +71,8 @@ public class EquipmentManager : MonoBehaviour
         if (HasArmorEquipped(armorToEquip.ArmorType))
         {
             var currentEquipped = GetEquippedArmorByType(armorToEquip.ArmorType);
+            if (currentEquipped == armorToEquip)
+                return;
             equippedArmor.Remove(currentEquipped);
             inventory.RemoveItemById(armorToEquip.Id);
 
@@ -170,7 +176,7 @@ public class EquipmentManager : MonoBehaviour
             Tool equippedItem;
             if ((equippedItem = equippedTools.Find(x => x.Id == itemToUnequip.Id)) != null)
             {
-                inventory.AddItemById(equippedItem.Id);
+                inventory.AddItemAtIndex(equippedItem.Id, index);
                 equippedTools.Remove(equippedItem);
                 OnItemEquippedCallBack?.Invoke();
             }
@@ -178,7 +184,7 @@ public class EquipmentManager : MonoBehaviour
 
         else if(itemToUnequip.GetType() == typeof(Weapon))
         {
-            inventory.AddItemById(equippedWeapon.Id);
+            inventory.AddItemAtIndex(equippedWeapon.Id, index);
             equippedWeapon = null;
             OnItemEquippedCallBack?.Invoke();
         }

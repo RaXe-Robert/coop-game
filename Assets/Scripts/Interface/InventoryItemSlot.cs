@@ -25,7 +25,6 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         
         set
         {
-            image.enabled = true;
             item = value;
             image.sprite = item?.Sprite;
             if (item?.StackSize > 1)
@@ -57,7 +56,6 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         item = null;
         image.sprite = null;
-        image.enabled = false;
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
