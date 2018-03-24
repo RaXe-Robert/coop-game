@@ -65,7 +65,6 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (item == null)
             return;
 
-        Debug.Log("Pointer enter");
         Tooltip.Instance.Show(item.Name, item.Description);
     }
 
