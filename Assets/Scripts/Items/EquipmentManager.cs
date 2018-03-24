@@ -15,7 +15,7 @@ public class EquipmentManager : MonoBehaviour
 
     public bool HasWeaponEquipped { get { return equippedWeapon != null; } }
 
-    void Start()
+    private void Start()
     {
         equippedTools = new List<Tool>(2);
         equippedArmor = new List<Armor>(4);
