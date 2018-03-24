@@ -7,9 +7,8 @@ public class InventoryUI : MonoBehaviour {
     [SerializeField] private GameObject inventorySlotPrefab;
 
     [SerializeField] private GameObject inventoryUIGo;
-    [SerializeField] private GameObject craftingUIGo;
-    [SerializeField] private GameObject equipmentUIGo;
     [SerializeField] private GameObject hotbarUIGo;
+
     private Inventory inventory;
     private EquipmentManager equipmentManager;
 
@@ -23,16 +22,6 @@ public class InventoryUI : MonoBehaviour {
         InitializeInventory();
         inventory.OnItemChangedCallback += UpdateUI;
 	}
-	
-	private void Update () {
-        if (Input.GetKeyDown(KeyCode.B) || Input.GetKeyDown(KeyCode.I))
-            inventoryUIGo.SetActive(!inventoryUIGo.activeSelf);
-        if (Input.GetKeyDown(KeyCode.F))
-            craftingUIGo.SetActive(!craftingUIGo.activeSelf);
-        if (Input.GetKeyDown(KeyCode.C))
-            equipmentUIGo.SetActive(!equipmentUIGo.activeSelf);
-
-    }
 
     public void UpdateUI()
     {

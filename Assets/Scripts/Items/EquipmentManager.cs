@@ -32,14 +32,14 @@ public class EquipmentManager : MonoBehaviour
 
             inventory.AddItemById(currentEquipped.Id, 1);
             equippedTools.Add(toolToEquip);
-            OnItemEquippedCallBack?.Invoke();
         }
         else
         {
             equippedTools.Add(toolToEquip);
             inventory.RemoveItemById(toolToEquip.Id);
-            OnItemEquippedCallBack?.Invoke();
         }
+
+        OnItemEquippedCallBack?.Invoke();
     }
 
     public void EquipWeapon(Weapon weaponToEquip)
@@ -52,36 +52,34 @@ public class EquipmentManager : MonoBehaviour
 
             equippedWeapon = weaponToEquip;
             inventory.AddItemById(currentEquipped.Id);
-            OnItemEquippedCallBack?.Invoke();
         }
         else
         {
             inventory.RemoveItemById(weaponToEquip.Id);
             equippedWeapon = weaponToEquip;
-            OnItemEquippedCallBack?.Invoke();
         }
+
+        OnItemEquippedCallBack?.Invoke();
     }
 
     public void EquipArmor(Armor armorToEquip)
     {
         if (HasArmorEquipped(armorToEquip.ArmorType))
         {
-            //Add currently equipped item to the inventory
             var currentEquipped = GetEquippedArmorByType(armorToEquip.ArmorType);
             equippedArmor.Remove(currentEquipped);
             inventory.RemoveItemById(armorToEquip.Id);
 
-            //Remove new armor from inventory and equip it
             inventory.AddItemById(currentEquipped.Id);
             equippedArmor.Add(armorToEquip);
-            OnItemEquippedCallBack?.Invoke();
         }
         else
         {
             equippedArmor.Add(armorToEquip);
             inventory.RemoveItemById(armorToEquip.Id);
-            OnItemEquippedCallBack?.Invoke();
         }
+
+        OnItemEquippedCallBack?.Invoke();
     }
 
     public void EquipItem(ItemBase item)

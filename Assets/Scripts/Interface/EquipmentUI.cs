@@ -11,7 +11,7 @@ public class EquipmentUI : MonoBehaviour {
     private EquipmentManager equipmentManager;
     private Inventory inventory;
 
-	void Start () {
+    private void Start () {
         equipmentManager = FindObjectOfType<EquipmentManager>();
         inventory = FindObjectOfType<Inventory>();
         equipmentManager.OnItemEquippedCallBack += UpdateUI;
@@ -28,14 +28,14 @@ public class EquipmentUI : MonoBehaviour {
         weaponSlot.Initialize(-1, inventory, equipmentManager);
     }
 
-    void UpdateUI()
+    private void UpdateUI()
     {
         UpdateTools();
         UpdateWeapon();
         UpdateArmor();
     }
 
-    void UpdateTools()
+    private void UpdateTools()
     {
         for (int i = 0; i < toolSlots.Length; i++)
         {
@@ -46,15 +46,15 @@ public class EquipmentUI : MonoBehaviour {
             else toolSlots[i].Clear();
         }
     }
-    
-    void UpdateWeapon()
+
+    private void UpdateWeapon()
     {
         if (equipmentManager.HasWeaponEquipped)
             weaponSlot.Item = equipmentManager.GetEquippedWeapon();
         else weaponSlot.Clear();
     }
 
-    void UpdateArmor()
+    private void UpdateArmor()
     {
         for (int i = 0; i < armorSlots.Length; i++)
         {
