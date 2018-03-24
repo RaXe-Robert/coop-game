@@ -924,6 +924,7 @@ GameObject:
   - component: {fileID: 1307443140}
   - component: {fileID: 1307443139}
   - component: {fileID: 1307443147}
+  - component: {fileID: 1307443148}
   m_Layer: 5
   m_Name: PlayerUI
   m_TagString: Untagged
@@ -1091,6 +1092,26 @@ MonoBehaviour:
   inventoryUI: {fileID: 1463700543}
   craftingUI: {fileID: 806153300}
   equipmentUI: {fileID: 1754730836}
+--- !u!114 &1307443148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1307443138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53cd1fbd831d6af4c9cb31e6cbf53835, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  armorSlots:
+  - {fileID: 1754730843}
+  - {fileID: 1754730842}
+  - {fileID: 1754730841}
+  - {fileID: 1754730840}
+  weaponSlot: {fileID: 1754730839}
+  toolSlots:
+  - {fileID: 1754730838}
+  - {fileID: 1754730837}
 --- !u!1001 &1377448596
 Prefab:
   m_ObjectHideFlags: 0
@@ -1503,6 +1524,48 @@ GameObject:
   m_PrefabParentObject: {fileID: 1580314959662808, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
     type: 2}
   m_PrefabInternal: {fileID: 1754730834}
+--- !u!114 &1754730837 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114863939832790434, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1754730834}
+  m_Script: {fileID: 11500000, guid: 356c80c5e9354fa4d9c4046181296516, type: 3}
+--- !u!114 &1754730838 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114091892299549480, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1754730834}
+  m_Script: {fileID: 11500000, guid: 356c80c5e9354fa4d9c4046181296516, type: 3}
+--- !u!114 &1754730839 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114601680184123330, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1754730834}
+  m_Script: {fileID: 11500000, guid: aa1ffc8bf084889479be36a9b50904f7, type: 3}
+--- !u!114 &1754730840 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114338929397509348, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1754730834}
+  m_Script: {fileID: 11500000, guid: c498781b064601a469d4519df1eef5e6, type: 3}
+--- !u!114 &1754730841 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114324133786809216, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1754730834}
+  m_Script: {fileID: 11500000, guid: c498781b064601a469d4519df1eef5e6, type: 3}
+--- !u!114 &1754730842 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114997737620869104, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1754730834}
+  m_Script: {fileID: 11500000, guid: c498781b064601a469d4519df1eef5e6, type: 3}
+--- !u!114 &1754730843 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114036177032708478, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1754730834}
+  m_Script: {fileID: 11500000, guid: c498781b064601a469d4519df1eef5e6, type: 3}
 --- !u!1001 &1799878098
 Prefab:
   m_ObjectHideFlags: 0
