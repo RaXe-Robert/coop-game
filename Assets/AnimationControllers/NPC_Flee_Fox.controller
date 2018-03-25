@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ace1c304c979840aa020c0077058f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fleeRange: 4
+  fleeRange: 3
 --- !u!114 &114948328954410344
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -71,7 +71,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Distance
-    m_EventTreshold: 20
+    m_EventTreshold: 13
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102429016291579468}
   m_Solo: 0
@@ -95,7 +95,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Distance
-    m_EventTreshold: 10
+    m_EventTreshold: 8
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102305446901220284}
   m_Solo: 0

@@ -50,11 +50,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28e34cb2d745ffd4cbf0deea6b715373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Npc: {fileID: 0}
-  Opponent: {fileID: 0}
-  Agent: {fileID: 0}
-  Waypoint: {x: 0, y: 0, z: 0}
-  accuracy: 1
 --- !u!114 &114277329390945744
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -66,11 +61,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc15b9d95757ff14eb2fe2c48b25bf63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Npc: {fileID: 0}
-  Opponent: {fileID: 0}
-  Agent: {fileID: 0}
-  Waypoint: {x: 0, y: 0, z: 0}
-  accuracy: 3
 --- !u!114 &114825898038002516
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -82,11 +72,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cddaa1b605705e043aaca6be470f0633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Npc: {fileID: 0}
-  Opponent: {fileID: 0}
-  Agent: {fileID: 0}
-  Waypoint: {x: 0, y: 0, z: 0}
-  accuracy: 1
 --- !u!1101 &1101037777134805272
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -120,7 +105,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Distance
-    m_EventTreshold: 3
+    m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102586410536803334}
   m_Solo: 0
@@ -144,7 +129,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Distance
-    m_EventTreshold: 3
+    m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102848647651249426}
   m_Solo: 0
@@ -192,7 +177,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: Distance
-    m_EventTreshold: 10
+    m_EventTreshold: 7
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102848647651249426}
   m_Solo: 0
@@ -288,7 +273,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: Distance
-    m_EventTreshold: 15
+    m_EventTreshold: 10
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102256325794621318}
   m_Solo: 0
@@ -481,7 +466,7 @@ AnimatorStateMachine:
     m_Position: {x: 420, y: 144, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102848647651249426}
-    m_Position: {x: 660, y: 84, z: 0}
+    m_Position: {x: 708, y: 84, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102586410536803334}
     m_Position: {x: 972, y: -12, z: 0}

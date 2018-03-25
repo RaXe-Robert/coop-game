@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 114094595974584758}
   - component: {fileID: 114817753689546952}
   - component: {fileID: 114108696994553980}
-  - component: {fileID: 208514330088218382}
+  - component: {fileID: 208085045006791390}
   m_Layer: 0
   m_Name: TreeStump
   m_TagString: Untagged
@@ -171,10 +171,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71619f749ec3df04f8dc57baed5cd491, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxValue: 100
-  MinValue: 0
-  health: 50
---- !u!208 &208514330088218382
+  ShowNotifications: 1
+  ShowNotificationsIfLocal: 1
+  MaxValue: 50
+  value: 50
+--- !u!208 &208085045006791390
 NavMeshObstacle:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

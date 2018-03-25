@@ -8,8 +8,8 @@ public class HealthStatusEffectData : ScriptableStatusEffectData
     [SerializeField] private float healthModification;
     public float HealthModification { get { return healthModification; } }
 
-    public override StatusEffectBase InitializeStatusEffect(GameObject gameObj)
+    public override StatusEffectBase InitializeStatusEffect(StatusEffectComponent statusEffectComponent)
     {
-        return new HealthStatusEffect(this, gameObj);
+        return new HealthStatusEffect(this, statusEffectComponent);
     }
 }

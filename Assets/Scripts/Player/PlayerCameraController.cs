@@ -36,8 +36,27 @@ public class PlayerCameraController : MonoBehaviour
         if (target)
         {
             Vector3 targetPos = new Vector3(target.position.x + centerOffset.x, target.position.y + centerOffset.y, target.position.z + centerOffset.z);
+
+            //Debug feature for animations
+            if ( Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                if (centerOffset.y > 2 && centerOffset.y < 11)
+                {
+                    centerOffset.y -= 0.5f;
+                }
+            }
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                if (centerOffset.y > 1 && centerOffset.y < 10)
+                {
+                    centerOffset.y += 0.5f;
+                }
+            }
+
             cameraReference.transform.position = targetPos;
             cameraReference.transform.LookAt(target);
+
+
         }
     }
 

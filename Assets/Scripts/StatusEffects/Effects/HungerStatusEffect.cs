@@ -10,9 +10,9 @@ public class HungerStatusEffect : StatusEffectBase
 
     private HungerComponent hungerComponent;
 
-    public HungerStatusEffect(ScriptableStatusEffectData statusEffect, GameObject gameObj) : base(statusEffect, gameObj)
+    public HungerStatusEffect(ScriptableStatusEffectData statusEffect, StatusEffectComponent statusEffectComponent) : base(statusEffect, statusEffectComponent)
     {
-        hungerComponent = gameObj.GetComponent<HungerComponent>();
+        hungerComponent = statusEffectComponent.GetComponent<HungerComponent>();
         hungerStatusEffectData = (HungerStatusEffectData)statusEffect;
     }
 
@@ -23,7 +23,7 @@ public class HungerStatusEffect : StatusEffectBase
 
     protected override void OnTick(float delta)
     {
-        hungerComponent.Hunger += hungerStatusEffectData.HungerModification / Duration * delta;
+        hungerComponent.IncreaseValue(hungerStatusEffectData.HungerModification / Duration * delta);
     }
 
     public override void End()
@@ -33,6 +33,6 @@ public class HungerStatusEffect : StatusEffectBase
 
     public override string ToString()
     {
-        return $"Modifies {gameObj.name} hunger by {hungerStatusEffectData.HungerModification} over {hungerStatusEffectData.Duration} seconds.";
+        return $"Modifies {statusEffectComponent.name} hunger by {hungerStatusEffectData.HungerModification} over {hungerStatusEffectData.Duration} seconds.";
     }
 }
