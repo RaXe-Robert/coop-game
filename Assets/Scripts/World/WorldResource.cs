@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class WorldResource : Photon.MonoBehaviour, IInteractable
 {
-    new public string name;
+    public ToolType requiredToolToHarvest;
     public float interactDistance = 5f;
     [SerializeField] private GameObject spawnOnDepleted;
     [SerializeField] private HealthComponent healthComponent;

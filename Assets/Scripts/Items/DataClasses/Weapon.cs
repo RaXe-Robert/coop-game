@@ -2,13 +2,14 @@
 {
     public Weapon(WeaponData weaponData) : base(weaponData)
     {
-        weaponType = weaponData.Type;
-        damage = weaponData.Damage;
+        Type = weaponData.Type;
+        MinDamage = weaponData.MinDamage;
+        MaxDamage = weaponData.MaxDamage;
+        AttacksPerSecond = weaponData.AttacksPerSecond;
     }
 
-    private WeaponType weaponType;
-    private float damage;
-
-    public WeaponType WeaponType { get { return weaponType; } }
-    public float Damage { get { return damage; } }
+    public WeaponType Type { get; }
+    public float MinDamage { get; }
+    public float MaxDamage { get; }
+    public float AttacksPerSecond { get; }
 }
