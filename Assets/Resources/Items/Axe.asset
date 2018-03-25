@@ -9,13 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80064babb00250949a949aa52544650b, type: 3}
-  m_Name: Pickaxe
+  m_Name: Axe
   m_EditorClassIdentifier: 
-  itemName: Pickaxe
-  sprite: {fileID: 21300000, guid: 5882d46022072ea4b9e607cd63bde06c, type: 3}
+  itemName: Axe
+  sprite: {fileID: 21300000, guid: f62c679d5fb4e9741934c71739f8e94c, type: 3}
   model: {fileID: 100000, guid: 4c944c55fd4d0844c90a245184fc9ed6, type: 3}
-  description: A pickaxe
+  description: An axe
   isConsumable: 0
   onConsumedEffects: []
-  id: 94
-  toolType: 1
+  id: 95
+  toolType: 0

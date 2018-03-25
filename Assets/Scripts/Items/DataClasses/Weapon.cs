@@ -2,13 +2,13 @@
 {
     public Weapon(WeaponData weaponData) : base(weaponData)
     {
-        type = weaponData.Type;
+        weaponType = weaponData.Type;
         damage = weaponData.Damage;
     }
 
-    private WeaponType type;
+    private WeaponType weaponType;
     private float damage;
 
-    public WeaponType Type { get { return type; } }
+    public WeaponType WeaponType { get { return weaponType; } }
     public float Damage { get { return damage; } }
 }
