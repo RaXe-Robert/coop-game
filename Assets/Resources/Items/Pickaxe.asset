@@ -8,13 +8,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3360136a058e1df4e820a7f66dc0db70, type: 3}
+  m_Script: {fileID: 11500000, guid: 80064babb00250949a949aa52544650b, type: 3}
   m_Name: Pickaxe
   m_EditorClassIdentifier: 
-  itemName: Meat Pickaxe
-  sprite: {fileID: 21300000, guid: 08e2fb8510c58d145b001e8325bf15e6, type: 3}
-  model: {fileID: 100000, guid: e143afe216cca7c4396116f3dbcc8a01, type: 3}
-  description: Meat Pickaxe
-  id: 2
-  type: 1
-  damage: 10
+  itemName: Pickaxe
+  sprite: {fileID: 21300000, guid: 5882d46022072ea4b9e607cd63bde06c, type: 3}
+  model: {fileID: 100000, guid: 4c944c55fd4d0844c90a245184fc9ed6, type: 3}
+  description: A pickaxe
+  isConsumable: 0
+  onConsumedEffects: []
+  id: 94
+  toolType: 1

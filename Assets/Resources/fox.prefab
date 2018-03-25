@@ -906,7 +906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemsToSpawn:
-  - {fileID: 11400000, guid: 9b984738be4bab148b16baebddcefb0e, type: 2}
+  - {fileID: 11400000, guid: 3babf6d415ca97b4f869989856adbe9c, type: 2}
   ItemCountPerItem: 04000000
   minRadius: -2
   maxRadius: 2

@@ -8,17 +8,19 @@ public class Inventory : MonoBehaviour
 {
     public static readonly int InventorySize = 20;
     public static readonly int HotbarSize = 10;
-    public ItemData diamond;
-    public ItemData stick;
-    public List<Item> inventoryItems;
+
+    public ScriptableItemData diamond;
+    public ScriptableItemData stick;
+    public List<ItemBase> inventoryItems;
     private PhotonView photonView;
+    private EquipmentManager equipmentManager;
 
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;
 
     private void Start()
     {
-        inventoryItems = new List<Item>(new Item[InventorySize + HotbarSize]);
+        inventoryItems = new List<ItemBase>(new ItemBase[InventorySize + HotbarSize]);
         photonView = GetComponent<PhotonView>();
     }
 
@@ -36,7 +38,7 @@ public class Inventory : MonoBehaviour
 
     private void AddNewItemStackById(int itemId, int stackSize)
     {
-        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
+        ItemBase item = ItemFactory.CreateNewItem(itemId, stackSize);
         var emptyIndex = inventoryItems.FirstNullIndexAt();
 
         inventoryItems[emptyIndex.Value] = item;
@@ -45,15 +47,15 @@ public class Inventory : MonoBehaviour
 
     private void FillItemStacksById(int itemId, int stackSize)
     {
-        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
+        ItemBase item = ItemFactory.CreateNewItem(itemId, stackSize);
 
         //Check if the item to add is a Resource item.
         if (item.GetType() == typeof(Resource))
         {
-            int itemsToAdd = ((Resource)item).Amount;
+            int itemsToAdd = item.StackSize;
 
             //Get all the items in the inventory where the id is the same as the item to add id.
-            var existingItems = inventoryItems.Where(x => x?.Id == item.Id && ((Resource)item).Amount < Resource.STACKSIZE).ToArray();
+            var existingItems = inventoryItems.Where(x => x?.Id == item.Id && item.StackSize < ItemBase.MAXSTACKSIZE).ToArray();
 
             //There are uncompleted stacks, we can add items to them.
             if (existingItems != null)
@@ -66,16 +68,16 @@ public class Inventory : MonoBehaviour
                         return;
 
                     Resource currentStack = existingItems[i] as Resource;
-                    int availableAmount = Resource.STACKSIZE - currentStack.Amount;
+                    int availableAmount = ItemBase.MAXSTACKSIZE - currentStack.StackSize;
                     if (availableAmount >= itemsToAdd)
                     {
-                        currentStack.Amount += itemsToAdd;
+                        currentStack.StackSize += itemsToAdd;
                         itemsToAdd = 0;
                         OnItemChangedCallback?.Invoke();
                     }
                     else
                     {
-                        currentStack.Amount = Resource.STACKSIZE;
+                        currentStack.StackSize = ItemBase.MAXSTACKSIZE;
                         itemsToAdd -= availableAmount;
                         OnItemChangedCallback?.Invoke();
                     }
@@ -123,7 +125,7 @@ public class Inventory : MonoBehaviour
             if (inventoryItems[i]?.Id == itemId)
             {
                 if (inventoryItems[i].GetType() == typeof(Resource))
-                    temp += ((Resource)inventoryItems[i]).Amount;
+                    temp += inventoryItems[i].StackSize;
                 else temp += 1;
             }
         }
@@ -141,7 +143,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="itemId">The id of the item to remove</param>
     /// <param name="amountToRemove">The amount of items to remove</param>
-    public void RemoveItemById(int itemId, int amountToRemove)
+    public void RemoveItemById(int itemId, int amountToRemove = 1)
     {
         if (!CheckAmountById(itemId, amountToRemove))
         {
@@ -163,14 +165,14 @@ public class Inventory : MonoBehaviour
                 if (inventoryItems[i].GetType() == typeof(Resource))
                 {
                     Resource currentStack = (Resource)inventoryItems[i];
-                    if (amountToRemove >= currentStack.Amount)
+                    if (amountToRemove >= currentStack.StackSize)
                     {
-                        amountToRemove -= currentStack.Amount;
+                        amountToRemove -= currentStack.StackSize;
                         RemoveItem(i);
                     }
                     else
                     {
-                        currentStack.Amount -= amountToRemove;
+                        currentStack.StackSize -= amountToRemove;
                         amountToRemove = 0;
                         OnItemChangedCallback?.Invoke();
                         return;
@@ -187,12 +189,12 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddItemById(int itemId, int stackSize)
+    public void AddItemById(int itemId, int stackSize = 1)
     {
         if (!photonView.isMine)
             return;
 
-        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
+        ItemBase item = ItemFactory.CreateNewItem(itemId, stackSize);
         if (!inventoryItems.FirstNullIndexAt().HasValue)
         {
             ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);
@@ -207,6 +209,21 @@ public class Inventory : MonoBehaviour
             {
                 AddNewItemStackById(itemId, stackSize);
             }
+        }
+    }
+
+    public void AddItemAtIndex(int itemId, int index, int stackSize = 1)
+    {
+        if(index < 0 || inventoryItems[index] != null)
+        {
+            Debug.LogError("Inventory -- AddItemAtIndex -- invalid index");
+            AddItemById(itemId, stackSize);
+        }
+        else
+        {
+            ItemBase item = ItemFactory.CreateNewItem(itemId, stackSize);
+            inventoryItems[index] = item;
+            OnItemChangedCallback?.Invoke();
         }
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemsToDropComponent : Photon.MonoBehaviour {
 
-    [SerializeField] private List<ItemData> ItemsToSpawn;
+    [SerializeField] private List<ScriptableItemData> ItemsToSpawn;
     [SerializeField] private List<int> ItemCountPerItem;
     [SerializeField] private int minRadius;
     [SerializeField] private int maxRadius;	
