@@ -909,7 +909,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 10
   m_AngularDrag: 10
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 84
@@ -980,7 +980,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraPrefab: {fileID: 1984004229981384, guid: b228fb14d03c3634398f7ed53fe7eca0,
     type: 2}
-  centerOffset: {x: 0, y: 20, z: -17}
+  centerOffset: {x: 0, y: 12, z: -7}
   followOnStart: 0
 --- !u!114 &114402216659252926
 MonoBehaviour:
@@ -1105,7 +1105,7 @@ MonoBehaviour:
   rotationLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  movementSpeed: 75
+  movementSpeed: 50
   mouseDeadZoneFromPlayer: 0.1
 --- !u!114 &114723616231544790
 MonoBehaviour:
