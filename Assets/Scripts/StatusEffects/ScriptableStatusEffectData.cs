@@ -18,5 +18,5 @@ public abstract class ScriptableStatusEffectData : ScriptableObject
     /// Returns a certain type of status effect based on this type.
     /// </summary>
     /// <param name="gameObj">Target object for the status effect.</param>
-    public abstract StatusEffectBase InitializeStatusEffect(GameObject gameObj);
+    public abstract StatusEffectBase InitializeStatusEffect(StatusEffectComponent statusEffectComponent);
 }

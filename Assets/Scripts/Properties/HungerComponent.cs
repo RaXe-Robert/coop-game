@@ -2,26 +2,10 @@
 using System.Collections;
 
 [RequireComponent(typeof(HealthComponent))]
-public class HungerComponent : Photon.MonoBehaviour, IPunObservable
+public class HungerComponent : PropertyComponentBase
 {
-    public delegate void OnValueChanged(float value);
-    public OnValueChanged OnValueChangedCallback;
-
-    [SerializeField] private float MaxValue = 100f;
-    [SerializeField] private float MinValue = 0f;
-
-    [SerializeField] private float hunger;
-    public float Hunger
-    {
-        get { return hunger; }
-        set
-        {
-            hunger = Mathf.Clamp(value, MinValue, MaxValue);
-            OnValueChangedCallback?.Invoke(hunger);
-        }
-    }
     public bool HungerDegenerationActive { get; set; } = true;
-
+    
     public void OnEnable()
     {
         if (photonView.isMine)
@@ -34,7 +18,7 @@ public class HungerComponent : Photon.MonoBehaviour, IPunObservable
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(1f);
 
-        HealthComponent cachedHealthComponent = GetComponent<HealthComponent>();
+        HealthComponent healthComponent = GetComponent<HealthComponent>();
 
         while (true)
         {
@@ -45,29 +29,38 @@ public class HungerComponent : Photon.MonoBehaviour, IPunObservable
                 continue;
             }
 
-            if (hunger == 0)
+            if (value == 0)
             {
-                cachedHealthComponent.Health -= 1;
+                healthComponent.DecreaseValue(1f);
             }
-            else if (hunger >= 90)
+            else if (value >= 90)
             {
-                cachedHealthComponent.Health += 1;
+                healthComponent.IncreaseValue(1f);
 
             }
 
-            Hunger -= 1;
+            DecreaseValue(1f);
         }
     }
 
-    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    protected override void ValueChangedNotification(float previousValue, float currentValue)
     {
-        if (photonView.isMine)
-        {
-            stream.SendNext(hunger);
-        }
-        else
-        {
-            hunger = (float)stream.ReceiveNext();
-        }
+        float changedAmount = currentValue - previousValue;
+
+        WorldNotificationsManager.Instance?.ShowNotification(
+            new WorldNotificationArgs(
+                transform.position,
+                Mathf.Abs(changedAmount).ToString("F0"),
+                0.4f,
+                changedAmount < 0 ? "red" : "green"
+                ), ShowNotificationsIfLocal
+        );
+    }
+
+    protected override float ValueRequestAction()
+    {
+        float modifiedValue = value;
+
+        return modifiedValue;
     }
 }

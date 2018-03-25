@@ -410,6 +410,7 @@ GameObject:
   - component: {fileID: 114743512028800480}
   - component: {fileID: 114723616231544790}
   - component: {fileID: 114836521450446672}
+  - component: {fileID: 114476197809957560}
   - component: {fileID: 114641208777587000}
   - component: {fileID: 114791167518695588}
   - component: {fileID: 114186301941130006}
@@ -1059,6 +1060,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
+--- !u!114 &114476197809957560
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1816867026278206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6d5f7090577ea644945eee09b6ff67b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowNotifications: 0
+  ShowNotificationsIfLocal: 0
+  MaxValue: 200
+  value: 70
 --- !u!114 &114492785987082522
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1090,7 +1106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4738ce1998c8143974a3ec3ade1c5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MergeEffectsOfSameType: 1
+  mergeEffectsOfSameType: 1
+  tickInterval: 1
 --- !u!114 &114692401914651078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1105,7 +1122,6 @@ MonoBehaviour:
   rotationLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  movementSpeed: 75
   mouseDeadZoneFromPlayer: 0.1
 --- !u!114 &114723616231544790
 MonoBehaviour:
@@ -1118,9 +1134,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71619f749ec3df04f8dc57baed5cd491, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowNotifications: 1
+  ShowNotificationsIfLocal: 0
   MaxValue: 100
-  MinValue: 0
-  health: 50
+  value: 100
 --- !u!114 &114743512028800480
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1197,9 +1214,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2fc4dd7e6f419c4494170ab2d86cc9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowNotifications: 0
+  ShowNotificationsIfLocal: 0
   MaxValue: 100
-  MinValue: 0
-  hunger: 100
+  value: 0
 --- !u!136 &136892308541336462
 CapsuleCollider:
   m_ObjectHideFlags: 1

@@ -13,11 +13,11 @@ public class PlayerPropertiesUI : MonoBehaviour
     public void Start()
     {
         HealthComponent playerHealthComponent = PlayerNetwork.PlayerObject?.GetComponent<HealthComponent>();
-        UpdateHealthSlider(playerHealthComponent.Health);
+        UpdateHealthSlider(playerHealthComponent.Value);
         playerHealthComponent.OnValueChangedCallback += UpdateHealthSlider;
 
         HungerComponent playerHungerComponent = PlayerNetwork.PlayerObject?.GetComponent<HungerComponent>();
-        UpdateHungerSlider(playerHungerComponent.Hunger);
+        UpdateHungerSlider(playerHungerComponent.Value);
         playerHungerComponent.OnValueChangedCallback += UpdateHungerSlider;
     }
     
