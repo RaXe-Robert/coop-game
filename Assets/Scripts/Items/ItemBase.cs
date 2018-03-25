@@ -33,4 +33,5 @@ public class ItemBase
     public bool IsConsumable { get { return isConsumable; } }
     public List<ScriptableStatusEffectData> OnConsumedEffects { get { return onConsumedEffects; } }
     public int Id { get { return id; } }
+    public bool Equippable { get { return GetType() == typeof(Armor) || GetType() == typeof(Tool) || GetType() == typeof(Weapon); } }
 }

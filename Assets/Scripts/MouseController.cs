@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MouseController : MonoBehaviour
 {
@@ -25,11 +26,11 @@ public class MouseController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             var interactable = hit.transform.GetComponentInChildren<IInteractable>();
-            if (interactable == null)
+            if (interactable == null && !EventSystem.current.IsPointerOverGameObject())
             {
-                Tooltip.Instance.Hide(this);
+                Tooltip.Instance.Hide();
             }
-            else
+            else if(interactable != null)
             {
                 if (Input.GetMouseButtonDown(0) && interactable.IsInteractable())
                 {
@@ -38,7 +39,7 @@ public class MouseController : MonoBehaviour
 
                 if (interactable.TooltipText() != string.Empty)
                 {
-                    Tooltip.Instance.Show(this, interactable.TooltipText());
+                    Tooltip.Instance.Show(interactable.TooltipText());
                 }
             }
         }

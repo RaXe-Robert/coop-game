@@ -57,7 +57,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
 
     public string TooltipText()
     {
-        return "";
+        return gameObject.name;
     }
 
     #endregion //IInteractable Implementation

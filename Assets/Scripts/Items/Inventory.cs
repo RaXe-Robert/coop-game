@@ -8,10 +8,12 @@ public class Inventory : MonoBehaviour
 {
     public static readonly int InventorySize = 20;
     public static readonly int HotbarSize = 10;
+
     public ScriptableItemData diamond;
     public ScriptableItemData stick;
     public List<ItemBase> inventoryItems;
     private PhotonView photonView;
+    private EquipmentManager equipmentManager;
 
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;
@@ -141,7 +143,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="itemId">The id of the item to remove</param>
     /// <param name="amountToRemove">The amount of items to remove</param>
-    public void RemoveItemById(int itemId, int amountToRemove)
+    public void RemoveItemById(int itemId, int amountToRemove = 1)
     {
         if (!CheckAmountById(itemId, amountToRemove))
         {
@@ -187,7 +189,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddItemById(int itemId, int stackSize)
+    public void AddItemById(int itemId, int stackSize = 1)
     {
         if (!photonView.isMine)
             return;
@@ -207,6 +209,21 @@ public class Inventory : MonoBehaviour
             {
                 AddNewItemStackById(itemId, stackSize);
             }
+        }
+    }
+
+    public void AddItemAtIndex(int itemId, int index, int stackSize = 1)
+    {
+        if(index < 0 || inventoryItems[index] != null)
+        {
+            Debug.LogError("Inventory -- AddItemAtIndex -- invalid index");
+            AddItemById(itemId, stackSize);
+        }
+        else
+        {
+            ItemBase item = ItemFactory.CreateNewItem(itemId, stackSize);
+            inventoryItems[index] = item;
+            OnItemChangedCallback?.Invoke();
         }
     }
 
