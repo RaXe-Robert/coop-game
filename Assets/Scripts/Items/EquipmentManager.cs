@@ -4,14 +4,25 @@ using UnityEngine;
 
 public class EquipmentManager : MonoBehaviour
 {
+    #region callbacks
+    public delegate void OnItemEquipped();
+    public OnItemEquipped OnItemEquippedCallBack;
+
+    public delegate void OnWeaponEquipped(Weapon equippedWeapon);
+    public OnWeaponEquipped OnWeaponEquippedCallback;
+
+    public delegate void OnArmorEquipped(Armor equippedArmor);
+    public OnArmorEquipped OnArmorEquippedCallback;
+
+    public delegate void OnToolEquipped(Tool equippedTool);
+    public OnToolEquipped OnToolEquippedCallback;
+    #endregion callbacks
+
     private List<Tool> equippedTools;
     private Weapon equippedWeapon;
     private List<Armor> equippedArmor;
 
     private Inventory inventory;
-
-    public delegate void OnItemEquipped();
-    public OnItemEquipped OnItemEquippedCallBack;
 
     public bool HasWeaponEquipped { get { return equippedWeapon != null; } }
 
@@ -42,6 +53,7 @@ public class EquipmentManager : MonoBehaviour
         }
 
         OnItemEquippedCallBack?.Invoke();
+        OnToolEquippedCallback?.Invoke(toolToEquip);
     }
 
     public void EquipWeapon(Weapon weaponToEquip)
@@ -64,6 +76,7 @@ public class EquipmentManager : MonoBehaviour
         }
 
         OnItemEquippedCallBack?.Invoke();
+        OnWeaponEquippedCallback?.Invoke(weaponToEquip);
     }
 
     public void EquipArmor(Armor armorToEquip)
@@ -86,6 +99,7 @@ public class EquipmentManager : MonoBehaviour
         }
 
         OnItemEquippedCallBack?.Invoke();
+        OnArmorEquippedCallback?.Invoke(armorToEquip);
     }
 
     public void EquipItem(ItemBase item)
