@@ -5,25 +5,41 @@ using UnityEngine;
 public class MapDisplay : MonoBehaviour
 {
     public Renderer textureRenderer;
+    public int tileSize = 10;
 
     public void DrawMap(MapTile[,] tileMap)
     {
+        var root = GameObject.Find("SpawnRoot");
+        ClearChildren(root);
+
         int width = tileMap.GetLength(0);
         int height = tileMap.GetLength(1);
 
-        Texture2D texture = new Texture2D(width, height);
-
-        Color[] color = new Color[width * height];
         for(int y = 0; y < height; ++y)
         {
             for(int x = 0; x < width; ++x)
             {
-                color[y * width + x] = tileMap[x,y].Color;
+                var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                plane.GetComponent<Renderer>().material.color = tileMap[x, y].Color;
+                plane.name = $"Plane {x} {y}";
+
+                tileSize = (int)plane.GetComponent<Renderer>().bounds.size.x;
+
+                plane.transform.SetParent(root.transform);
+                plane.transform.position = new Vector3(tileSize + (x * tileSize), 0, tileSize + (y * tileSize));
             }
         }
-        texture.Apply();
+    }
 
-        textureRenderer.sharedMaterial.mainTexture = texture;
-        textureRenderer.transform.localScale = new Vector3(width, 1, height);
+    public void ClearChildren(GameObject root)
+    {
+        var count = root.transform.childCount-1;
+        for (int i = count; i >= 0; --i)
+        {
+            if (Application.isEditor)
+                DestroyImmediate(root.transform.GetChild(i).gameObject);
+            else
+                Destroy(root.transform.GetChild(i).gameObject);
+        }
     }
 }
