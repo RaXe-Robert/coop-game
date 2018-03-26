@@ -20,6 +20,7 @@ public class MapDisplay : MonoBehaviour
             for(int x = 0; x < width; ++x)
             {
                 var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                plane.transform.localScale = new Vector3(10, 10, 10);
                 plane.GetComponent<Renderer>().material.color = tileMap[x, y].Color;
                 plane.name = $"Plane {x} {y}";
 

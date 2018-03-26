@@ -113,6 +113,8 @@ public class MapGenerator : MonoBehaviour
             mapTile.Type = MapTileType.Ocean;
         else if (stickType && prevTile != null)
             mapTile.Type = prevTile.Type;
+        else if (prevTile == null)
+            mapTile.Type = MapTileType.Grassland;
         else
             mapTile.Type = (MapTileType)values.GetValue(random.Next(values.Length));
     }
