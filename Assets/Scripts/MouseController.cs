@@ -23,10 +23,10 @@ public class MouseController : MonoBehaviour
             return;
 
         ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity) && !EventSystem.current.IsPointerOverGameObject())
         {
             var interactable = hit.transform.GetComponentInChildren<IInteractable>();
-            if (interactable == null && !EventSystem.current.IsPointerOverGameObject())
+            if (interactable == null)
             {
                 Tooltip.Instance.Hide();
             }
