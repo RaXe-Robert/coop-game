@@ -22,7 +22,7 @@ public class PlayerNetwork : MonoBehaviour
         //TODO: HARDCODED
         if (scene.name == "Game")
         {
-            Vector3 position = new Vector3(0, 0.5f, 0);
+            Vector3 position = new Vector3(Random.Range(-5f, 5f), 0.2f, Random.Range(0.5f, 5f));
             PlayerObject = PhotonNetwork.Instantiate("Player", position, Quaternion.identity, 0);
         }
         else if (scene.name == "MainMenu")
