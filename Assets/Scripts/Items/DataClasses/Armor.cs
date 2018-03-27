@@ -2,7 +2,7 @@
 {
     public Armor(ArmorData armorData) : base(armorData)
     {
-        ArmorType = armorData.WeaponType;
+        ArmorType = armorData.ArmorType;
         Defense = armorData.Defense;
     }
 
