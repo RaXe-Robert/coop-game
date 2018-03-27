@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -100,8 +100,8 @@ NavMeshSettings:
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
-    agentSlope: 45
-    agentClimb: 0.4
+    agentSlope: 0
+    agentClimb: -0
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
@@ -112,7 +112,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 9b5be9113817e0a4192f94de38473dbd, type: 2}
 --- !u!1001 &8865307
 Prefab:
   m_ObjectHideFlags: 0
@@ -725,7 +725,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!23 &865845537
 MeshRenderer:
@@ -808,8 +808,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tree: {fileID: 1296203204362048, guid: cea2ad25b4540224a86b529aa39547f6, type: 2}
   rock: {fileID: 1695406501947972, guid: 00e52d555c867374690f2256513d9e5a, type: 2}
+  carl: {fileID: 1386452222050776, guid: 6ec3b42c643222f43a50d22a8629f246, type: 2}
+  carlScared: {fileID: 1559031737579132, guid: 263ef742dba3c944abdc9eb1917e0da7, type: 2}
+  fox: {fileID: 1731566292436872, guid: 30ba0189b1de9094b85526fb1ce512e1, type: 2}
   maxTrees: 10
   maxRocks: 10
+  maxNPCs: 15
 --- !u!114 &865845542
 MonoBehaviour:
   m_ObjectHideFlags: 0
