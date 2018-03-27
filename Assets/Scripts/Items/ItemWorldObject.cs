@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
 {
     public ItemBase item;
-    public float pickupDistance = 3f;
+    public float pickupDistance = 2f;
 
     [PunRPC]
     public void DestroyWorldObject()
@@ -25,7 +25,10 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
     public void Interact(Vector3 invokerPosition)
     {
         if (Vector3.Distance(transform.position, invokerPosition) > pickupDistance)
+        {
+            PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>().ItemToPickup = this.gameObject;
             return;
+        }
 
         PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(item.Id, item.StackSize);
         photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);

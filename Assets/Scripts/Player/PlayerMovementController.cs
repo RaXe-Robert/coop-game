@@ -6,9 +6,12 @@ public class PlayerMovementController : Photon.MonoBehaviour
 {
     private Rigidbody rigidbodyComponent;
     private Animator animator;
+    private UnityEngine.AI.NavMeshAgent agent;
+    public GameObject ItemToPickup { get; set; }
+    public bool InterruptedPickup = false;
 
     [SerializeField] private LayerMask rotationLayerMask;
-
+    [SerializeField] private float rotateSpeed;
     [SerializeField] private float mouseDeadZoneFromPlayer;
 
     private PlayerCameraController cameraController = null;
@@ -16,6 +19,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
     private void Awake()
     {
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
@@ -45,6 +49,18 @@ public class PlayerMovementController : Photon.MonoBehaviour
             return;
 
         RotatePlayer();
+
+        if(ItemToPickup != null)
+        {
+            if(InterruptedPickup)
+            {
+                ItemToPickup = null;
+                agent.ResetPath();
+                InterruptedPickup = false;
+                return;
+            }
+            MoveToPosition();          
+        }
     }
     
     private void FixedUpdate()
@@ -87,13 +103,28 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
         if (movementInput != Vector3.zero)
         {
-            rigidbodyComponent.AddForce(movementInput.normalized * movementSpeedComponent.Value * 0.7071f);
+            InterruptedPickup = true;
+            rigidbodyComponent.AddForce(movementInput.normalized * movementSpeedComponent.Value);
 
             animator.SetBool("IsRunning", true);
         }
         else
         {
             animator.SetBool("IsRunning", false);
+        }
+    }
+
+
+    public void MoveToPosition()
+    {
+        agent.SetDestination(ItemToPickup.transform.position);
+        animator.SetBool("IsRunning", true);
+
+        if (Vector3.Distance(ItemToPickup.transform.position, transform.position) < ItemToPickup.GetComponent<ItemWorldObject>().pickupDistance)
+        {
+            ItemToPickup.GetComponent<ItemWorldObject>().Interact(transform.position);
+            ItemToPickup = null;
+            agent.ResetPath();            
         }
     }
 }
