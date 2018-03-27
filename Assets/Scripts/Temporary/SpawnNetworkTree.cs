@@ -35,9 +35,9 @@ public class SpawnNetworkTree : Photon.MonoBehaviour {
 
             for (int i = 0; i < maxNPCs / 3; i++)
             {
-                PhotonNetwork.InstantiateSceneObject(carl.name, new Vector3(0, 0, 0), new Quaternion(), 0, null);
-                PhotonNetwork.InstantiateSceneObject(carlScared.name, new Vector3(0, 0, 0), new Quaternion(), 0, null);
-                PhotonNetwork.InstantiateSceneObject(fox.name, new Vector3(0, 0, 0), new Quaternion(), 0, null);
+                PhotonNetwork.InstantiateSceneObject(carl.name, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-20f, 20f)), new Quaternion(), 0, null);
+                PhotonNetwork.InstantiateSceneObject(carlScared.name, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-20f, 20f)), new Quaternion(), 0, null);
+                PhotonNetwork.InstantiateSceneObject(fox.name, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-20f, 20f)), new Quaternion(), 0, null);
             }
         }
     }

@@ -28,7 +28,7 @@ GameObject:
   - component: {fileID: 64629248837855744}
   - component: {fileID: 208407444410447410}
   m_Layer: 0
-  m_Name: rock
+  m_Name: Rock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113,6 +113,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71619f749ec3df04f8dc57baed5cd491, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowNotifications: 1
+  ShowNotificationsIfLocal: 1
   MaxValue: 100
   value: 100
 --- !u!114 &114400987669569362

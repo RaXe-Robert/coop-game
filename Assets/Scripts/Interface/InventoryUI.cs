@@ -11,15 +11,19 @@ public class InventoryUI : MonoBehaviour {
 
     private Inventory inventory;
     private EquipmentManager equipmentManager;
+    private BuildingController buildingController;
 
     private List<InventoryItemSlot> inventorySlots;
 
     private void Start () {
         inventory = FindObjectOfType<Inventory>();
         equipmentManager = FindObjectOfType<EquipmentManager>();
+        buildingController = FindObjectOfType<BuildingController>();
         inventorySlots = new List<InventoryItemSlot>(Inventory.InventorySize + Inventory.HotbarSize);
+
         InitializeHotbar();
         InitializeInventory();
+
         inventory.OnItemChangedCallback += UpdateUI;
 	}
 
@@ -46,7 +50,7 @@ public class InventoryUI : MonoBehaviour {
         {
             var go = Instantiate(inventorySlotPrefab, hotbarUIGo.transform);
             inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
-            inventorySlots[i].Initialize(i, inventory, equipmentManager);
+            inventorySlots[i].Initialize(i, inventory, equipmentManager, buildingController);
         }
     }
 
@@ -56,7 +60,7 @@ public class InventoryUI : MonoBehaviour {
         {
             var go = Instantiate(inventorySlotPrefab, inventoryUIGo.transform);
             inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
-            inventorySlots[i].Initialize(i, inventory, equipmentManager);
+            inventorySlots[i].Initialize(i, inventory, equipmentManager, buildingController);
         }
     }
 }

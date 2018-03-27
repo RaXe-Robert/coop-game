@@ -13,19 +13,21 @@ public class EquipmentUI : MonoBehaviour {
 
     private void Start () {
         equipmentManager = FindObjectOfType<EquipmentManager>();
+        BuildingController buildingController = FindObjectOfType<BuildingController>();
+
         inventory = FindObjectOfType<Inventory>();
         equipmentManager.OnItemEquippedCallBack += UpdateUI;
 
         //Initialize all the equipment slots so they have a reference to the equipmentManager
         for (int i = 0; i < armorSlots.Length; i++)
         {
-            armorSlots[i].Initialize(-1, inventory, equipmentManager);
+            armorSlots[i].Initialize(-1, inventory, equipmentManager, buildingController);
         }
         for (int i = 0; i < toolSlots.Length; i++)
         {
-            toolSlots[i].Initialize(-1, inventory, equipmentManager);
+            toolSlots[i].Initialize(-1, inventory, equipmentManager, buildingController);
         }
-        weaponSlot.Initialize(-1, inventory, equipmentManager);
+        weaponSlot.Initialize(-1, inventory, equipmentManager, buildingController);
     }
 
     private void UpdateUI()
