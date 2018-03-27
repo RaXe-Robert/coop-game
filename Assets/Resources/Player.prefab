@@ -1217,7 +1217,7 @@ MonoBehaviour:
   ShowNotifications: 0
   ShowNotificationsIfLocal: 0
   MaxValue: 100
-  value: 0
+  value: 100
 --- !u!136 &136892308541336462
 CapsuleCollider:
   m_ObjectHideFlags: 1

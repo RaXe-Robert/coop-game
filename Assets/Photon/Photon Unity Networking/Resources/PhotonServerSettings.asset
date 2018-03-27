@@ -48,8 +48,6 @@ MonoBehaviour:
   - SpawnObjectInRadius
   - SpawnObjectOnParent
   - CallAnimation
-  - SetParent
-  - SetStoneParent
-  - SetTreeParent
   - CreateNotification
+  - SetParents
   DisableAutoOpenWizard: 1

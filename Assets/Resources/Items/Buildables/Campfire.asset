@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Campfire
   m_EditorClassIdentifier: 
   itemName: Campfire
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: efd0c0a726e9d7a4186d8070c762251a, type: 3}
   model: {fileID: 100000, guid: 04c16ae5218b7cf43a62afc77368123b, type: 3}
   description: A campfire.
   isConsumable: 0
