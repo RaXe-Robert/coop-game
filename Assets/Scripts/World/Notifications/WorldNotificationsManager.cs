@@ -41,9 +41,9 @@ public class WorldNotificationsManager : Photon.MonoBehaviour
     public void ShowNotification(WorldNotificationArgs worldNotificationArgs, bool includeLocal)
     {
         if (includeLocal)
-            photonView.RPC("CreateNotification", PhotonTargets.All, new object[] { worldNotificationArgs.Position, worldNotificationArgs.Text, worldNotificationArgs.Duration, worldNotificationArgs.Color});
+            photonView.RPC("CreateNotification", PhotonTargets.All, worldNotificationArgs.Position, worldNotificationArgs.Text, worldNotificationArgs.Duration, worldNotificationArgs.Color);
         else
-            photonView.RPC("CreateNotification", PhotonTargets.Others, new object[] { worldNotificationArgs.Position, worldNotificationArgs.Text, worldNotificationArgs.Duration, worldNotificationArgs.Color });
+            photonView.RPC("CreateNotification", PhotonTargets.Others, worldNotificationArgs.Position, worldNotificationArgs.Text, worldNotificationArgs.Duration, worldNotificationArgs.Color);
     }
 
     [PunRPC]

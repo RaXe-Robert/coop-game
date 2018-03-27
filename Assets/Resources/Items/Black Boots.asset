@@ -18,5 +18,5 @@ MonoBehaviour:
   isConsumable: 0
   onConsumedEffects: []
   id: 96
-  type: 3
+  weaponType: 3
   defense: 5

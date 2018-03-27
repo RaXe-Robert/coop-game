@@ -5,8 +5,9 @@ using UnityEngine;
 public class EquipmentManager : MonoBehaviour
 {
     #region callbacks
+    //Equip
     public delegate void OnItemEquipped();
-    public OnItemEquipped OnItemEquippedCallBack;
+    public OnItemEquipped OnItemChanged;
 
     public delegate void OnWeaponEquipped(Weapon equippedWeapon);
     public OnWeaponEquipped OnWeaponEquippedCallback;
@@ -16,6 +17,20 @@ public class EquipmentManager : MonoBehaviour
 
     public delegate void OnToolEquipped(Tool equippedTool);
     public OnToolEquipped OnToolEquippedCallback;
+
+    //Unequip
+    public delegate void OnItemUnequipped();
+    public OnItemUnequipped OnItemUnequippedCallBack;
+
+    public delegate void OnWeaponUnequipped(Weapon equippedWeapon);
+    public OnWeaponUnequipped OnWeaponUnequippedCallback;
+
+    public delegate void OnArmorUnEquipped(Armor equippedArmor);
+    public OnArmorUnEquipped OnArmorUnequippedCallback;
+
+    public delegate void OnToolUnEquipped(Tool equippedTool);
+    public OnToolUnEquipped OnToolUnequippedCallback;
+
     #endregion callbacks
 
     private List<Tool> equippedTools;
@@ -52,7 +67,7 @@ public class EquipmentManager : MonoBehaviour
             inventory.RemoveItemById(toolToEquip.Id);
         }
 
-        OnItemEquippedCallBack?.Invoke();
+        OnItemChanged?.Invoke();
         OnToolEquippedCallback?.Invoke(toolToEquip);
     }
 
@@ -75,7 +90,7 @@ public class EquipmentManager : MonoBehaviour
             equippedWeapon = weaponToEquip;
         }
 
-        OnItemEquippedCallBack?.Invoke();
+        OnItemChanged?.Invoke();
         OnWeaponEquippedCallback?.Invoke(weaponToEquip);
     }
 
@@ -98,7 +113,7 @@ public class EquipmentManager : MonoBehaviour
             inventory.RemoveItemById(armorToEquip.Id);
         }
 
-        OnItemEquippedCallBack?.Invoke();
+        OnItemChanged?.Invoke();
         OnArmorEquippedCallback?.Invoke(armorToEquip);
     }
 
@@ -181,7 +196,8 @@ public class EquipmentManager : MonoBehaviour
             {
                 inventory.AddItemAtIndex(equippedItem.Id, index);
                 equippedArmor.Remove(equippedItem);
-                OnItemEquippedCallBack?.Invoke();
+                OnArmorUnequippedCallback?.Invoke(equippedItem);
+                OnItemChanged?.Invoke();
             }
         }
 
@@ -192,15 +208,17 @@ public class EquipmentManager : MonoBehaviour
             {
                 inventory.AddItemAtIndex(equippedItem.Id, index);
                 equippedTools.Remove(equippedItem);
-                OnItemEquippedCallBack?.Invoke();
+                OnToolUnequippedCallback?.Invoke(equippedItem);
+                OnItemChanged?.Invoke();
             }
         }
 
         else if(itemToUnequip.GetType() == typeof(Weapon))
         {
             inventory.AddItemAtIndex(equippedWeapon.Id, index);
+            OnWeaponUnequippedCallback?.Invoke(equippedWeapon);
             equippedWeapon = null;
-            OnItemEquippedCallBack?.Invoke();
+            OnItemChanged?.Invoke();
         }
     }
 
@@ -213,7 +231,7 @@ public class EquipmentManager : MonoBehaviour
             {
                 ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedItem.Id);
                 equippedArmor.Remove(equippedItem);
-                OnItemEquippedCallBack?.Invoke();
+                OnItemChanged?.Invoke();
             }
         }
 
@@ -224,7 +242,7 @@ public class EquipmentManager : MonoBehaviour
             {
                 ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedItem.Id);
                 equippedTools.Remove(equippedItem);
-                OnItemEquippedCallBack?.Invoke();
+                OnItemChanged?.Invoke();
             }
         }
 
@@ -232,7 +250,7 @@ public class EquipmentManager : MonoBehaviour
         {
             ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedWeapon.Id);
             equippedWeapon = null;
-            OnItemEquippedCallBack?.Invoke();
+            OnItemChanged?.Invoke();
         }
     }
 }
