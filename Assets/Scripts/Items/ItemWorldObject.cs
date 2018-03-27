@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
 {
     public ItemBase item;
-    public float pickupDistance = 2f;
+    public float pickupDistance = 1f;
 
     [PunRPC]
     public void DestroyWorldObject()

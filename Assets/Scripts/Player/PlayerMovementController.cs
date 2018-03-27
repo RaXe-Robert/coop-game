@@ -8,7 +8,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private Animator animator;
     private UnityEngine.AI.NavMeshAgent agent;
     public GameObject ItemToPickup { get; set; }
-    public bool InterruptedPickup = false;
+    private bool InterruptedPickup = false;
 
     [SerializeField] private LayerMask rotationLayerMask;
     [SerializeField] private float rotateSpeed;
@@ -50,16 +50,19 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
         RotatePlayer();
 
-        if(ItemToPickup != null)
+        //If there is an item specified to pickup.
+        if(ItemToPickup)
         {
-            if(InterruptedPickup)
+            //Check on interruptions
+            if (InterruptedPickup)
             {
-                ItemToPickup = null;
-                agent.ResetPath();
-                InterruptedPickup = false;
+                InterruptMoveToItem();
                 return;
             }
-            MoveToPosition();          
+            else
+            {
+                MoveToItem();
+            }
         }
     }
     
@@ -113,18 +116,33 @@ public class PlayerMovementController : Photon.MonoBehaviour
             animator.SetBool("IsRunning", false);
         }
     }
-
-
-    public void MoveToPosition()
+    
+    /// <summary>
+    /// When there is an item to pickup this method moves to the item and checks if it needs to interact with the item.
+    /// As soon as the player is near the item it will pick up the item and reset the agent.
+    /// </summary>
+    private void MoveToItem()
     {
-        agent.SetDestination(ItemToPickup.transform.position);
-        animator.SetBool("IsRunning", true);
-
+        if (!agent.hasPath)
+        {
+            agent.SetDestination(ItemToPickup.transform.position);
+            animator.SetBool("IsRunning", true);
+        }
         if (Vector3.Distance(ItemToPickup.transform.position, transform.position) < ItemToPickup.GetComponent<ItemWorldObject>().pickupDistance)
         {
             ItemToPickup.GetComponent<ItemWorldObject>().Interact(transform.position);
             ItemToPickup = null;
             agent.ResetPath();            
         }
+    }
+
+    /// <summary>
+    /// Interrupts the agent and clears the ItemToPickup.
+    /// </summary>
+    private void InterruptMoveToItem()
+    {
+        ItemToPickup = null;
+        agent.ResetPath();
+        InterruptedPickup = false;
     }
 }
