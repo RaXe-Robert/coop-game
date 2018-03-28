@@ -8,12 +8,12 @@ public class WeaponData : ScriptableItemData
     [SerializeField] private WeaponType type;
     [SerializeField] private float minDamage;
     [SerializeField] private float maxDamage;
-    [SerializeField] private float attacksPerSecond;
+    [SerializeField] private float timeBetweenAttacks;
 
     public WeaponType Type { get { return type; } }
     public float MinDamage { get { return minDamage; } }
     public float MaxDamage { get { return maxDamage; } }
-    public float AttacksPerSecond { get { return attacksPerSecond; } }
+    public float TimeBetweenAttacks { get { return timeBetweenAttacks; } }
 
     public override ItemBase InitializeItem()
     {

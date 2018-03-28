@@ -237,7 +237,6 @@ GameObject:
   - component: {fileID: 114002834799445584}
   - component: {fileID: 114870329675510918}
   - component: {fileID: 114511514481972790}
-  - component: {fileID: 114689691126117450}
   - component: {fileID: 65952599567055490}
   m_Layer: 0
   m_Name: fox
@@ -921,22 +920,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca5057371c02a646af929ddf1533631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114689691126117450
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1731566292436872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ee515faafad84b45bd0cdd95da334be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  name: 
-  interactDistance: 5
-  spawnOnDepleted: {fileID: 0}
-  healthComponent: {fileID: 114870329675510918}
-  itemsToDrop: {fileID: 114511514481972790}
 --- !u!114 &114870329675510918
 MonoBehaviour:
   m_ObjectHideFlags: 1

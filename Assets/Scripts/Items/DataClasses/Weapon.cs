@@ -5,11 +5,11 @@
         Type = weaponData.Type;
         MinDamage = weaponData.MinDamage;
         MaxDamage = weaponData.MaxDamage;
-        AttacksPerSecond = weaponData.AttacksPerSecond;
+        TimeBetweenAttacks = weaponData.TimeBetweenAttacks;
     }
 
     public WeaponType Type { get; }
     public float MinDamage { get; }
     public float MaxDamage { get; }
-    public float AttacksPerSecond { get; }
+    public float TimeBetweenAttacks { get; }
 }

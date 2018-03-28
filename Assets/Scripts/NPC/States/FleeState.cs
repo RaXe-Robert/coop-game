@@ -10,7 +10,7 @@ public class FleeState : NPCBaseFSM {
     {
         if (PhotonNetwork.isMasterClient)
         {
-            if (Vector3.Distance(NPCScript.Waypoint, NPCScript.Npc.transform.position) < NPCScript.NearWaypointRange || Vector3.Distance(NPCScript.Opponent.transform.position, NPCScript.Npc.transform.position) < fleeRange)
+            if (Vector3.Distance(NPCScript.Waypoint, NPCScript.Npc.transform.position) < NPCScript.NearWaypointRange || Vector3.Distance(NPCScript.Target.transform.position, NPCScript.Npc.transform.position) < fleeRange)
             {
                 NPCScript.SetFleeWaypoint();
             }

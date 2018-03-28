@@ -12,13 +12,13 @@ public class PlayerStats : MonoBehaviour
     private Stat movementSpeed;
     private Stat minDamage;
     private Stat maxDamage;
-    private Stat attackPerSecond;
+    private Stat timeBetweenAttacks;
     private Stat defense;
 
     public float MovementSpeed => movementSpeed.CurrentValue;
     public float MinDamage => minDamage.CurrentValue;
     public float MaxDamage => maxDamage.CurrentValue;
-    public float AttacksPerSecond => attackPerSecond.CurrentValue;
+    public float TimeBetweenAttacks => timeBetweenAttacks.CurrentValue;
     public float Defense => defense.CurrentValue;
 
     private EquipmentManager equipmentManager;
@@ -47,7 +47,7 @@ public class PlayerStats : MonoBehaviour
         movementSpeed = new Stat(baseStats.movementSpeed, this);
         minDamage = new Stat(baseStats.minDamage, this);
         maxDamage = new Stat(baseStats.maxDamage, this);
-        attackPerSecond = new Stat(baseStats.attacksPerSecond, this);
+        timeBetweenAttacks = new Stat(baseStats.timeBetweenAttacks, this);
         defense = new Stat(baseStats.defense, this);
     }
 
@@ -55,14 +55,14 @@ public class PlayerStats : MonoBehaviour
     {
         minDamage.AddValue(weapon.MinDamage);
         maxDamage.AddValue(weapon.MaxDamage);
-        attackPerSecond.AddValue(weapon.AttacksPerSecond - baseStats.attacksPerSecond);
+        timeBetweenAttacks.AddValue(weapon.TimeBetweenAttacks - baseStats.timeBetweenAttacks);
     }
 
     private void UnEquipWeapon(Weapon weapon)
     {
         minDamage.RemoveValue(weapon.MinDamage);
         maxDamage.RemoveValue(weapon.MaxDamage);
-        attackPerSecond.RemoveValue(weapon.AttacksPerSecond - baseStats.attacksPerSecond);
+        timeBetweenAttacks.RemoveValue(weapon.TimeBetweenAttacks - baseStats.timeBetweenAttacks);
     }
 
     private void EquipArmor(Armor armor)

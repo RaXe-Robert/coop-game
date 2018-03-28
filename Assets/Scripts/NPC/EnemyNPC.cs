@@ -9,7 +9,7 @@ public class EnemyNPC : NPCBase {
     /// </summary>
     void Attack()
     {
-        Opponent.gameObject.GetComponent<HealthComponent>().DecreaseValue(1);
+        Target.gameObject.GetComponent<HealthComponent>().DecreaseValue(1);
     }
 
     /// <summary>

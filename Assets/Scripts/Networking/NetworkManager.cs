@@ -3,9 +3,6 @@ using System.Collections;
 
 public class NetworkManager : MonoBehaviour
 {
-    private void Start()
-    {}
-
     public bool Connected { get { return PhotonNetwork.connected; } }
     public bool OfflineMode { get { return PhotonNetwork.offlineMode; } }
 

@@ -15,5 +15,5 @@ MonoBehaviour:
   movementSpeed: 150
   minDamage: 1
   maxDamage: 5
-  attacksPerSecond: 1
+  timeBetweenAttacks: 1
   defense: 0

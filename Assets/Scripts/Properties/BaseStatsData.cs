@@ -8,6 +8,6 @@ public class BaseStatsData : ScriptableObject
     public float movementSpeed;
     public float minDamage;
     public float maxDamage;
-    public float attacksPerSecond;
+    public float timeBetweenAttacks;
     public float defense;
 }

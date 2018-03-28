@@ -37,13 +37,13 @@ public class MouseController : MonoBehaviour
             else if(interactable != null)
             {
                 if (Input.GetMouseButtonDown(0) && interactable.IsInteractable())
-                {                    
+                {
                     if (interactable.GetType() == typeof(WorldResource))
                         InteractWithWorldResource(interactable);
+                    else if (interactable.GetType() == typeof(EnemyNPC))
+                        AttackEnemy(interactable);
                     else
                         interactable.Interact(gameObject.transform.position);
-                    //TODO: What if monster?
-
                 }
 
                 if (interactable.TooltipText() != string.Empty)
@@ -73,6 +73,18 @@ public class MouseController : MonoBehaviour
         else
         {
             WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
+        }
+    }
+
+    private void AttackEnemy(IInteractable interactable)
+    {
+        if(interactionTimeout <= 0)
+        {
+            Debug.Log("Attacking");
+            PlayerStats stats = GetComponent<PlayerStats>();
+            NPCBase enemy = interactable as NPCBase;
+            enemy.TakeDamage(UnityEngine.Random.Range(stats.MinDamage, stats.MaxDamage));
+            interactionTimeout = stats.TimeBetweenAttacks;
         }
     }
 }

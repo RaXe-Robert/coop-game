@@ -6,7 +6,7 @@ public class PlayerStatsUI : MonoBehaviour
 {
     [SerializeField] private Text damageText;
     [SerializeField] private Text movementSpeedText;
-    [SerializeField] private Text attacksPerSecond;
+    [SerializeField] private Text timeBetweenAttacks;
     [SerializeField] private Text defenseText;
 
     private PlayerStats stats;
@@ -23,7 +23,7 @@ public class PlayerStatsUI : MonoBehaviour
     {
         damageText.text = $"Damage: {stats.MinDamage} - {stats.MaxDamage}";
         movementSpeedText.text = $"MovementSpeed: {stats.MovementSpeed}";
-        attacksPerSecond.text = $"Attacks per Second: {stats.AttacksPerSecond}";
+        timeBetweenAttacks.text = $"Time between attacks: {stats.TimeBetweenAttacks}";
         defenseText.text = $"Defense: {stats.Defense}";
     }
 }
