@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 114253825787940496}
   - component: {fileID: 114126515727490142}
   - component: {fileID: 64211466820573644}
+  - component: {fileID: 208198158521228998}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -305,7 +306,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 9172200ceecc09548a26a47f97f75dd0, type: 3}
@@ -393,9 +394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71619f749ec3df04f8dc57baed5cd491, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxValue: 100
-  MinValue: 0
-  health: 50
+  MaxValue: 150
+  value: 150
 --- !u!114 &114306816015052576
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -531,3 +531,18 @@ SkinnedMeshRenderer:
     m_Center: {x: -4.2064476, y: 0.54358864, z: -0.23747635}
     m_Extent: {x: 4.202833, y: 4.7309623, z: 4.8263845}
   m_DirtyAABB: 0
+--- !u!208 &208198158521228998
+NavMeshObstacle:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1296203204362048}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

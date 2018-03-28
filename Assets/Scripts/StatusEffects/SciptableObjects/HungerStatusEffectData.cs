@@ -8,8 +8,8 @@ public class HungerStatusEffectData : ScriptableStatusEffectData
     [SerializeField] private float hungerModification;
     public float HungerModification { get { return hungerModification; } }
 
-    public override StatusEffectBase InitializeStatusEffect(GameObject gameObj)
+    public override StatusEffectBase InitializeStatusEffect(StatusEffectComponent statusEffectComponent)
     {
-        return new HungerStatusEffect(this, gameObj);
+        return new HungerStatusEffect(this, statusEffectComponent);
     }
 }

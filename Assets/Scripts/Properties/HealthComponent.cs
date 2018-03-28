@@ -1,45 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class HealthComponent : Photon.MonoBehaviour, IPunObservable
+public class HealthComponent : PropertyComponentBase
 {
-    public delegate void OnValueChanged(float value);
-    public OnValueChanged OnValueChangedCallback;
+    protected override void ValueChangedNotification(float previousValue, float currentValue)
+    {        
+        float changedAmount = currentValue - previousValue;
 
-    [SerializeField] private float MaxValue = 100;
-    [SerializeField] private float MinValue = 0;
-
-    [SerializeField] private float health;
-    public float Health
-    {
-        get { return health; }
-        set
-        {
-            health = Mathf.Clamp(value, MinValue, MaxValue);
-            OnValueChangedCallback?.Invoke(health);
-        }
-    }
-    
-    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.isWriting)
-        {
-            stream.SendNext(health);
-        }
-        else
-        {
-            health = (float)stream.ReceiveNext();
-        }
-    }
-    
-    public bool IsDepleted()
-    {
-        if (health <= 0)
-        {
-            return true;
-        }
-        return false;
+        WorldNotificationsManager.Instance?.ShowNotification(
+            new WorldNotificationArgs(
+                transform.position,
+                Mathf.Abs(changedAmount).ToString("F0"),
+                0.4f,
+                changedAmount < 0 ? "red" : "green"
+                ), ShowNotificationsIfLocal
+        );
     }
 
+    protected override float ValueRequestAction()
+    {
+        float modifiedValue = value;
+
+        return modifiedValue;
+    }
 }

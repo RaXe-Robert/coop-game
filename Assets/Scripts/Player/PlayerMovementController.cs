@@ -1,21 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(MovementSpeedComponent))]
 public class PlayerMovementController : Photon.MonoBehaviour
 {
-    Rigidbody rigidbodyComponent;
-    Animator animator;
+    private Rigidbody rigidbodyComponent;
+    private Animator animator;
 
-    [SerializeField] private float movementSpeed;
+    [SerializeField] private LayerMask rotationLayerMask;
+
     [SerializeField] private float mouseDeadZoneFromPlayer;
 
     private PlayerCameraController cameraController = null;
+    private MovementSpeedComponent movementSpeedComponent = null;
 
     private void Awake()
     {
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
+        movementSpeedComponent = GetComponent<MovementSpeedComponent>();
     }
 
     // Use this for initialization
@@ -34,22 +38,27 @@ public class PlayerMovementController : Photon.MonoBehaviour
         }
 
     }
-    
+
     private void Update()
     {
-        if (!photonView.isMine) return;
+        if (!photonView.isMine)
+            return;
 
         RotatePlayer();
     }
     
     private void FixedUpdate()
     {
-        if (!photonView.isMine) return;
+        if (!photonView.isMine)
+            return;
 
         MovePlayer();
 
     }
 
+    /// <summary>
+    /// Rotates the player object towards the mouse.
+    /// </summary>
     private void RotatePlayer()
     {
         if (cameraController.CameraReference == null)
@@ -57,14 +66,16 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
         Ray ray = cameraController.CameraReference.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        Physics.Raycast(ray, out hit);
-
-        Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
-        if (Vector3.Distance(transform.position, lookPos) > mouseDeadZoneFromPlayer)
+        if (Physics.Raycast(ray, out hit, 1000f, rotationLayerMask.value))
         {
-            transform.LookAt(lookPos);
+            Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+
+            if (Vector3.Distance(transform.position, lookPos) > mouseDeadZoneFromPlayer)
+            {
+                transform.LookAt(lookPos);
+            }
         }
+        
     }
 
     /// <summary>
@@ -72,17 +83,11 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// </summary>
     private void MovePlayer()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+        Vector3 movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0.0f, Input.GetAxisRaw("Vertical"));
 
-        if (horizontal != 0 || vertical != 0)
+        if (movementInput != Vector3.zero)
         {
-            Vector3 movement = new Vector3(horizontal, 0.0f, vertical);
-
-            if (horizontal != 0 && vertical != 0)
-                rigidbodyComponent.AddForce(movement * movementSpeed * 0.7071f);
-            else
-                rigidbodyComponent.AddForce(movement * movementSpeed);
+            rigidbodyComponent.AddForce(movementInput.normalized * movementSpeedComponent.Value * 0.7071f);
 
             animator.SetBool("IsRunning", true);
         }
