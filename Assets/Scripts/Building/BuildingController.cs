@@ -82,6 +82,8 @@ public class BuildingController : Photon.MonoBehaviour
     private IEnumerator FollowMouse()
     {
         PlayerCameraController playerCameraController = PlayerNetwork.PlayerObject.GetComponent<PlayerCameraController>();
+        Material buildingGrid = GetComponent<Renderer>().sharedMaterial;
+
         while (buildableToBuild != null)
         {
             Ray ray = playerCameraController.CameraReference.ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
@@ -106,6 +108,8 @@ public class BuildingController : Photon.MonoBehaviour
                 }
                 // Apply the position
                 buildableToBuild.transform.position = position;
+                transform.position = position + Vector3.up * 0.1f;
+                buildingGrid.SetVector("_Point", position);
             }
             yield return null;
         }

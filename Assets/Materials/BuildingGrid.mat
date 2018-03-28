@@ -6,15 +6,14 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: BuildingModeMaterial
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _GLOSSYREFLECTIONS_OFF _SPECULARHIGHLIGHTS_OFF
+  m_Name: BuildingGrid
+  m_Shader: {fileID: 4800000, guid: c97394803f698f34a9613b7d367b4798, type: 3}
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
-  stringTagMap:
-    RenderType: Transparent
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -59,24 +58,29 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DistanceNear: 5
-    - _DstBlend: 10
-    - _GlossMapScale: 0
+    - _DistanceNear: 10
+    - _DstBlend: 0
+    - _GlossMapScale: 1
     - _Glossiness: 0.5
-    - _GlossyReflections: 0
-    - _GridSpacing: 10
-    - _GridThickness: 0.02
+    - _GlossyReflections: 1
+    - _GridSpacing: 5
+    - _GridThickness: 0.01
     - _Metallic: 0
-    - _Mode: 3
+    - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
-    - _SpecularHighlights: 0
+    - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _ZWrite: 0
+    - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0, g: 0.62733257, b: 0.6544118, a: 0.134}
-    - _EmissionColor: {r: 0.6985294, g: 0.6985294, b: 0.6985294, a: 1}
+    - _BaseColour: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorFar: {r: 0.3, g: 0.3, b: 0.3, a: 0}
+    - _ColorNear: {r: 0, g: 1, b: 0, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GridColor: {r: 0.5, g: 0.5, b: 1, a: 1}
-    - _Point: {r: 0, g: 0, b: 0, a: 1}
+    - _GridColour: {r: 0.5, g: 1, b: 1, a: 1}
+    - _OutsideColor: {r: 0, g: 0, b: 0, a: 0}
+    - _Point: {r: 10, g: 1.0997993e-18, b: 0, a: 0}
