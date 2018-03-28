@@ -42,7 +42,6 @@ public class WorldObjectSpawner : Photon.MonoBehaviour {
                 instantiatedObjects.Add(PhotonNetwork.InstantiateSceneObject(carl.name, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-20f, 20f)), new Quaternion(), 0, null).GetPhotonView().instantiationId);
                 instantiatedObjects.Add(PhotonNetwork.InstantiateSceneObject(carlScared.name, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-20f, 20f)), new Quaternion(), 0, null).GetPhotonView().instantiationId);
                 instantiatedObjects.Add(PhotonNetwork.InstantiateSceneObject(fox.name, new Vector3(Random.Range(-20f, 20f), 0, Random.Range(-20f, 20f)), new Quaternion(), 0, null).GetPhotonView().instantiationId);
-
             }
 
             photonView.RPC("SetParents", PhotonTargets.AllBufferedViaServer, instantiatedObjects.ToArray());
@@ -54,7 +53,7 @@ public class WorldObjectSpawner : Photon.MonoBehaviour {
     {
         foreach (var id in ids)
         {
-            PhotonView.Find(id).gameObject.transform.SetParent(worldResources.transform);
+            PhotonView.Find(id)?.transform?.SetParent(worldResources.transform);
         }
     }
 }
