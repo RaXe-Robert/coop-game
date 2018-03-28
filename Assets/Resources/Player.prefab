@@ -410,11 +410,11 @@ GameObject:
   - component: {fileID: 114743512028800480}
   - component: {fileID: 114723616231544790}
   - component: {fileID: 114836521450446672}
-  - component: {fileID: 114476197809957560}
   - component: {fileID: 114641208777587000}
   - component: {fileID: 114791167518695588}
   - component: {fileID: 114186301941130006}
   - component: {fileID: 195182915314943150}
+  - component: {fileID: 114418477130141916}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1049,6 +1049,18 @@ MonoBehaviour:
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0
+--- !u!114 &114418477130141916
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1816867026278206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f587660a8beae64dadc1a0e4bfc07b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseStats: {fileID: 11400000, guid: f4d2400d514febf4bbfa405a7d249738, type: 2}
 --- !u!114 &114443901816051506
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1061,21 +1073,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
---- !u!114 &114476197809957560
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1816867026278206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6d5f7090577ea644945eee09b6ff67b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowNotifications: 0
-  ShowNotificationsIfLocal: 0
-  MaxValue: 200
-  value: 70
 --- !u!114 &114492785987082522
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1120,11 +1117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f867d5f311953d449f9ee17be087631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InterruptedPickup: 0
   rotationLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  rotateSpeed: 0
   mouseDeadZoneFromPlayer: 0.1
 --- !u!114 &114723616231544790
 MonoBehaviour:
