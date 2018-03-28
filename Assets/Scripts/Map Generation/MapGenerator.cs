@@ -78,6 +78,14 @@ public class MapGenerator : MonoBehaviour
     public int borderOffset = 3;
     //The threshold for sticking to the type of the previous tile
     public float typeStickyness = .8f;
+    //Whether the mapp should generate on start
+    public bool generateOnStart = true;
+
+    private void Start()
+    {
+        if (generateOnStart)
+            GenetateMap();
+    }
 
     /// <summary>
     /// Generates the map and passes it to the first MapDisplay it can find

@@ -10,7 +10,6 @@ using UnityEngine;
 /// </summary>
 public class MapDisplay : MonoBehaviour
 {
-    public Renderer textureRenderer;
     public int tileSize = 10;
     public System.Random random = new System.Random();
 

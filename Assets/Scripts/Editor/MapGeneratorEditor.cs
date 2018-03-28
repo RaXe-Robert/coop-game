@@ -10,6 +10,10 @@ public class MapGeneratorEditor : Editor {
     {
         MapGenerator mapGenerator = (MapGenerator)target;
 
+        if (DrawDefaultInspector())
+        { }
+            //mapGenerator.GenetateMap();
+
         if (GUILayout.Button("Generate Map"))
             mapGenerator.GenetateMap();
     }
