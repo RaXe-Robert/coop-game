@@ -20,11 +20,11 @@ public class MapTile
 {
     private Dictionary<MapTileType, Color> colorMap = new Dictionary<MapTileType, Color>()
     {
-        { MapTileType.Grassland, Color.green },
-        { MapTileType.Forest, Color.cyan },
-        { MapTileType.Desert, Color.red },
-        { MapTileType.RockyLand, Color.gray },
-        { MapTileType.Ocean, Color.blue }
+        { MapTileType.Grassland, new Color(0.31f, 0.81f, 0.14f) },
+        { MapTileType.Forest, new Color(0.10f, 0.34f, 0.10f) },
+        { MapTileType.Desert, new Color(1.00f, 0.97f, 0.76f) },
+        { MapTileType.RockyLand, new Color(0.70f, 0.70f, 0.70f) },
+        { MapTileType.Ocean, new Color(0.07f, 0.40f, 0.69f) }
     };
 
     private MapTile[,] map;
