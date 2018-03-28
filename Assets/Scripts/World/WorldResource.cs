@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class WorldResource : Photon.MonoBehaviour, IInteractable
 {
+    public new string name;
     public ToolType requiredToolToHarvest;
     public float interactDistance = 5f;
     [SerializeField] private GameObject spawnOnDepleted;
@@ -57,7 +58,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
 
     public string TooltipText()
     {
-        return gameObject.name;
+        return $"{name} \nRequires {requiredToolToHarvest}";
     }
 
     #endregion //IInteractable Implementation

@@ -112,6 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71619f749ec3df04f8dc57baed5cd491, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowNotifications: 1
+  ShowNotificationsIfLocal: 1
   MaxValue: 100
   value: 100
 --- !u!114 &114400987669569362
@@ -168,6 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Rock
+  requiredToolToHarvest: 1
   interactDistance: 5
   spawnOnDepleted: {fileID: 0}
   healthComponent: {fileID: 114056808189935048}
