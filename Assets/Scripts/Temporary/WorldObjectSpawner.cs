@@ -16,8 +16,12 @@ public class WorldObjectSpawner : Photon.MonoBehaviour {
     public int maxRocks = 10;
     public int maxNPCs = 15;
 
-    void Start() {
+    private void Awake()
+    {
         worldResources = new GameObject("Spawned World Resources");
+    }
+
+    private void Start() {
 
         if (PhotonNetwork.isMasterClient)
         {
@@ -46,10 +50,12 @@ public class WorldObjectSpawner : Photon.MonoBehaviour {
     }
 
     [PunRPC]
-    void SetParents(int[] ids)
+    private void SetParents(int[] ids)
     {
         foreach (var id in ids)
+        {
             PhotonView.Find(id).gameObject.transform.SetParent(worldResources.transform);
+        }
     }
 }
 
