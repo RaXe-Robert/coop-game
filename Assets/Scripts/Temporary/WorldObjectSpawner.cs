@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnNetworkTree : Photon.MonoBehaviour {
+public class WorldObjectSpawner : Photon.MonoBehaviour {
 
     [SerializeField] private GameObject tree;
     [SerializeField] private GameObject rock;
