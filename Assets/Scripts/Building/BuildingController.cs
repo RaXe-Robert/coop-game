@@ -12,6 +12,9 @@ public class BuildingController : Photon.MonoBehaviour
     private GameObject buildableToBuild = null;
     private Buildable buildableData = null;
 
+    [SerializeField] private bool snapToGrid;
+    [Range(1f, 10f)]
+    [SerializeField] private float gridSpacing;
     [SerializeField] private LayerMask layerMask;
 
     private void Update()
@@ -77,7 +80,50 @@ public class BuildingController : Photon.MonoBehaviour
             RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo, 1000f, layerMask.value))
             {
-                buildableToBuild.transform.position = hitInfo.point;
+                Vector3 position = hitInfo.point;
+
+                if (snapToGrid)
+                {
+                    float xSpacing = Mathf.Abs(position.x % gridSpacing);
+                    float zSpacing = Mathf.Abs(position.z % gridSpacing);
+
+                    float xOffset = (xSpacing > gridSpacing / 2) ? (gridSpacing - xSpacing) : xSpacing;
+                    float zOffset = (zSpacing > gridSpacing / 2) ? (gridSpacing - zSpacing) : zSpacing;
+
+                    if (xSpacing > gridSpacing / 2)
+                    {
+                        if (position.x >= 0)
+                            position.x = position.x + xOffset;
+                        else
+                            position.x = position.x - xOffset;
+                    }
+                    else
+                    {
+                        if (position.x < 0)
+                            position.x = position.x + xOffset;
+                        else
+                            position.x = position.x - xOffset;
+                    }
+
+                    if (zSpacing > gridSpacing / 2)
+                    {
+                        if (position.z >= 0)
+                            position.z = position.z + zOffset;
+                        else
+                            position.z = position.z - zOffset;
+                    }
+                    else
+                    {
+                        if (position.z < 0)
+                            position.z = position.z + zOffset;
+                        else
+                            position.z = position.z - zOffset;
+                    }
+
+                    Debug.Log($"From: {hitInfo.point.x} | Remainder: {xSpacing} | To: {position.x}");
+                    Debug.Log($"From: {hitInfo.point.z} | Remainder: {zSpacing} | To: {position.z}");
+                }
+                buildableToBuild.transform.position = position;
             }
             yield return null;
         }
