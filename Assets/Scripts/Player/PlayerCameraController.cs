@@ -45,7 +45,7 @@ public class PlayerCameraController : MonoBehaviour
                     centerOffset.y -= 0.5f;
                 }
             }
-            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            else if (Input.GetAxis("Mouse ScrollWheel") < 0)
             {
                 if (centerOffset.y > 1 && centerOffset.y < 10)
                 {
