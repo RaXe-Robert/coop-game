@@ -125,9 +125,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
     {
         if (!agent.hasPath)
         {
-            agent.SetDestination(ItemToPickup.transform.position);
-            animator.SetBool("IsRunning", true);
+            agent.SetDestination(ItemToPickup.transform.position);            
         }
+        animator.SetBool("IsRunning", true);
         if (Vector3.Distance(ItemToPickup.transform.position, transform.position) < ItemToPickup.GetComponent<ItemWorldObject>().pickupDistance)
         {
             ItemToPickup.GetComponent<ItemWorldObject>().Interact(transform.position);
