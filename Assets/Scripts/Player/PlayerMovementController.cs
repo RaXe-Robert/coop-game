@@ -8,10 +8,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private Animator animator;
     private UnityEngine.AI.NavMeshAgent agent;
     public GameObject ItemToPickup { get; set; }
-    private bool InterruptedPickup = false;
+    private bool interruptedPickup = false;
 
     [SerializeField] private LayerMask rotationLayerMask;
-    [SerializeField] private float rotateSpeed;
     [SerializeField] private float mouseDeadZoneFromPlayer;
 
     private PlayerCameraController cameraController = null;
@@ -54,7 +53,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if(ItemToPickup)
         {
             //Check on interruptions
-            if (InterruptedPickup)
+            if (interruptedPickup)
             {
                 InterruptMoveToItem();
                 return;
@@ -106,7 +105,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
         if (movementInput != Vector3.zero)
         {
-            InterruptedPickup = true;
+            interruptedPickup = true;
             rigidbodyComponent.AddForce(movementInput.normalized * movementSpeedComponent.Value);
 
             animator.SetBool("IsRunning", true);
@@ -143,6 +142,6 @@ public class PlayerMovementController : Photon.MonoBehaviour
     {
         ItemToPickup = null;
         agent.ResetPath();
-        InterruptedPickup = false;
+        interruptedPickup = false;
     }
 }
