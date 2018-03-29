@@ -10,7 +10,8 @@ public class EnemyNPC : NPCBase
     /// </summary>
     void Attack()
     {
-        Target.gameObject.GetComponent<HealthComponent>().DecreaseValue(Random.Range(stats.minDamage, stats.maxDamage));
+        //TODO: this should be changed
+        Target.gameObject.GetComponent<HealthComponent>().DecreaseValue((Random.Range(stats.minDamage, stats.maxDamage) - Target.gameObject.GetComponent<StatsComponent>().Defense));
     }
 
     /// <summary>
