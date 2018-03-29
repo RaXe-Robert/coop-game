@@ -52,4 +52,8 @@ MonoBehaviour:
   - SetStoneParent
   - SetTreeParent
   - CreateNotification
+  - DecreaseHealthValue
+  - DecreaseHungerValue
+  - IncreaseHealthValue
+  - IncreaseHungerValue
   DisableAutoOpenWizard: 1

@@ -25,7 +25,7 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
         {
             return ValueRequestAction();
         }
-        private set
+        protected set
         {
             float previousValue = this.value;
 
@@ -65,6 +65,10 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
         }
     }
 
+    public abstract void IncreaseValue(float amount);
+    public abstract void DecreaseValue(float amount);
+
+    /*
     /// <summary>
     /// Change the value of this component positively.
     /// </summary>
@@ -73,8 +77,8 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
     {
         if (amount < 0)
             return;
-        
-        Value += amount;
+
+        photonView.RPC("RPC_IncreaseValue", PhotonTargets.MasterClient, amount);
     }
 
     /// <summary>
@@ -86,8 +90,26 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
         if (amount < 0)
             return;
 
-        Value -= amount;
+        photonView.RPC("RPC_DecreaseValue", PhotonTargets.MasterClient, amount);
     }
+
+    [PunRPC]
+    public void RPC_IncreaseValue(float amount)
+    {
+        if (amount < 0)
+            return;
+
+        Value += amount;
+    }
+
+    [PunRPC]
+    public void RPC_DecreaseValue(float amount)
+    {
+        if (amount < 0)
+            return;
+
+        Value -= amount;
+    }*/
 
     /// <summary>
     /// If an outside class calls the getter of this Value apply certain effects to this value first
