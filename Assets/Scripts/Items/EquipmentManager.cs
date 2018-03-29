@@ -60,6 +60,7 @@ public class EquipmentManager : MonoBehaviour
 
             inventory.AddItemById(currentEquipped.Id, 1);
             equippedTools.Add(toolToEquip);
+            OnToolUnequippedCallback(currentEquipped);
         }
         else
         {
@@ -83,6 +84,7 @@ public class EquipmentManager : MonoBehaviour
 
             equippedWeapon = weaponToEquip;
             inventory.AddItemById(currentEquipped.Id);
+            OnWeaponUnequippedCallback?.Invoke(currentEquipped);
         }
         else
         {
@@ -104,6 +106,7 @@ public class EquipmentManager : MonoBehaviour
             equippedArmor.Remove(currentEquipped);
             inventory.RemoveItemById(armorToEquip.Id);
 
+            OnArmorUnequippedCallback?.Invoke(currentEquipped);
             inventory.AddItemById(currentEquipped.Id);
             equippedArmor.Add(armorToEquip);
         }

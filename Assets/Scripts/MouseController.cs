@@ -39,9 +39,9 @@ public class MouseController : MonoBehaviour
                 if (Input.GetMouseButtonDown(0) && interactable.IsInteractable())
                 {
                     if (interactable.GetType() == typeof(WorldResource))
-                        InteractWithWorldResource(interactable);
+                        InteractWithWorldResource(interactable, hit.transform);
                     else if (interactable.GetType() == typeof(EnemyNPC))
-                        AttackEnemy(interactable);
+                        AttackEnemy(interactable, hit.transform);
                     else
                         interactable.Interact(gameObject.transform.position);
                 }
@@ -54,37 +54,42 @@ public class MouseController : MonoBehaviour
         }
     }
 
-    private void InteractWithWorldResource(IInteractable interactable)
+    private void InteractWithWorldResource(IInteractable interactable, Transform target)
     {
-        if (interactionTimeout <= 0)
+        if (((WorldResource)interactable).interactDistance > Vector3.Distance(transform.position, target.position))
         {
-            WorldResource resource = interactable as WorldResource;
-            EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
-            if (equipmentManager.HasToolEquipped(resource.requiredToolToHarvest))
+            if (interactionTimeout <= 0)
             {
-                interactionTimeout = 2;
-                interactable.Interact(transform.position);
+                WorldResource resource = interactable as WorldResource;
+                EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
+                if (equipmentManager.HasToolEquipped(resource.requiredToolToHarvest))
+                {
+                    interactionTimeout = 2;
+                    interactable.Interact(transform.position);
+                }
+                else
+                {
+                    WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1), true);
+                }
             }
             else
             {
-                WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1), true);
+                WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
             }
-        }
-        else
-        {
-            WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
         }
     }
 
-    private void AttackEnemy(IInteractable interactable)
+    private void AttackEnemy(IInteractable interactable, Transform target)
     {
-        if(interactionTimeout <= 0)
+        if (Vector3.Distance(transform.position, target.position) < 3)
         {
-            Debug.Log("Attacking");
-            StatsComponent stats = GetComponent<StatsComponent>();
-            NPCBase enemy = interactable as NPCBase;
-            enemy.TakeDamage(UnityEngine.Random.Range(stats.MinDamage, stats.MaxDamage));
-            interactionTimeout = stats.TimeBetweenAttacks;
+            if (interactionTimeout <= 0)
+            {
+                StatsComponent stats = GetComponent<StatsComponent>();
+                NPCBase enemy = interactable as NPCBase;
+                enemy.TakeDamage(UnityEngine.Random.Range(stats.MinDamage, stats.MaxDamage));
+                interactionTimeout = stats.TimeBetweenAttacks;
+            }
         }
     }
 }
