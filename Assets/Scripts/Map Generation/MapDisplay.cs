@@ -45,7 +45,8 @@ public class MapDisplay : MonoBehaviour
                 plane.transform.position = new Vector3(-(tileSize * width / 2) -(tileSize/2) + tileSize + (x * tileSize), 0, -(tileSize * height / 2) -(tileSize/2) + tileSize + (y * tileSize));
 
                 // Place the resources on the newly created tile
-                SpawnResourcesOnTile(plane, tileMap[x, y], random);
+                if (PhotonNetwork.isMasterClient)
+                    SpawnResourcesOnTile(plane, tileMap[x, y], random);
             }
         }
     }
@@ -92,11 +93,11 @@ public class MapDisplay : MonoBehaviour
 
             //Randomize the rotation, scale and location
             var rotation = new Vector3(0, random.Next(0, 360), 0);
-            var scale = 1 + (float)(random.NextDouble() * 3);
-            var instance = Instantiate(prefab, tileGo.transform);
-            instance.transform.localRotation = Quaternion.Euler(rotation);
-            instance.transform.localPosition = new Vector3(-5 + (float)random.NextDouble() * 10, 0, -5 + (float)random.NextDouble() * 10);
-            instance.transform.localScale = instance.transform.localScale / tileGo.transform.lossyScale.x * scale;
+            //var scale = 1 + (float)(random.NextDouble() * 3);
+
+            Vector3 position = tileGo.transform.position + new Vector3(-5 + (float)random.NextDouble() * 10, 0, -5 + (float)random.NextDouble() * 10);
+            PhotonNetwork.InstantiateSceneObject(prefab.name, position, Quaternion.Euler(rotation), 0, null);
+            //instance.transform.localScale = instance.transform.localScale / tileGo.transform.lossyScale.x * scale;
         }
     }
 
