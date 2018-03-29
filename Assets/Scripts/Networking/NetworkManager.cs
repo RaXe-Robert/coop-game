@@ -3,9 +3,6 @@ using System.Collections;
 
 public class NetworkManager : MonoBehaviour
 {
-    private void Start()
-    {}
-
     public bool Connected { get { return PhotonNetwork.connected; } }
     public bool OfflineMode { get { return PhotonNetwork.offlineMode; } }
 
@@ -53,7 +50,8 @@ public class NetworkManager : MonoBehaviour
     {
         print($"Connected to master. (Offline mode = {PhotonNetwork.offlineMode})");
         PhotonNetwork.automaticallySyncScene = true;
-        PlayerNetwork.PlayerName = SystemInfo.deviceName;
+        
+        PlayerNetwork.PlayerName = PlayerPrefs.GetString("PlayerName");
 
         if (PhotonNetwork.offlineMode)
             return;

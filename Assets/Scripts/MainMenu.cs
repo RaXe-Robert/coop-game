@@ -33,26 +33,27 @@ public class MainMenu : MonoBehaviour {
             networkManager.Disconnect();
     }
 
-    public void StartGame()
-    {
-        SceneManager.LoadScene("Game");
-    }
-
     public void StartSinglePlayerGame()
     {
         PhotonNetwork.offlineMode = true;
 
         //TODO Move all room creation scripts to the NetworkManager
-        RoomOptions options = new RoomOptions()
+        RoomOptions roomOptions = new RoomOptions()
         {
             IsOpen = false,
             MaxPlayers = 1,
             IsVisible = false,
             CleanupCacheOnLeave = true
         };
-        PhotonNetwork.CreateRoom("Singleplayer Game", options, TypedLobby.Default);
+        CreateGame("Singleplayer Game", roomOptions);
+    }
 
-        StartGame();
+    public void CreateGame(string roomName, RoomOptions roomOptions)
+    {
+        if (PhotonNetwork.playerName == string.Empty)
+            ShowEnterNamePanel(true);
+        else
+            PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
     }
 
     public void ExitGame()
@@ -66,8 +67,27 @@ public class MainMenu : MonoBehaviour {
 
     public void ChangePlayerName(string name)
     {
-        PlayerNetwork.PlayerName = name.Length == 0 ? SystemInfo.deviceName : name;
+        if (name == string.Empty)
+            return;
+
+        PlayerPrefs.SetString("PlayerName", name);
+        PlayerNetwork.PlayerName = name;
     }
+
+    #region Photon Callbacks
+
+    private void OnPhotonCreateRoomFailed(object[] codeAndMessage)
+    {
+        print("Failed to create a room: " + codeAndMessage[1]);
+    }
+
+    private void OnCreatedRoom()
+    {
+        print("Succesfully created a room");
+        PhotonNetwork.LoadLevel("Game");
+    }
+
+    #endregion //Photon Callbacks
 
     #region Panel Navigation
 

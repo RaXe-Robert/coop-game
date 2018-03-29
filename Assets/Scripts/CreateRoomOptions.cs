@@ -9,8 +9,7 @@ public class CreateRoomOptions : MonoBehaviour
     [SerializeField] private Dropdown playerCountDropdown;
     [SerializeField] private Dropdown roomVisibilityDropdown;
     [SerializeField] private Dropdown objectDropdown;
-
-    #region Public Methods
+    
     public void OnClick_CreateRoom()
     {
         RoomOptions roomOptions = new RoomOptions()
@@ -23,29 +22,6 @@ public class CreateRoomOptions : MonoBehaviour
 
         string roomName = string.IsNullOrEmpty(roomNameText?.text) ? PlayerNetwork.PlayerName : roomNameText.text;
 
-        if (PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default))
-        {
-            print("Succesfully requested a room");
-        }
-        else
-        {
-            print("Failed to send a room request!");
-        }
+        FindObjectOfType<MainMenu>().CreateGame(roomName, roomOptions);
     }
-    #endregion //Public Methods
-
-    #region Photon Callbacks
-
-    private void OnPhotonCreateRoomFailed(object[] codeAndMessage)
-    {
-        print("Failed to create a room: " + codeAndMessage[1]);
-    }
-
-    private void OnCreatedRoom()
-    {
-        print("Succesfully created a room");        
-        PhotonNetwork.LoadLevel("Game");
-    }
-
-    #endregion //Photon Callbacks
 }
