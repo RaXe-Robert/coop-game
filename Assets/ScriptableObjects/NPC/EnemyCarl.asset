@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: EnemyCarl
   m_EditorClassIdentifier: 
   maxHealth: 20
-  movementSpeed: 20
+  movementSpeed: 3
   minDamage: 1
-  maxDamage: 2
+  maxDamage: 10
   timeBetweenAttacks: 1
   defense: 0

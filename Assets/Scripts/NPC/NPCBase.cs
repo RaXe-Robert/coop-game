@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -49,7 +50,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable {
     /// </summary>
     public void SetClosestOpponent()
     {
-        GameObject[] players = PlayerNetwork.AllPlayers.ToArray();
+        PlayerNameTag[] players = FindObjectsOfType<PlayerNameTag>();
         GameObject closestOpponent = null;
         float distance = Mathf.Infinity;
 
@@ -58,7 +59,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable {
             float distanceToObject = Vector3.Distance(players[i].transform.position, transform.position);
             if (distanceToObject < distance)
             {
-                closestOpponent = players[i];
+                closestOpponent = players[i].gameObject;
                 distance = distanceToObject;
             }
         }

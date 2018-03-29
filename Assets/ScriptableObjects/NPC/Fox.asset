@@ -9,10 +9,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79ac6ca6141691f41bd87e748cd6d8e8, type: 3}
-  m_Name: EnemyCarl 1
+  m_Name: Fox
   m_EditorClassIdentifier: 
   maxHealth: 20
-  movementSpeed: 20
+  movementSpeed: 4
   minDamage: 1
   maxDamage: 2
   timeBetweenAttacks: 1
