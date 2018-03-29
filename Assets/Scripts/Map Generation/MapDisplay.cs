@@ -11,7 +11,6 @@ using UnityEngine;
 public class MapDisplay : MonoBehaviour
 {
     public int tileSize = 10;
-    public System.Random random = new System.Random();
 
     public GameObject root;
     public GameObject treePrefab;
@@ -21,11 +20,12 @@ public class MapDisplay : MonoBehaviour
     /// Places all the tiles and resources according to the generated tileMap.
     /// </summary>
     /// <param name="tileMap"></param>
-    public void DrawMap(MapTile[,] tileMap)
+    public void DrawMap(MapTile[,] tileMap, int seed)
     {
         // Clear all the gameobjects of the root
         ClearChildren(root);
 
+        var random = new System.Random(seed);
         int width = tileMap.GetLength(0);
         int height = tileMap.GetLength(1);
 
@@ -45,7 +45,7 @@ public class MapDisplay : MonoBehaviour
                 plane.transform.position = new Vector3(-(tileSize * width / 2) -(tileSize/2) + tileSize + (x * tileSize), 0, -(tileSize * height / 2) -(tileSize/2) + tileSize + (y * tileSize));
 
                 // Place the resources on the newly created tile
-                SpawnResourcesOnTile(plane, tileMap[x, y]);
+                SpawnResourcesOnTile(plane, tileMap[x, y], random);
             }
         }
     }
@@ -55,7 +55,7 @@ public class MapDisplay : MonoBehaviour
     /// </summary>
     /// <param name="tileGo"></param>
     /// <param name="mapTile"></param>
-    public void SpawnResourcesOnTile(GameObject tileGo, MapTile mapTile)
+    public void SpawnResourcesOnTile(GameObject tileGo, MapTile mapTile, System.Random random)
     {
         //Variables for the biome type
         List<GameObject> resources = new List<GameObject>();
@@ -88,7 +88,7 @@ public class MapDisplay : MonoBehaviour
         for (int i = 0; i < amount; ++i)
         {
             //Pick a resource
-            var prefab = PickRandom(resources);
+            var prefab = PickRandom(resources, random);
 
             //Randomize the rotation, scale and location
             var rotation = new Vector3(0, random.Next(0, 360), 0);
@@ -105,7 +105,7 @@ public class MapDisplay : MonoBehaviour
     /// </summary>
     /// <param name="items"></param>
     /// <returns></returns>
-    private GameObject PickRandom(List<GameObject> items)
+    private GameObject PickRandom(List<GameObject> items, System.Random random)
     {
         var index = random.Next(0, items.Count);
         return items[index];

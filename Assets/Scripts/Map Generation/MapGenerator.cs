@@ -69,7 +69,7 @@ public class MapTile
 /// <summary>
 /// This is where the magic hapends, this will generate the map.
 /// </summary>
-public class MapGenerator : MonoBehaviour
+public class MapGenerator : Photon.MonoBehaviour
 {
     //Width and height of the map
     public int width = 24;
@@ -81,16 +81,35 @@ public class MapGenerator : MonoBehaviour
     //Whether the mapp should generate on start
     public bool generateOnStart = true;
 
-    private void Start()
+    public int seed = 0;
+
+    private int RandomSeed => (new System.Random()).Next(0, int.MaxValue);
+
+    void Start()
     {
-        if (generateOnStart)
-            GenetateMap();
+        if(PhotonNetwork.isMasterClient)
+        {
+            var seed = (new System.Random()).Next(0, int.MaxValue);
+            photonView.RPC("SetSeedAndGenerate", PhotonTargets.AllBuffered, seed);
+        } else if (generateOnStart)
+        {
+            seed = RandomSeed;
+            GenerateMap();
+        }
+    }
+
+    [PunRPC]
+    public void SetSeedAndGenerate(int seed)
+    {
+        UnityEngine.Debug.Log($"Recieved generation rpc, building map with seed: {seed}");
+        this.seed = seed;
+        GenerateMap();
     }
 
     /// <summary>
     /// Generates the map and passes it to the first MapDisplay it can find
     /// </summary>
-    public void GenetateMap()
+    public void GenerateMap()
     {
         // Create a MapTile array and fills it with ocean tiles
         var tiles = new MapTile[width, height];
@@ -103,7 +122,7 @@ public class MapGenerator : MonoBehaviour
         queue.Enqueue(new Tuple<MapTile,MapTile>(null, tiles[width / 2, height / 2]));
 
         // Some variables needed for the process
-        System.Random random = new System.Random((int)DateTime.Now.Ticks);
+        System.Random random = new System.Random(seed);
         int maxWidthBorder = width - borderOffset - 1;
         int maxHeightBorder = height - borderOffset - 1;
         int iteration = 0;
@@ -132,7 +151,7 @@ public class MapGenerator : MonoBehaviour
         UnityEngine.Debug.Log($"Finished generating the map in {iteration} iterations");
 
         MapDisplay display = FindObjectOfType<MapDisplay>();
-        display.DrawMap(tiles);
+        display.DrawMap(tiles, seed);
     }
 
     /// <summary>

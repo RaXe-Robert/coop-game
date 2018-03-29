@@ -52,4 +52,5 @@ MonoBehaviour:
   - SetStoneParent
   - SetTreeParent
   - CreateNotification
+  - SetSeedAndGenerate
   DisableAutoOpenWizard: 1
