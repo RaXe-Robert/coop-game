@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class NPCBase : Photon.MonoBehaviour, IInteractable {
 
+    [SerializeField] protected BaseStatsData stats;
     public GameObject Npc { get; private set; }
     public GameObject Target { get; private set; }
-    public NavMeshAgent Agent { get; private set; }
+    public UnityEngine.AI.NavMeshAgent Agent { get; private set; }
     public Vector3 Waypoint { get; private set; }
     public float NearWaypointRange { get; set; } = 4.0f; // The distance this has to be from the agent waypoint to reach it
 
@@ -21,6 +21,10 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable {
         Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         animator = GetComponent<Animator>();
         healthComponent = GetComponent<HealthComponent>();
+
+        healthComponent.SetValue(stats.maxHealth);
+        Agent.speed = stats.movementSpeed;
+
         foreach (NPCBaseFSM fsm in animator.GetBehaviours<NPCBaseFSM>())
         {
             fsm.NPCScript = this;
@@ -90,8 +94,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable {
 
     public void TakeDamage(float amount)
     {
-
-        healthComponent.DecreaseValue(amount);
+        healthComponent.DecreaseValue(amount - stats.defense);
 
         if (healthComponent.IsDepleted())
         {
@@ -106,7 +109,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable {
 
     public void Interact(Vector3 invokerPosition)
     {
-        Debug.Log("Interacted with " + gameObject.name);
+        //For now interaction is done with the TakeDamage method
     }
 
     public string TooltipText()

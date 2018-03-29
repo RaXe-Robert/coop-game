@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 114357573752806218}
   - component: {fileID: 114918395143774818}
   - component: {fileID: 135850484510566660}
+  - component: {fileID: 114422931353476676}
   m_Layer: 0
   m_Name: Carl
   m_TagString: Untagged
@@ -526,6 +527,18 @@ MonoBehaviour:
   ShowNotificationsIfLocal: 1
   MaxValue: 100
   value: 100
+--- !u!114 &114422931353476676
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386452222050776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f587660a8beae64dadc1a0e4bfc07b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseStats: {fileID: 0}
 --- !u!114 &114765503467221414
 MonoBehaviour:
   m_ObjectHideFlags: 1

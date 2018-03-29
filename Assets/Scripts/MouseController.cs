@@ -81,7 +81,7 @@ public class MouseController : MonoBehaviour
         if(interactionTimeout <= 0)
         {
             Debug.Log("Attacking");
-            PlayerStats stats = GetComponent<PlayerStats>();
+            StatsComponent stats = GetComponent<StatsComponent>();
             NPCBase enemy = interactable as NPCBase;
             enemy.TakeDamage(UnityEngine.Random.Range(stats.MinDamage, stats.MaxDamage));
             interactionTimeout = stats.TimeBetweenAttacks;

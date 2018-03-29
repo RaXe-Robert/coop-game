@@ -12,7 +12,7 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
     public delegate void OnValueChanged(float value);
     public event OnValueChanged OnValueChangedCallback;
 
-    [Tooltip("Completely disable world notifications for this object.")]
+    [Tooltip("Show world notifications for this object.")]
     [SerializeField] protected bool ShowNotifications = true;
     [Tooltip("Don't show notifications for this object if it's a local object.")]
     [SerializeField] protected bool ShowNotificationsIfLocal = true;
@@ -41,6 +41,11 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
                 }
             }
         }
+    }
+
+    public void SetValue(float value)
+    {
+        Value = value;
     }
 
     public bool IsDepleted ()

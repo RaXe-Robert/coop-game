@@ -5,7 +5,7 @@ public class Stat
 {
     private float baseValue;
     private float currentValue;
-    private PlayerStats playerStats;
+    private StatsComponent playerStats;
 
     public float CurrentValue => currentValue;
     public float BaseValue
@@ -23,7 +23,7 @@ public class Stat
         }
     }
 
-    public Stat(float baseValue, PlayerStats playerStats)
+    public Stat(float baseValue, StatsComponent playerStats)
     {
         this.playerStats = playerStats;
         this.baseValue = baseValue;

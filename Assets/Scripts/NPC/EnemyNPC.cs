@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyNPC : NPCBase {
-       
+public class EnemyNPC : NPCBase
+{
+
     /// <summary>
     /// Handle attacking when the enemy reaches this state.
     /// </summary>
     void Attack()
     {
-        Target.gameObject.GetComponent<HealthComponent>().DecreaseValue(1);
+        Target.gameObject.GetComponent<HealthComponent>().DecreaseValue(Random.Range(stats.minDamage, stats.maxDamage));
     }
 
     /// <summary>
@@ -17,7 +18,7 @@ public class EnemyNPC : NPCBase {
     /// </summary>
     public void StartAttack()
     {
-        InvokeRepeating("Attack", 0.5f, 0.5f);
+        InvokeRepeating("Attack", stats.timeBetweenAttacks, stats.timeBetweenAttacks);
     }
 
     /// <summary>

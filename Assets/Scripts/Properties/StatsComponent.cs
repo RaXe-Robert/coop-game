@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerStats : MonoBehaviour
+public class StatsComponent : MonoBehaviour
 {
     [SerializeField] private BaseStatsData baseStats;
 

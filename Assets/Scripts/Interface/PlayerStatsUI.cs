@@ -9,11 +9,11 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private Text timeBetweenAttacks;
     [SerializeField] private Text defenseText;
 
-    private PlayerStats stats;
+    private StatsComponent stats;
 
     private void Start()
     {
-        stats = FindObjectOfType<PlayerStats>();
+        stats = FindObjectOfType<StatsComponent>();
         stats.OnValueChangedCallback += UpdateUI;
 
         UpdateUI();

@@ -24,7 +24,6 @@ public class PlayerNetwork : Photon.MonoBehaviour
     private void FindAllPlayers()
     {
         AllPlayers.Clear();
-        var x = FindObjectsOfType<PlayerNameTag>();
         foreach (var item in FindObjectsOfType<PlayerNameTag>())
         {
             AllPlayers.Add(item.gameObject);
