@@ -42,7 +42,7 @@ public class MapDisplay : MonoBehaviour
                 // Calculates the tilesize and position
                 tileSize = (int)plane.GetComponent<Renderer>().bounds.size.x;
                 plane.transform.SetParent(root.transform);
-                plane.transform.position = new Vector3(tileSize + (x * tileSize), 0, tileSize + (y * tileSize));
+                plane.transform.position = new Vector3(-(tileSize * width / 2) -(tileSize/2) + tileSize + (x * tileSize), 0, -(tileSize * height / 2) -(tileSize/2) + tileSize + (y * tileSize));
 
                 // Place the resources on the newly created tile
                 SpawnResourcesOnTile(plane, tileMap[x, y]);

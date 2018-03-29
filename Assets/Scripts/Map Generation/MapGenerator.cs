@@ -72,8 +72,8 @@ public class MapTile
 public class MapGenerator : MonoBehaviour
 {
     //Width and height of the map
-    public int width = 256;
-    public int height = 256;
+    public int width = 24;
+    public int height = 24;
     //Amount of ocean around the map
     public int borderOffset = 3;
     //The threshold for sticking to the type of the previous tile
