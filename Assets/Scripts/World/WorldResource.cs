@@ -13,9 +13,20 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
     [SerializeField] private ItemsToDropComponent itemsToDrop;
     private Animator animator;
 
-    void Start()
+    private void Start()
     {
         animator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        if (!photonView.isMine)
+            return;
+
+        if (healthComponent.IsDepleted())
+        {
+            StartCoroutine(PlayDepletedAnimation());
+        }
     }
 
     private IEnumerator PlayDepletedAnimation()
@@ -49,11 +60,6 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
             return;
 
         healthComponent.DecreaseValue(50f);
-
-        if (healthComponent.IsDepleted())
-        {
-            StartCoroutine(PlayDepletedAnimation());
-        }
     }
 
     public string TooltipText()
