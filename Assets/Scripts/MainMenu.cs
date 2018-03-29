@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] private GameObject videoSettingsPanel;
     [SerializeField] private GameObject audioSettingsPanel;
     [SerializeField] private GameObject exitGamePanel;
+    [SerializeField] private GameObject enterNamePanel;
 
     private NetworkManager networkManager;
 
@@ -24,7 +25,7 @@ public class MainMenu : MonoBehaviour {
         //Initialize volume to 50% so people don't go deaf.
         AudioListener.volume = 0.5f;
 
-        //TODO: There should be a better way to get the netweork manager
+        //TODO: There should be a better way to get the network manager
         networkManager = FindObjectOfType<NetworkManager>();
 
         //When the player returns from the game to the main menu, the photon is still connected
@@ -178,6 +179,12 @@ public class MainMenu : MonoBehaviour {
     public void ShowExitGamePanel(bool state)
     {
         exitGamePanel.SetActive(state);
+        ShowMainMenuPanel(!state);
+    }
+
+    public void ShowEnterNamePanel(bool state)
+    {
+        enterNamePanel.SetActive(state);
         ShowMainMenuPanel(!state);
     }
 

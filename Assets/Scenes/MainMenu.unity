@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -9541,12 +9541,12 @@ GameObject:
   - component: {fileID: 930554324}
   - component: {fileID: 930554323}
   m_Layer: 5
-  m_Name: NamePanel
+  m_Name: EnterNamePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &930554322
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13831,6 +13831,7 @@ MonoBehaviour:
   videoSettingsPanel: {fileID: 1757275760}
   audioSettingsPanel: {fileID: 1799537045}
   exitGamePanel: {fileID: 483431700}
+  enterNamePanel: {fileID: 930554321}
 --- !u!114 &1515196732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15970,15 +15971,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1515196731}
-        m_MethodName: ExitGame
-        m_Mode: 1
+        m_MethodName: ShowEnterNamePanel
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
