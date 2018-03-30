@@ -4,6 +4,22 @@ using System.Collections;
 [RequireComponent(typeof(HealthComponent))]
 public class HungerComponent : PropertyComponentBase
 {
+    public override void IncreaseValue(float amount)
+    {
+        if (amount <= 0)
+            return;
+
+        photonView.RPC("IncreaseHungerValue", PhotonTargets.MasterClient, amount);
+    }
+
+    public override void DecreaseValue(float amount)
+    {
+        if (amount <= 0)
+            return;
+
+        photonView.RPC("DecreaseHungerValue", PhotonTargets.MasterClient, amount);
+    }
+
     public bool HungerDegenerationActive { get; set; } = true;
     
     public void OnEnable()
@@ -62,5 +78,17 @@ public class HungerComponent : PropertyComponentBase
         float modifiedValue = value;
 
         return modifiedValue;
+    }
+
+    [PunRPC]
+    private void IncreaseHungerValue(float amount)
+    {
+        Value += amount;
+    }
+
+    [PunRPC]
+    private void DecreaseHungerValue(float amount)
+    {
+        Value -= amount;
     }
 }

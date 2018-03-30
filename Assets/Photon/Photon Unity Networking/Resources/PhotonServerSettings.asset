@@ -54,4 +54,8 @@ MonoBehaviour:
   - CreateNotification
   - SetSeedAndGenerate
   - SpawnResource
+  - DecreaseHealthValue
+  - DecreaseHungerValue
+  - IncreaseHealthValue
+  - IncreaseHungerValue
   DisableAutoOpenWizard: 1

@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class CraftingQueue
 {
+    public CraftingQueue(CraftingManager craftingManager)
+    {
+        this.craftingManager = craftingManager;
+    }
+
     private Queue<CraftingRecipe> craftQueue = new Queue<CraftingRecipe>();
     private CraftingRecipe currentCraft;
     private float craftingProgress;
+    private CraftingManager craftingManager;
 
     private int amountToCraft = 1;
-
-    public delegate void OnCraftCompleted(CraftingRecipe recipe);
-    public OnCraftCompleted OnCraftCompletedCallback;
-
+    
     public void AddRecipe(CraftingRecipe recipe)
     {
-        Debug.Log($"Added {recipe.result.item.name} x {recipe.amountToCraft} to the crafting queue");
+        craftingManager.OnCraftAddedCallback?.Invoke(recipe);
         craftQueue.Enqueue(recipe);
     }
 
@@ -39,7 +42,7 @@ public class CraftingQueue
             if(craftingProgress <= 0)
             {
                 amountToCraft--;
-                OnCraftCompletedCallback?.Invoke(currentCraft);
+                craftingManager.OnCraftCompletedCallback?.Invoke(currentCraft);
 
                 if (amountToCraft > 0)
                     craftingProgress = currentCraft.craftingTime;

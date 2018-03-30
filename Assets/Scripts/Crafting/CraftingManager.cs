@@ -8,12 +8,18 @@ public class CraftingManager : MonoBehaviour
     private CraftingQueue craftingQueue;
     private Inventory inventory;
 
+    public delegate void OnCraftCompleted(CraftingRecipe recipe);
+    public OnCraftCompleted OnCraftCompletedCallback;
+
+    public delegate void OnCraftAdded(CraftingRecipe recipe);
+    public OnCraftAdded OnCraftAddedCallback;
+
     private void Start()
     {
         inventory = GetComponent<Inventory>();
-        craftingQueue = new CraftingQueue();
+        craftingQueue = new CraftingQueue(this);
 
-        craftingQueue.OnCraftCompletedCallback += CompleteCraft;
+        OnCraftCompletedCallback += CompleteCraft;
     }
 
     private void CompleteCraft(CraftingRecipe recipe)
