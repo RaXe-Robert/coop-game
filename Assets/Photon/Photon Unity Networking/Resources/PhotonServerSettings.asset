@@ -50,6 +50,5 @@ MonoBehaviour:
   - CallAnimation
   - CreateNotification
   - SetParents
-  - SpawnBuildableOnNetwork
   - RPC_SpawnBuildable
   DisableAutoOpenWizard: 1
