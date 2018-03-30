@@ -18,6 +18,7 @@ public class MapDisplay : MonoBehaviour
     public GameObject treePrefab;
     public GameObject rockPrefab;
     private NavMeshSurface navmesh;
+    private List<GameObject> spawnedPlanes;
 
     private void Awake()
     {
@@ -32,6 +33,7 @@ public class MapDisplay : MonoBehaviour
     {
         // Clear all the gameobjects of the root
         ClearChildren(root);
+        spawnedPlanes = new List<GameObject>();
 
         var random = new System.Random(seed);
         int width = tileMap.GetLength(0);
@@ -49,6 +51,7 @@ public class MapDisplay : MonoBehaviour
                 plane.transform.localScale = new Vector3(10, 10, 10);
                 plane.GetComponent<Renderer>().material.color = tileMap[x, y].Color;
                 plane.name = $"Plane {x} {y}";
+                spawnedPlanes.Add(plane);
 
                 //If it's an Ocean tile we set the layer to be 4(Water)
                 if (tileMap[x, y].Type == MapTileType.Ocean)
@@ -125,8 +128,9 @@ public class MapDisplay : MonoBehaviour
     private void SpawnResource(string tileName, int resourcePhotonId, float scale, Vector3 position)
     {
         //TODO: BIG NO NO but for now it works.
+        var plane = spawnedPlanes.Find(x => x.name == tileName);
         var newResource = PhotonView.Find(resourcePhotonId).gameObject;
-        newResource.transform.SetParent(GameObject.Find(tileName).transform);
+        newResource.transform.SetParent(plane.transform);
         newResource.transform.position = position;
     }
 
