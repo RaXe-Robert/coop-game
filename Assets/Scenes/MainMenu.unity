@@ -5310,11 +5310,11 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: 2 PLAYERS
+    - m_Text: 4 PLAYERS
       m_Image: {fileID: 0}
     - m_Text: 3 PLAYERS
       m_Image: {fileID: 0}
-    - m_Text: 4 PLAYERS
+    - m_Text: 2 PLAYERS
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6674,7 +6674,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2 PLAYERS
+  m_Text: 4 PLAYERS
 --- !u!222 &444313603
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14101,7 +14101,7 @@ MonoBehaviour:
   videoSettingsPanel: {fileID: 1757275760}
   audioSettingsPanel: {fileID: 1799537045}
   exitGamePanel: {fileID: 483431700}
-  enterNamePanel: {fileID: 930554321}
+  enterNamePanel: {fileID: 0}
   inputNameText: {fileID: 1874924663}
   nameText: {fileID: 1951426017}
 --- !u!114 &1515196732
