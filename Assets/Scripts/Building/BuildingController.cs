@@ -128,6 +128,7 @@ public class BuildingController : Photon.MonoBehaviour
                 buildableToBuild.transform.position = newPosition;
                 transform.position = newPosition + Vector3.up * 0.1f;
                 buildingGrid.SetVector("_Point", newPosition);
+                buildingGrid.SetFloat("_GridSpacing", gridSpacing);
             }
             yield return null;
         }

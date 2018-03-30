@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(PhotonView))]
-public class BuildableWorldObject : Photon.MonoBehaviour
+public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
 {
     public Buildable buildable;
     public float interactDistance = 1f;
@@ -18,7 +18,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour
     {
         //TODO: Needs interaction menu
         Debug.Log("Interacting");
-
+        
         /*
         if (Vector3.Distance(transform.position, invokerPosition) > interactDistance)
         {
@@ -32,7 +32,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour
 
     public string TooltipText()
     {
-        return $"{buildable.Name} ({buildable.StackSize})";
+        return $"";
     }
 
     #endregion //IInteractable Implementation

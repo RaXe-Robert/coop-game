@@ -1,6 +1,8 @@
-﻿public class Buildable : ItemBase
+﻿using UnityEngine;
+
+public class Buildable : ItemBase
 {
-    public float Recoverable { get; }
+    public bool Recoverable { get; }
 
     public Buildable(BuildableData buildableData) : base(buildableData)
     {

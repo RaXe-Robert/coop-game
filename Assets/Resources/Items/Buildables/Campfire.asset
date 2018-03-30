@@ -18,3 +18,4 @@ MonoBehaviour:
   isConsumable: 0
   onConsumedEffects: []
   id: 200
+  recoverable: 1
