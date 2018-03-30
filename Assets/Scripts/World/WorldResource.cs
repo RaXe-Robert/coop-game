@@ -36,13 +36,8 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
             photonView.RPC("CallAnimation", PhotonTargets.All);
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
         }
-        
-        if (spawnOnDepleted != null)
-        {
-            itemsToDrop.SpawnObjectOnParent(spawnOnDepleted);
-        }
 
-        itemsToDrop.SpawnItemsOnDepleted();
+        itemsToDrop?.SpawnItemsOnDepleted();
 
         photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }

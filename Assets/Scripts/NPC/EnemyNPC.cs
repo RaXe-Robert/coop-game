@@ -10,8 +10,11 @@ public class EnemyNPC : NPCBase
     /// </summary>
     void Attack()
     {
-        //TODO: this should be changed
-        Target.gameObject.GetComponent<HealthComponent>().DecreaseValue((Random.Range(stats.minDamage, stats.maxDamage) - Target.gameObject.GetComponent<StatsComponent>().Defense));
+        if(Vector3.Distance(transform.position, Target.transform.position) < 3)
+        {
+            //TODO: this should be changed
+            Target.gameObject.GetComponent<HealthComponent>().DecreaseValue((Random.Range(stats.minDamage, stats.maxDamage) - Target.gameObject.GetComponent<StatsComponent>().Defense));
+        }
     }
 
     /// <summary>

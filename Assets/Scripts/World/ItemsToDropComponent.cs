@@ -19,16 +19,4 @@ public class ItemsToDropComponent : Photon.MonoBehaviour {
             }
         }
     }
-
-    public void SpawnObjectOnParent(GameObject objectToSpawn)
-    {
-        Quaternion objectToSpawnRotation = transform.rotation * objectToSpawn.transform.rotation;
-        photonView.RPC("SpawnObjectOnParent", PhotonTargets.MasterClient, objectToSpawn.name, objectToSpawnRotation);
-    }
-
-    [PunRPC]
-    void SpawnObjectOnParent(string go, Quaternion objectToSpawnRotation)
-    {
-        PhotonNetwork.InstantiateSceneObject(go, transform.position, objectToSpawnRotation, 0, null);
-    }
 }
