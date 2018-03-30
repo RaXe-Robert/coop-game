@@ -52,6 +52,8 @@ MonoBehaviour:
   - SetStoneParent
   - SetTreeParent
   - CreateNotification
+  - SetSeedAndGenerate
+  - SpawnResource
   - DecreaseHealthValue
   - DecreaseHungerValue
   - IncreaseHealthValue
