@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
@@ -17,6 +18,9 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] private GameObject audioSettingsPanel;
     [SerializeField] private GameObject exitGamePanel;
     [SerializeField] private GameObject enterNamePanel;
+    [SerializeField] private InputField inputNameText;
+    [SerializeField] private Text nameText;
+
 
     private NetworkManager networkManager;
 
@@ -27,6 +31,8 @@ public class MainMenu : MonoBehaviour {
 
         //TODO: There should be a better way to get the network manager
         networkManager = FindObjectOfType<NetworkManager>();
+
+        nameText.text = PlayerPrefs.GetString("PlayerName");
 
         //When the player returns from the game to the main menu, the photon is still connected
         if (networkManager.Connected)
@@ -50,10 +56,7 @@ public class MainMenu : MonoBehaviour {
 
     public void CreateGame(string roomName, RoomOptions roomOptions)
     {
-        if (PhotonNetwork.playerName == string.Empty)
-            ShowEnterNamePanel(true);
-        else
-            PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
+        PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
     }
 
     public void ExitGame()
@@ -204,8 +207,19 @@ public class MainMenu : MonoBehaviour {
 
     public void ShowEnterNamePanel(bool state)
     {
-        enterNamePanel.SetActive(state);
-        ShowMainMenuPanel(!state);
+        enterNamePanel.SetActive(state);    
+    }    
+
+    public void DoneEnterName()
+    {
+        ChangePlayerName(inputNameText.text.ToUpper());
+        UpdatePlayerName();
+        ShowEnterNamePanel(false);
+    }
+
+    private void UpdatePlayerName()
+    {
+        nameText.text = PlayerNetwork.PlayerName;
     }
 
     public void HideAllPanelsExceptMain()
