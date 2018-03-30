@@ -13,6 +13,7 @@ public class MapDisplay : MonoBehaviour
 {
     public int tileSize = 10;
 
+    public GameObject planePrefab;
     public GameObject root;
     public GameObject treePrefab;
     public GameObject rockPrefab;
@@ -41,8 +42,8 @@ public class MapDisplay : MonoBehaviour
             for (int x = 0; x < width; ++x)
             {
                 // Instantiates the plane and sets the name
-                var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-                PhotonView view = plane.AddComponent<PhotonView>();
+                var plane = Instantiate(planePrefab);
+                PhotonView view = plane.GetComponent<PhotonView>();
                 view.viewID = PhotonNetwork.AllocateViewID();
 
                 plane.transform.localScale = new Vector3(10, 10, 10);
@@ -116,15 +117,16 @@ public class MapDisplay : MonoBehaviour
             Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0, random.Next(-extent, extent));
 
             GameObject resource = PhotonNetwork.InstantiateSceneObject(prefab.name, tileGo.transform.position, Quaternion.Euler(rotation), 0, null);
-            GetComponent<PhotonView>().RPC("SpawnResource", PhotonTargets.AllBuffered, tileGo.GetPhotonView().viewID, resource.GetPhotonView().instantiationId, scale, position);
+            GetComponent<PhotonView>().RPC("SpawnResource", PhotonTargets.AllBuffered, tileGo.name, resource.GetPhotonView().instantiationId, scale, position);
         }
     }
 
     [PunRPC]
-    private void SpawnResource(int tilePhotonId, int resourcePhotonId, float scale, Vector3 position)
+    private void SpawnResource(string tileName, int resourcePhotonId, float scale, Vector3 position)
     {
+        //TODO: BIG NO NO but for now it works.
         var newResource = PhotonView.Find(resourcePhotonId).gameObject;
-        newResource.transform.SetParent(PhotonView.Find(tilePhotonId).gameObject.transform);
+        newResource.transform.SetParent(GameObject.Find(tileName).transform);
         newResource.transform.position = position;
     }
 

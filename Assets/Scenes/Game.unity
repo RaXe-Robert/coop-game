@@ -1218,6 +1218,12 @@ Prefab:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114122361260664216, guid: 43f5bec9d0325394cba3453b46c5d4b5,
+        type: 2}
+      propertyPath: planePrefab
+      value: 
+      objectReference: {fileID: 1734947063586872, guid: 6d5928bd9100bd64ba49e069f45042e4,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 43f5bec9d0325394cba3453b46c5d4b5, type: 2}
   m_IsPrefabParent: 0
