@@ -50,7 +50,8 @@ public class NetworkManager : MonoBehaviour
     {
         print($"Connected to master. (Offline mode = {PhotonNetwork.offlineMode})");
         PhotonNetwork.automaticallySyncScene = true;
-        PlayerNetwork.PlayerName = SystemInfo.deviceName;
+        
+        PlayerNetwork.PlayerName = PlayerPrefs.GetString("PlayerName");
 
         if (PhotonNetwork.offlineMode)
             return;

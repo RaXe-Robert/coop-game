@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
@@ -16,6 +17,10 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] private GameObject videoSettingsPanel;
     [SerializeField] private GameObject audioSettingsPanel;
     [SerializeField] private GameObject exitGamePanel;
+    [SerializeField] private GameObject enterNamePanel;
+    [SerializeField] private InputField inputNameText;
+    [SerializeField] private Text nameText;
+
 
     private NetworkManager networkManager;
 
@@ -24,17 +29,14 @@ public class MainMenu : MonoBehaviour {
         //Initialize volume to 50% so people don't go deaf.
         AudioListener.volume = 0.5f;
 
-        //TODO: There should be a better way to get the netweork manager
+        //TODO: There should be a better way to get the network manager
         networkManager = FindObjectOfType<NetworkManager>();
+
+        nameText.text = PlayerPrefs.GetString("PlayerName");
 
         //When the player returns from the game to the main menu, the photon is still connected
         if (networkManager.Connected)
             networkManager.Disconnect();
-    }
-
-    public void StartGame()
-    {
-        SceneManager.LoadScene("Game");
     }
 
     public void StartSinglePlayerGame()
@@ -42,16 +44,19 @@ public class MainMenu : MonoBehaviour {
         PhotonNetwork.offlineMode = true;
 
         //TODO Move all room creation scripts to the NetworkManager
-        RoomOptions options = new RoomOptions()
+        RoomOptions roomOptions = new RoomOptions()
         {
             IsOpen = false,
             MaxPlayers = 1,
             IsVisible = false,
             CleanupCacheOnLeave = true
         };
-        PhotonNetwork.CreateRoom("Singleplayer Game", options, TypedLobby.Default);
+        CreateGame("Singleplayer Game", roomOptions);
+    }
 
-        StartGame();
+    public void CreateGame(string roomName, RoomOptions roomOptions)
+    {
+        PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
     }
 
     public void ExitGame()
@@ -65,8 +70,27 @@ public class MainMenu : MonoBehaviour {
 
     public void ChangePlayerName(string name)
     {
-        PlayerNetwork.PlayerName = name.Length == 0 ? SystemInfo.deviceName : name;
+        if (name == string.Empty)
+            return;
+
+        PlayerPrefs.SetString("PlayerName", name);
+        PlayerNetwork.PlayerName = name;
     }
+
+    #region Photon Callbacks
+
+    private void OnPhotonCreateRoomFailed(object[] codeAndMessage)
+    {
+        print("Failed to create a room: " + codeAndMessage[1]);
+    }
+
+    private void OnCreatedRoom()
+    {
+        print("Succesfully created a room");
+        PhotonNetwork.LoadLevel("Game");
+    }
+
+    #endregion //Photon Callbacks
 
     #region Panel Navigation
 
@@ -179,6 +203,23 @@ public class MainMenu : MonoBehaviour {
     {
         exitGamePanel.SetActive(state);
         ShowMainMenuPanel(!state);
+    }
+
+    public void ShowEnterNamePanel(bool state)
+    {
+        enterNamePanel.SetActive(state);    
+    }    
+
+    public void DoneEnterName()
+    {
+        ChangePlayerName(inputNameText.text.ToUpper());
+        UpdatePlayerName();
+        ShowEnterNamePanel(false);
+    }
+
+    private void UpdatePlayerName()
+    {
+        nameText.text = PlayerNetwork.PlayerName;
     }
 
     public void HideAllPanelsExceptMain()
