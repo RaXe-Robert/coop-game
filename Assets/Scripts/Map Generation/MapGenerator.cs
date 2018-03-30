@@ -91,7 +91,8 @@ public class MapGenerator : Photon.MonoBehaviour
         {
             var seed = (new System.Random()).Next(0, int.MaxValue);
             photonView.RPC("SetSeedAndGenerate", PhotonTargets.AllBuffered, seed);
-        } else if (generateOnStart)
+        }
+        else if (generateOnStart)
         {
             seed = RandomSeed;
             GenerateMap();

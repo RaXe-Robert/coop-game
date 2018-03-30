@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
 /// This class takes a generated array of MapTiles and instantiates the propper planes and resources for the biomes.
@@ -15,6 +16,12 @@ public class MapDisplay : MonoBehaviour
     public GameObject root;
     public GameObject treePrefab;
     public GameObject rockPrefab;
+    private NavMeshSurface navmesh;
+
+    private void Awake()
+    {
+        navmesh = GetComponent<NavMeshSurface>();
+    }
 
     /// <summary>
     /// Places all the tiles and resources according to the generated tileMap.
@@ -35,9 +42,17 @@ public class MapDisplay : MonoBehaviour
             {
                 // Instantiates the plane and sets the name
                 var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                PhotonView view = plane.AddComponent<PhotonView>();
+                view.viewID = PhotonNetwork.AllocateSceneViewID();
+
                 plane.transform.localScale = new Vector3(10, 10, 10);
                 plane.GetComponent<Renderer>().material.color = tileMap[x, y].Color;
                 plane.name = $"Plane {x} {y}";
+
+                //If it's an Ocean tile we set the layer to be 4(Water)
+                if (tileMap[x, y].Type == MapTileType.Ocean)
+                    plane.layer = 4;
+
 
                 // Calculates the tilesize and position
                 tileSize = (int)plane.GetComponent<Renderer>().bounds.size.x;
@@ -49,6 +64,7 @@ public class MapDisplay : MonoBehaviour
                     SpawnResourcesOnTile(plane, tileMap[x, y], random);
             }
         }
+        navmesh.BuildNavMesh();
     }
 
     /// <summary>
@@ -60,8 +76,8 @@ public class MapDisplay : MonoBehaviour
     {
         //Variables for the biome type
         List<GameObject> resources = new List<GameObject>();
-        var spawnRateMin = 5;
-        var spawnRateMax = 15;
+        var spawnRateMin = 10;
+        var spawnRateMax = 30;
 
         switch (mapTile.Type)
         {
@@ -93,12 +109,28 @@ public class MapDisplay : MonoBehaviour
 
             //Randomize the rotation, scale and location
             var rotation = new Vector3(0, random.Next(0, 360), 0);
-            //var scale = 1 + (float)(random.NextDouble() * 3);
+            var scale = 1 + (float)(random.NextDouble() * 3);
 
-            Vector3 position = tileGo.transform.position + new Vector3(-5 + (float)random.NextDouble() * 10, 0, -5 + (float)random.NextDouble() * 10);
-            PhotonNetwork.InstantiateSceneObject(prefab.name, position, Quaternion.Euler(rotation), 0, null);
-            //instance.transform.localScale = instance.transform.localScale / tileGo.transform.lossyScale.x * scale;
+            int extent = (int)tileGo.GetComponent<Renderer>().bounds.extents.x;
+            Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0, random.Next(-extent, extent));
+
+            GameObject resource = PhotonNetwork.InstantiateSceneObject(prefab.name, tileGo.transform.position, Quaternion.Euler(rotation), 0, null);
+            GetComponent<PhotonView>().RPC("SpawnResource", 
+                PhotonTargets.AllBuffered, 
+                tileGo.GetPhotonView().viewID, 
+                resource.GetPhotonView().instantiationId, 
+                scale, 
+                position
+            );
         }
+    }
+
+    [PunRPC]
+    private void SpawnResource(int tilePhotonId, int resourcePhotonId, float scale, Vector3 position)
+    {
+        var newResource = PhotonView.Find(resourcePhotonId).gameObject;
+        newResource.transform.SetParent(PhotonView.Find(tilePhotonId).gameObject.transform);
+        newResource.transform.position = position;
     }
 
     /// <summary>

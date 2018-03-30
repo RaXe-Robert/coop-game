@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.574817, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -112,7 +112,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 9b5be9113817e0a4192f94de38473dbd, type: 2}
+  m_NavMeshData: {fileID: 0}
 --- !u!1001 &8865307
 Prefab:
   m_ObjectHideFlags: 0
@@ -1172,9 +1172,89 @@ Prefab:
       propertyPath: ownershipTransfer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114122361260664216, guid: 43f5bec9d0325394cba3453b46c5d4b5,
+        type: 2}
+      propertyPath: tileSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114122361260664216, guid: 43f5bec9d0325394cba3453b46c5d4b5,
+        type: 2}
+      propertyPath: root
+      value: 
+      objectReference: {fileID: 1442299235}
+    - target: {fileID: 114122361260664216, guid: 43f5bec9d0325394cba3453b46c5d4b5,
+        type: 2}
+      propertyPath: treePrefab
+      value: 
+      objectReference: {fileID: 1296203204362048, guid: cea2ad25b4540224a86b529aa39547f6,
+        type: 2}
+    - target: {fileID: 114122361260664216, guid: 43f5bec9d0325394cba3453b46c5d4b5,
+        type: 2}
+      propertyPath: rockPrefab
+      value: 
+      objectReference: {fileID: 1695406501947972, guid: 00e52d555c867374690f2256513d9e5a,
+        type: 2}
+    - target: {fileID: 114122361260664216, guid: 43f5bec9d0325394cba3453b46c5d4b5,
+        type: 2}
+      propertyPath: navmesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114810206140880260, guid: 43f5bec9d0325394cba3453b46c5d4b5,
+        type: 2}
+      propertyPath: width
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114810206140880260, guid: 43f5bec9d0325394cba3453b46c5d4b5,
+        type: 2}
+      propertyPath: height
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114810206140880260, guid: 43f5bec9d0325394cba3453b46c5d4b5,
+        type: 2}
+      propertyPath: borderOffset
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 43f5bec9d0325394cba3453b46c5d4b5, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1442299234 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1945220194723466, guid: 43f5bec9d0325394cba3453b46c5d4b5,
+    type: 2}
+  m_PrefabInternal: {fileID: 1442299233}
+--- !u!1 &1442299235 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1100712231532218, guid: 43f5bec9d0325394cba3453b46c5d4b5,
+    type: 2}
+  m_PrefabInternal: {fileID: 1442299233}
+--- !u!114 &1442299236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1442299234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967279
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_BuildHeightMesh: 0
+  m_NavMeshData: {fileID: 0}
 --- !u!1001 &1463700542
 Prefab:
   m_ObjectHideFlags: 0
