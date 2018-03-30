@@ -16,7 +16,7 @@ public class AttackState : NPCBaseFSM
     {
         if (PhotonNetwork.isMasterClient)
         {
-            NPCScript.Npc.transform.LookAt(NPCScript.Opponent.transform.position);
+            NPCScript.Npc.transform.LookAt(NPCScript.Target.transform.position);
         }
     }
 

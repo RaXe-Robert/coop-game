@@ -4,9 +4,8 @@ public class Tool : ItemBase
 {
     public Tool(ToolData toolData) : base(toolData)
     {
-        toolType = toolData.ToolType;
+        ToolType = toolData.ToolType;
     }
 
-    [SerializeField] private ToolType toolType;
-    public ToolType ToolType { get { return toolType; } }
+    public ToolType ToolType { get; }
 }
