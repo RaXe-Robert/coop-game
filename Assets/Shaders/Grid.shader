@@ -11,9 +11,9 @@ Shader "Custom/Grid" {
 		_GridThickness("Grid Thickness", Float) = 0.02
 		_GridSpacing("Grid Spacing", Float) = 10.0
 		_GridColor("Grid Color", Color) = (0.5, 0.5, 1.0, 1.0)
+		_GridDistance("Grid Distance", Float) = 5.0
 
 		_Point("Point In World Space", Vector) = (0., 0., 0., 1.0)
-		_DistanceNear("Threshold Distance", Float) = 5.0
 	}
 
 	SubShader{
@@ -35,8 +35,9 @@ Shader "Custom/Grid" {
 		uniform float _GridThickness;
 		uniform float _GridSpacing;
 		uniform float4 _GridColor;
+		uniform float _GridDistance;
+
 		uniform float4 _Point;
-		uniform float _DistanceNear;
 
 		struct vertexInput {
 			float4 vertex : POSITION;
@@ -58,7 +59,7 @@ Shader "Custom/Grid" {
 			float dist = distance(input.worldPos, _Point);
 
 			if ((frac(input.worldPos.x / _GridSpacing) < _GridThickness || frac(input.worldPos.z / _GridSpacing) < _GridThickness) 
-			&& dist < _DistanceNear)
+			&& dist < _GridDistance)
 			{
 				return _GridColor;
 			}

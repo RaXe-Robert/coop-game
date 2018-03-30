@@ -600,9 +600,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 780331300}
+  - component: {fileID: 780331301}
   - component: {fileID: 780331299}
   - component: {fileID: 780331297}
-  - component: {fileID: 780331301}
   - component: {fileID: 780331298}
   m_Layer: 0
   m_Name: BuildingController
@@ -656,8 +656,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d2b7811c1745a843adcb1826d9e31be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snapToGrid: 1
-  gridSpacing: 5
+  buildingRange: 10
+  gridSpacing: 2.5
+  snapToGridColor: {r: 0, g: 0.95862055, b: 1, a: 1}
+  dontSnapToGridColor: {r: 1, g: 0, b: 0, a: 1}
   layerMask:
     serializedVersion: 2
     m_Bits: 256

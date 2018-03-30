@@ -13,11 +13,16 @@ public class BuildingController : Photon.MonoBehaviour
     private GameObject buildableToBuild = null;
     private Buildable buildableData = null;
 
-    [SerializeField] private bool snapToGrid = true;
+    [Range(1f,15f)]
+    [SerializeField] private float buildingRange = 5f;
     [Range(1f, 10f)]
     [SerializeField] private float gridSpacing = 5f;
+    [SerializeField] private Color snapToGridColor;
+    [SerializeField] private Color dontSnapToGridColor;
+
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private Material buildingModeMaterial;
+
 
     private Renderer gridRenderer;
 
@@ -61,6 +66,10 @@ public class BuildingController : Photon.MonoBehaviour
             ReplaceMaterials();
 
             gridRenderer.enabled = true;
+            gridRenderer.sharedMaterial.SetFloat("_GridSpacing", gridSpacing);
+            gridRenderer.sharedMaterial.SetFloat("_GridDistance", buildingRange);
+            gridRenderer.sharedMaterial.SetColor("_GridColor", (buildableData.SnapToGrid ? snapToGridColor : dontSnapToGridColor));
+
             StartCoroutine(FollowMouse());
         }
         else
@@ -74,7 +83,7 @@ public class BuildingController : Photon.MonoBehaviour
     /// </summary>
     private void FinishBuildMode()
     {
-        if (buildableToBuild == null)
+        if (buildableToBuild == null || buildingRange < Vector3.Distance(PlayerNetwork.PlayerObject.transform.position, buildableToBuild.transform.position))
             return;
 
         FindObjectOfType<Inventory>().RemoveItemById(buildableData.Id);
@@ -110,7 +119,7 @@ public class BuildingController : Photon.MonoBehaviour
             {
                 Vector3 newPosition = hitInfo.point;
 
-                if (snapToGrid)
+                if (buildableData.SnapToGrid)
                 {
                     // Calculate X positon
                     float xSpacing = Mathf.Abs(newPosition.x % gridSpacing);
@@ -123,12 +132,14 @@ public class BuildingController : Photon.MonoBehaviour
                     // Store the position
                     newPosition.x += newPosition.x >= 0 ? xPosition : xPosition * -1;
                     newPosition.z += newPosition.z >= 0 ? zPosition : zPosition * -1;
+
                 }
                 // Apply the position
                 buildableToBuild.transform.position = newPosition;
-                transform.position = newPosition + Vector3.up * 0.1f;
+                
+                //Update the building grid
+                transform.position = newPosition;
                 buildingGrid.SetVector("_Point", newPosition);
-                buildingGrid.SetFloat("_GridSpacing", gridSpacing);
             }
             yield return null;
         }
