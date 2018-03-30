@@ -43,7 +43,7 @@ public class MapDisplay : MonoBehaviour
                 // Instantiates the plane and sets the name
                 var plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
                 PhotonView view = plane.AddComponent<PhotonView>();
-                view.viewID = PhotonNetwork.AllocateSceneViewID();
+                view.viewID = PhotonNetwork.AllocateViewID();
 
                 plane.transform.localScale = new Vector3(10, 10, 10);
                 plane.GetComponent<Renderer>().material.color = tileMap[x, y].Color;
@@ -52,6 +52,7 @@ public class MapDisplay : MonoBehaviour
                 //If it's an Ocean tile we set the layer to be 4(Water)
                 if (tileMap[x, y].Type == MapTileType.Ocean)
                     plane.layer = 4;
+                else plane.layer = 8;
 
 
                 // Calculates the tilesize and position
@@ -115,13 +116,7 @@ public class MapDisplay : MonoBehaviour
             Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0, random.Next(-extent, extent));
 
             GameObject resource = PhotonNetwork.InstantiateSceneObject(prefab.name, tileGo.transform.position, Quaternion.Euler(rotation), 0, null);
-            GetComponent<PhotonView>().RPC("SpawnResource", 
-                PhotonTargets.AllBuffered, 
-                tileGo.GetPhotonView().viewID, 
-                resource.GetPhotonView().instantiationId, 
-                scale, 
-                position
-            );
+            GetComponent<PhotonView>().RPC("SpawnResource", PhotonTargets.AllBuffered, tileGo.GetPhotonView().viewID, resource.GetPhotonView().instantiationId, scale, position);
         }
     }
 

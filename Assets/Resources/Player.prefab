@@ -1120,11 +1120,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f867d5f311953d449f9ee17be087631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InterruptedPickup: 0
   rotationLayerMask:
     serializedVersion: 2
     m_Bits: 256
-  rotateSpeed: 0
+  waterLayerMask:
+    serializedVersion: 2
+    m_Bits: 16
   mouseDeadZoneFromPlayer: 0.1
 --- !u!114 &114723616231544790
 MonoBehaviour:

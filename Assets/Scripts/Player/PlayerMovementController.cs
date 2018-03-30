@@ -11,6 +11,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private bool interruptedPickup = false;
 
     [SerializeField] private LayerMask rotationLayerMask;
+    [SerializeField] private LayerMask waterLayerMask;
     [SerializeField] private float mouseDeadZoneFromPlayer;
 
     private PlayerCameraController cameraController = null;
@@ -84,7 +85,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
         Ray ray = cameraController.CameraReference.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1000f, rotationLayerMask.value))
+        if (Physics.Raycast(ray, out hit, 1000f, rotationLayerMask.value | waterLayerMask.value))
         {
             Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
 
