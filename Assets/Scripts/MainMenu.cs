@@ -212,7 +212,7 @@ public class MainMenu : MonoBehaviour {
 
     public void DoneEnterName()
     {
-        ChangePlayerName(inputNameText.text.ToUpper());
+        ChangePlayerName(inputNameText.text);
         UpdatePlayerName();
         ShowEnterNamePanel(false);
     }
