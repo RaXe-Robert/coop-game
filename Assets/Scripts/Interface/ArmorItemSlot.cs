@@ -13,7 +13,7 @@ public class ArmorItemSlot : InventoryItemSlot
         if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
             if (from.Item.GetType() == typeof(Armor))
-                equipmentManager.EquipArmor(from.Item as Armor);
+                equipmentManager.EquipArmor(from.Item as Armor, from.index);
         }
     }
 

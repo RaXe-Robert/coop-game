@@ -10,7 +10,7 @@ public class WeaponItemSlot : InventoryItemSlot
         if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
             if (from.Item.GetType() == typeof(Weapon))
-                equipmentManager.EquipWeapon(from.Item as Weapon);
+                equipmentManager.EquipWeapon(from.Item as Weapon, from.index);
         }
     }
 

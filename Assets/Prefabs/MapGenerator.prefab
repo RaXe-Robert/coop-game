@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967279
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
@@ -154,9 +154,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6c6edbe8ffc7a4583b63c8db0938a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 16
-  height: 16
-  borderOffset: 2
+  width: 8
+  height: 8
+  borderOffset: 1
   typeStickyness: 0.7
   generateOnStart: 1
   seed: 0
