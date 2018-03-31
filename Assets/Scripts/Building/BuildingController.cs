@@ -9,20 +9,21 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class BuildingController : Photon.MonoBehaviour
 {
-    // The object that is currently selected by the player to be build.
-    private GameObject buildableToBuild = null;
-    private Buildable buildableData = null;
-
     [Range(1f,15f)]
     [SerializeField] private float buildingRange = 5f;
     [Range(1f, 10f)]
     [SerializeField] private float gridSpacing = 5f;
-    [SerializeField] private Color snapToGridColor;
-    [SerializeField] private Color dontSnapToGridColor;
+    [SerializeField] private Color gridSnappingActiveColor;
+    [SerializeField] private Color gridSnappingInactiveColor;
+    [SerializeField] private Color gridOutOfRangeColor;
 
     [SerializeField] private LayerMask layerMask;
     [SerializeField] private Material buildingModeMaterial;
 
+    // The object that is currently selected by the player to be build.
+    private GameObject buildableToBuild = null;
+    private Buildable buildableData = null;
+    private float distanceToPlayer = 0f;
 
     private Renderer gridRenderer;
 
@@ -68,7 +69,6 @@ public class BuildingController : Photon.MonoBehaviour
             gridRenderer.enabled = true;
             gridRenderer.sharedMaterial.SetFloat("_GridSpacing", gridSpacing);
             gridRenderer.sharedMaterial.SetFloat("_GridDistance", buildingRange);
-            gridRenderer.sharedMaterial.SetColor("_GridColor", (buildableData.SnapToGrid ? snapToGridColor : dontSnapToGridColor));
 
             StartCoroutine(FollowMouse());
         }
@@ -95,7 +95,7 @@ public class BuildingController : Photon.MonoBehaviour
     }
 
     /// <summary>
-    /// When building is cancelled the buildable should be removed from the world
+    /// When building is cancelled or stopped the buildable should be removed from the world
     /// </summary>
     private void ExitBuildMode()
     {
@@ -109,6 +109,7 @@ public class BuildingController : Photon.MonoBehaviour
     private IEnumerator FollowMouse()
     {
         PlayerCameraController playerCameraController = PlayerNetwork.PlayerObject.GetComponent<PlayerCameraController>();
+        Transform playerTransform = PlayerNetwork.PlayerObject.transform;
         Material buildingGrid = GetComponent<Renderer>().sharedMaterial;
 
         while (buildableToBuild != null)
@@ -140,6 +141,13 @@ public class BuildingController : Photon.MonoBehaviour
                 //Update the building grid
                 transform.position = newPosition;
                 buildingGrid.SetVector("_Point", newPosition);
+
+                distanceToPlayer = Vector3.Distance(newPosition, playerTransform.position);
+
+                if (distanceToPlayer < buildingRange)
+                    gridRenderer.sharedMaterial.SetColor("_GridColor", (buildableData.SnapToGrid ? gridSnappingActiveColor : gridSnappingInactiveColor));
+                else
+                    gridRenderer.sharedMaterial.SetColor("_GridColor", gridOutOfRangeColor);
             }
             yield return null;
         }

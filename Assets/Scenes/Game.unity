@@ -1651,8 +1651,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingRange: 5
   gridSpacing: 2.5
-  snapToGridColor: {r: 0, g: 0.91724133, b: 1, a: 1}
-  dontSnapToGridColor: {r: 1, g: 0, b: 0, a: 1}
+  gridSnappingActiveColor: {r: 0, g: 0.95862055, b: 1, a: 1}
+  gridSnappingInactiveColor: {r: 0.11724138, g: 1, b: 0, a: 1}
+  gridOutOfRangeColor: {r: 1, g: 0, b: 0, a: 1}
   layerMask:
     serializedVersion: 2
     m_Bits: 256

@@ -19,4 +19,4 @@ MonoBehaviour:
   onConsumedEffects: []
   id: 200
   recoverable: 1
-  snapToGrid: 1
+  snapToGrid: 0
