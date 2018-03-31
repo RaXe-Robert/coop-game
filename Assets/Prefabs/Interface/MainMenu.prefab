@@ -1540,7 +1540,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1565437148403794
 GameObject:
   m_ObjectHideFlags: 1
@@ -4277,6 +4277,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   qualityDropDown: {fileID: 114027159866530418}
   resolutionDropDown: {fileID: 114977302044754050}
+  fullscreenToggle: {fileID: 114505179250312684}
   volumeAmount: {fileID: 114245320969663090}
 --- !u!114 &114243536264106306
 MonoBehaviour:

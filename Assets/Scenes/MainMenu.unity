@@ -3758,6 +3758,12 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &862345621 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114505179250312684, guid: cdb8c23d422cae34f8faa3f34f8df571,
+    type: 2}
+  m_PrefabInternal: {fileID: 928956461}
+  m_Script: {fileID: 2109663825, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &928956461
 Prefab:
   m_ObjectHideFlags: 0
@@ -3863,6 +3869,11 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114237810627566236, guid: cdb8c23d422cae34f8faa3f34f8df571,
+        type: 2}
+      propertyPath: fullscreenToggle
+      value: 
+      objectReference: {fileID: 862345621}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cdb8c23d422cae34f8faa3f34f8df571, type: 2}
   m_IsPrefabParent: 0
