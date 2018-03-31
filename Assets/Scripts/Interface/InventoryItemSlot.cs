@@ -12,7 +12,6 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private int index;
     protected Inventory inventory;
     protected EquipmentManager equipmentManager;
-    protected BuildingController buildingController;
 
     protected ItemBase item;
 
@@ -43,12 +42,11 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
     }
 
-    public virtual void Initialize(int index, Inventory inventory, EquipmentManager equipmentManager, BuildingController buildingController)
+    public virtual void Initialize(int index, Inventory inventory, EquipmentManager equipmentManager)
     {
         this.index = index;
         this.inventory = inventory;
         this.equipmentManager = equipmentManager;
-        this.buildingController = buildingController;
     }
 
     public void Start()
@@ -85,7 +83,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
             if (item is Buildable)
             {
-                buildingController.ActivateBuildMode(item as Buildable);
+                inventory.BuildingController?.ActivateBuildMode(item as Buildable);
             }
 
             else if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
@@ -174,9 +172,8 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-                ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, item.StackSize);
-                inventory.RemoveItem(index);
-            
+            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, item.StackSize);
+            inventory.RemoveItem(index);
         }
     }
 }

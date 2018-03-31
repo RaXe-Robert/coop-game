@@ -23,7 +23,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
 
     public string TooltipText()
     {
-        return $"";
+        return $"{buildable.Name}";
     }
 
     #endregion //IInteractable Implementation

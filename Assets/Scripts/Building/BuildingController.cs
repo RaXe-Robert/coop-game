@@ -181,10 +181,8 @@ public class BuildingController : Photon.MonoBehaviour
             Collider[] overlappingObjects = Physics.OverlapBox(buildableToBuildRenderer.bounds.center, buildableToBuildRenderer.bounds.extents);
             foreach (Collider collider in overlappingObjects)
             {
-                //Ignore the terrain layer as a collider
-                if ((1 << collider.gameObject.layer & layerMask.value) > 0)
-                    continue;
-                else
+                //If the layer of the collider object is anything but the given layerMask
+                if ((1 << collider.gameObject.layer & layerMask.value) <= 0)
                     return false;
             }
         }
