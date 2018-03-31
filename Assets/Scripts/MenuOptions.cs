@@ -80,7 +80,9 @@ public class MenuOptions : MonoBehaviour
 
     private bool CompareCurrentResolution(Resolution resolution)
     {
-        return Screen.currentResolution.Equals(resolution);
+        return resolution.width == Screen.width &&
+            resolution.height == Screen.height &&
+            resolution.refreshRate == Screen.currentResolution.refreshRate;
     }
 
     private void InitializeQualityDropDown()
