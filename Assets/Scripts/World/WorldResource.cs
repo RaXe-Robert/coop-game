@@ -5,16 +5,28 @@ using UnityEngine;
 
 public class WorldResource : Photon.MonoBehaviour, IInteractable
 {
-    new public string name;
+    public new string name;
+    public ToolType requiredToolToHarvest;
     public float interactDistance = 5f;
     [SerializeField] private GameObject spawnOnDepleted;
     [SerializeField] private HealthComponent healthComponent;
     [SerializeField] private ItemsToDropComponent itemsToDrop;
     private Animator animator;
 
-    void Start()
+    private void Start()
     {
         animator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        if (!photonView.isMine)
+            return;
+
+        if (healthComponent.IsDepleted())
+        {
+            StartCoroutine(PlayDepletedAnimation());
+        }
     }
 
     private IEnumerator PlayDepletedAnimation()
@@ -24,13 +36,8 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
             photonView.RPC("CallAnimation", PhotonTargets.All);
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
         }
-        
-        if (spawnOnDepleted != null)
-        {
-            itemsToDrop.SpawnObjectOnParent(spawnOnDepleted);
-        }
 
-        itemsToDrop.SpawnItemsOnDepleted();
+        itemsToDrop?.SpawnItemsOnDepleted();
 
         photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }
@@ -48,16 +55,11 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
             return;
 
         healthComponent.DecreaseValue(50f);
-
-        if (healthComponent.IsDepleted())
-        {
-            StartCoroutine(PlayDepletedAnimation());
-        }
     }
 
     public string TooltipText()
     {
-        return gameObject.name;
+        return $"{name} \nRequires {requiredToolToHarvest}";
     }
 
     #endregion //IInteractable Implementation

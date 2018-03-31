@@ -117,7 +117,6 @@ GameObject:
   - component: {fileID: 114304246863543792}
   - component: {fileID: 114118434449334906}
   - component: {fileID: 114780369903076048}
-  - component: {fileID: 114175295519325148}
   - component: {fileID: 135531842032238686}
   m_Layer: 0
   m_Name: Carl_Scared
@@ -488,22 +487,6 @@ MonoBehaviour:
   ShowNotificationsIfLocal: 1
   MaxValue: 100
   value: 0
---- !u!114 &114175295519325148
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1559031737579132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ee515faafad84b45bd0cdd95da334be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  name: ScaredCarl
-  interactDistance: 5
-  spawnOnDepleted: {fileID: 0}
-  healthComponent: {fileID: 114118434449334906}
-  itemsToDrop: {fileID: 114780369903076048}
 --- !u!114 &114186898373795776
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -515,6 +498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca5057371c02a646af929ddf1533631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stats: {fileID: 11400000, guid: 5fbd79f1c79aa13469ff4e0524e69184, type: 2}
 --- !u!114 &114257805978908996
 MonoBehaviour:
   m_ObjectHideFlags: 1

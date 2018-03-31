@@ -171,6 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Rock
+  requiredToolToHarvest: 1
   interactDistance: 5
   spawnOnDepleted: {fileID: 0}
   healthComponent: {fileID: 114056808189935048}

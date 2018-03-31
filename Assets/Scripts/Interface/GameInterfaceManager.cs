@@ -45,8 +45,7 @@ public class GameInterfaceManager : MonoBehaviour {
                 break;
         }
 
-        if(IsInterfaceOpen(interfaceToToggle) == false)
-            Tooltip.Instance.Hide();
+        Tooltip.Instance.Hide();
     }
 
     private bool IsInterfaceOpen(GameInterface gameInterface)

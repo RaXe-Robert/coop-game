@@ -16,7 +16,7 @@ public class EquipmentUI : MonoBehaviour {
         BuildingController buildingController = FindObjectOfType<BuildingController>();
 
         inventory = FindObjectOfType<Inventory>();
-        equipmentManager.OnItemEquippedCallBack += UpdateUI;
+        equipmentManager.OnItemChanged += UpdateUI;
 
         //Initialize all the equipment slots so they have a reference to the equipmentManager
         for (int i = 0; i < armorSlots.Length; i++)

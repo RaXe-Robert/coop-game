@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 222037358971360062}
   - component: {fileID: 114698688004580312}
   - component: {fileID: 114848369165395464}
-  - component: {fileID: 114831353185017686}
   m_Layer: 5
   m_Name: CraftingRecipe
   m_TagString: Untagged
@@ -161,7 +160,6 @@ GameObject:
   - component: {fileID: 224618589225508988}
   - component: {fileID: 222317726033927098}
   - component: {fileID: 114986774477546096}
-  - component: {fileID: 114000210785365542}
   m_Layer: 5
   m_Name: CraftingResult
   m_TagString: Untagged
@@ -327,20 +325,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114000210785365542
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1455023909029480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 2, y: -2}
-  m_UseGraphicAlpha: 1
 --- !u!114 &114039737243649934
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -479,7 +463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_EffectDistance: {x: 2, y: -2}
+  m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
 --- !u!114 &114148539128771010
 MonoBehaviour:
@@ -584,7 +568,7 @@ MonoBehaviour:
     m_Bottom: 5
   m_ChildAlignment: 2
   m_Spacing: 2
-  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 1
@@ -1046,20 +1030,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Crafting Time : {x}s'
---- !u!114 &114831353185017686
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1020228882977738}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 2, y: -2}
-  m_UseGraphicAlpha: 1
 --- !u!114 &114848369165395464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1360,7 +1330,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.2, y: 0.93333334}
   m_AnchorMax: {x: 0.8432984, y: 0.9633333}
-  m_AnchoredPosition: {x: -37.5, y: -3}
+  m_AnchoredPosition: {x: -57.30002, y: -0.0000038146973}
   m_SizeDelta: {x: -85, y: 17}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224154589442862118
@@ -1397,8 +1367,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -5, y: 5}
-  m_SizeDelta: {x: 35, y: 35}
+  m_AnchoredPosition: {x: -6.2, y: 5}
+  m_SizeDelta: {x: 37.5, y: 35}
   m_Pivot: {x: 1, y: 0}
 --- !u!224 &224325899244962686
 RectTransform:
@@ -1435,8 +1405,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -25, y: -30}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchoredPosition: {x: -30, y: -20}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 1, y: 1}
 --- !u!224 &224401386949176330
 RectTransform:
@@ -1472,7 +1442,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0.000015258789, y: 0}
-  m_SizeDelta: {x: 25, y: 25}
+  m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 1, y: 0}
 --- !u!224 &224470004549076734
 RectTransform:
@@ -1490,8 +1460,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -40, y: 5}
-  m_SizeDelta: {x: 35, y: 35}
+  m_AnchoredPosition: {x: -42.5, y: 5}
+  m_SizeDelta: {x: 37.5, y: 35}
   m_Pivot: {x: 1, y: 0}
 --- !u!224 &224486760437204514
 RectTransform:
@@ -1526,8 +1496,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 12.5, y: 2}
-  m_SizeDelta: {x: -175, y: 71.333}
+  m_AnchoredPosition: {x: -8.502499, y: 3.165}
+  m_SizeDelta: {x: -146.995, y: 59.17}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!224 &224583413430695260
 RectTransform:
@@ -1546,7 +1516,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -55, y: 40}
-  m_SizeDelta: {x: 20, y: 30}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 1, y: 0}
 --- !u!224 &224618589225508988
 RectTransform:
@@ -1566,7 +1536,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 5, y: 0}
-  m_SizeDelta: {x: 90, y: 90}
+  m_SizeDelta: {x: 55, y: 55}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!224 &224842750023513318
 RectTransform:
@@ -1629,7 +1599,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224923495209194314
 RectTransform:
@@ -1646,8 +1616,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.2, y: 0.93333334}
   m_AnchorMax: {x: 0.8432984, y: 0.9633333}
-  m_AnchoredPosition: {x: 148.91869, y: -3.0003471}
-  m_SizeDelta: {x: -157.86, y: 17}
+  m_AnchoredPosition: {x: 68.715, y: 0}
+  m_SizeDelta: {x: -137.43, y: 17}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224960492289957660
 RectTransform:
@@ -1665,7 +1635,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 25, y: 25}
+  m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 1, y: 0}
 --- !u!224 &224974152646571974
 RectTransform:
@@ -1684,5 +1654,5 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -5, y: 40}
-  m_SizeDelta: {x: 20, y: 30}
+  m_SizeDelta: {x: 25, y: 25}
   m_Pivot: {x: 1, y: 0}

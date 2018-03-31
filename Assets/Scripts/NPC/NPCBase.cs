@@ -1,22 +1,34 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCBase : Photon.MonoBehaviour {
+public class NPCBase : Photon.MonoBehaviour, IInteractable {
 
+    [SerializeField] protected BaseStatsData stats;
     public GameObject Npc { get; private set; }
-    public GameObject Opponent { get; private set; }
+    public GameObject Target { get; private set; }
     public UnityEngine.AI.NavMeshAgent Agent { get; private set; }
-    public Animator Animator { get; private set; } 
     public Vector3 Waypoint { get; private set; }
     public float NearWaypointRange { get; set; } = 4.0f; // The distance this has to be from the agent waypoint to reach it
+    private ItemsToDropComponent itemToDrop;
+
+    private HealthComponent healthComponent;
+    private float searchNewTargetCountdown = 1f;
+    private Animator animator;
     
     private void Awake()
     {
         Npc = gameObject;
         Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        Animator = GetComponent<Animator>();
-        foreach (NPCBaseFSM fsm in Animator.GetBehaviours<NPCBaseFSM>())
+        animator = GetComponent<Animator>();
+        healthComponent = GetComponent<HealthComponent>();
+        itemToDrop = GetComponent<ItemsToDropComponent>();
+
+        healthComponent.SetValue(stats.maxHealth);
+        Agent.speed = stats.movementSpeed;
+
+        foreach (NPCBaseFSM fsm in animator.GetBehaviours<NPCBaseFSM>())
         {
             fsm.NPCScript = this;
         }       
@@ -26,8 +38,12 @@ public class NPCBase : Photon.MonoBehaviour {
     {
         if (PhotonNetwork.isMasterClient)
         {
-            SetClosestOpponent();
-            UpdateDistanceToOpponent();
+            if(searchNewTargetCountdown < 0)
+            {
+                SetClosestOpponent();
+                UpdateDistanceToOpponent();
+            }
+            searchNewTargetCountdown -= Time.deltaTime;
         }
     }
 
@@ -38,22 +54,18 @@ public class NPCBase : Photon.MonoBehaviour {
     {
         PlayerNameTag[] players = FindObjectsOfType<PlayerNameTag>();
         GameObject closestOpponent = null;
+        float distance = Mathf.Infinity;
 
         for (int i = 0; i < players.Length; i++)
         {
-            if(i == 0)
+            float distanceToObject = Vector3.Distance(players[i].transform.position, transform.position);
+            if (distanceToObject < distance)
             {
-                closestOpponent = players[0].gameObject;
-            }
-            else
-            {
-                if (Vector3.Distance(players[i - 1].transform.position, transform.position) > Vector3.Distance(players[i].transform.position, transform.position))
-                {
-                    closestOpponent = players[i].gameObject;
-                }
+                closestOpponent = players[i].gameObject;
+                distance = distanceToObject;
             }
         }
-        Opponent = closestOpponent;
+        Target = closestOpponent;
     }
 
     /// <summary>
@@ -61,7 +73,7 @@ public class NPCBase : Photon.MonoBehaviour {
     /// </summary>
     public void SetFleeWaypoint()
     {
-        Vector3 heading = Npc.transform.position - Opponent.transform.position;
+        Vector3 heading = Npc.transform.position - Target.transform.position;
         Vector3 direction = heading / heading.magnitude;
         direction.y = 0f;
         Waypoint = Npc.transform.position + direction * 10;
@@ -80,6 +92,56 @@ public class NPCBase : Photon.MonoBehaviour {
     /// </summary>
     protected void UpdateDistanceToOpponent()
     {
-        Animator.SetFloat("Distance", Vector3.Distance(transform.position, Opponent.transform.position));
+        animator.SetFloat("Distance", Vector3.Distance(transform.position, Target.transform.position));
+    }
+
+    public void TakeDamage(float amount)
+    {
+        healthComponent.DecreaseValue(amount - stats.defense);
+
+        if (healthComponent.IsDepleted())
+        {
+            StartCoroutine(PlayDepletedAnimation());
+        }
+    }
+
+    public bool IsInteractable()
+    {
+        return true;
+    }
+
+    public void Interact(Vector3 invokerPosition)
+    {
+        //For now interaction is done with the TakeDamage method
+    }
+
+    public string TooltipText()
+    {
+        return gameObject.name;
+    }
+
+    protected IEnumerator PlayDepletedAnimation()
+    {
+        if (animator != null)
+        {
+            photonView.RPC("CallAnimation", PhotonTargets.All);
+            yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
+        }
+
+        itemToDrop?.SpawnItemsOnDepleted();
+
+        photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
+    }
+
+    [PunRPC]
+    protected void CallAnimation()
+    {
+        animator.SetBool("isDepleted", true);
+    }
+
+    [PunRPC]
+    protected void DestroyObject()
+    {
+        PhotonNetwork.Destroy(gameObject);
     }
 }

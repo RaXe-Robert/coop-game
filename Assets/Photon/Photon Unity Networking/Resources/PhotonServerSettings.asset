@@ -51,4 +51,10 @@ MonoBehaviour:
   - CreateNotification
   - SetParents
   - RPC_SpawnBuildable
+  - SetSeedAndGenerate
+  - SpawnResource
+  - DecreaseHealthValue
+  - DecreaseHungerValue
+  - IncreaseHealthValue
+  - IncreaseHungerValue
   DisableAutoOpenWizard: 1

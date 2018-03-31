@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(MovementSpeedComponent))]
+[RequireComponent(typeof(StatsComponent))]
 public class PlayerMovementController : Photon.MonoBehaviour
 {
     private Rigidbody rigidbodyComponent;
@@ -10,10 +10,11 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private bool interruptedPickup = false;
 
     [SerializeField] private LayerMask rotationLayerMask;
+    [SerializeField] private LayerMask waterLayerMask;
     [SerializeField] private float mouseDeadZoneFromPlayer;
 
     private PlayerCameraController cameraController = null;
-    private MovementSpeedComponent movementSpeedComponent = null;
+    private StatsComponent stats;
 
     public GameObject ItemToPickup { get; set; }
 
@@ -23,7 +24,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
-        movementSpeedComponent = GetComponent<MovementSpeedComponent>();
+        stats = GetComponent<StatsComponent>();
     }
 
     private void Start()
@@ -72,7 +73,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
         Ray ray = cameraController.CameraReference.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1000f, rotationLayerMask.value))
+        if (Physics.Raycast(ray, out hit, 1000f, rotationLayerMask.value | waterLayerMask.value))
         {
             Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
 
@@ -94,7 +95,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (movementInput != Vector3.zero)
         {
             interruptedPickup = true;
-            rigidbodyComponent.AddForce(movementInput.normalized * movementSpeedComponent.Value);
+            rigidbodyComponent.AddForce(movementInput.normalized * stats.MovementSpeed);
 
             animator.SetBool("IsRunning", true);
         }
@@ -127,6 +128,8 @@ public class PlayerMovementController : Photon.MonoBehaviour
     {
         ItemToPickup = null;
         interruptedPickup = false;
-        agent.ResetPath();
+
+        if (agent.hasPath)
+            agent.ResetPath();
     }
 }
