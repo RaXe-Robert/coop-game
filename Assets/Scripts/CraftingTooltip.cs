@@ -20,7 +20,7 @@ public class CraftingTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (item != null)
-            Tooltip.Instance.Show(item.name, craftingTime.ToString("F0"));
+            Tooltip.Instance.Show(item.name, craftingTime.ToString("F0") + "s");
     }
 
     public void OnPointerExit(PointerEventData eventData)

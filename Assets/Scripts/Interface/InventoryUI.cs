@@ -18,8 +18,10 @@ public class InventoryUI : MonoBehaviour {
         inventory = FindObjectOfType<Inventory>();
         equipmentManager = FindObjectOfType<EquipmentManager>();
         inventorySlots = new List<InventoryItemSlot>(Inventory.InventorySize + Inventory.HotbarSize);
+
         InitializeHotbar();
         InitializeInventory();
+
         inventory.OnItemChangedCallback += UpdateUI;
 	}
 

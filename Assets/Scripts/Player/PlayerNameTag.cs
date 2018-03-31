@@ -5,13 +5,14 @@ using UnityEngine;
 /// <summary>
 /// Adds a nametag at the players position
 /// </summary>
+[RequireComponent(typeof(PhotonView))]
 public class PlayerNameTag : Photon.MonoBehaviour {
 
     private PlayerCameraController cameraController;
 
     [SerializeField] Vector3 positionOffset = Vector3.zero;
-    [SerializeField] private float width = 50;
-    [SerializeField] private float height = 5;
+    [SerializeField] private float width = 50f;
+    [SerializeField] private float height = 5f;
 
     private GUIStyle guiStyle;
 
@@ -25,9 +26,16 @@ public class PlayerNameTag : Photon.MonoBehaviour {
         };
     }
 
+    private void OnEnable()
+    {
+        if (photonView.isMine)
+            enabled = false;
+    }
+
     private void Start()
     {
         cameraController = PlayerNetwork.PlayerObject?.GetComponent<PlayerCameraController>();
+        positionOffset.y = (PlayerNetwork.PlayerObject?.GetComponent<Collider>().bounds.size.y ?? 2f) * 2.5f;
     }
 
     private void OnGUI()

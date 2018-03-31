@@ -7,7 +7,6 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private Rigidbody rigidbodyComponent;
     private Animator animator;
     private UnityEngine.AI.NavMeshAgent agent;
-    public GameObject ItemToPickup { get; set; }
     private bool interruptedPickup = false;
 
     [SerializeField] private LayerMask rotationLayerMask;
@@ -16,6 +15,8 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
     private PlayerCameraController cameraController = null;
     private StatsComponent stats;
+
+    public GameObject ItemToPickup { get; set; }
 
     private void Awake()
     {
@@ -26,7 +27,6 @@ public class PlayerMovementController : Photon.MonoBehaviour
         stats = GetComponent<StatsComponent>();
     }
 
-    // Use this for initialization
     private void Start()
     {
         if (photonView.isMine)
@@ -40,7 +40,6 @@ public class PlayerMovementController : Photon.MonoBehaviour
                 Debug.LogError("Missing CameraController Component on playerPrefab.");
             }
         }
-
     }
 
     private void Update()
@@ -49,30 +48,19 @@ public class PlayerMovementController : Photon.MonoBehaviour
             return;
 
         RotatePlayer();
-
-        //If there is an item specified to pickup.
-        if(ItemToPickup)
-        {
-            //Check on interruptions
-            if (interruptedPickup)
-            {
-                InterruptMoveToItem();
-                return;
-            }
-            else
-            {
-                MoveToItem();
-            }
-        }
+        
+        if (ItemToPickup == null || interruptedPickup)
+            StopAutoWalkToItem();
+        else
+            AutoWalkToItem();
     }
-    
+
     private void FixedUpdate()
     {
         if (!photonView.isMine)
             return;
 
         MovePlayer();
-
     }
 
     /// <summary>
@@ -112,37 +100,36 @@ public class PlayerMovementController : Photon.MonoBehaviour
             animator.SetBool("IsRunning", true);
         }
         else
-        {
             animator.SetBool("IsRunning", false);
-        }
     }
-    
+
     /// <summary>
     /// When there is an item to pickup this method moves to the item and checks if it needs to interact with the item.
     /// As soon as the player is near the item it will pick up the item and reset the agent.
     /// </summary>
-    private void MoveToItem()
+    private void AutoWalkToItem()
     {
         if (!agent.hasPath)
-        {
-            agent.SetDestination(ItemToPickup.transform.position);            
-        }
-        animator.SetBool("IsRunning", true);
+            agent.SetDestination(ItemToPickup.transform.position);
+
         if (Vector3.Distance(ItemToPickup.transform.position, transform.position) < ItemToPickup.GetComponent<ItemWorldObject>().pickupDistance)
         {
             ItemToPickup.GetComponent<ItemWorldObject>().Interact(transform.position);
-            ItemToPickup = null;
-            agent.ResetPath();            
+            StopAutoWalkToItem();
         }
+        else
+            animator.SetBool("IsRunning", true);
     }
 
     /// <summary>
     /// Interrupts the agent and clears the ItemToPickup.
     /// </summary>
-    private void InterruptMoveToItem()
+    private void StopAutoWalkToItem()
     {
         ItemToPickup = null;
-        agent.ResetPath();
         interruptedPickup = false;
+
+        if (agent.hasPath)
+            agent.ResetPath();
     }
 }

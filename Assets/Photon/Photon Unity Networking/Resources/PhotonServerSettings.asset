@@ -48,10 +48,9 @@ MonoBehaviour:
   - SpawnObjectInRadius
   - SpawnObjectOnParent
   - CallAnimation
-  - SetParent
-  - SetStoneParent
-  - SetTreeParent
   - CreateNotification
+  - SetParents
+  - RPC_SpawnBuildable
   - SetSeedAndGenerate
   - SpawnResource
   - DecreaseHealthValue

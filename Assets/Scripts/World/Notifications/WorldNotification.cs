@@ -44,28 +44,18 @@ public class WorldNotification : MonoBehaviour
     {
         switch (color)
         {
-            case "cyan":
-                return Color.cyan;
-            case "green":
-                return Color.green;
-            case "red":
-                return Color.red;
-            case "yellow":
-                return Color.yellow;
-            case "blue":
-                return Color.blue;
-            case "magenta":
-                return Color.magenta;
-            case "gray":
-                return Color.gray;
-            case "white":
-                return Color.white;
-            case "grey":
-                return Color.grey;
+            case "cyan":    return Color.cyan;
+            case "green":   return Color.green;
+            case "red":     return Color.red;
+            case "yellow":  return Color.yellow;
+            case "blue":    return Color.blue;
+            case "magenta": return Color.magenta;
+            case "gray":    return Color.gray;
+            case "white":   return Color.white;
+            case "grey":    return Color.grey;
             //case "black":
             //case "clear":
-            default:
-                return Color.black;
+            default:        return Color.black;
         }
     }
 }

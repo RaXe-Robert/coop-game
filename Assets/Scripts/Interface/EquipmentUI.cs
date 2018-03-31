@@ -13,6 +13,7 @@ public class EquipmentUI : MonoBehaviour {
 
     private void Start () {
         equipmentManager = FindObjectOfType<EquipmentManager>();
+
         inventory = FindObjectOfType<Inventory>();
         equipmentManager.OnItemChanged += UpdateUI;
 

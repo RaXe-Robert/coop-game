@@ -55,8 +55,6 @@ public class PlayerCameraController : MonoBehaviour
 
             cameraReference.transform.position = targetPos;
             cameraReference.transform.LookAt(target);
-
-
         }
     }
 

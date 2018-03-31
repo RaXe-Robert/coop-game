@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 114511514481972790}
   - component: {fileID: 65952599567055490}
   m_Layer: 0
-  m_Name: fox
+  m_Name: Fox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

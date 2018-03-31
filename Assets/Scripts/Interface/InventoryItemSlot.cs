@@ -8,13 +8,15 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField] protected Image image;
     [SerializeField] private Text stackSizeText;
     [SerializeField] private Image textBackground;
-    
-    protected ItemBase item;
+
+    private int index;
     protected Inventory inventory;
     protected EquipmentManager equipmentManager;
+
+    protected ItemBase item;
+
     protected CanvasGroup canvasGroup;
     protected Transform initialParentTransform;
-    private int index;
 
     public ItemBase Item
     {
@@ -78,7 +80,13 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
+
+            if (item is Buildable)
+            {
+                inventory.BuildingController?.ActivateBuildMode(item as Buildable);
+            }
+
+            else if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
             {
                 PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
                 inventory.RemoveItem(index);
