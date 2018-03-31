@@ -22,8 +22,8 @@ public class BuildingController : Photon.MonoBehaviour
 
     // The object that is currently selected by the player to be build.
     private GameObject buildableToBuild = null;
+    private Renderer buildableToBuildRenderer = null;
     private Buildable buildableData = null;
-    private float distanceToPlayer = 0f;
 
     private Renderer gridRenderer;
 
@@ -60,12 +60,13 @@ public class BuildingController : Photon.MonoBehaviour
             buildableData = buildable;
 
             buildableToBuild = Instantiate(buildableResource, PlayerNetwork.PlayerObject.transform.position, Quaternion.identity);
-            buildableToBuild.GetComponent<MeshRenderer>().sharedMaterials = buildable.Model.GetComponent<MeshRenderer>().sharedMaterials;
-            buildableToBuild.GetComponent<MeshFilter>().sharedMesh = buildable.Model.GetComponent<MeshFilter>().sharedMesh;
             buildableToBuild.name = buildable.Name;
 
-            ReplaceMaterials();
+            buildableToBuildRenderer = buildableToBuild.GetComponent<Renderer>();
 
+            buildableToBuild.GetComponent<MeshRenderer>().sharedMaterials = GetReplacementMaterials(buildable.Model.GetComponent<MeshRenderer>().sharedMaterials);
+            buildableToBuild.GetComponent<MeshFilter>().sharedMesh = buildable.Model.GetComponent<MeshFilter>().sharedMesh;
+            
             gridRenderer.enabled = true;
             gridRenderer.sharedMaterial.SetFloat("_GridSpacing", gridSpacing);
             gridRenderer.sharedMaterial.SetFloat("_GridDistance", buildingRange);
@@ -83,7 +84,7 @@ public class BuildingController : Photon.MonoBehaviour
     /// </summary>
     private void FinishBuildMode()
     {
-        if (buildableToBuild == null || buildingRange < Vector3.Distance(PlayerNetwork.PlayerObject.transform.position, buildableToBuild.transform.position))
+        if (ConfirmBuildingConditions() == false)
             return;
 
         FindObjectOfType<Inventory>().RemoveItemById(buildableData.Id);
@@ -142,9 +143,7 @@ public class BuildingController : Photon.MonoBehaviour
                 transform.position = newPosition;
                 buildingGrid.SetVector("_Point", newPosition);
 
-                distanceToPlayer = Vector3.Distance(newPosition, playerTransform.position);
-
-                if (distanceToPlayer < buildingRange)
+                if (ConfirmBuildingConditions())
                     gridRenderer.sharedMaterial.SetColor("_GridColor", (buildableData.SnapToGrid ? gridSnappingActiveColor : gridSnappingInactiveColor));
                 else
                     gridRenderer.sharedMaterial.SetColor("_GridColor", gridOutOfRangeColor);
@@ -154,22 +153,42 @@ public class BuildingController : Photon.MonoBehaviour
     }
 
     /// <summary>
-    /// Replaces all the materials present on the <see cref="buildableToBuild"/> with the <seealso cref="buildingModeMaterial"/>
+    /// Replaces all given materials with the <see cref="buildingModeMaterial"/>
     /// </summary>
-    private void ReplaceMaterials()
+    private Material[] GetReplacementMaterials(Material[] materials)
     {
-        if (buildableToBuild == null)
-            return;
-
-        Renderer renderer = buildableToBuild.GetComponent<Renderer>();
-        Material[] materials = new Material[renderer.materials.Length];
+        Material[] replacementMaterials = new Material[materials.Length];
 
         for (int i = 0; i < materials.Length; i++)
         {
-            materials[i] = buildingModeMaterial;
+            replacementMaterials[i] = buildingModeMaterial;
         }
 
-        renderer.materials = materials;
+        return replacementMaterials;
+    }
+
+    /// <summary>
+    /// Checks if the current location of the buildableToBuild object is suitable to be build on
+    /// </summary>
+    /// <returns></returns>
+    private bool ConfirmBuildingConditions()
+    {
+        if (buildableToBuild == null || buildingRange < Vector3.Distance(PlayerNetwork.PlayerObject.transform.position, buildableToBuild.transform.position))
+            return false;
+
+        if (buildableToBuildRenderer)
+        {
+            Collider[] overlappingObjects = Physics.OverlapBox(buildableToBuildRenderer.bounds.center, buildableToBuildRenderer.bounds.extents);
+            foreach (Collider collider in overlappingObjects)
+            {
+                //Ignore the terrain layer as a collider
+                if ((1 << collider.gameObject.layer & layerMask.value) > 0)
+                    continue;
+                else
+                    return false;
+            }
+        }
+        return true;
     }
 
     [PunRPC]
