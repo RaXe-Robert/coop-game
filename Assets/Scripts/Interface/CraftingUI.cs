@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// UI for displaying the recipes that are in the crafting queue
+/// </summary>
 public class CraftingUI : MonoBehaviour
 {
     [Header("Prefabs")]
@@ -15,22 +18,22 @@ public class CraftingUI : MonoBehaviour
     private CraftingManager craftingManager;
     private Inventory inventory;
 
-    private List<GameObject> currentCrafts;
+    private List<CraftingTooltip> currentCrafts;
 
     private void Start()
     {
         inventory = FindObjectOfType<Inventory>();
         craftingManager = FindObjectOfType<CraftingManager>();
 
-        currentCrafts = new List<GameObject>();
+        currentCrafts = new List<CraftingTooltip>();
 
         craftingManager.OnCraftAddedCallback += AddToVisualCraftingQueue;
         craftingManager.OnCraftCompletedCallback += RemoveFromVisualCraftingQueue;
 
-        for (int i = 0; i < craftingManager.availableRecipes.recipes.Count; i++)
+        for (int i = 0; i < craftingManager.AvailableRecipes.recipes.Count; i++)
         {
             CraftingRecipeSlot recipeSlot = Instantiate(recipeSlotPrefab, recipeSlotParent.transform).GetComponent<CraftingRecipeSlot>();
-            recipeSlot.Initialize(craftingManager.availableRecipes.recipes[i], inventory);
+            recipeSlot.Initialize(craftingManager.AvailableRecipes.recipes[i], inventory);
         }
     }
 
@@ -38,11 +41,15 @@ public class CraftingUI : MonoBehaviour
     {
         CraftingTooltip craftingTooltip = Instantiate(craftingQueueItemPrefab, craftingQueue.transform).GetComponent<CraftingTooltip>();
         craftingTooltip.Initialize(recipe);
-        currentCrafts.Add(craftingTooltip.gameObject);
+        currentCrafts.Add(craftingTooltip);
     }
 
     private void RemoveFromVisualCraftingQueue(CraftingRecipe recipe)
     {
+        // Dont remove if there is still more of the same item in the queue
+        if (craftingManager.CraftingQueue.AmountRemaining > 0)
+            return;
+
         Destroy(currentCrafts[0].gameObject);
         currentCrafts.RemoveAt(0);
     }

@@ -1150,7 +1150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb6f70817089f7459d7c6530ae23607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  availableRecipes: {fileID: 11400000, guid: f6e6f11ee42c65045b0ad429c0983faa, type: 2}
+  AvailableRecipes: {fileID: 11400000, guid: f6e6f11ee42c65045b0ad429c0983faa, type: 2}
 --- !u!114 &114791167518695588
 MonoBehaviour:
   m_ObjectHideFlags: 1

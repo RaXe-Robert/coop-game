@@ -14,7 +14,7 @@ public class CraftingQueue
     private float craftingProgress;
     private CraftingManager craftingManager;
 
-    private int amountToCraft = 1;
+    public int AmountRemaining { get; private set; } = 1;
     
     public void AddRecipe(CraftingRecipe recipe)
     {
@@ -32,7 +32,7 @@ public class CraftingQueue
         if(currentCraft == null)
         {
             currentCraft = craftQueue.Dequeue();
-            amountToCraft = currentCraft.amountToCraft;
+            AmountRemaining = currentCraft.amountToCraft;
             craftingProgress = currentCraft.craftingTime;
         }
         else
@@ -41,10 +41,10 @@ public class CraftingQueue
             //Done with a craft.
             if(craftingProgress <= 0)
             {
-                amountToCraft--;
+                AmountRemaining--;
                 craftingManager.OnCraftCompletedCallback?.Invoke(currentCraft);
 
-                if (amountToCraft > 0)
+                if (AmountRemaining > 0)
                     craftingProgress = currentCraft.craftingTime;
                 else
                     currentCraft = null;
