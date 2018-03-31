@@ -24,10 +24,7 @@ ExportedObj/
 *.pdb
 
 # Blender generated files
-*.blend1
-*.blend2
-*.blend3
-*.blend4
+*.blend*
 
 # Unity3D generated meta files
 *.pidb.meta
