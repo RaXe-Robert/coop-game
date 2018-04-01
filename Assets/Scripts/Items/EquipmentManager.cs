@@ -48,38 +48,39 @@ public class EquipmentManager : MonoBehaviour
         inventory = FindObjectOfType<Inventory>();
     }
 
-    public void EquipTool(Tool toolToEquip)
+    public void EquipTool(Tool toolToEquip, int inventoryIndex)
     {
         if (HasToolEquipped(toolToEquip.ToolType))
         {
             var currentEquipped = GetEquippedTool(toolToEquip.ToolType);
             if (currentEquipped == toolToEquip)
                 return;
-            inventory.RemoveItemById(toolToEquip.Id);
+
+            inventory.RemoveItemAtIndex(inventoryIndex);
             equippedTools.Remove(currentEquipped);
 
             inventory.AddItemById(currentEquipped.Id, 1);
             equippedTools.Add(toolToEquip);
-            OnToolUnequippedCallback(currentEquipped);
+            OnToolUnequippedCallback?.Invoke(currentEquipped);
         }
         else
         {
             equippedTools.Add(toolToEquip);
-            inventory.RemoveItemById(toolToEquip.Id);
+            inventory.RemoveItemAtIndex(inventoryIndex);
         }
 
         OnItemChanged?.Invoke();
         OnToolEquippedCallback?.Invoke(toolToEquip);
     }
 
-    public void EquipWeapon(Weapon weaponToEquip)
+    public void EquipWeapon(Weapon weaponToEquip, int inventoryIndex)
     {
         if (HasWeaponEquipped)
         {
             var currentEquipped = equippedWeapon;
             if (currentEquipped == weaponToEquip)
                 return;
-            inventory.RemoveItemById(weaponToEquip.Id);
+            inventory.RemoveItemAtIndex(inventoryIndex);
             equippedWeapon = null;
 
             equippedWeapon = weaponToEquip;
@@ -88,7 +89,7 @@ public class EquipmentManager : MonoBehaviour
         }
         else
         {
-            inventory.RemoveItemById(weaponToEquip.Id);
+            inventory.RemoveItemAtIndex(inventoryIndex);
             equippedWeapon = weaponToEquip;
         }
 
@@ -96,7 +97,7 @@ public class EquipmentManager : MonoBehaviour
         OnWeaponEquippedCallback?.Invoke(weaponToEquip);
     }
 
-    public void EquipArmor(Armor armorToEquip)
+    public void EquipArmor(Armor armorToEquip, int inventoryIndex)
     {
         if (HasArmorEquipped(armorToEquip.ArmorType))
         {
@@ -104,7 +105,7 @@ public class EquipmentManager : MonoBehaviour
             if (currentEquipped == armorToEquip)
                 return;
             equippedArmor.Remove(currentEquipped);
-            inventory.RemoveItemById(armorToEquip.Id);
+            inventory.RemoveItemAtIndex(inventoryIndex);
 
             OnArmorUnequippedCallback?.Invoke(currentEquipped);
             inventory.AddItemById(currentEquipped.Id);
@@ -113,24 +114,24 @@ public class EquipmentManager : MonoBehaviour
         else
         {
             equippedArmor.Add(armorToEquip);
-            inventory.RemoveItemById(armorToEquip.Id);
+            inventory.RemoveItemAtIndex(inventoryIndex);
         }
 
         OnItemChanged?.Invoke();
         OnArmorEquippedCallback?.Invoke(armorToEquip);
     }
 
-    public void EquipItem(ItemBase item)
+    public void EquipItem(ItemBase item, int inventoryIndex)
     {
         if (!item.Equippable)
             return;
 
         if (item.GetType() == typeof(Armor))
-            EquipArmor(item as Armor);
+            EquipArmor(item as Armor, inventoryIndex);
         else if (item.GetType() == typeof(Weapon))
-            EquipWeapon(item as Weapon);
+            EquipWeapon(item as Weapon, inventoryIndex);
         else if (item.GetType() == typeof(Tool))
-            EquipTool(item as Tool);
+            EquipTool(item as Tool, inventoryIndex);
     }
 
     public bool HasToolEquipped(ToolType toolType)

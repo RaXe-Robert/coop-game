@@ -9,7 +9,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField] private Text stackSizeText;
     [SerializeField] private Image textBackground;
 
-    private int index;
+    protected internal int index;
     protected Inventory inventory;
     protected EquipmentManager equipmentManager;
 
@@ -78,7 +78,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (item == null)
             return;
 
-        if (eventData.button == PointerEventData.InputButton.Left)
+        if (eventData.button == PointerEventData.InputButton.Right)
         {
 
             if (item is Buildable)
@@ -89,13 +89,13 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
             else if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
             {
                 PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
-                inventory.RemoveItem(index);
+                inventory.RemoveItemAtIndex(index);
                 Tooltip.Instance.Hide();
             }
 
             else if(item.Equippable)
             {
-                equipmentManager.EquipItem(item);
+                equipmentManager.EquipItem(item, index);
                 Tooltip.Instance.Hide();
             }
         }
@@ -137,20 +137,20 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
                     return;
 
                 //We cant swap the items it they arent the same type
-                if (from.Item.GetType() == Item.GetType())
+                if (from.Item.GetType() != Item.GetType())
                     return;
 
                 //Check if our item is an Armor and see if it's the same type of armor, if so we can swap the items around.
                 if ((from.Item.GetType() == typeof(Armor) && ((Armor)from.Item).ArmorType == ((Armor)Item).ArmorType))
-                    equipmentManager.EquipArmor(Item as Armor);
+                    equipmentManager.EquipArmor(Item as Armor, index);
 
                 //Check if our item is a Tool and see if it's the same type of tool, if so we can swap the items around.
                 else if ((from.Item.GetType() == typeof(Tool) && ((Tool)from.Item).ToolType == ((Tool)Item).ToolType))
-                    equipmentManager.EquipTool(Item as Tool);
+                    equipmentManager.EquipTool(Item as Tool, index);
 
                 //Check if we both have weapons if so we can swap them around.
                 else if ((from.Item.GetType() == typeof(Weapon) && Item.GetType() == typeof(Weapon)))
-                    equipmentManager.EquipWeapon(Item as Weapon);
+                    equipmentManager.EquipWeapon(Item as Weapon, index);
             }
             else if(from.index == -1 && Item == null)
             {
@@ -173,7 +173,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (!EventSystem.current.IsPointerOverGameObject())
         {
             ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, item.StackSize);
-            inventory.RemoveItem(index);
+            inventory.RemoveItemAtIndex(index);
         }
     }
 }
