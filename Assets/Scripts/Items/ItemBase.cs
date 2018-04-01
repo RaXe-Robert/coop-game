@@ -7,31 +7,23 @@ public class ItemBase
 
     public ItemBase(ScriptableItemData itemData)
     {
-        itemName = itemData.name;
-        sprite = itemData.Sprite;
-        model = itemData.Model;
-        description = itemData.Description;
-        isConsumable = itemData.IsConsumable;
-        onConsumedEffects = itemData.OnConsumedEffects;
-        id = itemData.Id;
+        Name = itemData.name;
+        Sprite = itemData.Sprite;
+        Model = itemData.Model;
+        Description = itemData.Description;
+        IsConsumable = itemData.IsConsumable;
+        OnConsumedEffects = itemData.OnConsumedEffects;
+        Id = itemData.Id;
     }
+    
+    public string Name { get; }
+    public Sprite Sprite { get; }
+    public GameObject Model { get; }
+    public string Description { get; }
+    public bool IsConsumable { get; }
+    public List<ScriptableStatusEffectData> OnConsumedEffects { get; }
+    public int Id { get; }
 
-    private string itemName;
-    private Sprite sprite;
-    private GameObject model;
-    private int stackSize;
-    private string description;
-    private bool isConsumable;
-    private List<ScriptableStatusEffectData> onConsumedEffects;
-    private int id;
-
-    public string Name { get { return itemName; } }
-    public Sprite Sprite { get { return sprite; } }
-    public GameObject Model { get { return model; } }
-    public int StackSize { get { return stackSize; } set { stackSize = value; } }
-    public string Description { get { return description; } }
-    public bool IsConsumable { get { return isConsumable; } }
-    public List<ScriptableStatusEffectData> OnConsumedEffects { get { return onConsumedEffects; } }
-    public int Id { get { return id; } }
+    public int StackSize { get; set; }
     public bool Equippable { get { return GetType() == typeof(Armor) || GetType() == typeof(Tool) || GetType() == typeof(Weapon); } }
 }
