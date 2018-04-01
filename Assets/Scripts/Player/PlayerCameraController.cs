@@ -6,8 +6,7 @@ public class PlayerCameraController : MonoBehaviour
     private Transform target;
 
     [SerializeField] private GameObject cameraPrefab;
-    [SerializeField] private bool followOnStart;
-    [SerializeField] private float offset = 5;
+    [SerializeField] private Vector3 offset;
 
     [Header("Rotation")]
     [SerializeField] private float angle = 0;
@@ -31,12 +30,6 @@ public class PlayerCameraController : MonoBehaviour
         isFollowing = false;
     }
 
-    private void Start()
-    {
-        if (followOnStart)
-            StartFollowing();
-    }
-
     private void LateUpdate()
     {
         if (isFollowing == false)
@@ -56,9 +49,8 @@ public class PlayerCameraController : MonoBehaviour
                 else if (Input.GetAxis("Mouse ScrollWheel") < 0)
                     zoom = Mathf.Clamp(zoom + (zoomSpeed * Time.deltaTime), zoomMinimum, zoomMaximum);
             }
-
-            Vector3 cameraPos = CalculateCameraPos(angle, offset, zoom);
-            Vector3 targetPos = target.position + cameraPos;
+            
+            Vector3 targetPos = CalculateCameraPos(offset, angle, zoom);
             cameraReference.transform.position = targetPos;
             cameraReference.transform.LookAt(target);
         }
@@ -84,16 +76,13 @@ public class PlayerCameraController : MonoBehaviour
         }
     }
 
-    private Vector3 CalculateCameraPos(float angle, float offset, float zoom)
-    {
-        float x = Mathf.Cos(angle) * offset;
-        float z = Mathf.Sin(angle) * offset;
-        float y = zoom;
-        return new Vector3(x, y, z);
-    }
-
     public void StopFollowing()
     {
         isFollowing = false;
+    }
+
+    private Vector3 CalculateCameraPos(Vector3 offset, float angle, float zoom)
+    {
+        return target.position + (Quaternion.Euler(0, Angle * Mathf.Rad2Deg, 0) * offset).normalized * zoom;
     }
 }

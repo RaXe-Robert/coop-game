@@ -82,7 +82,6 @@ public class PlayerMovementController : Photon.MonoBehaviour
                 transform.LookAt(lookPos);
             }
         }
-        
     }
 
     /// <summary>
@@ -90,10 +89,11 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// </summary>
     private void MovePlayer()
     {
-        float currentCameraAngle = (cameraController.Angle * Mathf.Rad2Deg) * -1 -90;
+        Vector3 cameraForward = cameraController.CameraReference.transform.forward;
+        Vector3 cameraLeft = Quaternion.Euler(0, -90, 0) * cameraForward;
 
-        Vector3 movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0.0f, Input.GetAxisRaw("Vertical"));
-        movementInput = (Quaternion.Euler(0, currentCameraAngle, 0) * movementInput).normalized;
+        Vector3 movementInput = (cameraForward * Input.GetAxisRaw("Vertical") + cameraLeft * Input.GetAxisRaw("Horizontal")).normalized;
+        movementInput.y = 0;
 
         if (movementInput != Vector3.zero)
         {
