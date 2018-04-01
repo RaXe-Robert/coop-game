@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameInterface { Inventory, Crafting, Equipment }
+public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu }
 
 public class GameInterfaceManager : MonoBehaviour {
 
     public static GameInterfaceManager Instance { get; private set; }
 
+    [SerializeField] private GameObject escapeMenuUI;
     [SerializeField] private GameObject inventoryUI;
     [SerializeField] private GameObject craftingUI;
     [SerializeField] private GameObject equipmentUI;
@@ -24,6 +25,7 @@ public class GameInterfaceManager : MonoBehaviour {
     {
         interfaceGameObjectDictionary = new Dictionary<GameInterface, GameObject>
         {
+            {GameInterface.EscapeMenu, escapeMenuUI },
             {GameInterface.Crafting, craftingUI },
             {GameInterface.Equipment, equipmentUI },
             {GameInterface.Inventory, inventoryUI }
@@ -35,21 +37,39 @@ public class GameInterfaceManager : MonoBehaviour {
         switch (interfaceToToggle)
         {
             case GameInterface.Crafting:
-                craftingUI.SetActive(!craftingUI.activeSelf);
+                ToggleGivenDisableOthers(GameInterface.Crafting);                
                 break;
             case GameInterface.Equipment:
-                equipmentUI.SetActive(!equipmentUI.activeSelf);
+                ToggleGivenDisableOthers(GameInterface.Equipment);
                 break;
             case GameInterface.Inventory:
-                inventoryUI.SetActive(!inventoryUI.activeSelf);
+                ToggleGivenDisableOthers(GameInterface.Inventory);
+                break;
+            case GameInterface.EscapeMenu:
+                ToggleGivenDisableOthers(GameInterface.EscapeMenu);
                 break;
         }
 
         Tooltip.Instance.Hide();
     }
 
-    private bool IsInterfaceOpen(GameInterface gameInterface)
+    public bool IsInterfaceOpen(GameInterface gameInterface)
     {
         return interfaceGameObjectDictionary[gameInterface].activeSelf;
     }
+
+    private void ToggleGivenDisableOthers(GameInterface gameInterface) {
+        foreach(KeyValuePair<GameInterface, GameObject> d in interfaceGameObjectDictionary)
+        {
+            if(d.Key != gameInterface)
+            {
+                d.Value.SetActive(false);
+            }
+            else
+            {
+                d.Value.SetActive(!d.Value.activeSelf);
+            }
+        }
+    }
+
 }

@@ -3,21 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameMenuScript : MonoBehaviour {
+public class EscapeMenu : MonoBehaviour {
 
-    [SerializeField] private GameObject escapeMenu;
+    [SerializeField] private GameObject escapeMenuUI;
     
-	// Update is called once per frame
-	private void Update () {
-        if (Input.GetKeyDown("escape"))
-        {
-            escapeMenu.SetActive(!escapeMenu.GetActive());
-        }
-	}
-
-    public void ResumeGame()
+	public void ResumeGame()
     {
-        escapeMenu.SetActive(false);
+        escapeMenuUI.SetActive(false);
     }
 
     public void QuitGame()
