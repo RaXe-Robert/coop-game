@@ -48,8 +48,9 @@ public class MouseController : MonoBehaviour
 
                 if (interactable.TooltipText() != string.Empty)
                 {
+                    //This show will not dissapear when hovering from worlditem to a UI element. {BUG}
                     Tooltip.Instance.Show(interactable.TooltipText());
-                }
+                }                
             }
         }
     }
