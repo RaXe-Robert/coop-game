@@ -6,10 +6,18 @@ public class PlayerCameraController : MonoBehaviour
     private Transform target;
 
     [SerializeField] private GameObject cameraPrefab;
-    [SerializeField] private float angle = 0;
-    [SerializeField] private float offset = 5;
-    [SerializeField] private float zoom = 5;
     [SerializeField] private bool followOnStart;
+    [SerializeField] private float offset = 5;
+
+    [Header("Rotation")]
+    [SerializeField] private float angle = 0;
+    [SerializeField] private float angleRotationSpeed = 2f;
+
+    [Header("Zoom")]
+    [SerializeField] private float zoom = 5;
+    [SerializeField] private float zoomSpeed = 5f;
+    [SerializeField] private float zoomMinimum = 5f;
+    [SerializeField] private float zoomMaximum = 50f;
 
     private bool isFollowing;
     private Camera cameraReference = null;
@@ -38,12 +46,16 @@ public class PlayerCameraController : MonoBehaviour
         {
             if (Application.isFocused)
             {
+                if (Input.GetKey(KeyCode.E))
+                    angle -= angleRotationSpeed * Time.deltaTime;
+                if (Input.GetKey(KeyCode.Q))
+                    angle += angleRotationSpeed * Time.deltaTime;
+
                 if (Input.GetAxis("Mouse ScrollWheel") > 0)
-                    angle -= 0.5f;
+                    zoom = Mathf.Clamp(zoom - (zoomSpeed * Time.deltaTime), zoomMinimum, zoomMaximum);
                 else if (Input.GetAxis("Mouse ScrollWheel") < 0)
-                    angle += 0.5f;
+                    zoom = Mathf.Clamp(zoom + (zoomSpeed * Time.deltaTime), zoomMinimum, zoomMaximum);
             }
-            zoom = Mathf.Clamp(zoom, 5, 20);
 
             Vector3 cameraPos = CalculateCameraPos(angle, offset, zoom);
             Vector3 targetPos = target.position + cameraPos;

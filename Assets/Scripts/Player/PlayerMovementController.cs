@@ -90,12 +90,15 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// </summary>
     private void MovePlayer()
     {
+        float currentCameraAngle = (cameraController.Angle * Mathf.Rad2Deg) * -1 -90;
+
         Vector3 movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0.0f, Input.GetAxisRaw("Vertical"));
+        movementInput = (Quaternion.Euler(0, currentCameraAngle, 0) * movementInput).normalized;
 
         if (movementInput != Vector3.zero)
         {
             interruptedPickup = true;
-            rigidbodyComponent.AddForce(movementInput.normalized * stats.MovementSpeed);
+            rigidbodyComponent.AddForce(movementInput * stats.MovementSpeed);
 
             animator.SetBool("IsRunning", true);
         }
