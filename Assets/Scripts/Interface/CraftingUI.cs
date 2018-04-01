@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// UI for displaying the recipes that are in the crafting queue
 /// </summary>
-public class CraftingUI : MonoBehaviour
+public class CraftingUI : MonoBehaviour, IPointerEnterHandler
 {
     [Header("Prefabs")]
     [SerializeField] private GameObject craftingQueueItemPrefab;
@@ -52,6 +53,11 @@ public class CraftingUI : MonoBehaviour
 
         Destroy(currentCrafts[0].gameObject);
         currentCrafts.RemoveAt(0);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Tooltip.Instance.Hide();
     }
 }
 
