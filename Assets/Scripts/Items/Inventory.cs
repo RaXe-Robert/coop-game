@@ -150,7 +150,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="itemId">The id of the item to remove</param>
     /// <param name="amountToRemove">The amount of items to remove</param>
-    public void RemoveItemByIdFromStart(int itemId, int amountToRemove = 1)
+    public void RemoveItemByIdBackwards(int itemId, int amountToRemove = 1)
     {
         if (!CheckAmountById(itemId, amountToRemove))
         {
@@ -202,7 +202,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="itemId">The id of the item to remove</param>
     /// <param name="amountToRemove">The amount of items to remove</param>
-    public void RemoveItemByIdFromBack(int itemId, int amountToRemove = 1)
+    public void RemoveItemById(int itemId, int amountToRemove = 1)
     {
         if (!CheckAmountById(itemId, amountToRemove))
         {
@@ -306,7 +306,7 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < recipe.requiredItems.Length; i++)
         {
             var requiredItem = recipe.requiredItems[i];
-            RemoveItemByIdFromBack(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft);
+            RemoveItemById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft);
         }
 
         return true;

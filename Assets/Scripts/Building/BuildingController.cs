@@ -87,7 +87,7 @@ public class BuildingController : Photon.MonoBehaviour
         if (ConfirmBuildingConditions() == false)
             return;
 
-        FindObjectOfType<Inventory>().RemoveItemByIdFromBack(buildableData.Id);
+        FindObjectOfType<Inventory>().RemoveItemById(buildableData.Id);
 
         var photonId = PhotonNetwork.AllocateViewID();
         photonView.RPC(nameof(RPC_SpawnBuildable), PhotonTargets.AllBuffered, buildableToBuild.transform.position, photonId, buildableData.Id, buildableToBuild.transform.rotation);
