@@ -50,7 +50,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
     {
         for (int i = 0; i < craftingRecipe.requiredItems.Length; i++)
         {
-            Debug.Log(inventory.GetItemAmountById(inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)));
+            //Debug.Log(inventory.GetItemAmountById(inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)));
             requiredItems.GetChild(i).gameObject.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
         }
     }
