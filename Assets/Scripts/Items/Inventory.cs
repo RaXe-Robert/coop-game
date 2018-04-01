@@ -126,6 +126,9 @@ public class Inventory : MonoBehaviour
 
     public int GetItemAmountById(int itemId)
     {
+        if (IsInventoryEmpty())
+            return 0;
+
         int temp = 0;
         for (int i = 0; i < inventoryItems.Count; i++)
         {
@@ -137,6 +140,10 @@ public class Inventory : MonoBehaviour
             }
         }
         return temp;
+    }
+    private bool IsInventoryEmpty()
+    {
+        return inventoryItems == null;
     }
 
     public bool CheckAmountById(int itemId, int amountNeeded)

@@ -26,6 +26,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
         craftingRecipe = recipe;
         this.inventory = inventory;
+        inventory.OnItemChangedCallback += UpdateRequiredItems;
 
         //Set result
         recipeResultImage.sprite = craftingRecipe.result.item.Sprite;
@@ -41,7 +42,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
         {
             var go = Instantiate(requiredItemPrefab, requiredItems);
             go.GetComponent<Image>().sprite = craftingRecipe.requiredItems[i].item.Sprite;
-            go.GetComponentInChildren<Text>().text = $"x / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
+            go.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
         }
     }
 
@@ -49,7 +50,8 @@ public class CraftingRecipeSlot : MonoBehaviour {
     {
         for (int i = 0; i < craftingRecipe.requiredItems.Length; i++)
         {
-            requiredItems.GetChild(i).gameObject.GetComponentInChildren<Text>().text = $"x / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
+            Debug.Log(inventory.GetItemAmountById(inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)));
+            requiredItems.GetChild(i).gameObject.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
         }
     }
 
@@ -78,6 +80,11 @@ public class CraftingRecipeSlot : MonoBehaviour {
     public void OnClick_MaxCrafts()
     {
         SetAmount(inventory.GetMaxCrafts(craftingRecipe).ToString());
+    }
+
+    public void OnClick_ResetAmount()
+    {
+        SetAmount("1");
     }
 
     public void OnClick_Craft()
