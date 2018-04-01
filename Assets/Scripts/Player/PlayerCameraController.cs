@@ -6,13 +6,16 @@ public class PlayerCameraController : MonoBehaviour
     private Transform target;
 
     [SerializeField] private GameObject cameraPrefab;
-
-    [SerializeField] private Vector3 centerOffset;
+    [SerializeField] private float angle = 0;
+    [SerializeField] private float offset = 5;
+    [SerializeField] private float zoom = 5;
     [SerializeField] private bool followOnStart;
 
     private bool isFollowing;
     private Camera cameraReference = null;
-    public Camera CameraReference { get { return this.cameraReference; } }
+    public Camera CameraReference => cameraReference;
+
+    public float Angle => angle;
 
     private void Awake()
     {
@@ -23,9 +26,7 @@ public class PlayerCameraController : MonoBehaviour
     private void Start()
     {
         if (followOnStart)
-        {
             StartFollowing();
-        }
     }
 
     private void LateUpdate()
@@ -35,24 +36,17 @@ public class PlayerCameraController : MonoBehaviour
 
         if (target)
         {
-            Vector3 targetPos = new Vector3(target.position.x + centerOffset.x, target.position.y + centerOffset.y, target.position.z + centerOffset.z);
-
-            //Debug feature for animations
-            if ( Input.GetAxis("Mouse ScrollWheel") > 0)
+            if (Application.isFocused)
             {
-                if (centerOffset.y > 2 && centerOffset.y < 11)
-                {
-                    centerOffset.y -= 0.5f;
-                }
+                if (Input.GetAxis("Mouse ScrollWheel") > 0)
+                    angle -= 0.5f;
+                else if (Input.GetAxis("Mouse ScrollWheel") < 0)
+                    angle += 0.5f;
             }
-            else if (Input.GetAxis("Mouse ScrollWheel") < 0)
-            {
-                if (centerOffset.y > 1 && centerOffset.y < 10)
-                {
-                    centerOffset.y += 0.5f;
-                }
-            }
+            zoom = Mathf.Clamp(zoom, 5, 20);
 
+            Vector3 cameraPos = CalculateCameraPos(angle, offset, zoom);
+            Vector3 targetPos = target.position + cameraPos;
             cameraReference.transform.position = targetPos;
             cameraReference.transform.LookAt(target);
         }
@@ -76,6 +70,14 @@ public class PlayerCameraController : MonoBehaviour
             else
                 Debug.LogError("[CameraController] No Camera prefab assigned");
         }
+    }
+
+    private Vector3 CalculateCameraPos(float angle, float offset, float zoom)
+    {
+        float x = Mathf.Cos(angle) * offset;
+        float z = Mathf.Sin(angle) * offset;
+        float y = zoom;
+        return new Vector3(x, y, z);
     }
 
     public void StopFollowing()
