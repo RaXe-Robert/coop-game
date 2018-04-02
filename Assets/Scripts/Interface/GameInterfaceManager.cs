@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu }
 
-public class GameInterfaceManager : MonoBehaviour {
+public class GameInterfaceManager : MonoBehaviour
+{
 
     public static GameInterfaceManager Instance { get; private set; }
 
@@ -37,7 +38,7 @@ public class GameInterfaceManager : MonoBehaviour {
         switch (interfaceToToggle)
         {
             case GameInterface.Crafting:
-                ToggleGivenDisableOthers(GameInterface.Crafting);                
+                ToggleGivenDisableOthers(GameInterface.Crafting);
                 break;
             case GameInterface.Equipment:
                 ToggleGivenDisableOthers(GameInterface.Equipment);
@@ -46,7 +47,10 @@ public class GameInterfaceManager : MonoBehaviour {
                 ToggleGivenDisableOthers(GameInterface.Inventory);
                 break;
             case GameInterface.EscapeMenu:
-                ToggleGivenDisableOthers(GameInterface.EscapeMenu);
+                if (IsAnyInterfaceOpen())
+                    CloseAllInterfaces();
+                else
+                    ToggleGivenDisableOthers(GameInterface.EscapeMenu);
                 break;
         }
 
@@ -58,10 +62,30 @@ public class GameInterfaceManager : MonoBehaviour {
         return interfaceGameObjectDictionary[gameInterface].activeSelf;
     }
 
-    private void ToggleGivenDisableOthers(GameInterface gameInterface) {
-        foreach(KeyValuePair<GameInterface, GameObject> d in interfaceGameObjectDictionary)
+    public bool IsAnyInterfaceOpen()
+    {
+        foreach (var panel in interfaceGameObjectDictionary)
         {
-            if(d.Key != gameInterface)
+            if (panel.Value.activeSelf)
+                return true;
+        }
+        return false;
+    }
+
+    private void CloseAllInterfaces()
+    {
+        foreach (var panel in interfaceGameObjectDictionary)
+        {
+            if (panel.Value.activeSelf)
+                panel.Value.SetActive(false);
+        }
+    }
+
+    private void ToggleGivenDisableOthers(GameInterface gameInterface)
+    {
+        foreach (KeyValuePair<GameInterface, GameObject> d in interfaceGameObjectDictionary)
+        {
+            if (d.Key != gameInterface)
             {
                 d.Value.SetActive(false);
             }
@@ -71,5 +95,4 @@ public class GameInterfaceManager : MonoBehaviour {
             }
         }
     }
-
 }
