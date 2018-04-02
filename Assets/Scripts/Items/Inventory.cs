@@ -36,11 +36,13 @@ public class Inventory : MonoBehaviour
         if (!photonView.isMine)
             return;
 
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.R))
         {
             AddItemById(stick.Id, 10);
             AddItemById(diamond.Id, 10);
         }
+#endif
     }
 
     private void AddNewItemStackById(int itemId, int stackSize)

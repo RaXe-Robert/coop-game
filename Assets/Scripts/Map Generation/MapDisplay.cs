@@ -56,6 +56,7 @@ public class MapDisplay : MonoBehaviour
 
                 plane.transform.localScale = new Vector3(10, 10, 10);
                 plane.GetComponent<Renderer>().material.color = tileMap[x, y].Color;
+                plane.GetComponent<Renderer>().material.SetFloat("_Glossiness", 0f);
                 plane.name = $"Plane {x} {y}";
                 SetMobs(plane, tileMap[x, y].Type);
 
