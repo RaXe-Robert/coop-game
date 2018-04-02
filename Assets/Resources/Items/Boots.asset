@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Boots
   sprite: {fileID: 21300000, guid: 1a186a584a31f824f9cbc0d2d0b5c1f0, type: 3}
-  model: {fileID: 100000, guid: 74aa4a8cb947b0644b7f6594a9691e18, type: 3}
+  model: {fileID: 100000, guid: b6fe1de474d3ee7438e5e351cb9c1904, type: 3}
   description: Some Boots
   isConsumable: 0
   onConsumedEffects: []
