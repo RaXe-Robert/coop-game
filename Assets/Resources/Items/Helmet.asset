@@ -9,12 +9,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d11520a5ae26ca4f93acf2ea1753e64, type: 3}
-  m_Name: Black Helmet
+  m_Name: Helmet
   m_EditorClassIdentifier: 
-  itemName: Black Helmet
+  itemName: Helmet
   sprite: {fileID: 21300000, guid: 0ea874f431d5edf43adf3561b587c67a, type: 3}
   model: {fileID: 100000, guid: 0c636770a08d26e4ab7ca57ffe776b5c, type: 3}
-  description: Black helmet
+  description: A Helmet
   isConsumable: 0
   onConsumedEffects: []
   id: 98
