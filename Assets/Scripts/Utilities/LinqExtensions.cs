@@ -43,5 +43,19 @@ namespace Assets.Scripts.Utilities
             }
             return null;
         }
+
+        /// <summary>
+        /// Returns a random item from a list
+        /// </summary>
+        public static T PickRandom<T>(this List<T> list, Random random = null)
+        {
+            random = random ?? new Random();
+
+            if (list.Count == 0)
+                throw new Exception("List is empty");
+
+            var index = random.Next(0, list.Count -1);
+            return list.At(index);
+        }
     }
 }
