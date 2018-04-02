@@ -6,14 +6,13 @@ using Assets.Scripts.Utilities;
 public class MobSpawner : Photon.MonoBehaviour
 {
     public GameObject parent;
-    public GameObject mobRoot;
     public float spawnRate = 60f;
     public int maxMobs = 7;
     public List<GameObject> mobs;
 
+    private int currentMobs;
     private float tileExtent;
 
-    // Use this for initialization
     public void StartSpawner()
     {
         if (PhotonNetwork.isMasterClient && mobs.Count > 0)
@@ -27,8 +26,7 @@ public class MobSpawner : Photon.MonoBehaviour
     {
         while(true)
         {
-            Debug.Log(mobRoot.transform.childCount);
-            if (mobRoot.transform.childCount >= maxMobs)
+            if (currentMobs >= maxMobs)
             {
                 yield return new WaitForSeconds(spawnRate);
                 continue;
@@ -43,18 +41,18 @@ public class MobSpawner : Photon.MonoBehaviour
             var instantiated = PhotonNetwork.Instantiate(mob.name,
                     parent.transform.position + localPosition,
                     rotation, 0, null);
-            instantiated.transform.SetParent(mobRoot.transform);
             instantiatedObjects.Add(instantiated.GetPhotonView().instantiationId);
-            
-            photonView.RPC("SetParents", PhotonTargets.AllBufferedViaServer, instantiatedObjects.ToArray());
+
+            instantiated.GetComponent<NPCBase>().OnNPCKilledCallback += ReduceCurrentMobs;
+
+            currentMobs++;
+
             yield return new WaitForSeconds(spawnRate);
         }
     }
 
-    [PunRPC]
-    private void SetParents(int[] ids)
+    private void ReduceCurrentMobs()
     {
-        foreach (var id in ids)
-            PhotonView.Find(id)?.transform?.SetParent(mobRoot.transform);
+        currentMobs--;
     }
 }
