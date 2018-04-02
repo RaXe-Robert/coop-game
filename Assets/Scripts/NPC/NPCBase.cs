@@ -16,6 +16,9 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable {
     private HealthComponent healthComponent;
     private float searchNewTargetCountdown = 1f;
     private Animator animator;
+
+    public delegate void OnNPCKilled();
+    public OnNPCKilled OnNPCKilledCallback;
     
     private void Awake()
     {
@@ -142,6 +145,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable {
     [PunRPC]
     protected void DestroyObject()
     {
+        OnNPCKilledCallback?.Invoke();
         PhotonNetwork.Destroy(gameObject);
     }
 }

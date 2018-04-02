@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Utilities;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,10 +14,15 @@ public class MapDisplay : MonoBehaviour
 {
     public int tileSize = 10;
 
-    public GameObject planePrefab;
     public GameObject root;
+    public GameObject planePrefab;
     public GameObject treePrefab;
     public GameObject rockPrefab;
+
+    public GameObject carl;
+    public GameObject carlScared;
+    public GameObject fox;
+    
     private NavMeshSurface navmesh;
     private List<GameObject> spawnedPlanes;
 
@@ -50,7 +56,10 @@ public class MapDisplay : MonoBehaviour
 
                 plane.transform.localScale = new Vector3(10, 10, 10);
                 plane.GetComponent<Renderer>().material.color = tileMap[x, y].Color;
+                plane.GetComponent<Renderer>().material.SetFloat("_Glossiness", 0f);
                 plane.name = $"Plane {x} {y}";
+                SetMobs(plane, tileMap[x, y].Type);
+
                 spawnedPlanes.Add(plane);
 
                 //If it's an Ocean tile we set the layer to be 4(Water)
@@ -70,6 +79,26 @@ public class MapDisplay : MonoBehaviour
             }
         }
         navmesh.BuildNavMesh();
+    }
+
+    public void SetMobs(GameObject plane, MapTileType type)
+    {
+        var mobSpawner = plane.GetComponent<MobSpawner>();
+        switch(type)
+        {
+            case MapTileType.Forest:
+                mobSpawner.mobs.Add(fox);
+                break;
+
+            case MapTileType.Desert:
+                mobSpawner.mobs.Add(carl);
+                break;
+
+            case MapTileType.Grassland:
+                mobSpawner.mobs.Add(carlScared);
+                break;
+        }
+        mobSpawner.StartSpawner();
     }
 
     /// <summary>
@@ -107,20 +136,53 @@ public class MapDisplay : MonoBehaviour
             return;
 
         var amount = random.Next(spawnRateMin, spawnRateMax);
+        int extent = (int)tileGo.GetComponent<Renderer>().bounds.extents.x;
         for (int i = 0; i < amount; ++i)
         {
             //Pick a resource
-            var prefab = PickRandom(resources, random);
+            var prefab = resources.PickRandom(random);
 
             //Randomize the rotation, scale and location
             var rotation = new Vector3(0, random.Next(0, 360), 0);
             var scale = 1 + (float)(random.NextDouble() * 3);
 
-            int extent = (int)tileGo.GetComponent<Renderer>().bounds.extents.x;
             Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0, random.Next(-extent, extent));
 
             GameObject resource = PhotonNetwork.InstantiateSceneObject(prefab.name, tileGo.transform.position, Quaternion.Euler(rotation), 0, null);
             GetComponent<PhotonView>().RPC("SpawnResource", PhotonTargets.AllBuffered, tileGo.name, resource.GetPhotonView().instantiationId, scale, position);
+        }
+
+        //Spawn item resources to gather before creating tools.
+        switch (mapTile.Type)
+        {
+            case MapTileType.Forest:
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
+                    ItemFactory.CreateWorldObject(position, 1);
+                }
+                break;
+
+            case MapTileType.RockyLand:
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
+                    ItemFactory.CreateWorldObject(position, 0);
+                }
+                break;
+
+            case MapTileType.Grassland:
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
+                    ItemFactory.CreateWorldObject(position, 1);
+                }
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
+                    ItemFactory.CreateWorldObject(position, 0);
+                }
+                break;
         }
     }
 
@@ -132,17 +194,6 @@ public class MapDisplay : MonoBehaviour
         var newResource = PhotonView.Find(resourcePhotonId).gameObject;
         newResource.transform.SetParent(plane.transform);
         newResource.transform.position = position;
-    }
-
-    /// <summary>
-    /// Picks a random resource from the given list
-    /// </summary>
-    /// <param name="items"></param>
-    /// <returns></returns>
-    private GameObject PickRandom(List<GameObject> items, System.Random random)
-    {
-        var index = random.Next(0, items.Count);
-        return items[index];
     }
 
     /// <summary>
