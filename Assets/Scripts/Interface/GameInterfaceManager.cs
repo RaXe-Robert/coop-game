@@ -83,15 +83,15 @@ public class GameInterfaceManager : MonoBehaviour
 
     private void ToggleGivenDisableOthers(GameInterface gameInterface)
     {
-        foreach (KeyValuePair<GameInterface, GameObject> d in interfaceGameObjectDictionary)
+        foreach (var panel in interfaceGameObjectDictionary)
         {
-            if (d.Key != gameInterface)
+            if (panel.Key != gameInterface)
             {
-                d.Value.SetActive(false);
+                panel.Value.SetActive(false);
             }
             else
             {
-                d.Value.SetActive(!d.Value.activeSelf);
+                panel.Value.SetActive(!panel.Value.activeSelf);
             }
         }
     }
