@@ -36,7 +36,7 @@ public class Inventory : MonoBehaviour
         if (!photonView.isMine)
             return;
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             AddItemById(stick.Id, 10);
             AddItemById(diamond.Id, 10);

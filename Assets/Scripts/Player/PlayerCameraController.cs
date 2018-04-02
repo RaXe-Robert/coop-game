@@ -48,6 +48,9 @@ public class PlayerCameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (isFollowing == false)
+            return;
+
         cameraReference.transform.position = CalculateCameraPos();
         cameraReference.transform.LookAt(target);
     }
