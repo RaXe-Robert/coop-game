@@ -9,11 +9,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
-  m_Name: Diamond
+  m_Name: Pebble
   m_EditorClassIdentifier: 
   itemName: Pebble
-  sprite: {fileID: 21300000, guid: 1d5d2ef0f1b609e40a77017b5670ee63, type: 3}
+  sprite: {fileID: 21300000, guid: 8a36b8271bed82245b04bc461fe9219e, type: 3}
   model: {fileID: 100000, guid: 0c636770a08d26e4ab7ca57ffe776b5c, type: 3}
-  description: Pebble diamond
+  description: Pebble
+  isConsumable: 0
+  onConsumedEffects: []
   id: 0
-  amount: 0
