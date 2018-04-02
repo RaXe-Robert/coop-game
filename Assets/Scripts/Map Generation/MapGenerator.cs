@@ -153,6 +153,7 @@ public class MapGenerator : Photon.MonoBehaviour
 
         MapDisplay display = FindObjectOfType<MapDisplay>();
         display.DrawMap(tiles, seed);
+        
     }
 
     /// <summary>

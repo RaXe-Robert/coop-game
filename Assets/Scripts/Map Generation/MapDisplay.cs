@@ -135,6 +135,7 @@ public class MapDisplay : MonoBehaviour
             return;
 
         var amount = random.Next(spawnRateMin, spawnRateMax);
+        int extent = (int)tileGo.GetComponent<Renderer>().bounds.extents.x;
         for (int i = 0; i < amount; ++i)
         {
             //Pick a resource
@@ -144,11 +145,43 @@ public class MapDisplay : MonoBehaviour
             var rotation = new Vector3(0, random.Next(0, 360), 0);
             var scale = 1 + (float)(random.NextDouble() * 3);
 
-            int extent = (int)tileGo.GetComponent<Renderer>().bounds.extents.x;
             Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0, random.Next(-extent, extent));
 
             GameObject resource = PhotonNetwork.InstantiateSceneObject(prefab.name, tileGo.transform.position, Quaternion.Euler(rotation), 0, null);
             GetComponent<PhotonView>().RPC("SpawnResource", PhotonTargets.AllBuffered, tileGo.name, resource.GetPhotonView().instantiationId, scale, position);
+        }
+
+        //Spawn item resources to gather before creating tools.
+        switch (mapTile.Type)
+        {
+            case MapTileType.Forest:
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
+                    ItemFactory.CreateWorldObject(position, 1);
+                }
+                break;
+
+            case MapTileType.RockyLand:
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
+                    ItemFactory.CreateWorldObject(position, 0);
+                }
+                break;
+
+            case MapTileType.Grassland:
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
+                    ItemFactory.CreateWorldObject(position, 1);
+                }
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
+                    ItemFactory.CreateWorldObject(position, 0);
+                }
+                break;
         }
     }
 

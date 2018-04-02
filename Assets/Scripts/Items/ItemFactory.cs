@@ -9,11 +9,11 @@ public class ItemFactory : MonoBehaviour {
     private static PhotonView photonView;
     public ItemBase test;
 
-    private void Start()
+    private void Awake()
     {
         photonView = GetComponent<PhotonView>();
 
-        itemLookUpTable = Resources.LoadAll<ScriptableItemData>("Items");
+        itemLookUpTable = Resources.LoadAll<ScriptableItemData>("Items");        
     }
 
     public static ItemBase CreateNewItem(int itemId, int stackSize = 1)
