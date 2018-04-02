@@ -89,7 +89,15 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
             else if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
             {
                 PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
-                inventory.RemoveItemAtIndex(index);
+
+                if (item.StackSize > 1)
+                {
+                    item.StackSize--;
+                    inventory.OnItemChangedCallback?.Invoke();
+                }
+                else
+                    inventory.RemoveItemAtIndex(index);
+
                 Tooltip.Instance.Hide();
             }
 

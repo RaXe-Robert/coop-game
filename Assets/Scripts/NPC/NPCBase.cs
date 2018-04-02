@@ -3,8 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCBase : Photon.MonoBehaviour, IInteractable {
-
+public class NPCBase : Photon.MonoBehaviour, IInteractable
+{
+    [SerializeField] private string npcName;
     [SerializeField] protected BaseStatsData stats;
     public GameObject Npc { get; private set; }
     public GameObject Target { get; private set; }
@@ -120,7 +121,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable {
 
     public string TooltipText()
     {
-        return gameObject.name;
+        return npcName;
     }
 
     protected IEnumerator PlayDepletedAnimation()
