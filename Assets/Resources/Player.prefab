@@ -985,8 +985,8 @@ MonoBehaviour:
   offset: {x: 0, y: 12, z: 10}
   angle: 0
   angleRotationSpeed: 2
-  zoom: 5
-  zoomSpeed: 5
+  zoom: 15
+  zoomSpeed: 10
   zoomMinimum: 5
   zoomMaximum: 50
 --- !u!114 &114402216659252926

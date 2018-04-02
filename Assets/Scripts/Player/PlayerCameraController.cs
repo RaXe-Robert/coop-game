@@ -24,36 +24,35 @@ public class PlayerCameraController : MonoBehaviour
 
     public float Angle => angle;
 
+    private float smoothTime = 0.1f;
+    private Vector3 velocity = Vector3.zero;
+
     private void Awake()
     {
         target = gameObject.transform;
         isFollowing = false;
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         if (isFollowing == false)
             return;
 
-        if (target)
+        if (target && Application.isFocused)
         {
-            if (Application.isFocused)
-            {
-                if (Input.GetKey(KeyCode.E))
-                    angle -= angleRotationSpeed * Time.deltaTime;
-                if (Input.GetKey(KeyCode.Q))
-                    angle += angleRotationSpeed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.Q))
+                angle -= angleRotationSpeed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.E))
+                angle += angleRotationSpeed * Time.deltaTime;
 
-                if (Input.GetAxis("Mouse ScrollWheel") > 0)
-                    zoom = Mathf.Clamp(zoom - (zoomSpeed * Time.deltaTime), zoomMinimum, zoomMaximum);
-                else if (Input.GetAxis("Mouse ScrollWheel") < 0)
-                    zoom = Mathf.Clamp(zoom + (zoomSpeed * Time.deltaTime), zoomMinimum, zoomMaximum);
-            }
-            
-            Vector3 targetPos = CalculateCameraPos(offset, angle, zoom);
-            cameraReference.transform.position = targetPos;
-            cameraReference.transform.LookAt(target);
+            zoom = Mathf.Clamp(zoom - (Input.GetAxis("Mouse ScrollWheel") * zoomSpeed), zoomMinimum, zoomMaximum);
         }
+    }
+
+    private void LateUpdate()
+    {
+        cameraReference.transform.position = CalculateCameraPos();
+        cameraReference.transform.LookAt(target);
     }
 
     public void StartFollowing()
@@ -81,7 +80,7 @@ public class PlayerCameraController : MonoBehaviour
         isFollowing = false;
     }
 
-    private Vector3 CalculateCameraPos(Vector3 offset, float angle, float zoom)
+    private Vector3 CalculateCameraPos()
     {
         return target.position + (Quaternion.Euler(0, Angle * Mathf.Rad2Deg, 0) * offset).normalized * zoom;
     }

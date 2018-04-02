@@ -89,10 +89,10 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// </summary>
     private void MovePlayer()
     {
-        Vector3 cameraForward = cameraController.CameraReference.transform.forward;
-        Vector3 cameraLeft = Quaternion.Euler(0, -90, 0) * cameraForward;
+        Vector3 cameraDirectionForward = cameraController.CameraReference.transform.forward;
+        Vector3 cameraDirectionRight = Quaternion.Euler(0, 90, 0) * cameraDirectionForward;
 
-        Vector3 movementInput = (cameraForward * Input.GetAxisRaw("Vertical") + cameraLeft * Input.GetAxisRaw("Horizontal")).normalized;
+        Vector3 movementInput = (cameraDirectionForward * Input.GetAxisRaw("Vertical") + cameraDirectionRight * Input.GetAxisRaw("Horizontal")).normalized;
         movementInput.y = 0;
 
         if (movementInput != Vector3.zero)
