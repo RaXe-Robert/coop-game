@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Name: Diamond
   m_EditorClassIdentifier: 
   itemName: Pebble
-  sprite: {fileID: 21300000, guid: 1d5d2ef0f1b609e40a77017b5670ee63, type: 3}
+  sprite: {fileID: 21300000, guid: 596fa2bb3f7484346a0cffeae2532bac, type: 3}
   model: {fileID: 100000, guid: 0c636770a08d26e4ab7ca57ffe776b5c, type: 3}
   description: Pebble diamond
+  isConsumable: 0
+  onConsumedEffects: []
   id: 0
-  amount: 0
