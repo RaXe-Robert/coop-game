@@ -91,15 +91,15 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private void MovePlayer()
     {
         Vector3 cameraDirectionForward = cameraController.CameraReference.transform.forward;
+        cameraDirectionForward.y = 0;
         Vector3 cameraDirectionRight = Quaternion.Euler(0, 90, 0) * cameraDirectionForward;
 
-        Vector3 movementInput = (cameraDirectionForward * Input.GetAxisRaw("Vertical") + cameraDirectionRight * Input.GetAxisRaw("Horizontal")).normalized;
-        movementInput.y = 0;
+        Vector3 movementInput = (cameraDirectionForward * Input.GetAxisRaw("Vertical") + cameraDirectionRight * Input.GetAxisRaw("Horizontal"));
 
         if (movementInput != Vector3.zero)
         {
             interruptedPickup = true;
-            rigidbodyComponent.AddForce(movementInput * stats.MovementSpeed);
+            rigidbodyComponent.AddForce(movementInput.normalized * stats.MovementSpeed);
 
             animator.SetBool("IsRunning", true);
         }
