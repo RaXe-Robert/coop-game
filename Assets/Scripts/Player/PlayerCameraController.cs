@@ -24,9 +24,6 @@ public class PlayerCameraController : MonoBehaviour
 
     public float Angle => angle;
 
-    private float smoothTime = 0.1f;
-    private Vector3 velocity = Vector3.zero;
-
     private void Awake()
     {
         target = gameObject.transform;
@@ -65,7 +62,7 @@ public class PlayerCameraController : MonoBehaviour
         {
             if (cameraPrefab == true)
             {
-                GameObject newCamera = Instantiate(cameraPrefab, transform.position, Quaternion.identity, gameObject.transform) as GameObject;
+                GameObject newCamera = Instantiate(cameraPrefab, transform.position, Quaternion.identity, transform) as GameObject;
                 cameraReference = newCamera.GetComponent<Camera>();
 
                 isFollowing = true;

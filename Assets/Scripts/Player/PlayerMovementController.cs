@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(PlayerCameraController))]
 [RequireComponent(typeof(StatsComponent))]
 public class PlayerMovementController : Photon.MonoBehaviour
 {
