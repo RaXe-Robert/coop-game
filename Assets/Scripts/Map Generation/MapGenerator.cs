@@ -89,12 +89,14 @@ public class MapGenerator : Photon.MonoBehaviour
     {
         if(PhotonNetwork.isMasterClient)
         {
-            var seed = (new System.Random()).Next(0, int.MaxValue);
+            //TODO: Restore after demo
+            //var seed = (new System.Random()).Next(0, int.MaxValue);
+            var seed = 980594875;
             photonView.RPC("SetSeedAndGenerate", PhotonTargets.AllBuffered, seed);
         }
         else if (generateOnStart)
         {
-            seed = RandomSeed;
+            seed = 980594875;
             GenerateMap();
         }
     }
