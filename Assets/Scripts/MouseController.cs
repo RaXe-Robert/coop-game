@@ -40,7 +40,7 @@ public class MouseController : MonoBehaviour
                 {
                     if (interactable.GetType() == typeof(WorldResource))
                         InteractWithWorldResource(interactable, hit.transform);
-                    else if (interactable.GetType() == typeof(EnemyNPC))
+                    else if (interactable.GetType() == typeof(EnemyNPC) || interactable.GetType() == typeof(FriendlyNPC))
                         AttackEnemy(interactable, hit.transform);
                     else
                         interactable.Interact(gameObject.transform.position);
