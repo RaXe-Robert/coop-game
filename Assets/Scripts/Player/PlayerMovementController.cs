@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(PlayerCameraController))]
 [RequireComponent(typeof(StatsComponent))]
 public class PlayerMovementController : Photon.MonoBehaviour
 {
@@ -82,7 +83,6 @@ public class PlayerMovementController : Photon.MonoBehaviour
                 transform.LookAt(lookPos);
             }
         }
-        
     }
 
     /// <summary>
@@ -90,7 +90,11 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// </summary>
     private void MovePlayer()
     {
-        Vector3 movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0.0f, Input.GetAxisRaw("Vertical"));
+        Vector3 cameraDirectionForward = cameraController.CameraReference.transform.forward;
+        cameraDirectionForward.y = 0;
+        Vector3 cameraDirectionRight = Quaternion.Euler(0, 90, 0) * cameraDirectionForward;
+
+        Vector3 movementInput = (cameraDirectionForward * Input.GetAxisRaw("Vertical") + cameraDirectionRight * Input.GetAxisRaw("Horizontal"));
 
         if (movementInput != Vector3.zero)
         {

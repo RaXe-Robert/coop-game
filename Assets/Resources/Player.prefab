@@ -982,8 +982,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraPrefab: {fileID: 1984004229981384, guid: b228fb14d03c3634398f7ed53fe7eca0,
     type: 2}
-  centerOffset: {x: 0, y: 9, z: -7}
-  followOnStart: 0
+  offset: {x: 0, y: 12, z: 10}
+  angle: 0
+  angleRotationSpeed: 2
+  zoom: 15
+  zoomSpeed: 10
+  zoomMinimum: 5
+  zoomMaximum: 50
 --- !u!114 &114402216659252926
 MonoBehaviour:
   m_ObjectHideFlags: 1
