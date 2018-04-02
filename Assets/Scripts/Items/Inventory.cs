@@ -107,7 +107,7 @@ public class Inventory : MonoBehaviour
     /// Removes an Item from the inventory
     /// </summary>
     /// <param name="item"></param>
-    public void RemoveItem(int index)
+    public void RemoveItemAtIndex(int index)
     {
         if (index < inventoryItems.Count && inventoryItems[index] != null)
         {
@@ -126,6 +126,9 @@ public class Inventory : MonoBehaviour
 
     public int GetItemAmountById(int itemId)
     {
+        if (IsInventoryEmpty())
+            return 0;
+
         int temp = 0;
         for (int i = 0; i < inventoryItems.Count; i++)
         {
@@ -138,6 +141,10 @@ public class Inventory : MonoBehaviour
         }
         return temp;
     }
+    private bool IsInventoryEmpty()
+    {
+        return inventoryItems == null;
+    }
 
     public bool CheckAmountById(int itemId, int amountNeeded)
     {
@@ -145,12 +152,12 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Removes items based on the item id and the amount of items to remove.
+    /// Removes items based on the item id and the amount of items to remove. starting at the back of the inventory
     /// THE ITEMS GET DESTROYED!!
     /// </summary>
     /// <param name="itemId">The id of the item to remove</param>
     /// <param name="amountToRemove">The amount of items to remove</param>
-    public void RemoveItemById(int itemId, int amountToRemove = 1)
+    public void RemoveItemByIdBackwards(int itemId, int amountToRemove = 1)
     {
         if (!CheckAmountById(itemId, amountToRemove))
         {
@@ -175,7 +182,7 @@ public class Inventory : MonoBehaviour
                     if (amountToRemove >= currentStack.StackSize)
                     {
                         amountToRemove -= currentStack.StackSize;
-                        RemoveItem(i);
+                        RemoveItemAtIndex(i);
                     }
                     else
                     {
@@ -189,7 +196,59 @@ public class Inventory : MonoBehaviour
                 else
                 {
                     amountToRemove--;
-                    RemoveItem(i);
+                    RemoveItemAtIndex(i);
+                    OnItemChangedCallback?.Invoke();
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Removes items based on the item id and the amount of items to remove. starting at the start of the inventory
+    /// THE ITEMS GET DESTROYED!!
+    /// </summary>
+    /// <param name="itemId">The id of the item to remove</param>
+    /// <param name="amountToRemove">The amount of items to remove</param>
+    public void RemoveItemById(int itemId, int amountToRemove = 1)
+    {
+        if (!CheckAmountById(itemId, amountToRemove))
+        {
+            Debug.LogError($"Inventory -- Trying to remove {amountToRemove} x item {itemId}, but we dont have that many");
+            return;
+        }
+
+        //Remove items from inventory, start at the back of the inventory.
+        //TODO: Only check the items with the required ID have to refactored removeItems and other things aswell
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            //If all the items are removed we can stop
+            if (amountToRemove == 0)
+                return;
+
+            if (inventoryItems[i]?.Id == itemId)
+            {
+                //Check if the item is a resource if so, we can take items of the stacksize.
+                if (inventoryItems[i].GetType() == typeof(Resource))
+                {
+                    Resource currentStack = (Resource)inventoryItems[i];
+                    if (amountToRemove >= currentStack.StackSize)
+                    {
+                        amountToRemove -= currentStack.StackSize;
+                        RemoveItemAtIndex(i);
+                    }
+                    else
+                    {
+                        currentStack.StackSize -= amountToRemove;
+                        amountToRemove = 0;
+                        OnItemChangedCallback?.Invoke();
+                        return;
+                    }
+                }
+                //If it aint a resource we just get the single item.
+                else
+                {
+                    amountToRemove--;
+                    RemoveItemAtIndex(i);
                     OnItemChangedCallback?.Invoke();
                 }
             }
