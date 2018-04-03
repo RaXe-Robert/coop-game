@@ -483,6 +483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3388bcc3b306b56458feaf183283fa90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcName: Carl
   stats: {fileID: 11400000, guid: 6ede8687a128eea49bc8f21c354b6f1a, type: 2}
 --- !u!114 &114305619081064444
 MonoBehaviour:
@@ -630,8 +631,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemsToSpawn:
-  - {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-  ItemCountPerItem: 0a000000
+  - {fileID: 11400000, guid: 453a7fe97a8cca04a955ee16fef2a3a3, type: 2}
+  ItemCountPerItem: 02000000
   minRadius: -3
   maxRadius: 3
 --- !u!135 &135850484510566660

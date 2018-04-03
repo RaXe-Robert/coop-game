@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Pickaxe
   sprite: {fileID: 21300000, guid: 5882d46022072ea4b9e607cd63bde06c, type: 3}
-  model: {fileID: 100000, guid: 4c944c55fd4d0844c90a245184fc9ed6, type: 3}
+  model: {fileID: 100000, guid: 6d90a8ddfab85a1478b17efa8d8740f0, type: 3}
   description: A pickaxe
   isConsumable: 0
   onConsumedEffects: []

@@ -32,7 +32,7 @@ public class HungerComponent : PropertyComponentBase
 
     private IEnumerator HungerTick()
     {
-        WaitForSeconds waitForSeconds = new WaitForSeconds(1f);
+        WaitForSeconds waitForSeconds = new WaitForSeconds(3f);
 
         HealthComponent healthComponent = GetComponent<HealthComponent>();
 

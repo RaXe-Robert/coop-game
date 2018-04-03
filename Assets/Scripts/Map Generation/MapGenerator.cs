@@ -23,13 +23,13 @@ public enum MapTileType
 public class MapTile
 {
     // Dictionary to map a color to a biome
-    private Dictionary<MapTileType, Color> colorMap = new Dictionary<MapTileType, Color>()
+    private Dictionary<MapTileType, Color32> colorMap = new Dictionary<MapTileType, Color32>()
     {
-        { MapTileType.Grassland, new Color(0.31f, 0.81f, 0.14f) },
-        { MapTileType.Forest, new Color(0.10f, 0.34f, 0.10f) },
-        { MapTileType.Desert, new Color(1.00f, 0.97f, 0.76f) },
-        { MapTileType.RockyLand, new Color(0.70f, 0.70f, 0.70f) },
-        { MapTileType.Ocean, new Color(0.07f, 0.40f, 0.69f) }
+        { MapTileType.Grassland, new Color32(21, 153, 12, 1) },
+        { MapTileType.Forest, new Color32(16, 114, 10,1) },
+        { MapTileType.Desert, new Color32(168, 162, 3,1) },
+        { MapTileType.RockyLand, new Color32(155, 155, 147,1) },
+        { MapTileType.Ocean, new Color32(7, 79, 193,1) }
     };
 
     // The parent tilemap to reference neighbours

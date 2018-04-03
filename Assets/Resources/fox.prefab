@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 114511514481972790}
   - component: {fileID: 65952599567055490}
   m_Layer: 0
-  m_Name: Fox
+  m_Name: fox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -905,8 +905,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemsToSpawn:
-  - {fileID: 11400000, guid: 3babf6d415ca97b4f869989856adbe9c, type: 2}
-  ItemCountPerItem: 04000000
+  - {fileID: 11400000, guid: 453a7fe97a8cca04a955ee16fef2a3a3, type: 2}
+  ItemCountPerItem: 02000000
   minRadius: -2
   maxRadius: 2
 --- !u!114 &114525195115561974
@@ -920,6 +920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca5057371c02a646af929ddf1533631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcName: Fox
   stats: {fileID: 11400000, guid: b1505c3993c25e9429cf193430d2cc1c, type: 2}
 --- !u!114 &114870329675510918
 MonoBehaviour:

@@ -35,6 +35,11 @@ public class PlayerCameraController : MonoBehaviour
         if (isFollowing == false)
             return;
 
+        if (Input.GetMouseButton(1))
+        {
+            angle += Input.GetAxisRaw("Mouse X") * angleRotationSpeed * 2 * Time.deltaTime;
+        }
+
         if (target && Application.isFocused)
         {
             if (Input.GetKey(KeyCode.Q))
