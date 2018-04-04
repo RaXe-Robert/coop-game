@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class MenuOptions : MonoBehaviour
 {
     public Dropdown qualityDropDown;
     public Dropdown resolutionDropDown;
+    public Toggle fullscreenToggle;
     public Text volumeAmount;
 
     private Resolution[] resolutions;
@@ -15,7 +17,8 @@ public class MenuOptions : MonoBehaviour
     {
         InitializeResolutionDropDown();
         InitializeQualityDropDown();
-    }    
+        InitializeFullscreenToggle();
+    }
 
     /// <summary>
     /// Sets the game volume.
@@ -25,7 +28,7 @@ public class MenuOptions : MonoBehaviour
     {
         //TODO: split into music and audio volume sliders using the audio mixer.
         AudioListener.volume = volume;
-        volumeAmount.text = (volume * 100).ToString("F0") + "%";
+        volumeAmount.text = (volume).ToString("F0") + "%";
     }
     
     public void SetFullScreen(bool isFullscreen)
@@ -62,17 +65,24 @@ public class MenuOptions : MonoBehaviour
 
         for (int i = 0; i < resolutions.Length; i++)
         {
-            var option = $"{resolutions[i].width} x {resolutions[i].height}";
+            var option = $"{resolutions[i].width} x {resolutions[i].height} {resolutions[i].refreshRate}Hz";
             dropDownResolutions.Add(option);
 
             //Check what the current resolution is so we can display it in the dropdown
-            if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+            if (CompareCurrentResolution(resolutions[i]))
                 currentResolutionIndex = i;
         }
 
         resolutionDropDown.AddOptions(dropDownResolutions);
         resolutionDropDown.value = currentResolutionIndex;
         resolutionDropDown.RefreshShownValue();
+    }
+
+    private bool CompareCurrentResolution(Resolution resolution)
+    {
+        return resolution.width == Screen.width &&
+            resolution.height == Screen.height &&
+            resolution.refreshRate == Screen.currentResolution.refreshRate;
     }
 
     private void InitializeQualityDropDown()
@@ -93,5 +103,10 @@ public class MenuOptions : MonoBehaviour
         qualityDropDown.AddOptions(qualityOptions);
         qualityDropDown.value = currentQuality;
         qualityDropDown.RefreshShownValue();
+    }
+
+    private void InitializeFullscreenToggle()
+    {
+        fullscreenToggle.isOn = Screen.fullScreen;
     }
 }
