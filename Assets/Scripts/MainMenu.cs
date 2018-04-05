@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour
+{
 
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject newGameMenuPanel;
@@ -21,7 +22,7 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] private InputField inputNameText;
     [SerializeField] private Text nameText;
 
-
+    private Stack<GameObject> menuStack = new Stack<GameObject>();
     private NetworkManager networkManager;
 
     private void Start()
@@ -37,6 +38,10 @@ public class MainMenu : MonoBehaviour {
         //When the player returns from the game to the main menu, the photon is still connected
         if (networkManager.Connected)
             networkManager.Disconnect();
+
+        //Sets the menu stack
+        menuStack.Clear();
+        menuStack.Push(mainMenuPanel);
     }
 
     public void StartSinglePlayerGame()
@@ -94,127 +99,89 @@ public class MainMenu : MonoBehaviour {
 
     #region Panel Navigation
 
-    public void ShowMainMenuPanel(bool state)
+    public void ReturnToPreviousMenu(int levels = 1)
     {
-        mainMenuPanel.SetActive(state);
+        for (int i = levels; i > 0; --i)
+            CloseMenu();
     }
 
-    public void ShowNewGameMenuPanel(bool state)
+    public void ShowNewGameMenuPanel()
     {
-        newGameMenuPanel.SetActive(state);
+        OpenMenu(newGameMenuPanel);
 
-        if (state)
-        {
-            ShowSinglePlayerPanel(true);
-            ShowMainMenuPanel(false);
-        }
+        //First menu shown is singleplayer, so connect in offline mode
+        Connect(offlineMode: true);
+        OpenMenu(singlePlayerPanel, disablePrevious: false);
     }
 
-    public void ShowServerBrowserMenuPanel(bool state)
+    public void ShowServerBrowserMenuPanel()
     {
-        serverBrowserMenuPanel.SetActive(state);
+        OpenMenu(serverBrowserMenuPanel);
 
-        if (state)
-        {
-            ShowServerBrowserPanel(true);
-            ShowMainMenuPanel(false);
-        }
+        Connect();
+        OpenMenu(serverBrowserPanel, disablePrevious: false);
     }
 
-    public void ShowOptionsMenuPanel(bool state)
+    public void ShowOptionsMenuPanel()
     {
-        optionsMenuPanel.SetActive(state);
-
-        if (state)
-        {
-            ShowControlsPanel(true);
-            ShowMainMenuPanel(false);
-        }
+        OpenMenu(optionsMenuPanel);
+        OpenMenu(controlsPanel, disablePrevious: false);
     }
 
-    public void ShowSinglePlayerPanel(bool state)
+    public void ShowSinglePlayerPanel()
     {
-        singlePlayerPanel.SetActive(state);
-
-        if (state)
-        {
-            Connect(true);
-            ShowHostGamePanel(false);
-        }
+        Connect(offlineMode: true);
+        CloseMenu();
+        OpenMenu(singlePlayerPanel, disablePrevious: false);
     }
 
-    public void ShowHostGamePanel(bool state)
+    public void ShowHostGamePanel()
     {
-        hostGamePanel.SetActive(state);
-
-        if (state)
-        {
-            Connect();
-            ShowSinglePlayerPanel(false);
-            ShowServerBrowserPanel(false);
-        }
+        Connect();
+        CloseMenu();
+        OpenMenu(hostGamePanel, disablePrevious: false);
     }
 
-    public void ShowServerBrowserPanel(bool state)
+    public void ShowServerBrowserPanel()
     {
-        serverBrowserPanel.SetActive(state);
-
-        if (state)
-        {
-            Connect();
-            ShowHostGamePanel(false);
-        }
+        Connect();
+        CloseMenu();
+        OpenMenu(serverBrowserPanel, disablePrevious: false);
     }
 
-    public void ShowControlsPanel(bool state)
+    public void ShowControlsPanel()
     {
-        controlsPanel.SetActive(state);
-
-        if (state)
-        {
-            ShowVideoSettingsPanel(false);
-            ShowAudioSettingsPanel(false);
-        }
+        CloseMenu();
+        OpenMenu(controlsPanel, disablePrevious: false);
     }
 
-    public void ShowVideoSettingsPanel(bool state)
+    public void ShowVideoSettingsPanel()
     {
-        videoSettingsPanel.SetActive(state);
-
-        if (state)
-        {
-            ShowControlsPanel(false);
-            ShowAudioSettingsPanel(false);
-        }
+        CloseMenu();
+        OpenMenu(videoSettingsPanel, disablePrevious: false);
     }
 
-    public void ShowAudioSettingsPanel(bool state)
+    public void ShowAudioSettingsPanel()
     {
-        audioSettingsPanel.SetActive(state);
-
-        if (state)
-        {
-            ShowControlsPanel(false);
-            ShowVideoSettingsPanel(false);
-        }
-    }
-   
-    public void ShowExitGamePanel(bool state)
-    {
-        exitGamePanel.SetActive(state);
-        ShowMainMenuPanel(!state);
+        CloseMenu();
+        OpenMenu(audioSettingsPanel, disablePrevious: false);
     }
 
-    public void ShowEnterNamePanel(bool state)
+    public void ShowExitGamePanel()
     {
-        enterNamePanel.SetActive(state);    
-    }    
+        OpenMenu(exitGamePanel, disablePrevious: false);
+    }
+
+    public void ShowEnterNamePanel()
+    {
+        OpenMenu(enterNamePanel, disablePrevious: false);
+    }
 
     public void DoneEnterName()
     {
         ChangePlayerName(inputNameText.text);
         UpdatePlayerName();
-        ShowEnterNamePanel(false);
+        CloseMenu();
     }
 
     private void UpdatePlayerName()
@@ -222,20 +189,39 @@ public class MainMenu : MonoBehaviour {
         nameText.text = PlayerNetwork.PlayerName;
     }
 
-    public void HideAllPanelsExceptMain()
+    /// <summary>
+    /// Activates a menu and adds it to the menu stack
+    /// </summary>
+    /// <param name="menu">The next window to open</param>
+    /// <param name="disablePrevious">Whether the previous menu needs to be closed</param>
+    private void OpenMenu(GameObject menu, bool disablePrevious = true)
     {
-        ShowNewGameMenuPanel(false);
-        ShowSinglePlayerPanel(false);
-        ShowHostGamePanel(false);
-        ShowServerBrowserMenuPanel(false);
-        ShowServerBrowserPanel(false);
-        ShowOptionsMenuPanel(false);
-        ShowControlsPanel(false);
-        ShowVideoSettingsPanel(false);
-        ShowAudioSettingsPanel(false);
-        ShowExitGamePanel(false);
+        //Check is the current menu is already in the stack to prevent duplicates
+        if (menuStack.Contains(menu))
+            return;
 
-        ShowMainMenuPanel(true);
+        //Retrieves the previous menu and pop and deactivate
+        var prev = menuStack.Peek();
+        if (prev != null && disablePrevious)
+            prev.SetActive(false);
+
+        //Add the next menu to the stack and enable it
+        menuStack.Push(menu);
+        menu.SetActive(true);
+    }
+
+    /// <summary>
+    /// Closes the current menu and pops it from the menu stack
+    /// </summary>
+    /// <param name="enablePrevious">Whether the previous menu needs to be shown or not</param>
+    private void CloseMenu(bool enablePrevious = true)
+    {
+        var current = menuStack.Pop();
+        current.SetActive(false);
+
+        var prev = menuStack.Peek();
+        if (prev != null && enablePrevious)
+            prev.SetActive(true);
     }
 
     /// <summary>
@@ -247,7 +233,7 @@ public class MainMenu : MonoBehaviour {
         //If connected to photon and offline mode is not correct, disconnect and reconnect
         if (!networkManager.Connected || networkManager.OfflineMode != offlineMode)
         {
-            if(networkManager.Connected)
+            if (networkManager.Connected)
                 Disconnect();
             networkManager.SetOfflineMode(offlineMode);
             networkManager.Connect();
