@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class MouseController : MonoBehaviour
 {
-    [SerializeField] private Camera playerCamera;
+    private Camera playerCamera;
 
     private Ray ray;
     private RaycastHit hit;
