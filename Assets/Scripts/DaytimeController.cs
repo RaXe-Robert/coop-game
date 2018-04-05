@@ -6,7 +6,7 @@ public class DaytimeController : MonoBehaviour
 {
     public const int MINUTESPERDAY = 24 * 60; 
     
-    [SerializeField] private GameObject sun = null;
+    [SerializeField] private GameObject sunLight = null;
     [Range(0, 45)]
     [SerializeField] private float rotationCurveOffset = 0f;
 
@@ -16,13 +16,20 @@ public class DaytimeController : MonoBehaviour
     [Header("Time Settings")]
     [Tooltip("Hours/Minutes/Seconds")]
     [SerializeField] private Vector3 initialStartTime = new Vector3(12, 0, 0);
-    [SerializeField] private int dayProgressionMultiplier = 5;
-    [SerializeField] private int nightProgressionMultiplier = 5;
 
     [Range(1, 10)] [SerializeField] private int dayStartHour = 7;
     [Range(16, 24)] [SerializeField] private int nightStartHour = 23;
 
-    public TimeSpan CurrentTime { get; private set; }
+    private TimeSpan currentTime;
+    public TimeSpan CurrentTime
+    {
+        get { return currentTime; }
+        private set
+        {
+            currentTime = value;
+            targetAngle = CalculateNextSunAngle();
+        }
+    }
     /// <summary>
     /// Returns the duration of the dayTime in hours.
     /// </summary>
@@ -31,20 +38,16 @@ public class DaytimeController : MonoBehaviour
     /// Returns the duration of the nightTime in hours.
     /// </summary>
     public int NightDuration => 24 - DayDuration;
-
-    private Quaternion previousSunRotation;
-    private Quaternion nextSunRotation;
+    
+    private float currentAngle = 0f;
+    private float targetAngle = 0f;
+    private float currentVelocity = 0f;
     
     private void Start()
     {
+        sunLight.transform.rotation = Quaternion.Euler(new Vector3(0f, -90f, rotationCurveOffset));
+        
         CurrentTime = VectorToTimeSpan(initialStartTime);
-        sun.transform.rotation = Quaternion.Euler(new Vector3(0f, -90f, rotationCurveOffset));
-        nextSunRotation = sun.transform.rotation;
-
-        //Debug Section
-
-        Debug.Log($"Day Duration: {DayDuration}");
-        Debug.Log($"Night Duration: {NightDuration}");
     }
 
     private void OnEnable()
@@ -68,10 +71,7 @@ public class DaytimeController : MonoBehaviour
 
         while (true)
         {
-            CurrentTime = CurrentTime.Add(TimeSpan.FromMinutes(1 * tickRate));
-
-            nextSunRotation = CalculateSunPosition();
-
+            CurrentTime = CurrentTime.Add(TimeSpan.FromMinutes(tickRate));
             yield return waitForSeconds;
         }
     }
@@ -79,9 +79,13 @@ public class DaytimeController : MonoBehaviour
     /// <summary>
     /// Calculates the sun position based on the <see cref="CurrentTime"/>, <seealso cref="dayStartHour"/> and <seealso cref="nightStartHour"/>.
     /// </summary>
-    private Quaternion CalculateSunPosition()
+    private float CalculateNextSunAngle()
     {
         float dayMinutes = CurrentTime.Hours > 0 ? CurrentTime.Hours * 60 + CurrentTime.Minutes : CurrentTime.Minutes;
+        dayMinutes += tickRate; // Add the tickrate to the current amount of minutes to get the total of minutes on the next tick
+
+        if (dayMinutes > MINUTESPERDAY)
+            dayMinutes = Mathf.Abs(MINUTESPERDAY - dayMinutes);
 
         float currentPercentage = dayMinutes / MINUTESPERDAY * 100f;
         if (dayStartHour * 60 <= dayMinutes && nightStartHour * 60 > dayMinutes)
@@ -89,8 +93,7 @@ public class DaytimeController : MonoBehaviour
             int startMinute = dayStartHour * 60;
             float dayPercentage = (dayMinutes - startMinute) / (DayDuration * 60) * 100;
 
-            previousSunRotation = nextSunRotation;
-            return Quaternion.Euler(new Vector3(180f / 100f * dayPercentage, -90f, 25f));
+            return 180f / 100f * dayPercentage;
         }
         else
         {
@@ -100,15 +103,20 @@ public class DaytimeController : MonoBehaviour
             // If we reached midnight we should calculate the percentage differently
             if (nightPercentage < 0)
                 nightPercentage = (dayMinutes + (MINUTESPERDAY - startMinute)) / (NightDuration * 60) * 100;
-
-            previousSunRotation = nextSunRotation;
-            return Quaternion.Euler(new Vector3((180f / 100f * nightPercentage) + 180, -90f, 25f));
+            
+            return 180f / 100f * nightPercentage + 180;
         }
     }
 
     private void ApplySunPosition()
     {
-        sun.transform.rotation = Quaternion.Lerp(sun.transform.rotation, nextSunRotation, Time.deltaTime);
+        float angle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentVelocity, 0.3f);
+
+        sunLight.transform.rotation = Quaternion.identity;
+        sunLight.transform.Rotate(Vector3.forward, rotationCurveOffset);
+        sunLight.transform.rotation *= Quaternion.AngleAxis(angle, Vector3.right);
+
+        currentAngle = angle;
     }
 
     private TimeSpan VectorToTimeSpan(Vector3 vector)

@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 15980278}
   m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
@@ -257,7 +257,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 0.3
+    m_Strength: 1
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -1397,6 +1397,11 @@ Prefab:
       propertyPath: m_AnchoredPosition.y
       value: 0.000005722046
       objectReference: {fileID: 0}
+    - target: {fileID: 224240537796088762, guid: ab0d4472bca75ea4ab312f991368c9eb,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ab0d4472bca75ea4ab312f991368c9eb, type: 2}
   m_IsPrefabParent: 0
@@ -1526,6 +1531,7 @@ GameObject:
   - component: {fileID: 1488939787}
   - component: {fileID: 1488939789}
   - component: {fileID: 1488939786}
+  - component: {fileID: 1488939790}
   m_Layer: 0
   m_Name: _Scripts
   m_TagString: Untagged
@@ -1596,6 +1602,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldNotificationPrefab: {fileID: 1968218064812564, guid: 3fa060ef411ee2c49820a1cce80da7f3,
     type: 2}
+--- !u!114 &1488939790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1488939785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7ac1a60b61bdf42863d14647acaed1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sunLight: {fileID: 15980277}
+  rotationCurveOffset: 25
+  tickRate: 1
+  initialStartTime: {x: 24, y: 0, z: 0}
+  dayStartHour: 7
+  nightStartHour: 23
 --- !u!1 &1664253369
 GameObject:
   m_ObjectHideFlags: 0
@@ -2081,6 +2104,11 @@ Prefab:
         type: 2}
       propertyPath: m_AnchoredPosition.y
       value: -316.99478
+      objectReference: {fileID: 0}
+    - target: {fileID: 224463020857441092, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.0000076293945
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 882d7df7bb0e07e47ad7bffe80aaacb1, type: 2}
