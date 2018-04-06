@@ -6,7 +6,6 @@ public class DaytimeController : MonoBehaviour
 {
     public const int MINUTESPERDAY = 24 * 60; 
     
-    [SerializeField] private GameObject sunLight = null;
     [Range(0, 45)]
     [SerializeField] private float rotationCurveOffset = 0f;
 
@@ -20,6 +19,17 @@ public class DaytimeController : MonoBehaviour
     [Range(1, 10)] [SerializeField] private int dayStartHour = 7;
     [Range(16, 24)] [SerializeField] private int nightStartHour = 23;
 
+    [Header("Lightning")]
+    [SerializeField] private Light sunLight = null;
+    [SerializeField] private float sunIntensityMax = 1f;
+    [SerializeField] private float sunIntensityMin = 0f;
+    [SerializeField] private float sunIntensityFadeSpeed = 1f;
+
+    [SerializeField] private Light moonLight = null;
+    [SerializeField] private float moonIntensityMax = 1f;
+    [SerializeField] private float moonIntensityMin = 0f;
+    [SerializeField] private float moonIntensityFadeSpeed = 1f;
+
     private TimeSpan currentTime;
     public TimeSpan CurrentTime
     {
@@ -27,7 +37,7 @@ public class DaytimeController : MonoBehaviour
         private set
         {
             currentTime = value;
-            targetAngle = CalculateNextSunAngle();
+            TargetAngle = CalculateNextSunAngle();
         }
     }
     /// <summary>
@@ -38,15 +48,25 @@ public class DaytimeController : MonoBehaviour
     /// Returns the duration of the nightTime in hours.
     /// </summary>
     public int NightDuration => 24 - DayDuration;
-    
-    private float currentAngle = 0f;
+
+    private float currentSunAngle = 0f;
+    public float CurrentSunAngle
+    {
+        get { return currentSunAngle; }
+        private set { currentSunAngle = AngleMod(value); }
+    }
+
+    public float CurrentMoonAngle => AngleMod(CurrentSunAngle + 180f);
+
     private float targetAngle = 0f;
-    private float currentVelocity = 0f;
-    
+    private float TargetAngle
+    {
+        get { return targetAngle; }
+        set { targetAngle = AngleMod(value); }
+    }
+
     private void Start()
     {
-        sunLight.transform.rotation = Quaternion.Euler(new Vector3(0f, -90f, rotationCurveOffset));
-        
         CurrentTime = VectorToTimeSpan(initialStartTime);
     }
 
@@ -60,9 +80,9 @@ public class DaytimeController : MonoBehaviour
         StopCoroutine(TimeProgression());
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        ApplySunPosition();
+        ApplyAngle();
     }
 
     private IEnumerator TimeProgression()
@@ -86,37 +106,42 @@ public class DaytimeController : MonoBehaviour
 
         if (dayMinutes > MINUTESPERDAY)
             dayMinutes = Mathf.Abs(MINUTESPERDAY - dayMinutes);
-
-        float currentPercentage = dayMinutes / MINUTESPERDAY * 100f;
+        
         if (dayStartHour * 60 <= dayMinutes && nightStartHour * 60 > dayMinutes)
         {
-            int startMinute = dayStartHour * 60;
-            float dayPercentage = (dayMinutes - startMinute) / (DayDuration * 60) * 100;
+            float dayPercentage = (dayMinutes - dayStartHour * 60) / (DayDuration * 60) * 100;
 
             return 180f / 100f * dayPercentage;
         }
         else
         {
-            int startMinute = nightStartHour * 60;
-            float nightPercentage = (dayMinutes - startMinute) / (NightDuration * 60) * 100;
+            float nightPercentage = (dayMinutes - nightStartHour * 60) / (NightDuration * 60) * 100;
 
             // If we reached midnight we should calculate the percentage differently
             if (nightPercentage < 0)
-                nightPercentage = (dayMinutes + (MINUTESPERDAY - startMinute)) / (NightDuration * 60) * 100;
+                nightPercentage = (dayMinutes + (MINUTESPERDAY - nightStartHour * 60)) / (NightDuration * 60) * 100;
             
             return 180f / 100f * nightPercentage + 180;
         }
     }
 
-    private void ApplySunPosition()
+    private void ApplyAngle()
     {
-        float angle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentVelocity, 0.3f);
+        CurrentSunAngle = AngleMod(Mathf.LerpAngle(CurrentSunAngle, TargetAngle, Time.deltaTime)); // Smooth the sun angle
 
         sunLight.transform.rotation = Quaternion.identity;
         sunLight.transform.Rotate(Vector3.forward, rotationCurveOffset);
-        sunLight.transform.rotation *= Quaternion.AngleAxis(angle, Vector3.right);
+        sunLight.transform.rotation *= Quaternion.AngleAxis(CurrentSunAngle, Vector3.right);
 
-        currentAngle = angle;
+        sunLight.intensity = CurrentSunAngle >= 0 && CurrentSunAngle <= 180 ? Mathf.Lerp(sunLight.intensity, sunIntensityMax, Time.deltaTime * sunIntensityFadeSpeed) : Mathf.Lerp(sunLight.intensity, sunIntensityMin, Time.deltaTime * sunIntensityFadeSpeed); // Adjusts the intensity of the sun.
+
+
+        moonLight.transform.rotation = Quaternion.identity;
+        moonLight.transform.Rotate(Vector3.forward, rotationCurveOffset);
+        moonLight.transform.rotation *= Quaternion.AngleAxis(CurrentMoonAngle, Vector3.right);
+
+        moonLight.intensity = CurrentMoonAngle >= 0 && CurrentMoonAngle <= 180 ? Mathf.Lerp(moonLight.intensity, moonIntensityMax, Time.deltaTime * moonIntensityFadeSpeed) : Mathf.Lerp(moonLight.intensity, moonIntensityMin, Time.deltaTime * moonIntensityFadeSpeed);// Adjusts the intensity of the moon.
+
     }
 
     private TimeSpan VectorToTimeSpan(Vector3 vector)
@@ -127,5 +152,10 @@ public class DaytimeController : MonoBehaviour
     private Vector3 TimeSpawnToVector(TimeSpan timeSpan)
     {
         return new Vector3(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+    }
+
+    private float AngleMod(float angle)
+    {
+        return (angle % 360f + 360f) % 360f;
     }
 }
