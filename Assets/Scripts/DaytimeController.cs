@@ -30,6 +30,9 @@ public class DaytimeController : MonoBehaviour
     [SerializeField] private float moonIntensityMin = 0f;
     [SerializeField] private float moonIntensityFadeSpeed = 1f;
 
+    public delegate void TimeChangedHandler(TimeSpan currentTime);
+    public static event TimeChangedHandler OnTimeChangedCallback;
+
     private TimeSpan currentTime;
     public TimeSpan CurrentTime
     {
@@ -38,6 +41,8 @@ public class DaytimeController : MonoBehaviour
         {
             currentTime = value;
             TargetAngle = CalculateNextSunAngle();
+
+            OnTimeChangedCallback?.Invoke(currentTime);
         }
     }
     /// <summary>
