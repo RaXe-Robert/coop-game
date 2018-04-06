@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 15980278}
-  m_IndirectSpecularColor: {r: 0.43696222, g: 0.4846397, b: 0.56489897, a: 1}
+  m_IndirectSpecularColor: {r: 0.45022613, g: 0.50026035, b: 0.57537943, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -281,13 +281,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 15980277}
-  m_LocalRotation: {x: 0.7171728, y: -0.17337699, z: 0.19216584, w: 0.64705175}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.32466948, y: -0, z: -0, w: 0.94582754}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 95.88501, y: -30, z: -0.000015258789}
+  m_LocalEulerAnglesHint: {x: 37.891003, y: 0, z: 0}
 --- !u!1001 &39127619
 Prefab:
   m_ObjectHideFlags: 0
@@ -966,7 +966,7 @@ Prefab:
     - target: {fileID: 224164457631068060, guid: c88e53c07b0c0cf4ead40b9c713e1264,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0.0049438477
+      value: 0.0048828125
       objectReference: {fileID: 0}
     - target: {fileID: 224164457631068060, guid: c88e53c07b0c0cf4ead40b9c713e1264,
         type: 2}
@@ -981,7 +981,7 @@ Prefab:
     - target: {fileID: 224164457631068060, guid: c88e53c07b0c0cf4ead40b9c713e1264,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 46.140015
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 224164457631068060, guid: c88e53c07b0c0cf4ead40b9c713e1264,
         type: 2}
@@ -1041,6 +1041,35 @@ Prefab:
     - target: {fileID: 114230321518420272, guid: c88e53c07b0c0cf4ead40b9c713e1264,
         type: 2}
       propertyPath: m_FontData.m_FontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1275502771886480, guid: c88e53c07b0c0cf4ead40b9c713e1264, type: 2}
+      propertyPath: m_Name
+      value: Daytime
+      objectReference: {fileID: 0}
+    - target: {fileID: 224127023612304554, guid: c88e53c07b0c0cf4ead40b9c713e1264,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.000045776367
+      objectReference: {fileID: 0}
+    - target: {fileID: 224127023612304554, guid: c88e53c07b0c0cf4ead40b9c713e1264,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.00009059906
+      objectReference: {fileID: 0}
+    - target: {fileID: 224127023612304554, guid: c88e53c07b0c0cf4ead40b9c713e1264,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 224127023612304554, guid: c88e53c07b0c0cf4ead40b9c713e1264,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: -0.00012207
+      objectReference: {fileID: 0}
+    - target: {fileID: 114230321518420272, guid: c88e53c07b0c0cf4ead40b9c713e1264,
+        type: 2}
+      propertyPath: m_FontData.m_HorizontalOverflow
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1755,8 +1784,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationCurveOffset: 25
-  tickRate: 1
-  initialStartTime: {x: 12, y: 0, z: 0}
+  tickRate: 60
+  initialStartTime: {x: 23, y: 0, z: 0}
   dayStartHour: 7
   nightStartHour: 23
   sunLight: {fileID: 15980278}
@@ -1912,8 +1941,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 1
-  m_Color: {r: 0.036206897, g: 0, b: 0.30882353, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.031681772, g: 0.023194198, b: 0.09558821, a: 1}
+  m_Intensity: 5.0000563
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -1945,13 +1974,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1688797319}
-  m_LocalRotation: {x: 0.7429314, y: 0.16540639, z: 0.19906782, w: -0.6173052}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 259.44702, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1753525986
 Prefab:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class DaytimeUI : MonoBehaviour
 {
     [SerializeField] private Text currentTime;
-    
+
     private void Start()
     {
         DaytimeController.OnTimeChangedCallback += UpdateTimeDisplay;
@@ -15,6 +15,11 @@ public class DaytimeUI : MonoBehaviour
     private void UpdateTimeDisplay(TimeSpan time)
     {
         if (currentTime != null)
-            currentTime.text = time.ToString();
+        {
+            string timeHours = time.Hours < 10 ? $"0{time.Hours}" : $"{time.Hours}";
+            string timeMinutes = time.Minutes < 10 ? $"0{time.Minutes}" : $"{time.Minutes}";
+
+            currentTime.text = $"Day: {time.Days + 1} | {timeHours}:{timeMinutes}";
+        }
     }
 }

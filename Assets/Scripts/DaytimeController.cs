@@ -73,6 +73,8 @@ public class DaytimeController : MonoBehaviour
     private void Start()
     {
         CurrentTime = VectorToTimeSpan(initialStartTime);
+
+        moonLight.transform.eulerAngles = new Vector3(90f, 0f, 0f);
     }
 
     private void OnEnable()
@@ -138,14 +140,11 @@ public class DaytimeController : MonoBehaviour
         sunLight.transform.Rotate(Vector3.forward, rotationCurveOffset);
         sunLight.transform.rotation *= Quaternion.AngleAxis(CurrentSunAngle, Vector3.right);
 
-        sunLight.intensity = CurrentSunAngle >= 0 && CurrentSunAngle <= 180 ? Mathf.Lerp(sunLight.intensity, sunIntensityMax, Time.deltaTime * sunIntensityFadeSpeed) : Mathf.Lerp(sunLight.intensity, sunIntensityMin, Time.deltaTime * sunIntensityFadeSpeed); // Adjusts the intensity of the sun.
-
-
-        moonLight.transform.rotation = Quaternion.identity;
-        moonLight.transform.Rotate(Vector3.forward, rotationCurveOffset);
-        moonLight.transform.rotation *= Quaternion.AngleAxis(CurrentMoonAngle, Vector3.right);
-
-        moonLight.intensity = CurrentMoonAngle >= 0 && CurrentMoonAngle <= 180 ? Mathf.Lerp(moonLight.intensity, moonIntensityMax, Time.deltaTime * moonIntensityFadeSpeed) : Mathf.Lerp(moonLight.intensity, moonIntensityMin, Time.deltaTime * moonIntensityFadeSpeed);// Adjusts the intensity of the moon.
+        // Adjusts the intensity of the sun based on the angle of the sun
+        sunLight.intensity = CurrentSunAngle >= 0 && CurrentSunAngle <= 180 ? Mathf.Lerp(sunLight.intensity, sunIntensityMax, Time.deltaTime * sunIntensityFadeSpeed) : Mathf.Lerp(sunLight.intensity, sunIntensityMin, Time.deltaTime * sunIntensityFadeSpeed);
+        
+        // Adjusts the intensity of the moon based on the angle of the sun
+        moonLight.intensity = CurrentSunAngle >= 10 && CurrentSunAngle <= 170 ? Mathf.Lerp(moonLight.intensity, moonIntensityMin, Time.deltaTime * moonIntensityFadeSpeed) : Mathf.Lerp(moonLight.intensity, moonIntensityMax, Time.deltaTime * moonIntensityFadeSpeed);
 
     }
 
