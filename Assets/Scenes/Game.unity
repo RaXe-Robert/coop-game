@@ -1700,8 +1700,8 @@ GameObject:
   - component: {fileID: 1488939788}
   - component: {fileID: 1488939787}
   - component: {fileID: 1488939789}
-  - component: {fileID: 1488939786}
   - component: {fileID: 1488939790}
+  - component: {fileID: 1488939786}
   m_Layer: 0
   m_Name: _Scripts
   m_TagString: Untagged
@@ -1724,12 +1724,12 @@ MonoBehaviour:
   group: 0
   OwnerShipWasTransfered: 0
   prefixBackup: -1
-  synchronization: 0
+  synchronization: 3
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
-  ownershipTransfer: 0
+  ownershipTransfer: 1
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 1488939790}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 1
   instantiationId: 1

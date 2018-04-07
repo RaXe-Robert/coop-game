@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class DaytimeController : MonoBehaviour
+public class DaytimeController : Photon.MonoBehaviour, IPunObservable
 {
     public const int MINUTESPERDAY = 24 * 60; 
     
@@ -61,8 +61,6 @@ public class DaytimeController : MonoBehaviour
         private set { currentSunAngle = AngleMod(value); }
     }
 
-    public float CurrentMoonAngle => AngleMod(CurrentSunAngle + 180f);
-
     private float targetAngle = 0f;
     private float TargetAngle
     {
@@ -98,7 +96,10 @@ public class DaytimeController : MonoBehaviour
 
         while (true)
         {
-            CurrentTime = CurrentTime.Add(TimeSpan.FromMinutes(tickRate));
+            if (PhotonNetwork.isMasterClient)
+            {
+                CurrentTime = CurrentTime.Add(TimeSpan.FromMinutes(tickRate));
+            }
             yield return waitForSeconds;
         }
     }
@@ -153,13 +154,20 @@ public class DaytimeController : MonoBehaviour
         return new TimeSpan((int)vector.x, (int)vector.y, (int)vector.z);
     }
 
-    private Vector3 TimeSpawnToVector(TimeSpan timeSpan)
-    {
-        return new Vector3(timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
-    }
-
     private float AngleMod(float angle)
     {
         return (angle % 360f + 360f) % 360f;
+    }
+
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            stream.SendNext(CurrentTime.Ticks);
+        }
+        else
+        {
+            CurrentTime = TimeSpan.FromTicks((long)stream.ReceiveNext());
+        }
     }
 }
