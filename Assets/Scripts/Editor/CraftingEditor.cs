@@ -7,7 +7,7 @@ using UnityEditorInternal;
 public class CraftingEditor : EditorWindow {
 
     private CraftingList selectedCraftingList;
-    public List<CraftingRecipe> list;
+    private CraftingRecipe selectedRecipe;
 
     private Rect listDisplay;
     private Rect dataDisplay;
@@ -39,6 +39,15 @@ public class CraftingEditor : EditorWindow {
             if (GUILayout.Button("UpdateList"))
             {
                 itemList = new ReorderableList(selectedCraftingList.recipes, typeof(CraftingRecipe),true,true,true,true);
+                itemList.drawHeaderCallback += (Rect rect) => { EditorGUI.LabelField(rect, "Recipes"); }; 
+
+                itemList.onSelectCallback += ShowRecipe;
+                itemList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) =>
+                {
+                    ScriptableItemData item = ((CraftingRecipe)itemList.list[index]).result?.item;
+                    rect.y += 2;
+                    EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), item ? item.name : "New recipe");
+                };
             }
             itemList?.DoLayoutList();
         }
@@ -47,9 +56,19 @@ public class CraftingEditor : EditorWindow {
 
     private void DrawDataDisplay()
     {
-        dataDisplay = new Rect(position.width * 0.3f, 0, position.width * 0.7f, position.height);
+        dataDisplay = new Rect(position.width * 0.35f, 0, position.width * 0.65f, position.height);
         GUILayout.BeginArea(dataDisplay);
-        GUILayout.Label("crafting recipe options");
+        if(selectedRecipe != null)
+        {
+            GUILayout.BeginHorizontal();
+            selectedRecipe.result.item = (ScriptableItemData)EditorGUILayout.ObjectField("Result", selectedRecipe.result.item, typeof(ScriptableItemData), false, GUILayout.Width(dataDisplay.width * 0.7f));
+            selectedRecipe.result.amount = EditorGUI.IntField(new Rect(dataDisplay.width *0.7f, dataDisplay.y, dataDisplay.width * 0.3f, EditorGUIUtility.singleLineHeight) , "amount", selectedRecipe.result.amount);
+        }
         GUILayout.EndArea();
+    }
+
+    private void ShowRecipe(ReorderableList reorderableList)
+    {
+        selectedRecipe = (CraftingRecipe)itemList.list[reorderableList.index];
     }
 }
