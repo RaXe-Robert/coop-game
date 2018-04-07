@@ -1784,8 +1784,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationCurveOffset: 25
-  tickRate: 60
-  initialStartTime: {x: 23, y: 0, z: 0}
+  tickRate: 1
+  initialStartTime: {x: 9, y: 0, z: 0}
   dayStartHour: 7
   nightStartHour: 23
   sunLight: {fileID: 15980278}
