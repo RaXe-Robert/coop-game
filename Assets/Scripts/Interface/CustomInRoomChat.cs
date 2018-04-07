@@ -19,12 +19,18 @@ public class CustomInRoomChat : Photon.MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
+            
             if (EventSystem.current.currentSelectedGameObject == input.gameObject)
             {
                 SendMessage();
             }
             EventSystem.current.SetSelectedGameObject(input.gameObject, null);
             input.OnPointerClick(new PointerEventData(EventSystem.current));
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+            }
         }
     }
 
