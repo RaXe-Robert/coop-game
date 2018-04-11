@@ -38,7 +38,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
     private void InitializeRequiredItems()
     {
-        for (int i = 0; i < craftingRecipe.requiredItems.Length; i++)
+        for (int i = 0; i < craftingRecipe.requiredItems.Count; i++)
         {
             var go = Instantiate(requiredItemPrefab, requiredItems);
             go.GetComponent<Image>().sprite = craftingRecipe.requiredItems[i].item.Sprite;
@@ -48,7 +48,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
     private void UpdateRequiredItems()
     {
-        for (int i = 0; i < craftingRecipe.requiredItems.Length; i++)
+        for (int i = 0; i < craftingRecipe.requiredItems.Count; i++)
         {
             //Debug.Log(inventory.GetItemAmountById(inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)));
             requiredItems.GetChild(i).gameObject.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";

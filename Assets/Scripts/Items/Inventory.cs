@@ -302,7 +302,7 @@ public class Inventory : MonoBehaviour
     /// <returns>Whether there are enough materials to craft this recipe</returns>
     public bool RemoveItemsForCrafting(CraftingRecipe recipe)
     {
-        for (int i = 0; i < recipe.requiredItems.Length; i++)
+        for (int i = 0; i < recipe.requiredItems.Count; i++)
         {
             var requiredItem = recipe.requiredItems[i];
             if (!CheckAmountById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft))
@@ -312,7 +312,7 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < recipe.requiredItems.Length; i++)
+        for (int i = 0; i < recipe.requiredItems.Count; i++)
         {
             var requiredItem = recipe.requiredItems[i];
             RemoveItemById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft);

@@ -84,9 +84,3 @@ MonoBehaviour:
       amount: 1
     amountToCraft: 1
     craftingTime: 2
-  - requiredItems: []
-    result:
-      item: {fileID: 0}
-      amount: 0
-    amountToCraft: 0
-    craftingTime: 0

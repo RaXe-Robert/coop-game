@@ -12,6 +12,7 @@ public class CraftingEditor : EditorWindow
     private Rect listDisplay;
     private Rect dataDisplay;
     private ReorderableList itemList;
+    private ReorderableList requiredItems;
 
     [MenuItem("Window/CraftingEditor")]
     public static void ShowWindow()
@@ -27,10 +28,10 @@ public class CraftingEditor : EditorWindow
 
     private void DrawCraftingRecipesList()
     {
-        listDisplay = new Rect(0, 0, position.width * 0.3f, position.height);
+        listDisplay = new Rect(0, 0, position.width * 0.30f, position.height);
         GUILayout.BeginArea(listDisplay);
 
-        //Input field for a crafting list
+        //Input field for a list of recipes
         selectedCraftingList = (CraftingList)EditorGUILayout.ObjectField(selectedCraftingList, typeof(CraftingList), false);
 
         if (selectedCraftingList != null)
@@ -45,6 +46,19 @@ public class CraftingEditor : EditorWindow
         GUILayout.EndArea();
     }
 
+    private void DrawRecipeData()
+    {
+        dataDisplay = new Rect(position.width * 0.35f, 0, position.width * 0.65f, position.height);
+        GUILayout.BeginArea(dataDisplay);
+
+        if (selectedRecipe != null)
+        {
+            DrawRecipeFields();
+            requiredItems?.DoLayoutList();
+        }
+        GUILayout.EndArea();
+    }
+
     private void DrawRecipesList()
     {
         selectedRecipe = null;
@@ -55,51 +69,35 @@ public class CraftingEditor : EditorWindow
         itemList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) =>
         {
             ScriptableItemData item = ((CraftingRecipe)itemList.list[index]).result?.item;
-            rect.y += 2;
             EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), item ? item.name : "New recipe");
         };
     }
 
-    private void DrawRecipeData()
-    {
-        dataDisplay = new Rect(position.width * 0.35f, 0, position.width * 0.65f, position.height);
-        GUILayout.BeginArea(dataDisplay);
-
-        if (selectedRecipe != null)
-        {
-            DrawRecipeFields();
-        }
-        GUILayout.EndArea();
-    }
-
     private void DrawRecipeFields()
     {
+        GUILayout.BeginVertical();
         //Crafting result + amount
         GUILayout.BeginHorizontal();
         selectedRecipe.result.item = (ScriptableItemData)EditorGUILayout.ObjectField("Result", selectedRecipe.result.item, typeof(ScriptableItemData), false, GUILayout.Width(dataDisplay.width * 0.7f));
         selectedRecipe.result.amount = EditorGUI.IntField(new Rect(dataDisplay.width * 0.7f, dataDisplay.y, dataDisplay.width * 0.3f, EditorGUIUtility.singleLineHeight), "amount", selectedRecipe.result.amount);
         GUILayout.EndHorizontal();
 
+        GUILayout.Space(20);
+
         //Crafting Time
         selectedRecipe.craftingTime = EditorGUI.FloatField(new Rect(0, dataDisplay.y + EditorGUIUtility.singleLineHeight, dataDisplay.width * 0.25f, EditorGUIUtility.singleLineHeight), "Crafting Time", selectedRecipe.craftingTime);
 
-        GUILayout.Space(EditorGUIUtility.singleLineHeight);
-
         //Required items for this recipe
-        var requiredItems = new ReorderableList(selectedRecipe.requiredItems, typeof(CraftingItem), true, true, true, true);
-        Debug.Log(requiredItems.list.Count);
+        requiredItems = new ReorderableList(selectedRecipe.requiredItems, typeof(CraftingItem), true, true, true, true);
         requiredItems.drawHeaderCallback += (Rect rect) => { EditorGUI.LabelField(rect, "Required items"); };
 
         requiredItems.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) =>
         {
-            CraftingItem item = ((CraftingItem)requiredItems.list[index]);
-            rect.y += 2;
-            EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width * 0.5f, EditorGUIUtility.singleLineHeight), "Required Item", item.item, typeof(ScriptableItemData), false);
-            EditorGUI.IntField(new Rect(rect.width * 0.55f, rect.y, rect.width * 0.45f, EditorGUIUtility.singleLineHeight), "Required Amount", item.amount);
+            CraftingItem item = (CraftingItem)requiredItems.list[index];
+            item.item = (ScriptableItemData)EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width * 0.5f, EditorGUIUtility.singleLineHeight), "Required Item", item.item, typeof(ScriptableItemData), false);
+            item.amount = EditorGUI.IntField(new Rect(rect.width * 0.55f, rect.y, rect.width * 0.45f, EditorGUIUtility.singleLineHeight), "Required Amount", item.amount);
         };
-
-        //Index out of bounds ??
-        requiredItems?.DoLayoutList();
+        GUILayout.EndVertical();
     }
 
     private void ShowRecipe(ReorderableList reorderableList)
