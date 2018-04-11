@@ -17,7 +17,8 @@ public class CraftingEditor : EditorWindow
     [MenuItem("Window/CraftingEditor")]
     public static void ShowWindow()
     {
-        GetWindow<CraftingEditor>("Crafting Editor");
+        var x = GetWindow<CraftingEditor>("Crafting Editor");
+        x.minSize = new Vector2(1000, 400);
     }
 
     private void OnGUI()
@@ -30,6 +31,7 @@ public class CraftingEditor : EditorWindow
     {
         recipeListDisplay = new Rect(0, 0, position.width * 0.30f, position.height);
         GUILayout.BeginArea(recipeListDisplay);
+        GUILayout.Space(10);
 
         //Input field for a list of recipes
         selectedCraftingList = (CraftingList)EditorGUILayout.ObjectField(selectedCraftingList, typeof(CraftingList), false);
@@ -48,8 +50,9 @@ public class CraftingEditor : EditorWindow
 
     private void DrawRecipeDataDisplay()
     {
-        recipeDataDisplay = new Rect(position.width * 0.35f, 0, position.width * 0.65f, position.height);
+        recipeDataDisplay = new Rect(position.width * 0.31f, 0, position.width * 0.65f, position.height);
         GUILayout.BeginArea(recipeDataDisplay);
+        GUILayout.Space(10);
 
         if (selectedRecipe != null)
         {
@@ -75,15 +78,15 @@ public class CraftingEditor : EditorWindow
     private void DrawRecipeDataFields()
     {
         //Crafting result + amount
-        selectedRecipe.result.item = (ScriptableItemData)EditorGUILayout.ObjectField("Result", selectedRecipe.result.item, typeof(ScriptableItemData), false, GUILayout.Width(recipeDataDisplay.width * 0.4f));
-        selectedRecipe.result.amount = EditorGUI.IntField(new Rect(recipeDataDisplay.width * 0.42f, recipeDataDisplay.y, recipeDataDisplay.width * 0.3f, EditorGUIUtility.singleLineHeight), "Amount", selectedRecipe.result.amount);
+        selectedRecipe.result.item = (ScriptableItemData)EditorGUILayout.ObjectField("Result", selectedRecipe.result.item, typeof(ScriptableItemData), false, GUILayout.Width(recipeDataDisplay.width * 0.5f));
+        selectedRecipe.result.amount = EditorGUI.IntField(new Rect(recipeDataDisplay.width * 0.52f, recipeDataDisplay.y + 10, recipeDataDisplay.width * 0.3f, EditorGUIUtility.singleLineHeight), "Amount", selectedRecipe.result.amount);
 
         //Crafting Time
-        selectedRecipe.craftingTime = EditorGUI.FloatField(new Rect(0, recipeDataDisplay.y + EditorGUIUtility.singleLineHeight + 5, recipeDataDisplay.width * 0.25f, EditorGUIUtility.singleLineHeight), "Crafting Time", selectedRecipe.craftingTime);
+        selectedRecipe.craftingTime = EditorGUI.FloatField(new Rect(0, recipeDataDisplay.y + 10 + EditorGUIUtility.singleLineHeight + 5, recipeDataDisplay.width * 0.45f, EditorGUIUtility.singleLineHeight), "Crafting Time", selectedRecipe.craftingTime);
 
         GUILayout.Space(20);        
 
-        requiredItems.DoLayoutList();
+        requiredItems?.DoLayoutList();
     }
 
     private void SelectRecipe(ReorderableList reorderableList)
@@ -99,9 +102,9 @@ public class CraftingEditor : EditorWindow
 
         requiredItems.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) =>
         {
-            CraftingItem item = (CraftingItem)requiredItems.list[index];
-            item.item = (ScriptableItemData)EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width * 0.4f, EditorGUIUtility.singleLineHeight), "Required Item", item.item, typeof(ScriptableItemData), false);
-            item.amount = EditorGUI.IntField(new Rect(rect.width * 0.45f, rect.y, rect.width * 0.25f, EditorGUIUtility.singleLineHeight), "Required Amount", item.amount);
+            CraftingItem requiredItem = (CraftingItem)requiredItems.list[index];
+            requiredItem.item = (ScriptableItemData)EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width * 0.5f, EditorGUIUtility.singleLineHeight), "Required Item", requiredItem.item, typeof(ScriptableItemData), false);
+            requiredItem.amount = EditorGUI.IntField(new Rect(rect.width * 0.55f, rect.y, rect.width * 0.4f, EditorGUIUtility.singleLineHeight), "Required Amount", requiredItem.amount);
         };
     }
 }
