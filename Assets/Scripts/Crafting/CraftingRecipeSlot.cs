@@ -27,11 +27,11 @@ public class CraftingRecipeSlot : MonoBehaviour
 
         craftingRecipe = recipe;
         this.inventory = inventory;
-        inventory.OnItemChangedCallback += UpdateRequiredItems;
 
         if (ValidateRecipe())
         {
             //Set result
+            inventory.OnItemChangedCallback += UpdateRequiredItems;
             recipeResultImage.sprite = craftingRecipe.result.item.Sprite;
             recipeResultText.text = craftingRecipe.result.item.name;
             craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
@@ -82,7 +82,6 @@ public class CraftingRecipeSlot : MonoBehaviour
     {
         for (int i = 0; i < craftingRecipe.requiredItems.Count; i++)
         {
-            //Debug.Log(inventory.GetItemAmountById(inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)));
             requiredItems.GetChild(i).gameObject.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
         }
     }
