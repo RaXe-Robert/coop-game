@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingRecipeSlot : MonoBehaviour {
+public class CraftingRecipeSlot : MonoBehaviour
+{
 
     [SerializeField] private GameObject requiredItemPrefab;
     [SerializeField] private Transform requiredItems;
@@ -33,6 +34,16 @@ public class CraftingRecipeSlot : MonoBehaviour {
         recipeResultText.text = craftingRecipe.result.item.name;
         craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
 
+        //Logging if something is wrong with the crafting recipe
+        foreach (var item in craftingRecipe.requiredItems)
+        {
+            if (item.item == null)
+            {
+                Debug.LogError($"{craftingRecipe.result.item.name} crafting recipe is missing some data");
+                Destroy(gameObject);
+                return;
+            }
+        }
         InitializeRequiredItems();
     }
 
@@ -41,13 +52,6 @@ public class CraftingRecipeSlot : MonoBehaviour {
         for (int i = 0; i < craftingRecipe.requiredItems.Count; i++)
         {
             var go = Instantiate(requiredItemPrefab, requiredItems);
-
-            //Logging if something is wrong with the crafting recipe
-            if (craftingRecipe.requiredItems[i].item == null)
-            {
-                Debug.LogError($"{craftingRecipe.result.item.name} crafting recipe is missing some data");
-                return;
-            }
 
             go.GetComponent<Image>().sprite = craftingRecipe.requiredItems[i].item.Sprite;
             go.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
