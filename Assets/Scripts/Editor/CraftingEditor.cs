@@ -29,9 +29,8 @@ public class CraftingEditor : EditorWindow
 
     private void DrawRecipeListDisplay()
     {
-        recipeListDisplay = new Rect(0, 0, position.width * 0.30f, position.height);
+        recipeListDisplay = new Rect(5, 5, position.width * 0.30f, position.height);
         GUILayout.BeginArea(recipeListDisplay);
-        GUILayout.Space(10);
 
         //Input field for a list of recipes
         selectedCraftingList = (CraftingList)EditorGUILayout.ObjectField(selectedCraftingList, typeof(CraftingList), false);
@@ -50,9 +49,8 @@ public class CraftingEditor : EditorWindow
 
     private void DrawRecipeDataDisplay()
     {
-        recipeDataDisplay = new Rect(position.width * 0.31f, 0, position.width * 0.65f, position.height);
+        recipeDataDisplay = new Rect(position.width * 0.315f, 5, position.width * 0.65f, position.height);
         GUILayout.BeginArea(recipeDataDisplay);
-        GUILayout.Space(10);
 
         if (selectedRecipe != null)
         {
@@ -78,11 +76,11 @@ public class CraftingEditor : EditorWindow
     private void DrawRecipeDataFields()
     {
         //Crafting result + amount
-        selectedRecipe.result.item = (ScriptableItemData)EditorGUILayout.ObjectField("Result", selectedRecipe.result.item, typeof(ScriptableItemData), false, GUILayout.Width(recipeDataDisplay.width * 0.5f));
-        selectedRecipe.result.amount = EditorGUI.IntField(new Rect(recipeDataDisplay.width * 0.52f, recipeDataDisplay.y + 10, recipeDataDisplay.width * 0.3f, EditorGUIUtility.singleLineHeight), "Amount", selectedRecipe.result.amount);
+        selectedRecipe.result.item = (ScriptableItemData)EditorGUILayout.ObjectField("Result", selectedRecipe.result.item ?? null, typeof(ScriptableItemData), false, GUILayout.Width(recipeDataDisplay.width * 0.5f));
+        selectedRecipe.result.amount = EditorGUI.IntField(new Rect(recipeDataDisplay.width * 0.52f, recipeDataDisplay.y - 5, recipeDataDisplay.width * 0.25f, EditorGUIUtility.singleLineHeight), "Amount", selectedRecipe.result != null ? selectedRecipe.result.amount : 0);
 
         //Crafting Time
-        selectedRecipe.craftingTime = EditorGUI.FloatField(new Rect(0, recipeDataDisplay.y + 10 + EditorGUIUtility.singleLineHeight + 5, recipeDataDisplay.width * 0.45f, EditorGUIUtility.singleLineHeight), "Crafting Time", selectedRecipe.craftingTime);
+        selectedRecipe.craftingTime = EditorGUI.FloatField(new Rect(0, recipeDataDisplay.y + EditorGUIUtility.singleLineHeight, recipeDataDisplay.width * 0.45f, EditorGUIUtility.singleLineHeight), "Crafting Time", selectedRecipe.craftingTime);
 
         GUILayout.Space(20);        
 
@@ -92,6 +90,13 @@ public class CraftingEditor : EditorWindow
     private void SelectRecipe(ReorderableList reorderableList)
     {
         selectedRecipe = (CraftingRecipe)recipeList.list[reorderableList.index];
+
+        if (selectedRecipe.requiredItems == null)
+            selectedRecipe.requiredItems = new List<CraftingItem>();
+
+        if (selectedRecipe.result == null)
+            selectedRecipe.result = new CraftingItem();
+
         CreateRequiredItemList();
     }
 
@@ -106,5 +111,12 @@ public class CraftingEditor : EditorWindow
             requiredItem.item = (ScriptableItemData)EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width * 0.5f, EditorGUIUtility.singleLineHeight), "Required Item", requiredItem.item, typeof(ScriptableItemData), false);
             requiredItem.amount = EditorGUI.IntField(new Rect(rect.width * 0.55f, rect.y, rect.width * 0.4f, EditorGUIUtility.singleLineHeight), "Required Amount", requiredItem.amount);
         };
+    }
+
+    private void AddNewRecipe(ReorderableList reorderableList)
+    {
+        selectedRecipe = (CraftingRecipe)recipeList.list[reorderableList.index];
+        selectedRecipe.requiredItems = new List<CraftingItem>();
+        selectedRecipe.result = new CraftingItem();
     }
 }

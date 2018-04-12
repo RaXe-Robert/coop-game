@@ -41,6 +41,14 @@ public class CraftingRecipeSlot : MonoBehaviour {
         for (int i = 0; i < craftingRecipe.requiredItems.Count; i++)
         {
             var go = Instantiate(requiredItemPrefab, requiredItems);
+
+            //Logging if something is wrong with the crafting recipe
+            if (craftingRecipe.requiredItems[i].item == null)
+            {
+                Debug.LogError($"{craftingRecipe.result.item.name} crafting recipe is missing some data");
+                return;
+            }
+
             go.GetComponent<Image>().sprite = craftingRecipe.requiredItems[i].item.Sprite;
             go.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
         }
