@@ -140,7 +140,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 1734947063586872}
-  mobRoot: {fileID: 1257863322210830}
   spawnRate: 5
   maxMobs: 3
   mobs: []
