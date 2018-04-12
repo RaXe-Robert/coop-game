@@ -29,22 +29,42 @@ public class CraftingRecipeSlot : MonoBehaviour
         this.inventory = inventory;
         inventory.OnItemChangedCallback += UpdateRequiredItems;
 
-        //Set result
-        recipeResultImage.sprite = craftingRecipe.result.item.Sprite;
-        recipeResultText.text = craftingRecipe.result.item.name;
-        craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
+        if (ValidateRecipe())
+        {
+            //Set result
+            recipeResultImage.sprite = craftingRecipe.result.item.Sprite;
+            recipeResultText.text = craftingRecipe.result.item.name;
+            craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
 
-        //Logging if something is wrong with the crafting recipe
+            InitializeRequiredItems();
+        }
+    }
+
+    //Logging if something is wrong with the crafting recipe    
+    private bool ValidateRecipe()
+    {
+        if (craftingRecipe.result.item == null || craftingRecipe.result.amount <= 0)
+        {
+            Debug.LogError($"There is a crafting recipe without a result or the result amount is invalid");
+            Destroy(gameObject);
+            return false;
+        }
         foreach (var item in craftingRecipe.requiredItems)
         {
             if (item.item == null)
             {
                 Debug.LogError($"{craftingRecipe.result.item.name} crafting recipe is missing some data");
                 Destroy(gameObject);
-                return;
+                return false;
+            }
+            if (item.amount <= 0)
+            {
+                Debug.LogError($"{craftingRecipe.result.item.name} recipe has a required item with an invalid amount");
+                Destroy(gameObject);
+                return false;
             }
         }
-        InitializeRequiredItems();
+        return true;
     }
 
     private void InitializeRequiredItems()
