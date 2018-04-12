@@ -7,11 +7,11 @@ using UnityEngine;
 /// </summary>
 public class Billboard : MonoBehaviour
 {
-    [SerializeField] private bool flip = true;
+    [SerializeField] private bool flip = false;
 
     private Camera cameraToFace = null;
     
-    private void LateUpdate()
+    private void Update()
     {
         FaceCamera();
     }
@@ -24,7 +24,7 @@ public class Billboard : MonoBehaviour
             return;
         }
 
-        transform.LookAt(cameraToFace.transform.position, cameraToFace.transform.up);
+        transform.rotation = Quaternion.LookRotation(cameraToFace.transform.forward);
 
         if (flip)
         {
