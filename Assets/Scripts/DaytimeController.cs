@@ -19,16 +19,18 @@ public class DaytimeController : Photon.MonoBehaviour, IPunObservable
     [Range(1, 10)] [SerializeField] private int dayStartHour = 7;
     [Range(16, 24)] [SerializeField] private int nightStartHour = 23;
 
-    [Header("Lightning")]
+    [Header("Lighting")]
     [SerializeField] private Light sunLight = null;
-    [SerializeField] private float sunIntensityMax = 1f;
-    [SerializeField] private float sunIntensityMin = 0f;
-    [SerializeField] private float sunIntensityFadeSpeed = 1f;
-
     [SerializeField] private Light moonLight = null;
-    [SerializeField] private float moonIntensityMax = 1f;
-    [SerializeField] private float moonIntensityMin = 0f;
-    [SerializeField] private float moonIntensityFadeSpeed = 1f;
+
+    [Header("Daytime")]
+    [SerializeField] private AnimationCurve daySunIntensity;
+    [SerializeField] private AnimationCurve dayMoonIntensity;
+
+    [SerializeField] private AnimationCurve daySunShadowStrength;
+
+    [Header("Nighttime")]
+    [SerializeField] private AnimationCurve nightMoonIntensity;
 
     public delegate void TimeChangedHandler(TimeSpan currentTime);
     public static event TimeChangedHandler OnTimeChangedCallback;
@@ -54,6 +56,9 @@ public class DaytimeController : Photon.MonoBehaviour, IPunObservable
     /// </summary>
     public int NightDuration => 24 - DayDuration;
 
+    private float currentDayPercentage;
+    private float currentNightPercentage;
+
     private float currentSunAngle = 0f;
     public float CurrentSunAngle
     {
@@ -67,6 +72,8 @@ public class DaytimeController : Photon.MonoBehaviour, IPunObservable
         get { return targetAngle; }
         set { targetAngle = AngleMod(value); }
     }
+
+    public bool IsDaytime { get { return CurrentSunAngle >= 0 && CurrentSunAngle <= 180; } }
 
     private void Start()
     {
@@ -117,19 +124,19 @@ public class DaytimeController : Photon.MonoBehaviour, IPunObservable
         
         if (dayStartHour * 60 <= dayMinutes && nightStartHour * 60 > dayMinutes)
         {
-            float dayPercentage = (dayMinutes - dayStartHour * 60) / (DayDuration * 60) * 100;
+            currentDayPercentage = (dayMinutes - dayStartHour * 60) / (DayDuration * 60) * 100;
 
-            return 180f / 100f * dayPercentage;
+            return 180f / 100f * currentDayPercentage;
         }
         else
         {
-            float nightPercentage = (dayMinutes - nightStartHour * 60) / (NightDuration * 60) * 100;
+            currentNightPercentage = (dayMinutes - nightStartHour * 60) / (NightDuration * 60) * 100;
 
             // If we reached midnight we should calculate the percentage differently
-            if (nightPercentage < 0)
-                nightPercentage = (dayMinutes + (MINUTESPERDAY - nightStartHour * 60)) / (NightDuration * 60) * 100;
+            if (currentNightPercentage < 0)
+                currentNightPercentage = (dayMinutes + (MINUTESPERDAY - nightStartHour * 60)) / (NightDuration * 60) * 100;
             
-            return 180f / 100f * nightPercentage + 180;
+            return 180f / 100f * currentNightPercentage + 180;
         }
     }
 
@@ -140,13 +147,19 @@ public class DaytimeController : Photon.MonoBehaviour, IPunObservable
         sunLight.transform.rotation = Quaternion.identity;
         sunLight.transform.Rotate(Vector3.forward, rotationCurveOffset);
         sunLight.transform.rotation *= Quaternion.AngleAxis(CurrentSunAngle, Vector3.right);
-
-        // Adjusts the intensity of the sun based on the angle of the sun
-        sunLight.intensity = CurrentSunAngle >= 0 && CurrentSunAngle <= 180 ? Mathf.Lerp(sunLight.intensity, sunIntensityMax, Time.deltaTime * sunIntensityFadeSpeed) : Mathf.Lerp(sunLight.intensity, sunIntensityMin, Time.deltaTime * sunIntensityFadeSpeed);
         
-        // Adjusts the intensity of the moon based on the angle of the sun
-        moonLight.intensity = CurrentSunAngle >= 10 && CurrentSunAngle <= 170 ? Mathf.Lerp(moonLight.intensity, moonIntensityMin, Time.deltaTime * moonIntensityFadeSpeed) : Mathf.Lerp(moonLight.intensity, moonIntensityMax, Time.deltaTime * moonIntensityFadeSpeed);
+        if (IsDaytime)
+        {
+            sunLight.intensity = daySunIntensity.Evaluate(currentDayPercentage / 100f);
+            moonLight.intensity = dayMoonIntensity.Evaluate(currentDayPercentage / 100f);
 
+            sunLight.shadowStrength = daySunShadowStrength.Evaluate(currentDayPercentage / 100f);
+        }
+        else
+        {
+            moonLight.intensity = nightMoonIntensity.Evaluate(currentNightPercentage / 100f);
+            sunLight.intensity = 0;
+        }
     }
 
     private TimeSpan VectorToTimeSpan(Vector3 vector)
