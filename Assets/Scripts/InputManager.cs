@@ -4,7 +4,9 @@ using UnityEngine;
 using System.Linq;
 
 public class InputManager : MonoBehaviour {
-
+    
+    Dictionary<string, KeyCode> buttonKeys;
+    
     private void OnEnable()
     {
         buttonKeys = new Dictionary<string, KeyCode>
@@ -16,20 +18,11 @@ public class InputManager : MonoBehaviour {
         };
     }
 
-    // Use this for initialization
-    void Start () {
-        
-    }
-
-    Dictionary<string, KeyCode> buttonKeys;
-    
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public bool GetButtonDown( string buttonName)
     {
+        //TODO: Pause game when in text fields here.
+
+
         if(buttonKeys.ContainsKey(buttonName) == false)
         {
             Debug.LogError("InputManager::GetButtonDown -- No button named: " + buttonName);
@@ -42,5 +35,21 @@ public class InputManager : MonoBehaviour {
     public string[] GetButtonNames()
     {
         return buttonKeys.Keys.ToArray();
+    }
+
+    public string GetKeyNameForButton(string buttonName)
+    {
+        if (buttonKeys.ContainsKey(buttonName) == false)
+        {
+            Debug.LogError("InputManager::GetKeyNameForButton -- No button named: " + buttonName);
+            return "N/A";
+        }
+
+        return buttonKeys[buttonName].ToString();
+    }
+
+    public void SetButtonForKey( string buttonName, KeyCode keyCode)
+    {
+        buttonKeys[buttonName] = keyCode;
     }
 }
