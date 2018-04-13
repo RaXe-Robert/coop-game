@@ -6,14 +6,13 @@ using System;
 
 public class ControlsUIManager : MonoBehaviour {
 
-    InputManager inputManager;
+    private InputManager inputManager;
     public GameObject keyItemPrefab;
     public GameObject keyList;
 
-    string buttonToRebind = null;
-    Dictionary<string, Text> buttonToLabel;
-
-    // Use this for initialization
+    private string buttonToRebind = null;
+    private Dictionary<string, Text> buttonToLabel;
+    
     void Start () {
         inputManager = GameObject.FindObjectOfType<InputManager>();
 
@@ -30,8 +29,7 @@ public class ControlsUIManager : MonoBehaviour {
             go.transform.localScale = Vector3.one;
 
             Text buttonNameText = go.transform.Find("ButtonName").GetComponent<Text>();
-            buttonNameText.text = bn;
-            
+            buttonNameText.text = bn;            
 
             Text keyNameText = go.transform.Find("Button/KeyName").GetComponent<Text>();
             keyNameText.text = inputManager.GetKeyNameForButton(bn);
@@ -42,7 +40,6 @@ public class ControlsUIManager : MonoBehaviour {
         }
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		if (buttonToRebind != null)
         {
@@ -62,10 +59,11 @@ public class ControlsUIManager : MonoBehaviour {
         }
 	}
 
-    void StartRebindFor( string buttonName)
+    void StartRebindFor(string buttonName)
     {
         Debug.Log(buttonName);
 
         buttonToRebind = buttonName;
+        buttonToLabel[buttonToRebind].text = "Press the new button";
     }
 }

@@ -5,20 +5,21 @@ using System.Linq;
 
 public class InputManager : MonoBehaviour {
     
-    Dictionary<string, KeyCode> buttonKeys;
+    private Dictionary<string, KeyCode> buttonKeys;
     
     private void OnEnable()
     {
         buttonKeys = new Dictionary<string, KeyCode>
         {
-            //TODO: Reading these from a user preferences file
-            ["Forward"] = KeyCode.W,
-            ["Backward"] = KeyCode.S,
-            ["Left"] = KeyCode.A,
-            ["Right"] = KeyCode.D,
+            //TODO: The movement keys are still a Input.Getaxis in the PlayerInputController.cs
+            //["Forward"] = KeyCode.W,
+            //["Backward"] = KeyCode.S,
+            //["Left"] = KeyCode.A,
+            //["Right"] = KeyCode.D,
             ["Crafting"] = KeyCode.C,
             ["Inventory"] = KeyCode.I,
-            ["Escape"] = KeyCode.Escape,
+            //Maybe Don't make escape button changable?
+            //["Escape"] = KeyCode.Escape,
             ["Equipment"] = KeyCode.F
         };
     }
@@ -26,11 +27,8 @@ public class InputManager : MonoBehaviour {
     public bool GetButtonDown( string buttonName)
     {
         //TODO: Pause game when in text fields here.
-
-
         if(buttonKeys.ContainsKey(buttonName) == false)
         {
-            Debug.LogError("InputManager::GetButtonDown -- No button named: " + buttonName);
             return false;
         }
 
@@ -46,7 +44,6 @@ public class InputManager : MonoBehaviour {
     {
         if (buttonKeys.ContainsKey(buttonName) == false)
         {
-            Debug.LogError("InputManager::GetKeyNameForButton -- No button named: " + buttonName);
             return "N/A";
         }
 
