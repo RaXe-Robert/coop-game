@@ -5,9 +5,11 @@ using UnityEngine;
 public class PlayerInputController : MonoBehaviour {
 
     private PhotonView photonview;
+    InputManager inputManager;
 
     private void Start()
     {
+        inputManager = FindObjectOfType<InputManager>();
         photonview = GetComponent<PhotonView>();
     }
 
@@ -15,16 +17,16 @@ public class PlayerInputController : MonoBehaviour {
     {
         if (photonview.isMine)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (inputManager.GetButtonDown( "Escape" ))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.EscapeMenu);
 
-            if (Input.GetKeyDown(KeyCode.F) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
+            if (inputManager.GetButtonDown( "Crafting" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Crafting);
 
-            if (Input.GetKeyDown(KeyCode.C) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
+            if (inputManager.GetButtonDown( "Equipment" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Equipment);
 
-            if (Input.GetKeyDown(KeyCode.B) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
+            if (inputManager.GetButtonDown( "Inventory" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Inventory);
         }
     }

@@ -12,9 +12,14 @@ public class InputManager : MonoBehaviour {
         buttonKeys = new Dictionary<string, KeyCode>
         {
             //TODO: Reading these from a user preferences file
-            ["Jump"] = KeyCode.Space,
-            ["Left"] = KeyCode.LeftArrow,
-            ["Right"] = KeyCode.RightArrow
+            ["Forward"] = KeyCode.W,
+            ["Backward"] = KeyCode.S,
+            ["Left"] = KeyCode.A,
+            ["Right"] = KeyCode.D,
+            ["Crafting"] = KeyCode.C,
+            ["Inventory"] = KeyCode.I,
+            ["Escape"] = KeyCode.Escape,
+            ["Equipment"] = KeyCode.F
         };
     }
 
