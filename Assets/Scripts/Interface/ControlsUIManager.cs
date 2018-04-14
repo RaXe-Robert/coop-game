@@ -61,8 +61,6 @@ public class ControlsUIManager : MonoBehaviour {
 
     void StartRebindFor(string buttonName)
     {
-        Debug.Log(buttonName);
-
         buttonToRebind = buttonName;
         buttonToLabel[buttonToRebind].text = "Press the new button";
     }
