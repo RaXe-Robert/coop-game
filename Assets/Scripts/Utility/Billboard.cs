@@ -11,7 +11,7 @@ public class Billboard : MonoBehaviour
 
     private Camera cameraToFace = null;
     
-    private void Update()
+    private void LateUpdate()
     {
         FaceCamera();
     }
