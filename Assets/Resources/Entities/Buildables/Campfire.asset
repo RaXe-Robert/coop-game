@@ -18,3 +18,5 @@ MonoBehaviour:
   id: 200
   recoverable: 1
   snapToGrid: 0
+  fireParticles: {fileID: 1139308815913448, guid: 507939ca034a5e145a8351a3bda185e9,
+    type: 2}

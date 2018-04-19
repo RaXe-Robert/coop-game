@@ -28,7 +28,7 @@ GameObject:
   - component: {fileID: 64629248837855744}
   - component: {fileID: 208407444410447410}
   m_Layer: 0
-  m_Name: rock
+  m_Name: Rock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EntitiesToSpawn:
   - {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-  AmounPerEntity: 05000000
+  AmountPerEntity: 
   minRadius: -2
   maxRadius: 2
 --- !u!114 &114655443740691952

@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 114511514481972790}
   - component: {fileID: 65952599567055490}
   m_Layer: 0
-  m_Name: fox
+  m_Name: Fox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -907,7 +907,7 @@ MonoBehaviour:
   EntitiesToSpawn:
   - {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
   - {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-  AmounPerEntity: 0300000003000000
+  AmountPerEntity: 
   minRadius: -2
   maxRadius: 2
 --- !u!114 &114525195115561974

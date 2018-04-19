@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class BuildableInteractionMenu : MonoBehaviour
 {
@@ -25,11 +23,11 @@ public class BuildableInteractionMenu : MonoBehaviour
     }
 
     private Canvas canvas = null;
-    [SerializeField] private Button button_UseAction = null;
-    [SerializeField] private Button button_PickupAction = null;
 
-    private BuildableWorldObject target;
-    public int TargetInstanceID => target?.GetInstanceID() ?? 0;
+    [SerializeField] private List<Button> interactionButtons = new List<Button>();
+
+    public BuildableWorldObject Target { get; private set; }
+    public int TargetInstanceID => Target?.GetInstanceID() ?? 0;
 
     private void Awake()
     {
@@ -43,34 +41,49 @@ public class BuildableInteractionMenu : MonoBehaviour
 
     private void Update()
     {
-        if (target == null)
+        if (Target == null)
+        {
+            Hide();
             return;
+        }
 
-        transform.position = target.transform.position;
+        transform.position = Target.transform.position + Vector3.up;
     }
 
     public void Show(BuildableWorldObject invoker, UnityAction[] actions)
     {
         Hide();
 
-        target = invoker;
+        Target = invoker;
 
         if (canvas.worldCamera == null)
             canvas.worldCamera = PlayerNetwork.PlayerObject?.GetComponent<PlayerCameraController>()?.CameraReference;
 
-        button_UseAction.onClick.RemoveAllListeners();
-        button_UseAction.onClick.AddListener(actions[0]);
-        button_PickupAction.onClick.RemoveAllListeners();
-        button_PickupAction.onClick.AddListener(actions[1]);
+        if (actions.Length > interactionButtons.Count)
+            Debug.LogWarning("[BuildableInteractionMenu] More actions than interaction buttons.");
+
+        for (int i = 0; i < interactionButtons.Count; i++)
+        {
+            if (i >= actions.Length)
+                break;
+
+            interactionButtons[i].gameObject.SetActive(true);
+            interactionButtons[i].onClick.AddListener(actions[i]);
+        }
         
         gameObject.SetActive(true);
     }
 
     public void Hide()
     {
-        target = null;
+        Target = null;
+
+        foreach (Button button in interactionButtons)
+        {
+            button.onClick.RemoveAllListeners();
+            button.gameObject.SetActive(false);
+        }
 
         gameObject.SetActive(false);
     }
-
 }
