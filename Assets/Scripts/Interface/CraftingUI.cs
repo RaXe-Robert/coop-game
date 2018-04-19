@@ -9,7 +9,7 @@ using UnityEngine.EventSystems;
 public class CraftingUI : MonoBehaviour, IPointerEnterHandler
 {
     [Header("Prefabs")]
-    [SerializeField] private GameObject craftingQueueItemPrefab;
+    [SerializeField] private GameObject craftingQueueEntityPrefab;
     [SerializeField] private GameObject recipeSlotPrefab;
 
     [Header("Parents")]
@@ -40,14 +40,14 @@ public class CraftingUI : MonoBehaviour, IPointerEnterHandler
 
     private void AddToVisualCraftingQueue(CraftingRecipe recipe)
     {
-        CraftingTooltip craftingTooltip = Instantiate(craftingQueueItemPrefab, craftingQueue.transform).GetComponent<CraftingTooltip>();
+        CraftingTooltip craftingTooltip = Instantiate(craftingQueueEntityPrefab, craftingQueue.transform).GetComponent<CraftingTooltip>();
         craftingTooltip.Initialize(recipe);
         currentCrafts.Add(craftingTooltip);
     }
 
     private void RemoveFromVisualCraftingQueue(CraftingRecipe recipe)
     {
-        // Dont remove if there is still more of the same item in the queue
+        // Dont remove if there is still more of the same entity in the queue
         if (craftingManager.CraftingQueue.AmountRemaining > 0)
             return;
 

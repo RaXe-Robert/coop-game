@@ -1115,7 +1115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11f8e59400e1f7846a5c740e33722aac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  craftingQueueItemPrefab: {fileID: 1678675720927894, guid: e27af1a4f135fad41a6cbdf57e9d36bd,
+  craftingQueueEntityPrefab: {fileID: 1678675720927894, guid: e27af1a4f135fad41a6cbdf57e9d36bd,
     type: 2}
   recipeSlotPrefab: {fileID: 1020228882977738, guid: 2a33d38c4952be048b6ba0fcc0b2d9f7,
     type: 2}

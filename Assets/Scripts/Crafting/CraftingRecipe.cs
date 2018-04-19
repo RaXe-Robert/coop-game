@@ -4,8 +4,8 @@ using UnityEngine;
 [Serializable]
 public class CraftingRecipe
 {
-    public CraftingItem[] requiredItems;
-    public CraftingItem result;
+    public CraftingEntity[] requiredEntities;
+    public CraftingEntity result;
     [HideInInspector]
     public int amountToCraft;
     public float craftingTime;

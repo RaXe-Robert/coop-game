@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class CraftingRecipeSlot : MonoBehaviour {
 
-    [SerializeField] private GameObject requiredItemPrefab;
-    [SerializeField] private Transform requiredItems;
+    [SerializeField] private GameObject requiredEntityPrefab;
+    [SerializeField] private Transform requiredEntities;
     [SerializeField] private Image recipeResultImage;
     [SerializeField] private Text recipeResultText;
     [SerializeField] private Text craftingTimeText;
@@ -26,32 +26,31 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
         craftingRecipe = recipe;
         this.inventory = inventory;
-        inventory.OnItemChangedCallback += UpdateRequiredItems;
+        inventory.OnEntityChangedCallback += UpdateRequiredEntities;
 
         //Set result
-        recipeResultImage.sprite = craftingRecipe.result.item.Sprite;
-        recipeResultText.text = craftingRecipe.result.item.name;
+        recipeResultImage.sprite = craftingRecipe.result.entity.Sprite;
+        recipeResultText.text = craftingRecipe.result.entity.name;
         craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
 
-        InitializeRequiredItems();
+        InitializeRequiredEntities();
     }
 
-    private void InitializeRequiredItems()
+    private void InitializeRequiredEntities()
     {
-        for (int i = 0; i < craftingRecipe.requiredItems.Length; i++)
+        for (int i = 0; i < craftingRecipe.requiredEntities.Length; i++)
         {
-            var go = Instantiate(requiredItemPrefab, requiredItems);
-            go.GetComponent<Image>().sprite = craftingRecipe.requiredItems[i].item.Sprite;
-            go.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
+            var go = Instantiate(requiredEntityPrefab, requiredEntities);
+            go.GetComponent<Image>().sprite = craftingRecipe.requiredEntities[i].entity.Sprite;
+            go.GetComponentInChildren<Text>().text = $"{inventory.GetEntityAmountById(craftingRecipe.requiredEntities[i].entity.Id)} / {craftingRecipe.requiredEntities[i].amount * amountToCraft}";
         }
     }
 
-    private void UpdateRequiredItems()
+    private void UpdateRequiredEntities()
     {
-        for (int i = 0; i < craftingRecipe.requiredItems.Length; i++)
+        for (int i = 0; i < craftingRecipe.requiredEntities.Length; i++)
         {
-            //Debug.Log(inventory.GetItemAmountById(inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)));
-            requiredItems.GetChild(i).gameObject.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
+            requiredEntities.GetChild(i).gameObject.GetComponentInChildren<Text>().text = $"{inventory.GetEntityAmountById(craftingRecipe.requiredEntities[i].entity.Id)} / {craftingRecipe.requiredEntities[i].amount * amountToCraft}";
         }
     }
 
@@ -64,7 +63,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
     {
         amountToCraft = int.Parse(amount) <= 0 ? 1 : int.Parse(amount);
         UpdateAmountText();
-        UpdateRequiredItems();
+        UpdateRequiredEntities();
     }
 
     public void OnClick_IncreaseAmount()

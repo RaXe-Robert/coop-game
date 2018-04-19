@@ -87,7 +87,7 @@ public class BuildingController : Photon.MonoBehaviour
         if (ConfirmBuildingConditions() == false)
             return;
 
-        FindObjectOfType<Inventory>().RemoveItemById(buildableData.Id);
+        FindObjectOfType<Inventory>().RemoveEntityById(buildableData.Id);
 
         var photonId = PhotonNetwork.AllocateViewID();
         photonView.RPC(nameof(RPC_SpawnBuildable), PhotonTargets.AllBuffered, buildableToBuild.transform.position, photonId, buildableData.Id, buildableToBuild.transform.rotation);
@@ -190,14 +190,14 @@ public class BuildingController : Photon.MonoBehaviour
     }
 
     [PunRPC]
-    private void RPC_SpawnBuildable(Vector3 position, int photonId, int itemId, Quaternion quaternion = new Quaternion())
+    private void RPC_SpawnBuildable(Vector3 position, int photonId, int entityId, Quaternion quaternion = new Quaternion())
     {
         GameObject gameObjectResource = Resources.Load<GameObject>("Buildable");
 
-        Buildable buildable = ItemFactory.CreateNewItem(itemId) as Buildable;
+        Buildable buildable = EntityFactory.CreateNewEntity(entityId) as Buildable;
 
         //Get the mesh and materials from the referenced model.
-        Mesh itemMesh = buildable.Model.GetComponent<MeshFilter>().sharedMesh;
+        Mesh entityMesh = buildable.Model.GetComponent<MeshFilter>().sharedMesh;
 
         GameObject gameObj = Instantiate(gameObjectResource, position, quaternion);
         gameObj.GetComponent<BuildableWorldObject>().buildable = buildable;
@@ -205,11 +205,11 @@ public class BuildingController : Photon.MonoBehaviour
 
         //Assign the mesh and materials to the new gameObject.
         gameObj.GetComponent<MeshRenderer>().sharedMaterials = buildable.Model.GetComponent<MeshRenderer>().sharedMaterials;
-        gameObj.GetComponent<MeshFilter>().sharedMesh = itemMesh;
+        gameObj.GetComponent<MeshFilter>().sharedMesh = entityMesh;
 
         //Create the collider and make it convex
         var coll = gameObj.GetComponent<MeshCollider>();
-        coll.sharedMesh = itemMesh;
+        coll.sharedMesh = entityMesh;
         coll.convex = true;
 
         PhotonView[] nViews = gameObj.GetComponentsInChildren<PhotonView>();

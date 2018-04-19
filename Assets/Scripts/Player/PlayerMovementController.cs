@@ -116,9 +116,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (!agent.hasPath)
             agent.SetDestination(ItemToPickup.transform.position);
 
-        if (Vector3.Distance(ItemToPickup.transform.position, transform.position) < ItemToPickup.GetComponent<ItemWorldObject>().pickupDistance)
+        if (Vector3.Distance(ItemToPickup.transform.position, transform.position) < ItemToPickup.GetComponent<EntityWorldObject>().pickupDistance)
         {
-            ItemToPickup.GetComponent<ItemWorldObject>().Interact(transform.position);
+            ItemToPickup.GetComponent<EntityWorldObject>().Interact(transform.position);
             StopAutoWalkToItem();
         }
         else

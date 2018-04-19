@@ -42,7 +42,7 @@ public class EquipmentUI : MonoBehaviour {
         {
             if (equipmentManager.HasToolEquipped(toolSlots[i].SlotType))
             {
-                toolSlots[i].Item = equipmentManager.GetEquippedTool(toolSlots[i].SlotType);
+                toolSlots[i].Entity = equipmentManager.GetEquippedTool(toolSlots[i].SlotType);
             }
             else toolSlots[i].Clear();
         }
@@ -51,7 +51,7 @@ public class EquipmentUI : MonoBehaviour {
     private void UpdateWeapon()
     {
         if (equipmentManager.HasWeaponEquipped)
-            weaponSlot.Item = equipmentManager.GetEquippedWeapon();
+            weaponSlot.Entity = equipmentManager.GetEquippedWeapon();
         else weaponSlot.Clear();
     }
 
@@ -61,7 +61,7 @@ public class EquipmentUI : MonoBehaviour {
         {
             if (equipmentManager.HasArmorEquipped(armorSlots[i].SlotType))
             {
-                armorSlots[i].Item = equipmentManager.GetEquippedArmorByType(armorSlots[i].SlotType);
+                armorSlots[i].Entity = equipmentManager.GetEquippedArmorByType(armorSlots[i].SlotType);
             }
             else armorSlots[i].Clear();
         }

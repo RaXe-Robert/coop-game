@@ -7,20 +7,20 @@ using UnityEngine.UI;
 public class CraftingTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
     [SerializeField] private Image targetImage;
-    private ScriptableItemData item;
+    private ScriptableEntityData entity;
     private float craftingTime;
 
     public void Initialize(CraftingRecipe recipe)
     {
-        item = recipe.result.item;
+        entity = recipe.result.entity;
         craftingTime = recipe.craftingTime;
-        targetImage.sprite = item.Sprite;
+        targetImage.sprite = entity.Sprite;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (item != null)
-            Tooltip.Instance.Show(item.name, craftingTime.ToString("F0") + "s");
+        if (entity != null)
+            Tooltip.Instance.Show(entity.name, craftingTime.ToString("F0") + "s");
     }
 
     public void OnPointerExit(PointerEventData eventData)

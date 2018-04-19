@@ -159,7 +159,7 @@ public class MapDisplay : MonoBehaviour
                 for (int i = 0; i < 5; i++)
                 {
                     Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
-                    ItemFactory.CreateWorldObject(position, 1);
+                    EntityFactory.CreateWorldObject(position, 1);
                 }
                 break;
 
@@ -167,7 +167,7 @@ public class MapDisplay : MonoBehaviour
                 for (int i = 0; i < 5; i++)
                 {
                     Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
-                    ItemFactory.CreateWorldObject(position, 0);
+                    EntityFactory.CreateWorldObject(position, 0);
                 }
                 break;
 
@@ -175,12 +175,12 @@ public class MapDisplay : MonoBehaviour
                 for (int i = 0; i < 5; i++)
                 {
                     Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
-                    ItemFactory.CreateWorldObject(position, 1);
+                    EntityFactory.CreateWorldObject(position, 1);
                 }
                 for (int i = 0; i < 5; i++)
                 {
                     Vector3 position = tileGo.transform.position + new Vector3(random.Next(-extent, extent), 0.1f, random.Next(-extent, extent));
-                    ItemFactory.CreateWorldObject(position, 0);
+                    EntityFactory.CreateWorldObject(position, 0);
                 }
                 break;
         }

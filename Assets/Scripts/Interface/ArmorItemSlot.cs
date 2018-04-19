@@ -2,18 +2,18 @@
 using System;
 using UnityEngine.EventSystems;
 
-public class ArmorItemSlot : InventoryItemSlot
+public class ArmorItemSlot : InventoryEntitySlot
 {
     [SerializeField] private ArmorType slotType;
     public ArmorType SlotType { get { return slotType; } }
 
     public override void OnDrop(PointerEventData eventData)
     {
-        InventoryItemSlot from;
-        if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
+        InventoryEntitySlot from;
+        if ((from = eventData.pointerDrag.GetComponent<InventoryEntitySlot>()))
         {
-            if (from.Item.GetType() == typeof(Armor))
-                equipmentManager.EquipArmor(from.Item as Armor, from.index);
+            if (from.Entity.GetType() == typeof(Armor))
+                equipmentManager.EquipArmor(from.Entity as Armor, from.index);
         }
     }
 
@@ -30,7 +30,7 @@ public class ArmorItemSlot : InventoryItemSlot
         transform.localPosition = Vector3.zero;
 
         if (!EventSystem.current.IsPointerOverGameObject())
-            equipmentManager.DropEquippedItem(Item);
+            equipmentManager.DropEquippedItem(Entity);
     }
 }
 
