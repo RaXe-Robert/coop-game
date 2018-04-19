@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerInputController : MonoBehaviour {
 
     private PhotonView photonview;
-    InputManager inputManager;
+    private InputManager inputManager;
 
     private void Start()
     {

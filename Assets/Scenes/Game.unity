@@ -1299,6 +1299,7 @@ MonoBehaviour:
   inventoryUI: {fileID: 1463700543}
   craftingUI: {fileID: 637407845}
   equipmentUI: {fileID: 1753525988}
+  controlsUI: {fileID: 1220704955}
 --- !u!114 &1307443148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1334,6 +1335,7 @@ MonoBehaviour:
   inventoryUI: {fileID: 1463700543}
   craftingUI: {fileID: 637407845}
   equipmentUI: {fileID: 1753525988}
+  controlsUI: {fileID: 0}
 --- !u!114 &1307443150
 MonoBehaviour:
   m_ObjectHideFlags: 0

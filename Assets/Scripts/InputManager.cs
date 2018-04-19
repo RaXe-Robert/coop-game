@@ -5,11 +5,12 @@ using System.Linq;
 
 public class InputManager : MonoBehaviour {
     
-    private Dictionary<string, KeyCode> buttonKeys;
-    
+    private Dictionary<string, KeyCode> changableButtonKeys;
+    private Dictionary<string, KeyCode> staticButtonKeys;
+        
     private void OnEnable()
     {
-        buttonKeys = new Dictionary<string, KeyCode>
+        changableButtonKeys = new Dictionary<string, KeyCode>
         {
             //TODO: The movement keys are still a Input.Getaxis in the PlayerInputController.cs
             //["Forward"] = KeyCode.W,
@@ -18,56 +19,90 @@ public class InputManager : MonoBehaviour {
             //["Right"] = KeyCode.D,
             ["Crafting"] = KeyCode.C,
             ["Inventory"] = KeyCode.I,
-
-            //Maybe Don't make escape button changable?
-            ["Escape"] = KeyCode.Escape,
-            ["Equipment"] = KeyCode.F,
-            ["Camera rotation"] = KeyCode.Mouse1,
+            ["Equipment"] = KeyCode.F,   
             ["Left camera rotation"] = KeyCode.Q,
             ["Right camera rotation"] = KeyCode.E,
-            ["Camera zoom"] = KeyCode.Mouse2
         };
+
+        staticButtonKeys = new Dictionary<string, KeyCode>
+        {
+            ["Escape"] = KeyCode.Escape,
+            ["Camera rotation"] = KeyCode.Mouse1,      
+            ["Camera zoom"] = KeyCode.Mouse2,       
+            ["Spawn item"] = KeyCode.R
+        };
+    }
+
+    public float GetAxis(string buttonName)
+    {
+        //Make sure buttons don't react when interface is open
+        if (GameInterfaceManager.Instance.IsAnyInterfaceOpen())
+        {
+            return 0;
+        }
+        return Input.GetAxis(buttonName);
+    }
+
+    public float GetAxisRaw(string buttonName)
+    {
+        //Make sure buttons don't react when interface is open
+        if (GameInterfaceManager.Instance.IsAnyInterfaceOpen())
+        {
+            return 0;
+        }
+        return Input.GetAxisRaw(buttonName);
     }
 
     public bool GetButtonDown( string buttonName)
     {
-        //TODO: Pause game when in text fields here.
-        if(buttonKeys.ContainsKey(buttonName) == false)
-        {
-            return false;
-        }
+        //Make sure buttons do react when interface is open
 
-        return Input.GetKeyDown(buttonKeys[buttonName]);
+        if (changableButtonKeys.ContainsKey(buttonName) == true)
+        {
+            return Input.GetKeyDown(changableButtonKeys[buttonName]);
+        }
+        if (staticButtonKeys.ContainsKey(buttonName) == true)
+        {
+            return Input.GetKeyDown(staticButtonKeys[buttonName]);
+        }
+        return false;
     }
 
     public bool GetButton(string buttonName)
     {
-        //TODO: Pause game when in text fields here.
-        if (buttonKeys.ContainsKey(buttonName) == false)
+        //Make sure buttons don't react when interface is open
+        if (GameInterfaceManager.Instance.IsAnyInterfaceOpen())
         {
             return false;
         }
 
-        return Input.GetKey(buttonKeys[buttonName]);
-    }    
-
-    public string[] GetButtonNames()
-    {
-        return buttonKeys.Keys.ToArray();
+        if (changableButtonKeys.ContainsKey(buttonName) == true)
+        {
+            return Input.GetKey(changableButtonKeys[buttonName]);
+        }
+        if (staticButtonKeys.ContainsKey(buttonName) == true)
+        {
+            return Input.GetKey(staticButtonKeys[buttonName]);
+        }
+        return false;        
     }
 
-    public string GetKeyNameForButton(string buttonName)
+    public string[] GetChangableButtonNames()
     {
-        if (buttonKeys.ContainsKey(buttonName) == false)
+        return changableButtonKeys.Keys.ToArray();
+    }
+
+    public string GetNameForChangableButton(string buttonName)
+    {
+        if (changableButtonKeys.ContainsKey(buttonName) == false)
         {
             return "N/A";
         }
-
-        return buttonKeys[buttonName].ToString();
+        return changableButtonKeys[buttonName].ToString();
     }
 
-    public void SetButtonForKey( string buttonName, KeyCode keyCode)
+    public void SetChangableButtonForKey( string buttonName, KeyCode keyCode)
     {
-        buttonKeys[buttonName] = keyCode;
+        changableButtonKeys[buttonName] = keyCode;
     }
 }

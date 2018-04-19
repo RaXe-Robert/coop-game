@@ -16,7 +16,7 @@ public class ControlsUIManager : MonoBehaviour {
     void Start () {
         inputManager = GameObject.FindObjectOfType<InputManager>();
 
-        string[] buttonNames = inputManager.GetButtonNames();
+        string[] buttonNames = inputManager.GetChangableButtonNames();
         buttonToLabel = new Dictionary<string, Text>();
 
         for (int i = 0; i < buttonNames.Length; i++)
@@ -32,7 +32,7 @@ public class ControlsUIManager : MonoBehaviour {
             buttonNameText.text = bn;            
 
             Text keyNameText = go.transform.Find("Button/KeyName").GetComponent<Text>();
-            keyNameText.text = inputManager.GetKeyNameForButton(bn);
+            keyNameText.text = inputManager.GetNameForChangableButton(bn);
             buttonToLabel[bn] = keyNameText;
 
             Button keyBindButton = go.transform.Find("Button").GetComponent<Button>();
@@ -49,7 +49,7 @@ public class ControlsUIManager : MonoBehaviour {
                 {
                     if (Input.GetKeyDown(kc))
                     {
-                        inputManager.SetButtonForKey(buttonToRebind, kc);
+                        inputManager.SetChangableButtonForKey(buttonToRebind, kc);
                         buttonToLabel[buttonToRebind].text = kc.ToString();
                         buttonToRebind = null;
                         break;
