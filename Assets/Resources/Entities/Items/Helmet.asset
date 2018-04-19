@@ -9,14 +9,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d11520a5ae26ca4f93acf2ea1753e64, type: 3}
-  m_Name: Armor
+  m_Name: Helmet
   m_EditorClassIdentifier: 
-  entityName: Armor
-  sprite: {fileID: 21300000, guid: 6c6141d0e7b82574785cc692f5ef4557, type: 3}
+  entityName: Helmet
+  sprite: {fileID: 21300000, guid: 0ea874f431d5edf43adf3561b587c67a, type: 3}
   model: {fileID: 100000, guid: b6fe1de474d3ee7438e5e351cb9c1904, type: 3}
-  description: An armor
+  description: A Helmet
+  id: 98
   isConsumable: 0
   onConsumedEffects: []
-  id: 97
-  armorType: 1
-  defense: 2
+  armorType: 0
+  defense: 1

@@ -121,17 +121,17 @@ public class EquipmentManager : MonoBehaviour
         OnArmorEquippedCallback?.Invoke(armorToEquip);
     }
 
-    public void EquipItem(EntityBase entity, int inventoryIndex)
+    public void EquipItem(ItemBase item, int inventoryIndex)
     {
-        if (!entity.Equippable)
+        if (!item.Equippable)
             return;
 
-        if (entity.GetType() == typeof(Armor))
-            EquipArmor(entity as Armor, inventoryIndex);
-        else if (entity.GetType() == typeof(Weapon))
-            EquipWeapon(entity as Weapon, inventoryIndex);
-        else if (entity.GetType() == typeof(Tool))
-            EquipTool(entity as Tool, inventoryIndex);
+        if (item.GetType() == typeof(Armor))
+            EquipArmor(item as Armor, inventoryIndex);
+        else if (item.GetType() == typeof(Weapon))
+            EquipWeapon(item as Weapon, inventoryIndex);
+        else if (item.GetType() == typeof(Tool))
+            EquipTool(item as Tool, inventoryIndex);
     }
 
     public bool HasToolEquipped(ToolType toolType)
@@ -191,7 +191,7 @@ public class EquipmentManager : MonoBehaviour
         else return null;
     }
 
-    public void UnEquipItem(EntityBase itemToUnequip, int index)
+    public void UnequipItem(ItemBase itemToUnequip, int index)
     {
         if(itemToUnequip.GetType() == typeof(Armor))
         {
@@ -226,7 +226,7 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
-    public void DropEquippedItem(EntityBase itemToUnequip)
+    public void DropEquippedItem(ItemBase itemToUnequip)
     {
         if (itemToUnequip.GetType() == typeof(Armor))
         {

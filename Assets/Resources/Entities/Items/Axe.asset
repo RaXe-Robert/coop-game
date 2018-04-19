@@ -15,7 +15,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: f62c679d5fb4e9741934c71739f8e94c, type: 3}
   model: {fileID: 100000, guid: ed0296a0ef65938439b880f093d4c743, type: 3}
   description: An axe
+  id: 95
   isConsumable: 0
   onConsumedEffects: []
-  id: 95
   toolType: 0

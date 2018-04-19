@@ -1,4 +1,4 @@
-﻿public class Armor : EntityBase
+﻿public class Armor : ItemBase
 {
     public Armor(ArmorData armorData) : base(armorData)
     {

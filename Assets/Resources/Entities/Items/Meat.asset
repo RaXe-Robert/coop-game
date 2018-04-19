@@ -15,7 +15,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: fe9e17c7b51bc6a43bf9853dd129cb7c, type: 3}
   model: {fileID: 100000, guid: e143afe216cca7c4396116f3dbcc8a01, type: 3}
   description: Meat
+  id: 150
   isConsumable: 1
   onConsumedEffects:
   - {fileID: 11400000, guid: ff3eb3dc58ddffb4991422bd58b0731a, type: 2}
-  id: 150

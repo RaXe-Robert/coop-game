@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Resource", menuName = "Entities/Items/Resource")]
-public class ResourceData : ScriptableEntityData
+public class ResourceData : ScriptableItemData
 {
     public override EntityBase InitializeEntity()
     {

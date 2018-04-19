@@ -8,15 +8,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22580a90e66e2f44ea7c1962e6362f2f, type: 3}
+  m_Script: {fileID: 11500000, guid: f34212ec1e163da429b4d88da1091c06, type: 3}
   m_Name: Campfire
   m_EditorClassIdentifier: 
   entityName: Campfire
   sprite: {fileID: 21300000, guid: efd0c0a726e9d7a4186d8070c762251a, type: 3}
   model: {fileID: 100000, guid: 04c16ae5218b7cf43a62afc77368123b, type: 3}
   description: A campfire.
-  isConsumable: 0
-  onConsumedEffects: []
   id: 200
   recoverable: 1
   snapToGrid: 0

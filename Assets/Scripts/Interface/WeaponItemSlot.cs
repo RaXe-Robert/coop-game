@@ -27,7 +27,7 @@ public class WeaponItemSlot : InventoryEntitySlot
         transform.localPosition = Vector3.zero;
 
         if (!EventSystem.current.IsPointerOverGameObject())
-            equipmentManager.DropEquippedItem(Entity);
+            equipmentManager.DropEquippedItem(Entity as ItemBase);
     }
 }
 

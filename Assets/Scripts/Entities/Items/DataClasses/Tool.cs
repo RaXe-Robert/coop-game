@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Tool : EntityBase
+public class Tool : ItemBase
 {
     public Tool(ToolData toolData) : base(toolData)
     {

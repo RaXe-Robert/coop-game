@@ -1,4 +1,4 @@
-﻿public class Weapon : EntityBase
+﻿public class Weapon : ItemBase
 {
     public Weapon(WeaponData weaponData) : base(weaponData)
     {

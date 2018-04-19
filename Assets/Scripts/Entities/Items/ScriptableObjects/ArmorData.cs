@@ -3,7 +3,7 @@
 public enum ArmorType { Head, Chest, Legs, Feet}
 
 [CreateAssetMenu(fileName = "New Armor", menuName = "Entities/Items/Armor")]
-public class ArmorData : ScriptableEntityData
+public class ArmorData : ScriptableItemData
 {
     [SerializeField] private ArmorType armorType;
     [SerializeField] private float defense;

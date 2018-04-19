@@ -23,7 +23,7 @@ public class BuildingController : Photon.MonoBehaviour
     // The object that is currently selected by the player to be build.
     private GameObject buildableToBuild = null;
     private Renderer buildableToBuildRenderer = null;
-    private Buildable buildableData = null;
+    private BuildableBase buildableData = null;
 
     private Renderer gridRenderer;
 
@@ -50,7 +50,7 @@ public class BuildingController : Photon.MonoBehaviour
     /// Activates the building mode, the buildable will be instantiated and follows the mouse.
     /// </summary>
     /// <param name="buildable"></param>
-    public void ActivateBuildMode(Buildable buildable)
+    public void ActivateBuildMode(BuildableBase buildable)
     {
         ExitBuildMode();
         
@@ -194,7 +194,7 @@ public class BuildingController : Photon.MonoBehaviour
     {
         GameObject gameObjectResource = Resources.Load<GameObject>("Buildable");
 
-        Buildable buildable = EntityFactory.CreateNewEntity(entityId) as Buildable;
+        BuildableBase buildable = EntityFactory.CreateNewEntity(entityId) as BuildableBase;
 
         //Get the mesh and materials from the referenced model.
         Mesh entityMesh = buildable.Model.GetComponent<MeshFilter>().sharedMesh;

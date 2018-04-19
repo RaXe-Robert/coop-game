@@ -81,30 +81,33 @@ public class InventoryEntitySlot : MonoBehaviour, IPointerEnterHandler, IPointer
         if (eventData.button == PointerEventData.InputButton.Right)
         {
 
-            if (entity is Buildable)
+            if (entity is BuildableBase)
             {
-                inventory.BuildingController?.ActivateBuildMode(entity as Buildable);
+                inventory.BuildingController?.ActivateBuildMode(entity as BuildableBase);
             }
-
-            else if (entity.IsConsumable && entity.OnConsumedEffects != null && entity.OnConsumedEffects.Count > 0)
+            else if (entity is ItemBase)
             {
-                PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(entity.OnConsumedEffects);
-
-                if (entity.StackSize > 1)
+                ItemBase item = entity as ItemBase;
+                if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
                 {
-                    entity.StackSize--;
-                    inventory.OnEntityChangedCallback?.Invoke();
+                    PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
+
+                    if (item.StackSize > 1)
+                    {
+                        item.StackSize--;
+                        inventory.OnEntityChangedCallback?.Invoke();
+                    }
+                    else
+                        inventory.RemoveEntityAtIndex(index);
+
+                    Tooltip.Instance.Hide();
                 }
-                else
-                    inventory.RemoveEntityAtIndex(index);
 
-                Tooltip.Instance.Hide();
-            }
-
-            else if(entity.Equippable)
-            {
-                equipmentManager.EquipItem(entity, index);
-                Tooltip.Instance.Hide();
+                else if (item.Equippable)
+                {
+                    equipmentManager.EquipItem(item, index);
+                    Tooltip.Instance.Hide();
+                }
             }
         }
     }
@@ -140,8 +143,9 @@ public class InventoryEntitySlot : MonoBehaviour, IPointerEnterHandler, IPointer
             //We got an item from our equipment.
             if(from.index == -1 && Entity != null)
             {
+                ItemBase item = entity as ItemBase;
                 //We cant equip a non equippable item.
-                if (!entity.Equippable)
+                if (!item.Equippable)
                     return;
 
                 //We cant swap the items it they arent the same type
@@ -163,7 +167,7 @@ public class InventoryEntitySlot : MonoBehaviour, IPointerEnterHandler, IPointer
             else if(from.index == -1 && Entity == null)
             {
                 //We are dragging an equipment piece on an empty inventory slot.
-                equipmentManager.UnEquipItem(from.Entity, index);
+                equipmentManager.UnequipItem(from.Entity as ItemBase, index);
             }
 
             else 

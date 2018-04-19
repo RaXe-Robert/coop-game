@@ -3,7 +3,7 @@
 public enum WeaponType { Sword, Axe, Mace, Bow }
 
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Entities/Items/Weapon")]
-public class WeaponData : ScriptableEntityData
+public class WeaponData : ScriptableItemData
 {
     [SerializeField] private WeaponType type;
     [SerializeField] private float minDamage;

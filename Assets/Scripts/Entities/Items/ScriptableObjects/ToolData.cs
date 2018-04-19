@@ -3,7 +3,7 @@
 public enum ToolType { Axe, Pickaxe }
 
 [CreateAssetMenu(fileName = "New Tool", menuName = "Entities/Items/Tool")]
-public class ToolData : ScriptableEntityData
+public class ToolData : ScriptableItemData
 {
     [SerializeField] private ToolType toolType;
     public ToolType ToolType { get { return toolType; } }

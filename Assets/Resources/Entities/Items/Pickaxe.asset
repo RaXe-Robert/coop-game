@@ -15,7 +15,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 5882d46022072ea4b9e607cd63bde06c, type: 3}
   model: {fileID: 100000, guid: 6d90a8ddfab85a1478b17efa8d8740f0, type: 3}
   description: A pickaxe
+  id: 94
   isConsumable: 0
   onConsumedEffects: []
-  id: 94
   toolType: 1

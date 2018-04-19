@@ -7,7 +7,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(PhotonView))]
 public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
 {
-    public Buildable buildable;
+    public BuildableBase buildable;
 
     public float interactDistance = 1f;
 
