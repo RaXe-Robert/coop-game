@@ -2,18 +2,18 @@
 using System;
 using UnityEngine.EventSystems;
 
-public class ToolItemSlot : InventoryEntitySlot
+public class ToolItemSlot : InventoryItemSlot
 {
     [SerializeField] private ToolType slotType;
     public ToolType SlotType { get { return slotType; } }
 
     public override void OnDrop(PointerEventData eventData)
     {
-        InventoryEntitySlot from;
-        if((from = eventData.pointerDrag.GetComponent<InventoryEntitySlot>()))
+        InventoryItemSlot from;
+        if((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
-            if (from.Entity.GetType() == typeof(Tool))
-                equipmentManager.EquipTool(from.Entity as Tool, from.index);
+            if (from.CurrentItem.GetType() == typeof(Tool))
+                equipmentManager.EquipTool(from.CurrentItem as Tool, from.index);
         }
     }
 
@@ -30,7 +30,7 @@ public class ToolItemSlot : InventoryEntitySlot
         transform.localPosition = Vector3.zero;
 
         if (!EventSystem.current.IsPointerOverGameObject())
-            equipmentManager.DropEquippedItem(Entity as ItemBase);
+            equipmentManager.DropEquippedItem(CurrentItem as Item);
     }
 }
 

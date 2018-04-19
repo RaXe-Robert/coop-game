@@ -12,83 +12,11 @@ MonoBehaviour:
   m_Name: CraftingList
   m_EditorClassIdentifier: 
   recipes:
-  - requiredEntities:
-    - entity: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 2
-    - entity: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+  - requiredItems:
+    - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
       amount: 2
     result:
-      entity: {fileID: 11400000, guid: 20ef82f7e4cfdbc45951d094469b28ba, type: 2}
+      item: {fileID: 11400000, guid: 20ef82f7e4cfdbc45951d094469b28ba, type: 2}
       amount: 1
-    amountToCraft: 1
     craftingTime: 2
-  - requiredEntities:
-    - entity: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 2
-    - entity: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      amount: 2
-    result:
-      entity: {fileID: 11400000, guid: fad4e623a4f44034a8cbc8833498dd64, type: 2}
-      amount: 1
     amountToCraft: 1
-    craftingTime: 2
-  - requiredEntities:
-    - entity: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 2
-    - entity: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      amount: 2
-    result:
-      entity: {fileID: 11400000, guid: a738bc6225886344f80851b1ead008b1, type: 2}
-      amount: 1
-    amountToCraft: 1
-    craftingTime: 2
-  - requiredEntities:
-    - entity: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 2
-    - entity: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      amount: 2
-    result:
-      entity: {fileID: 11400000, guid: 5290acea0f599e241bffea287a877fb6, type: 2}
-      amount: 1
-    amountToCraft: 1
-    craftingTime: 2
-  - requiredEntities:
-    - entity: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 2
-    - entity: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      amount: 2
-    result:
-      entity: {fileID: 11400000, guid: d77d6ef02105b1949b526e4b31bf77c0, type: 2}
-      amount: 1
-    amountToCraft: 1
-    craftingTime: 2
-  - requiredEntities:
-    - entity: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 2
-    - entity: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      amount: 2
-    result:
-      entity: {fileID: 11400000, guid: 7231196bed1b8b64e990bca2f0e35635, type: 2}
-      amount: 1
-    amountToCraft: 1
-    craftingTime: 2
-  - requiredEntities:
-    - entity: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 2
-    - entity: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      amount: 2
-    result:
-      entity: {fileID: 11400000, guid: 3babf6d415ca97b4f869989856adbe9c, type: 2}
-      amount: 1
-    amountToCraft: 1
-    craftingTime: 2
-  - requiredEntities:
-    - entity: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 5
-    - entity: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      amount: 5
-    result:
-      entity: {fileID: 11400000, guid: 2602437519f92cd459da2e5df177416b, type: 2}
-      amount: 1
-    amountToCraft: 1
-    craftingTime: 2

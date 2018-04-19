@@ -21,10 +21,10 @@ GameObject:
   - component: {fileID: 224896146996002182}
   - component: {fileID: 222443999489038226}
   - component: {fileID: 114661235224871454}
-  - component: {fileID: 114461718169735740}
   - component: {fileID: 225665276719301804}
+  - component: {fileID: 114449649165599156}
   m_Layer: 5
-  m_Name: InventorySlotEntity
+  m_Name: InventorySlotItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114461718169735740
+--- !u!114 &114449649165599156
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

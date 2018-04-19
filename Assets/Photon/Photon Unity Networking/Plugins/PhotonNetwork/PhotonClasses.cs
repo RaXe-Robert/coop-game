@@ -441,7 +441,7 @@ public interface IPunCallbacks
 public interface IPunPrefabPool
 {
     /// <summary>
-    /// This is called when PUN wants to create a new instance of an entity prefab. Must return valid GameObject with PhotonView.
+    /// This is called when PUN wants to create a new instance of an item prefab. Must return valid GameObject with PhotonView.
     /// </summary>
     /// <param name="prefabId">The id of this prefab.</param>
     /// <param name="position">The position we want the instance instantiated at.</param>
@@ -450,7 +450,7 @@ public interface IPunPrefabPool
     GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation);
 
     /// <summary>
-    /// This is called when PUN wants to destroy the instance of an entity prefab.
+    /// This is called when PUN wants to destroy the instance of an item prefab.
     /// </summary>
 	/// <remarks>
 	/// A pool needs some way to find out which type of GameObject got returned via Destroy().

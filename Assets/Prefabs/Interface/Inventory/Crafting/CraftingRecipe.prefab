@@ -1188,19 +1188,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5832d99347725c343889824b15f1b18d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredEntityPrefab: {fileID: 1966178791521778, guid: 80ad222dad8a19c48a37f0b66b370de5,
+  requiredItemPrefab: {fileID: 1966178791521778, guid: 80ad222dad8a19c48a37f0b66b370de5,
     type: 2}
   requiredEntities: {fileID: 224544078932411198}
   recipeResultImage: {fileID: 114986774477546096}
   recipeResultText: {fileID: 114860130719130168}
   craftingTimeText: {fileID: 114794795167339760}
   craftingRecipe:
-    requiredEntities: []
+    requiredItems: []
     result:
-      entity: {fileID: 0}
+      item: {fileID: 0}
       amount: 0
-    amountToCraft: 0
     craftingTime: 0
+    amountToCraft: 0
 --- !u!114 &114854981301054920
 MonoBehaviour:
   m_ObjectHideFlags: 1

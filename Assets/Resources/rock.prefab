@@ -28,7 +28,7 @@ GameObject:
   - component: {fileID: 64629248837855744}
   - component: {fileID: 208407444410447410}
   m_Layer: 0
-  m_Name: Rock
+  m_Name: rock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,10 +128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EntitiesToSpawn:
-  - {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-  AmountPerEntity: 
-  minRadius: -2
+  EntitiesToSpawn: []
+  AmountPerItem: 
+  minRadius: 0
   maxRadius: 2
 --- !u!114 &114655443740691952
 MonoBehaviour:
@@ -175,7 +174,7 @@ MonoBehaviour:
   interactDistance: 5
   spawnOnDepleted: {fileID: 0}
   healthComponent: {fileID: 114056808189935048}
-  entitiesToDropComponent: {fileID: 114400987669569362}
+  entitiesToDropComponent: {fileID: 0}
 --- !u!208 &208407444410447410
 NavMeshObstacle:
   m_ObjectHideFlags: 1

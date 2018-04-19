@@ -68,7 +68,7 @@ public class CraftingEditor : EditorWindow
         recipeList.onSelectCallback += SelectRecipe;
         recipeList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) =>
         {
-            ScriptableEntityData item = ((CraftingRecipe)recipeList.list[index]).result?.entity;
+            ScriptableItemData item = ((CraftingRecipe)recipeList.list[index]).result?.item;
             EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), item ? item.name : "New recipe");
         };
     }
@@ -76,7 +76,7 @@ public class CraftingEditor : EditorWindow
     private void DrawRecipeDataFields()
     {
         //Crafting result + amount
-        selectedRecipe.result.entity = (ScriptableEntityData)EditorGUILayout.ObjectField("Result", selectedRecipe.result.entity ?? null, typeof(ScriptableEntityData), false, GUILayout.Width(recipeDataDisplay.width * 0.5f));
+        selectedRecipe.result.item = (ScriptableItemData)EditorGUILayout.ObjectField("Result", selectedRecipe.result.item ?? null, typeof(ScriptableItemData), false, GUILayout.Width(recipeDataDisplay.width * 0.5f));
         selectedRecipe.result.amount = EditorGUI.IntField(new Rect(recipeDataDisplay.width * 0.52f, recipeDataDisplay.y - 5, recipeDataDisplay.width * 0.25f, EditorGUIUtility.singleLineHeight), "Amount", selectedRecipe.result != null ? selectedRecipe.result.amount : 0);
 
         //Crafting Time
@@ -91,24 +91,24 @@ public class CraftingEditor : EditorWindow
     {
         selectedRecipe = (CraftingRecipe)recipeList.list[reorderableList.index];
 
-        if (selectedRecipe.requiredEntities == null)
-            selectedRecipe.requiredEntities = new List<CraftingEntity>();
+        if (selectedRecipe.requiredItems == null)
+            selectedRecipe.requiredItems = new List<CraftingItem>();
 
         if (selectedRecipe.result == null)
-            selectedRecipe.result = new CraftingEntity();
+            selectedRecipe.result = new CraftingItem();
 
         CreateRequiredItemList();
     }
 
     private void CreateRequiredItemList()
     {
-        requiredItems = new ReorderableList(selectedRecipe.requiredEntities, typeof(CraftingEntity), true, true, true, true);
+        requiredItems = new ReorderableList(selectedRecipe.requiredItems, typeof(CraftingItem), true, true, true, true);
         requiredItems.drawHeaderCallback += (Rect rect) => { EditorGUI.LabelField(rect, "Required items"); };
 
         requiredItems.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) =>
         {
-            CraftingEntity requiredItem = (CraftingEntity)requiredItems.list[index];
-            requiredItem.entity = (ScriptableEntityData)EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width * 0.5f, EditorGUIUtility.singleLineHeight), "Required Item", requiredItem.entity, typeof(ScriptableEntityData), false);
+            CraftingItem requiredItem = (CraftingItem)requiredItems.list[index];
+            requiredItem.item = (ScriptableItemData)EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width * 0.5f, EditorGUIUtility.singleLineHeight), "Required Item", requiredItem.item, typeof(ScriptableItemData), false);
             requiredItem.amount = EditorGUI.IntField(new Rect(rect.width * 0.55f, rect.y, rect.width * 0.4f, EditorGUIUtility.singleLineHeight), "Required Amount", requiredItem.amount);
         };
     }
@@ -116,7 +116,7 @@ public class CraftingEditor : EditorWindow
     private void AddNewRecipe(ReorderableList reorderableList)
     {
         selectedRecipe = (CraftingRecipe)recipeList.list[reorderableList.index];
-        selectedRecipe.requiredEntities = new List<CraftingEntity>();
-        selectedRecipe.result = new CraftingEntity();
+        selectedRecipe.requiredItems = new List<CraftingItem>();
+        selectedRecipe.result = new CraftingItem();
     }
 }

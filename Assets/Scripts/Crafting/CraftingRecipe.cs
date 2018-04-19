@@ -5,9 +5,10 @@ using UnityEngine;
 [Serializable]
 public class CraftingRecipe
 {
-    public List<CraftingEntity> requiredEntities;
-    public CraftingEntity result;
+    public List<CraftingItem> requiredItems;
+    public CraftingItem result;
+    public float craftingTime;
+
     [HideInInspector]
     public int amountToCraft;
-    public float craftingTime;
 }

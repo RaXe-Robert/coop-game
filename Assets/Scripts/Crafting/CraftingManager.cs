@@ -24,7 +24,7 @@ public class CraftingManager : MonoBehaviour
 
     private void CompleteCraft(CraftingRecipe recipe)
     {
-        inventory.AddEntityById(recipe.result.entity.Id, recipe.result.amount);
+        inventory.AddItemById(recipe.result.item.Id, recipe.result.amount);
     }
 
     private void Update()

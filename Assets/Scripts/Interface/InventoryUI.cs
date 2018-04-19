@@ -12,17 +12,17 @@ public class InventoryUI : MonoBehaviour {
     private Inventory inventory;
     private EquipmentManager equipmentManager;
 
-    private List<InventoryEntitySlot> inventorySlots;
+    private List<InventoryItemSlot> inventorySlots;
 
     private void Start () {
         inventory = FindObjectOfType<Inventory>();
         equipmentManager = FindObjectOfType<EquipmentManager>();
-        inventorySlots = new List<InventoryEntitySlot>(Inventory.InventorySize + Inventory.HotbarSize);
+        inventorySlots = new List<InventoryItemSlot>(Inventory.InventorySize + Inventory.HotbarSize);
 
         InitializeHotbar();
         InitializeInventory();
 
-        inventory.OnEntityChangedCallback += UpdateUI;
+        inventory.OnItemChangedCallback += UpdateUI;
 	}
 
     public void UpdateUI()
@@ -30,14 +30,14 @@ public class InventoryUI : MonoBehaviour {
         for (int i = Inventory.HotbarSize; i < Inventory.InventorySize + Inventory.HotbarSize; i++)
         {
             if (i < inventory.inventoryEntities.Count)
-                inventorySlots[i].Entity = inventory.inventoryEntities[i];
+                inventorySlots[i].CurrentItem = inventory.inventoryEntities[i];
             else inventorySlots[i].Clear();
         }
 
         for (int i = 0; i < Inventory.HotbarSize; i++)
         {
             if (i < inventory.inventoryEntities.Count)
-                inventorySlots[i].Entity = inventory.inventoryEntities[i];
+                inventorySlots[i].CurrentItem = inventory.inventoryEntities[i];
             else inventorySlots[i].Clear();
         }
     }
@@ -47,7 +47,7 @@ public class InventoryUI : MonoBehaviour {
         for (int i = 0; i < Inventory.HotbarSize; i++)
         {
             var go = Instantiate(inventorySlotPrefab, hotbarUIGo.transform);
-            inventorySlots.Add(go.GetComponentInChildren<InventoryEntitySlot>());
+            inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
             inventorySlots[i].Initialize(i, inventory, equipmentManager);
         }
     }
@@ -57,7 +57,7 @@ public class InventoryUI : MonoBehaviour {
         for (int i = Inventory.HotbarSize; i < Inventory.HotbarSize + Inventory.InventorySize; i++)
         {
             var go = Instantiate(inventorySlotPrefab, inventoryUIGo.transform);
-            inventorySlots.Add(go.GetComponentInChildren<InventoryEntitySlot>());
+            inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
             inventorySlots[i].Initialize(i, inventory, equipmentManager);
         }
     }

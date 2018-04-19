@@ -2,15 +2,15 @@
 using System;
 using UnityEngine.EventSystems;
 
-public class WeaponItemSlot : InventoryEntitySlot
+public class WeaponItemSlot : InventoryItemSlot
 {
     public override void OnDrop(PointerEventData eventData)
     {
-        InventoryEntitySlot from;
-        if ((from = eventData.pointerDrag.GetComponent<InventoryEntitySlot>()))
+        InventoryItemSlot from;
+        if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
-            if (from.Entity.GetType() == typeof(Weapon))
-                equipmentManager.EquipWeapon(from.Entity as Weapon, from.index);
+            if (from.CurrentItem.GetType() == typeof(Weapon))
+                equipmentManager.EquipWeapon(from.CurrentItem as Weapon, from.index);
         }
     }
 
@@ -27,7 +27,7 @@ public class WeaponItemSlot : InventoryEntitySlot
         transform.localPosition = Vector3.zero;
 
         if (!EventSystem.current.IsPointerOverGameObject())
-            equipmentManager.DropEquippedItem(Entity as ItemBase);
+            equipmentManager.DropEquippedItem(CurrentItem as Item);
     }
 }
 
