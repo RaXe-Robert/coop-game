@@ -46,6 +46,13 @@ public class Inventory : MonoBehaviour
 
     private void AddNewEntityStackById(int entityId, int stackSize)
     {
+        //If inventory is full we drop the entities on the floor
+        if (!inventoryEntities.FirstNullIndexAt().HasValue)
+        {
+            EntityFactory.CreateWorldObject(transform.position, entityId, stackSize);
+            return;
+        }
+
         EntityBase entity = EntityFactory.CreateNewEntity(entityId, stackSize);
         var emptyIndex = inventoryEntities.FirstNullIndexAt();
 
@@ -105,7 +112,7 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Removes an Entity from the inventory
+    /// Removes an entity from the inventory
     /// </summary>
     public void RemoveEntityAtIndex(int index)
     {
@@ -115,7 +122,7 @@ public class Inventory : MonoBehaviour
             OnEntityChangedCallback?.Invoke();
         }
         else
-            print($"Tried removing entity at index {index} but it couldnt be found in the inventory");
+            print($"Tried removing an entity at index {index} but it couldnt be found in the inventory");
     }
 
     public void SwapEntities(int indexA, int indexB)
@@ -261,9 +268,16 @@ public class Inventory : MonoBehaviour
             return;
 
         EntityBase entity = EntityFactory.CreateNewEntity(entityId, stackSize);
+
         if (!inventoryEntities.FirstNullIndexAt().HasValue)
         {
-            EntityFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, entity.Id, stackSize);
+            //Check if we are adding a resource entity, if so we check if we have full stacks of the entity.
+            if (entity.GetType() == typeof(Resource))
+                if (GetEntityAmountById(entity.Id) % 64 != 0)
+                    FillEntityStacksById(entityId, stackSize);
+
+                else
+                    EntityFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, entity.Id, stackSize);
         }
         else
         {
@@ -300,7 +314,7 @@ public class Inventory : MonoBehaviour
     /// <returns>Whether there are enough materials to craft this recipe</returns>
     public bool RemoveEntitiesForCrafting(CraftingRecipe recipe)
     {
-        for (int i = 0; i < recipe.requiredEntities.Length; i++)
+        for (int i = 0; i < recipe.requiredEntities.Count; i++)
         {
             var requiredEntities = recipe.requiredEntities[i];
             if (!CheckAmountById(requiredEntities.entity.Id, requiredEntities.amount * recipe.amountToCraft))
@@ -310,7 +324,7 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < recipe.requiredEntities.Length; i++)
+        for (int i = 0; i < recipe.requiredEntities.Count; i++)
         {
             var requiredEntities = recipe.requiredEntities[i];
             RemoveEntityById(requiredEntities.entity.Id, requiredEntities.amount * recipe.amountToCraft);

@@ -20,7 +20,7 @@ MonoBehaviour:
     result:
       entity: {fileID: 11400000, guid: 20ef82f7e4cfdbc45951d094469b28ba, type: 2}
       amount: 1
-    amountToCraft: 6
+    amountToCraft: 1
     craftingTime: 2
   - requiredEntities:
     - entity: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
@@ -84,11 +84,11 @@ MonoBehaviour:
     craftingTime: 2
   - requiredEntities:
     - entity: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 2
+      amount: 5
     - entity: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      amount: 2
+      amount: 5
     result:
       entity: {fileID: 11400000, guid: da34b5b3a3d262d4cb5ef91544d4d0c0, type: 2}
       amount: 1
-    amountToCraft: 1
+    amountToCraft: 10
     craftingTime: 2

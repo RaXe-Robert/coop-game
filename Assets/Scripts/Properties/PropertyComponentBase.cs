@@ -68,49 +68,6 @@ public abstract class PropertyComponentBase : Photon.MonoBehaviour, IPunObservab
     public abstract void IncreaseValue(float amount);
     public abstract void DecreaseValue(float amount);
 
-    /*
-    /// <summary>
-    /// Change the value of this component positively.
-    /// </summary>
-    /// <param name="amount">The amount to add.</param>
-    public void IncreaseValue(float amount)
-    {
-        if (amount < 0)
-            return;
-
-        photonView.RPC("RPC_IncreaseValue", PhotonTargets.MasterClient, amount);
-    }
-
-    /// <summary>
-    /// Change the value of this component negatively.
-    /// </summary>
-    /// <param name="amount">The amount to subtract.</param>
-    public void DecreaseValue(float amount)
-    {
-        if (amount < 0)
-            return;
-
-        photonView.RPC("RPC_DecreaseValue", PhotonTargets.MasterClient, amount);
-    }
-
-    [PunRPC]
-    public void RPC_IncreaseValue(float amount)
-    {
-        if (amount < 0)
-            return;
-
-        Value += amount;
-    }
-
-    [PunRPC]
-    public void RPC_DecreaseValue(float amount)
-    {
-        if (amount < 0)
-            return;
-
-        Value -= amount;
-    }*/
-
     /// <summary>
     /// If an outside class calls the getter of this Value apply certain effects to this value first
     /// </summary>

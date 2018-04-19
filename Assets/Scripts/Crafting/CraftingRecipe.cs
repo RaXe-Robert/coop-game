@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
 public class CraftingRecipe
 {
-    public CraftingEntity[] requiredEntities;
+    public List<CraftingEntity> requiredEntities;
     public CraftingEntity result;
     [HideInInspector]
     public int amountToCraft;

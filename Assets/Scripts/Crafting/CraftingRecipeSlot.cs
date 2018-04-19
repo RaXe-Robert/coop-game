@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingRecipeSlot : MonoBehaviour {
-
+public class CraftingRecipeSlot : MonoBehaviour
+{
     [SerializeField] private GameObject requiredEntityPrefab;
     [SerializeField] private Transform requiredEntities;
     [SerializeField] private Image recipeResultImage;
@@ -26,21 +26,52 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
         craftingRecipe = recipe;
         this.inventory = inventory;
-        inventory.OnEntityChangedCallback += UpdateRequiredEntities;
 
-        //Set result
-        recipeResultImage.sprite = craftingRecipe.result.entity.Sprite;
-        recipeResultText.text = craftingRecipe.result.entity.name;
-        craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
+        if (ValidateRecipe())
+        {
+            //Set result
+            inventory.OnEntityChangedCallback += UpdateRequiredEntities;
+            recipeResultImage.sprite = craftingRecipe.result.entity.Sprite;
+            recipeResultText.text = craftingRecipe.result.entity.name;
+            craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
 
-        InitializeRequiredEntities();
+            InitializeRequiredEntities();
+        }
+    }
+
+    //Logging if something is wrong with the crafting recipe    
+    private bool ValidateRecipe()
+    {
+        if (craftingRecipe.result.entity == null || craftingRecipe.result.amount <= 0)
+        {
+            Debug.LogError($"There is a crafting recipe without a result or the result amount is invalid");
+            Destroy(gameObject);
+            return false;
+        }
+        foreach (var craftingEntity in craftingRecipe.requiredEntities)
+        {
+            if (craftingEntity.entity == null)
+            {
+                Debug.LogError($"{craftingRecipe.result.entity.name} crafting recipe is missing some data");
+                Destroy(gameObject);
+                return false;
+            }
+            if (craftingEntity.amount <= 0)
+            {
+                Debug.LogError($"{craftingRecipe.result.entity.name} recipe has a required entity with an invalid amount");
+                Destroy(gameObject);
+                return false;
+            }
+        }
+        return true;
     }
 
     private void InitializeRequiredEntities()
     {
-        for (int i = 0; i < craftingRecipe.requiredEntities.Length; i++)
+        for (int i = 0; i < craftingRecipe.requiredEntities.Count; i++)
         {
             var go = Instantiate(requiredEntityPrefab, requiredEntities);
+
             go.GetComponent<Image>().sprite = craftingRecipe.requiredEntities[i].entity.Sprite;
             go.GetComponentInChildren<Text>().text = $"{inventory.GetEntityAmountById(craftingRecipe.requiredEntities[i].entity.Id)} / {craftingRecipe.requiredEntities[i].amount * amountToCraft}";
         }
@@ -48,7 +79,7 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
     private void UpdateRequiredEntities()
     {
-        for (int i = 0; i < craftingRecipe.requiredEntities.Length; i++)
+        for (int i = 0; i < craftingRecipe.requiredEntities.Count; i++)
         {
             requiredEntities.GetChild(i).gameObject.GetComponentInChildren<Text>().text = $"{inventory.GetEntityAmountById(craftingRecipe.requiredEntities[i].entity.Id)} / {craftingRecipe.requiredEntities[i].amount * amountToCraft}";
         }

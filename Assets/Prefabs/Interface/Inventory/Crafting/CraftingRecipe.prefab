@@ -232,7 +232,7 @@ GameObject:
   - component: {fileID: 114252277764589954}
   - component: {fileID: 114064908189807762}
   m_Layer: 5
-  m_Name: RequiredItems
+  m_Name: RequiredEntities
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
