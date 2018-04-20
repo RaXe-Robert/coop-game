@@ -21,8 +21,7 @@ public class ControlsUIManager : MonoBehaviour {
 
         for (int i = 0; i < buttonNames.Length; i++)
         {
-            string bn;
-            bn = buttonNames[i];
+            string bn = buttonNames[i];
 
             GameObject go = Instantiate(keyItemPrefab);
             go.transform.SetParent(keyList.transform);

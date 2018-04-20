@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour {
     {
         changableButtonKeys = new Dictionary<string, KeyCode>
         {
-            //TODO: The movement keys are still a Input.Getaxis in the PlayerInputController.cs
+            //TODO: The movement keys are still a Input.Getaxisraw in the PlayerMovementController.cs
             //["Forward"] = KeyCode.W,
             //["Backward"] = KeyCode.S,
             //["Left"] = KeyCode.A,
@@ -27,33 +27,32 @@ public class InputManager : MonoBehaviour {
         staticButtonKeys = new Dictionary<string, KeyCode>
         {
             ["Escape"] = KeyCode.Escape,
-            ["Camera rotation"] = KeyCode.Mouse1,      
-            ["Camera zoom"] = KeyCode.Mouse2,       
+            ["Camera rotation"] = KeyCode.Mouse1,  
             ["Spawn item"] = KeyCode.R
         };
     }
 
-    public float GetAxis(string buttonName)
+    public float GetAxis(string axisName)
     {
         //Make sure buttons don't react when interface is open
         if (GameInterfaceManager.Instance.IsAnyInterfaceOpen())
         {
             return 0;
         }
-        return Input.GetAxis(buttonName);
+        return Input.GetAxis(axisName);
     }
 
-    public float GetAxisRaw(string buttonName)
+    public float GetAxisRaw(string axisName)
     {
         //Make sure buttons don't react when interface is open
         if (GameInterfaceManager.Instance.IsAnyInterfaceOpen())
         {
             return 0;
         }
-        return Input.GetAxisRaw(buttonName);
+        return Input.GetAxisRaw(axisName);
     }
 
-    public bool GetButtonDown( string buttonName)
+    public bool GetButtonDown(string buttonName)
     {
         //Make sure buttons do react when interface is open
 
