@@ -12,11 +12,10 @@ public class InputManager : MonoBehaviour {
     {
         changableButtonKeys = new Dictionary<string, KeyCode>
         {
-            //TODO: The movement keys are still a Input.Getaxisraw in the PlayerMovementController.cs
-            //["Forward"] = KeyCode.W,
-            //["Backward"] = KeyCode.S,
-            //["Left"] = KeyCode.A,
-            //["Right"] = KeyCode.D,
+            ["Up"] = KeyCode.W,
+            ["Down"] = KeyCode.S,
+            ["Left"] = KeyCode.A,
+            ["Right"] = KeyCode.D,
             ["Crafting"] = KeyCode.C,
             ["Inventory"] = KeyCode.I,
             ["Equipment"] = KeyCode.F,   
@@ -49,7 +48,24 @@ public class InputManager : MonoBehaviour {
         {
             return 0;
         }
-        return Input.GetAxisRaw(axisName);
+
+        if (axisName.Equals("Horizontal"))
+        {
+            if (GetButton("Left") && !GetButton("Right"))
+                return -1f;
+            else if (GetButton("Right") && !GetButton("Left"))
+                return 1f;
+        }
+
+        if (axisName.Equals("Vertical"))
+        {
+            if (GetButton("Up") && !GetButton("Down"))
+                return 1f;
+            else if (GetButton("Down") && !GetButton("Up"))
+                return -1f;
+        }
+
+        return 0;
     }
 
     public bool GetButtonDown(string buttonName)
