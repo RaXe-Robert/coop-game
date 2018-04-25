@@ -24,7 +24,7 @@ public class NetworkManager : MonoBehaviour
     /// </summary>
     public void Disconnect()
     {
-        print("NM Disconnect");
+        print("[NetworkManager] Disconnecting...");
         if (PhotonNetwork.connected)
         {
             PhotonNetwork.Disconnect();
