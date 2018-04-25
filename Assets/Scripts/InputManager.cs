@@ -4,10 +4,11 @@ using UnityEngine;
 using System.Linq;
 
 public class InputManager : MonoBehaviour {
-    
+
+    public ControlsUIManager ui;
     private Dictionary<string, KeyCode> changableButtonKeys;
     private Dictionary<string, KeyCode> staticButtonKeys;
-        
+    
     private void OnEnable()
     {
         changableButtonKeys = new Dictionary<string, KeyCode>
@@ -116,8 +117,25 @@ public class InputManager : MonoBehaviour {
         return changableButtonKeys[buttonName].ToString();
     }
 
-    public void SetChangableButtonForKey( string buttonName, KeyCode keyCode)
+    public void SetChangableButtonForKey(string buttonName, KeyCode keyCode)
     {
-        changableButtonKeys[buttonName] = keyCode;
+        if (IsButtonAvailable(keyCode))
+        {
+            changableButtonKeys[buttonName] = keyCode;
+            ui.SetLabel(keyCode);
+        }
+        else
+        {
+            ui.ButtonInUse(buttonName);
+        }
+    }
+
+    private bool IsButtonAvailable(KeyCode keyCode)
+    {
+        if (changableButtonKeys.ContainsValue(keyCode) || staticButtonKeys.ContainsValue(keyCode))
+        {
+            return false;
+        }
+        return true;
     }
 }

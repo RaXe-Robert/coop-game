@@ -49,8 +49,6 @@ public class ControlsUIManager : MonoBehaviour {
                     if (Input.GetKeyDown(kc))
                     {
                         inputManager.SetChangableButtonForKey(buttonToRebind, kc);
-                        buttonToLabel[buttonToRebind].text = kc.ToString();
-                        buttonToRebind = null;
                         break;
                     }
                 }
@@ -62,5 +60,17 @@ public class ControlsUIManager : MonoBehaviour {
     {
         buttonToRebind = buttonName;
         buttonToLabel[buttonToRebind].text = "Press the new button";
+    }
+
+    public void ButtonInUse(string buttonName)
+    {
+        buttonToRebind = buttonName;
+        buttonToLabel[buttonToRebind].text = "Button already in use";
+    }
+
+    public void SetLabel(KeyCode kc)
+    {
+        buttonToLabel[buttonToRebind].text = kc.ToString();
+        buttonToRebind = null;
     }
 }

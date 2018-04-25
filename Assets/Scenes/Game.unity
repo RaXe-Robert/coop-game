@@ -1949,6 +1949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 205d1e270b0d4d34c9ff4222d9454cf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ui: {fileID: 2031770326}
 --- !u!1 &1664253369
 GameObject:
   m_ObjectHideFlags: 0
@@ -2804,7 +2805,7 @@ Prefab:
     - target: {fileID: 224113996752688282, guid: 6058f041145dfa845ab94de7144c988f,
         type: 2}
       propertyPath: m_AnchorMin.y
-      value: 0.28491646
+      value: 0.000000059604645
       objectReference: {fileID: 0}
     - target: {fileID: 224113996752688282, guid: 6058f041145dfa845ab94de7144c988f,
         type: 2}
@@ -2865,6 +2866,40 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 224075429476743164, guid: 6058f041145dfa845ab94de7144c988f,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224075429476743164, guid: 6058f041145dfa845ab94de7144c988f,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.0000026964121
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6058f041145dfa845ab94de7144c988f, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &2031770326 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114346707775522358, guid: 6058f041145dfa845ab94de7144c988f,
+    type: 2}
+  m_PrefabInternal: {fileID: 2031770325}
+  m_Script: {fileID: 11500000, guid: eef69f6f3a5fe584bb5275c17ac724d9, type: 3}
+--- !u!1 &2031770327 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1038039039333602, guid: 6058f041145dfa845ab94de7144c988f,
+    type: 2}
+  m_PrefabInternal: {fileID: 2031770325}
+--- !u!114 &2031770328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2031770327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 1
