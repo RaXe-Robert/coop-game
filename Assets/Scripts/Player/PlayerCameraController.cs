@@ -4,7 +4,6 @@ using System.Collections;
 public class PlayerCameraController : MonoBehaviour
 {
     private Transform target;
-    private InputManager inputManager;
 
     [SerializeField] private GameObject cameraPrefab;
     [SerializeField] private Vector3 offset;
@@ -27,7 +26,6 @@ public class PlayerCameraController : MonoBehaviour
 
     private void Awake()
     {
-        inputManager = FindObjectOfType<InputManager>();
         target = gameObject.transform;
         isFollowing = false;
     }
@@ -37,22 +35,22 @@ public class PlayerCameraController : MonoBehaviour
         if (isFollowing == false)
             return;
 
-        if (inputManager.GetButton("Camera rotation"))
+        if (InputManager.Instance.GetButton("Camera rotation"))
         {
-            angle += inputManager.GetAxisRaw("Mouse X") * angleRotationSpeed * 2 * Time.deltaTime;
+            angle += InputManager.Instance.GetAxisRaw("Mouse X") * angleRotationSpeed * 2 * Time.deltaTime;
         }
 
         if (target && Application.isFocused)
         {
-            if (inputManager.GetButton("Left camera rotation"))
+            if (InputManager.Instance.GetButton("Left camera rotation"))
             {
                 angle -= angleRotationSpeed * Time.deltaTime;
             }
-            if (inputManager.GetButton("Right camera rotation"))
+            if (InputManager.Instance.GetButton("Right camera rotation"))
             {
                 angle += angleRotationSpeed * Time.deltaTime;
             }
-            zoom = Mathf.Clamp(zoom - (inputManager.GetAxis("Mouse ScrollWheel") * zoomSpeed), zoomMinimum, zoomMaximum);
+            zoom = Mathf.Clamp(zoom - (InputManager.Instance.GetAxis("Mouse ScrollWheel") * zoomSpeed), zoomMinimum, zoomMaximum);
         }
     }
 

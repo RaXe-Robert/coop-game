@@ -16,7 +16,6 @@ public class Inventory : MonoBehaviour
     public List<ItemBase> inventoryItems;
     private PhotonView photonView;
     private EquipmentManager equipmentManager;
-    private InputManager inputManager;
 
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;
@@ -30,7 +29,6 @@ public class Inventory : MonoBehaviour
     {
         inventoryItems = new List<ItemBase>(new ItemBase[InventorySize + HotbarSize]);
         photonView = GetComponent<PhotonView>();
-        inputManager = FindObjectOfType<InputManager>();
     }
 
     private void Update()
@@ -39,7 +37,7 @@ public class Inventory : MonoBehaviour
             return;
 
 #if UNITY_EDITOR
-        if (inputManager.GetButtonDown("Spawn item"))
+        if (InputManager.Instance.GetButtonDown("Spawn item"))
         {
             AddItemById(stick.Id, 50);
             AddItemById(diamond.Id, 50);

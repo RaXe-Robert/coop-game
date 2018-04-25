@@ -5,10 +5,18 @@ using System.Linq;
 
 public class InputManager : MonoBehaviour {
 
+    public static InputManager Instance { get; private set; }
+
     public ControlsUIManager ui;
     private Dictionary<string, KeyCode> changableButtonKeys;
     private Dictionary<string, KeyCode> staticButtonKeys;
     
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
+
     private void OnEnable()
     {
         changableButtonKeys = new Dictionary<string, KeyCode>

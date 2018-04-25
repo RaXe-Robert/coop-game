@@ -5,7 +5,6 @@ using System.Collections;
 [RequireComponent(typeof(StatsComponent))]
 public class PlayerMovementController : Photon.MonoBehaviour
 {
-    private InputManager inputManager;
     private Rigidbody rigidbodyComponent;
     private Animator animator;
     private UnityEngine.AI.NavMeshAgent agent;
@@ -22,7 +21,6 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
     private void Awake()
     {
-        inputManager = FindObjectOfType<InputManager>();
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
@@ -96,7 +94,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         cameraDirectionForward.y = 0;
         Vector3 cameraDirectionRight = Quaternion.Euler(0, 90, 0) * cameraDirectionForward;
 
-        Vector3 movementInput = (cameraDirectionForward * inputManager.GetAxisRaw("Vertical") + cameraDirectionRight * inputManager.GetAxisRaw("Horizontal"));
+        Vector3 movementInput = (cameraDirectionForward * InputManager.Instance.GetAxisRaw("Vertical") + cameraDirectionRight * InputManager.Instance.GetAxisRaw("Horizontal"));
 
         if (movementInput != Vector3.zero)
         {

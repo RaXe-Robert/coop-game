@@ -5,11 +5,9 @@ using UnityEngine;
 public class PlayerInputController : MonoBehaviour {
 
     private PhotonView photonview;
-    private InputManager inputManager;
 
     private void Start()
     {
-        inputManager = FindObjectOfType<InputManager>();
         photonview = GetComponent<PhotonView>();
     }
 
@@ -17,16 +15,16 @@ public class PlayerInputController : MonoBehaviour {
     {
         if (photonview.isMine)
         {
-            if (inputManager.GetButtonDown( "Escape" ))
+            if (InputManager.Instance.GetButtonDown( "Escape" ))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.EscapeMenu);
 
-            if (inputManager.GetButtonDown( "Crafting" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
+            if (InputManager.Instance.GetButtonDown( "Crafting" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Crafting);
 
-            if (inputManager.GetButtonDown( "Equipment" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
+            if (InputManager.Instance.GetButtonDown( "Equipment" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Equipment);
 
-            if (inputManager.GetButtonDown( "Inventory" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
+            if (InputManager.Instance.GetButtonDown( "Inventory" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Inventory);
         }
     }

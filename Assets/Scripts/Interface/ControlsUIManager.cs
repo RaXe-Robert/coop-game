@@ -5,8 +5,7 @@ using UnityEngine.UI;
 using System;
 
 public class ControlsUIManager : MonoBehaviour {
-
-    private InputManager inputManager;
+    
     public GameObject keyItemPrefab;
     public GameObject keyList;
 
@@ -14,9 +13,7 @@ public class ControlsUIManager : MonoBehaviour {
     private Dictionary<string, Text> buttonToLabel;
     
     void Start () {
-        inputManager = GameObject.FindObjectOfType<InputManager>();
-
-        string[] buttonNames = inputManager.GetChangableButtonNames();
+        string[] buttonNames = InputManager.Instance.GetChangableButtonNames();
         buttonToLabel = new Dictionary<string, Text>();
 
         for (int i = 0; i < buttonNames.Length; i++)
@@ -31,7 +28,7 @@ public class ControlsUIManager : MonoBehaviour {
             buttonNameText.text = bn;            
 
             Text keyNameText = go.transform.Find("Button/KeyName").GetComponent<Text>();
-            keyNameText.text = inputManager.GetNameForChangableButton(bn);
+            keyNameText.text = InputManager.Instance.GetNameForChangableButton(bn);
             buttonToLabel[bn] = keyNameText;
 
             Button keyBindButton = go.transform.Find("Button").GetComponent<Button>();
@@ -48,7 +45,7 @@ public class ControlsUIManager : MonoBehaviour {
                 {
                     if (Input.GetKeyDown(kc))
                     {
-                        inputManager.SetChangableButtonForKey(buttonToRebind, kc);
+                        InputManager.Instance.SetChangableButtonForKey(buttonToRebind, kc);
                         break;
                     }
                 }
