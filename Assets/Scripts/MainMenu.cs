@@ -104,7 +104,6 @@ public class MainMenu : MonoBehaviour
     private void OnPhotonCreateRoomFailed(object[] codeAndMessage)
     {
         ShowErrorMessagePanel(codeAndMessage[0].ToString(), codeAndMessage[1].ToString());
-        print("Failed to create a room: " + codeAndMessage[1]);
     }
 
     private void OnCreatedRoom()
@@ -206,6 +205,7 @@ public class MainMenu : MonoBehaviour
     {
         errorMessage.text = $"[{code}] {message}";
         OpenMenu(errorMessagePanel, disablePrevious: false);
+        print($"Error: [{code}] { message}");
     }
 
     public void CloseErrorMessagePanel()
