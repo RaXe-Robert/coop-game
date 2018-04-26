@@ -15,16 +15,16 @@ public class PlayerInputController : MonoBehaviour {
     {
         if (photonview.isMine)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (InputManager.GetButtonDown( "Escape" ))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.EscapeMenu);
 
-            if (Input.GetKeyDown(KeyCode.F) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
+            if (InputManager.GetButtonDown( "Crafting" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Crafting);
 
-            if (Input.GetKeyDown(KeyCode.C) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
+            if (InputManager.GetButtonDown( "Equipment" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Equipment);
 
-            if (Input.GetKeyDown(KeyCode.B) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
+            if (InputManager.GetButtonDown( "Inventory" ) && !GameInterfaceManager.Instance.IsInterfaceOpen(GameInterface.EscapeMenu))
                 GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Inventory);
         }
     }

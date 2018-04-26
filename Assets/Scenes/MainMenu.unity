@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
+  m_AmbientIntensity: 0
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -3965,6 +3965,21 @@ Prefab:
       propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
       value: 2.0000
       objectReference: {fileID: 0}
+    - target: {fileID: 198655463973430396, guid: 507939ca034a5e145a8351a3bda185e9,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 2.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198655463973430396, guid: 507939ca034a5e145a8351a3bda185e9,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 2.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198655463973430396, guid: 507939ca034a5e145a8351a3bda185e9,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 2.0000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 507939ca034a5e145a8351a3bda185e9, type: 2}
   m_IsPrefabParent: 0
@@ -4145,7 +4160,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 3
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -7810,9 +7825,30 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114068670729204306, guid: cdb8c23d422cae34f8faa3f34f8df571,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1737162759}
+    - target: {fileID: 114068670729204306, guid: cdb8c23d422cae34f8faa3f34f8df571,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseErrorMessagePanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 114068670729204306, guid: cdb8c23d422cae34f8faa3f34f8df571,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cdb8c23d422cae34f8faa3f34f8df571, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1737162759 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114464156610780758, guid: cdb8c23d422cae34f8faa3f34f8df571,
+    type: 2}
+  m_PrefabInternal: {fileID: 1737162758}
+  m_Script: {fileID: 11500000, guid: 6e0a9b3d83b2bf3478b94c781e3fa313, type: 3}
 --- !u!1 &1863046042
 GameObject:
   m_ObjectHideFlags: 0

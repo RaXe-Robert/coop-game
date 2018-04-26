@@ -37,16 +37,23 @@ public class Inventory : MonoBehaviour
             return;
 
 #if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.R))
+        if (InputManager.GetButtonDown("Spawn item"))
         {
-            AddItemById(stick.Id, 10);
-            AddItemById(diamond.Id, 10);
+            AddItemById(stick.Id, 50);
+            AddItemById(diamond.Id, 50);
         }
 #endif
     }
 
     private void AddNewItemStackById(int itemId, int stackSize)
     {
+        //If inventory is full we drop the items on the floor
+        if (!inventoryItems.FirstNullIndexAt().HasValue)
+        {
+            ItemFactory.CreateWorldObject(transform.position, itemId, stackSize);
+            return;
+        }
+
         ItemBase item = ItemFactory.CreateNewItem(itemId, stackSize);
         var emptyIndex = inventoryItems.FirstNullIndexAt();
 
@@ -263,9 +270,16 @@ public class Inventory : MonoBehaviour
             return;
 
         ItemBase item = ItemFactory.CreateNewItem(itemId, stackSize);
+
         if (!inventoryItems.FirstNullIndexAt().HasValue)
         {
-            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);
+            //Check if we are adding a resource item, if so we check if we have full stacks of the item.
+            if (item.GetType() == typeof(Resource))
+                if (GetItemAmountById(item.Id) % 64 != 0)
+                    FillItemStacksById(itemId, stackSize);
+
+            else
+                ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);
         }
         else
         {
@@ -302,7 +316,7 @@ public class Inventory : MonoBehaviour
     /// <returns>Whether there are enough materials to craft this recipe</returns>
     public bool RemoveItemsForCrafting(CraftingRecipe recipe)
     {
-        for (int i = 0; i < recipe.requiredItems.Length; i++)
+        for (int i = 0; i < recipe.requiredItems.Count; i++)
         {
             var requiredItem = recipe.requiredItems[i];
             if (!CheckAmountById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft))
@@ -312,7 +326,7 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < recipe.requiredItems.Length; i++)
+        for (int i = 0; i < recipe.requiredItems.Count; i++)
         {
             var requiredItem = recipe.requiredItems[i];
             RemoveItemById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft);

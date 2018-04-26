@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(PhotonView))]
 public class CustomInRoomChat : Photon.MonoBehaviour
 {
+    public static CustomInRoomChat Instance { get; private set; }
+
     public Text content;
     public InputField input;
     public Button sendButton;
@@ -14,12 +16,17 @@ public class CustomInRoomChat : Photon.MonoBehaviour
     
     public bool IsVisible = true;
     public static readonly string ChatRPC = "Chat";
- 
+
+    public void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
+
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
-        {
-            
+        if (UnityEngine.Input.GetKeyDown(KeyCode.KeypadEnter) || UnityEngine.Input.GetKeyDown(KeyCode.Return))
+        {            
             if (EventSystem.current.currentSelectedGameObject == input.gameObject)
             {
                 SendMessage();
@@ -27,7 +34,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
             EventSystem.current.SetSelectedGameObject(input.gameObject, null);
             input.OnPointerClick(new PointerEventData(EventSystem.current));
 
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
             {
                 EventSystem.current.SetSelectedGameObject(null);
             }

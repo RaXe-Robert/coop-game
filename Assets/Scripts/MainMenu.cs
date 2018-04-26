@@ -18,9 +18,15 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject videoSettingsPanel;
     [SerializeField] private GameObject audioSettingsPanel;
     [SerializeField] private GameObject exitGamePanel;
+
+    [Header("Player name")]
     [SerializeField] private GameObject enterNamePanel;
     [SerializeField] private InputField inputNameText;
     [SerializeField] private Text nameText;
+
+    [Header("Error message")]
+    [SerializeField] private GameObject errorMessagePanel;
+    [SerializeField] private Text errorMessage;
 
     private Stack<GameObject> menuStack = new Stack<GameObject>();
     private NetworkManager networkManager;
@@ -61,7 +67,18 @@ public class MainMenu : MonoBehaviour
 
     public void CreateGame(string roomName, RoomOptions roomOptions)
     {
-        PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
+        if (!PhotonNetwork.connected)
+        {
+            OnPhotonCreateRoomFailed(new object[] { 1, "Not connected to master server!" });
+        }
+        else
+        {
+            if (!PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default))
+            {
+                OnPhotonCreateRoomFailed(new object[] { 2, "Room with the smae name already exists!" });
+            }
+        }
+
     }
 
     public void ExitGame()
@@ -86,7 +103,7 @@ public class MainMenu : MonoBehaviour
 
     private void OnPhotonCreateRoomFailed(object[] codeAndMessage)
     {
-        print("Failed to create a room: " + codeAndMessage[1]);
+        ShowErrorMessagePanel(codeAndMessage[0].ToString(), codeAndMessage[1].ToString());
     }
 
     private void OnCreatedRoom()
@@ -181,6 +198,18 @@ public class MainMenu : MonoBehaviour
     {
         ChangePlayerName(inputNameText.text);
         UpdatePlayerName();
+        CloseMenu();
+    }
+
+    private void ShowErrorMessagePanel(string code, string message)
+    {
+        errorMessage.text = $"[{code}] {message}";
+        OpenMenu(errorMessagePanel, disablePrevious: false);
+        print($"Error: [{code}] { message}");
+    }
+
+    public void CloseErrorMessagePanel()
+    {
         CloseMenu();
     }
 
