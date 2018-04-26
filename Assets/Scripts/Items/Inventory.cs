@@ -37,7 +37,7 @@ public class Inventory : MonoBehaviour
             return;
 
 #if UNITY_EDITOR
-        if (InputManager.Instance.GetButtonDown("Spawn item"))
+        if (InputManager.GetButtonDown("Spawn item"))
         {
             AddItemById(stick.Id, 50);
             AddItemById(diamond.Id, 50);

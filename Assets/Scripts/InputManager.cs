@@ -1,62 +1,49 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
 
-public class InputManager : MonoBehaviour {
+using UnityEngine;
 
-    public static InputManager Instance { get; private set; }
-
-    public ControlsUIManager ui;
-    private Dictionary<string, KeyCode> changableButtonKeys;
-    private Dictionary<string, KeyCode> staticButtonKeys;
+/// <summary>
+/// Wrapper for Unity's Input system so that we are able to remap buttons ingame.
+/// </summary>
+public static class InputManager {
     
-    private void Awake()
+    private static Dictionary<string, KeyCode> changableButtonKeys = new Dictionary<string, KeyCode>
     {
-        if (Instance == null)
-            Instance = this;
-    }
+        ["Up"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("UpKey", KeyCode.W.ToString())),
+        ["Down"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("DownKey", KeyCode.S.ToString())),
+        ["Left"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("LeftKey", KeyCode.A.ToString())),
+        ["Right"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("RightKey", KeyCode.D.ToString())),
+        ["Crafting"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("CraftingKey", KeyCode.C.ToString())),
+        ["Inventory"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("InventoryKey", KeyCode.I.ToString())),
+        ["Equipment"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("EquipmentKey", KeyCode.F.ToString())),
+        ["Left camera rotation"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("LeftCameraRotationKey", KeyCode.Q.ToString())),
+        ["Right camera rotation"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("RightCameraRotationKey", KeyCode.E.ToString())),
+    };
 
-    private void OnEnable()
+    private static Dictionary<string, KeyCode> staticButtonKeys = new Dictionary<string, KeyCode>
     {
-        changableButtonKeys = new Dictionary<string, KeyCode>
-        {
-            ["Up"] = KeyCode.W,
-            ["Down"] = KeyCode.S,
-            ["Left"] = KeyCode.A,
-            ["Right"] = KeyCode.D,
-            ["Crafting"] = KeyCode.C,
-            ["Inventory"] = KeyCode.I,
-            ["Equipment"] = KeyCode.F,   
-            ["Left camera rotation"] = KeyCode.Q,
-            ["Right camera rotation"] = KeyCode.E,
-        };
+        ["Escape"] = KeyCode.Escape,
+        ["Camera rotation"] = KeyCode.Mouse1,
+        ["Spawn item"] = KeyCode.R        
+    };
 
-        staticButtonKeys = new Dictionary<string, KeyCode>
-        {
-            ["Escape"] = KeyCode.Escape,
-            ["Camera rotation"] = KeyCode.Mouse1,  
-            ["Spawn item"] = KeyCode.R
-        };
-    }
-
-    public float GetAxis(string axisName)
+    public static float GetAxis(string axisName)
     {
         //Make sure buttons don't react when interface is open
         if (GameInterfaceManager.Instance.IsAnyInterfaceOpen())
-        {
             return 0;
-        }
+
         return Input.GetAxis(axisName);
     }
 
-    public float GetAxisRaw(string axisName)
+    public static float GetAxisRaw(string axisName)
     {
         //Make sure buttons don't react when interface is open
         if (GameInterfaceManager.Instance.IsAnyInterfaceOpen())
-        {
             return 0;
-        }
 
         if (axisName.Equals("Horizontal"))
         {
@@ -77,7 +64,7 @@ public class InputManager : MonoBehaviour {
         return 0;
     }
 
-    public bool GetButtonDown(string buttonName)
+    public static bool GetButtonDown(string buttonName)
     {
         //Make sure buttons do react when interface is open
 
@@ -89,16 +76,15 @@ public class InputManager : MonoBehaviour {
         {
             return Input.GetKeyDown(staticButtonKeys[buttonName]);
         }
+
         return false;
     }
 
-    public bool GetButton(string buttonName)
+    public static bool GetButton(string buttonName)
     {
         //Make sure buttons don't react when interface is open
         if (GameInterfaceManager.Instance.IsAnyInterfaceOpen())
-        {
             return false;
-        }
 
         if (changableButtonKeys.ContainsKey(buttonName) == true)
         {
@@ -108,42 +94,45 @@ public class InputManager : MonoBehaviour {
         {
             return Input.GetKey(staticButtonKeys[buttonName]);
         }
+
         return false;        
     }
 
-    public string[] GetChangableButtonNames()
+    public static string[] GetChangableButtonNames()
     {
         return changableButtonKeys.Keys.ToArray();
     }
 
-    public string GetNameForChangableButton(string buttonName)
+    public static string GetNameForChangableButton(string buttonName)
     {
         if (changableButtonKeys.ContainsKey(buttonName) == false)
-        {
             return "N/A";
-        }
+
         return changableButtonKeys[buttonName].ToString();
     }
 
-    public void SetChangableButtonForKey(string buttonName, KeyCode keyCode)
+    /// <summary>
+    /// Bind a button to a keycode. Returns true if the button was succesfully bound.
+    /// </summary>
+    /// <param name="buttonName">The name of the button.</param>
+    /// <param name="keyCode">The keycode that the button has to respond to.</param>
+    /// <returns>If the button was succesfully changed.</returns>
+    public static bool SetChangableButtonKey(string buttonName, KeyCode keyCode)
     {
         if (IsButtonAvailable(keyCode))
         {
             changableButtonKeys[buttonName] = keyCode;
-            ui.SetLabel(keyCode);
+            PlayerPrefs.SetString(buttonName.Replace(" ", "") + "Key", keyCode.ToString());
+            return true;
         }
-        else
-        {
-            ui.ButtonInUse(buttonName);
-        }
+        return false;
     }
 
-    private bool IsButtonAvailable(KeyCode keyCode)
+    private static bool IsButtonAvailable(KeyCode keyCode)
     {
         if (changableButtonKeys.ContainsValue(keyCode) || staticButtonKeys.ContainsValue(keyCode))
-        {
             return false;
-        }
+
         return true;
     }
 }

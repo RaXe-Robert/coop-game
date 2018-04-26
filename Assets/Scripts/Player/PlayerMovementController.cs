@@ -94,7 +94,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         cameraDirectionForward.y = 0;
         Vector3 cameraDirectionRight = Quaternion.Euler(0, 90, 0) * cameraDirectionForward;
 
-        Vector3 movementInput = (cameraDirectionForward * InputManager.Instance.GetAxisRaw("Vertical") + cameraDirectionRight * InputManager.Instance.GetAxisRaw("Horizontal"));
+        Vector3 movementInput = (cameraDirectionForward * InputManager.GetAxisRaw("Vertical") + cameraDirectionRight * InputManager.GetAxisRaw("Horizontal"));
 
         if (movementInput != Vector3.zero)
         {

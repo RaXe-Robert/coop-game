@@ -12,8 +12,8 @@ public class ControlsUIManager : MonoBehaviour {
     private string buttonToRebind = null;
     private Dictionary<string, Text> buttonToLabel;
     
-    void Start () {
-        string[] buttonNames = InputManager.Instance.GetChangableButtonNames();
+    private void Start () {
+        string[] buttonNames = InputManager.GetChangableButtonNames();
         buttonToLabel = new Dictionary<string, Text>();
 
         for (int i = 0; i < buttonNames.Length; i++)
@@ -28,7 +28,7 @@ public class ControlsUIManager : MonoBehaviour {
             buttonNameText.text = bn;            
 
             Text keyNameText = go.transform.Find("Button/KeyName").GetComponent<Text>();
-            keyNameText.text = InputManager.Instance.GetNameForChangableButton(bn);
+            keyNameText.text = InputManager.GetNameForChangableButton(bn);
             buttonToLabel[bn] = keyNameText;
 
             Button keyBindButton = go.transform.Find("Button").GetComponent<Button>();
@@ -36,7 +36,7 @@ public class ControlsUIManager : MonoBehaviour {
         }
 	}
 	
-	void Update () {
+	private void Update () {
 		if (buttonToRebind != null)
         {
             if (Input.anyKeyDown)
@@ -45,7 +45,10 @@ public class ControlsUIManager : MonoBehaviour {
                 {
                     if (Input.GetKeyDown(kc))
                     {
-                        InputManager.Instance.SetChangableButtonForKey(buttonToRebind, kc);
+                        if (InputManager.SetChangableButtonKey(buttonToRebind, kc))
+                            SetLabel(kc);
+                        else
+                            ButtonInUse(buttonToRebind);
                         break;
                     }
                 }
@@ -53,7 +56,7 @@ public class ControlsUIManager : MonoBehaviour {
         }
 	}
 
-    void StartRebindFor(string buttonName)
+    private void StartRebindFor(string buttonName)
     {
         buttonToRebind = buttonName;
         buttonToLabel[buttonToRebind].text = "Press the new button";
