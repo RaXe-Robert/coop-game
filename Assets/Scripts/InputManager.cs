@@ -29,19 +29,16 @@ public static class InputManager {
     {
         ["Escape"] = KeyCode.Escape,
         ["Camera rotation"] = KeyCode.Mouse1,
-        ["Spawn item"] = KeyCode.R        
+        ["Spawn item"] = KeyCode.R,
+        ["Chat key 1"] = KeyCode.KeypadEnter,
+        ["Chat key 2"] = KeyCode.Return
     };
 
     public static float GetAxis(string axisName)
     {
         //Make sure buttons don't react when interface is open
-        if (GameInterfaceManager.Instance.IsAnyInterfaceOpen())
+        if (GameInterfaceManager.Instance.IsAnyInterfaceOpen() || CustomInRoomChat.Instance.input.isFocused == true)
             return 0;
-
-        if (CustomInRoomChat.Instance.input.isFocused == true)
-        {
-            return 0;
-        }
 
         return Input.GetAxis(axisName);
     }
@@ -49,13 +46,8 @@ public static class InputManager {
     public static float GetAxisRaw(string axisName)
     {
         //Make sure buttons don't react when interface is open
-        if (GameInterfaceManager.Instance.IsAnyInterfaceOpen())
+        if (GameInterfaceManager.Instance.IsAnyInterfaceOpen() || CustomInRoomChat.Instance.input.isFocused == true)
             return 0;
-
-        if (CustomInRoomChat.Instance.input.isFocused == true)
-        {
-            return 0;
-        }
 
         if (axisName.Equals("Horizontal"))
         {
@@ -99,13 +91,8 @@ public static class InputManager {
     public static bool GetButton(string buttonName)
     {
         //Make sure buttons don't react when interface is open
-        if (GameInterfaceManager.Instance.IsAnyInterfaceOpen())
+        if (GameInterfaceManager.Instance.IsAnyInterfaceOpen() || CustomInRoomChat.Instance.input.isFocused == true)
             return false;
-
-        if (CustomInRoomChat.Instance.input.isFocused == true)
-        {
-            return false;
-        }
 
         if (changableButtonKeys.ContainsKey(buttonName) == true)
         {

@@ -25,7 +25,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
 
     public void Update()
     {
-        if (UnityEngine.Input.GetKeyDown(KeyCode.KeypadEnter) || UnityEngine.Input.GetKeyDown(KeyCode.Return))
+        if (InputManager.GetButtonDown("Chat key 1") || InputManager.GetButtonDown("Chat key 2"))
         {            
             if (EventSystem.current.currentSelectedGameObject == input.gameObject)
             {
@@ -34,7 +34,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
             EventSystem.current.SetSelectedGameObject(input.gameObject, null);
             input.OnPointerClick(new PointerEventData(EventSystem.current));
 
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
+            if (InputManager.GetButtonDown("Escape"))
             {
                 EventSystem.current.SetSelectedGameObject(null);
             }
