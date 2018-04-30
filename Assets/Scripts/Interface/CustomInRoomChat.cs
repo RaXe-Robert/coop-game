@@ -63,12 +63,29 @@ public class CustomInRoomChat : Photon.MonoBehaviour
                 $"Player {mi.sender.ID}" : mi.sender.NickName;
         }
 
-        AddLine(senderName + ": " + newLine + "\n");
+        AddLine(senderName + ": " + newLine);
     }
 
     public void AddLine(string newLine)
     {
-        content.text += newLine;
+        content.text += newLine + "\n";
         scrollView.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+    }
+
+    void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+    {
+        AddLine($"Player joined: {PlayerNickNameOrId(newPlayer)}");
+    }
+
+    void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
+    {
+        AddLine($"Player left: {PlayerNickNameOrId(otherPlayer)}");
+    }
+
+    private string PlayerNickNameOrId(PhotonPlayer player)
+    {
+        return string.IsNullOrEmpty(player.NickName) ?
+            $"Player {player.ID}" :
+            player.NickName;
     }
 }
