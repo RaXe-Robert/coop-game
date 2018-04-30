@@ -48,7 +48,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
         if (input.text == "")
             return;
                 
-        this.photonView.RPC("Chat", PhotonTargets.All, input.text);        
+        photonView.RPC("Chat", PhotonTargets.All, input.text);        
         input.text = "";
     }
 
@@ -59,22 +59,16 @@ public class CustomInRoomChat : Photon.MonoBehaviour
 
         if (mi.sender != null)
         {
-            if (!string.IsNullOrEmpty(mi.sender.NickName))
-            {
-                senderName = mi.sender.NickName;
-            }
-            else
-            {
-                senderName = "player " + mi.sender.ID;
-            }
+            senderName = string.IsNullOrEmpty(mi.sender.NickName) ?
+                $"Player {mi.sender.ID}" : mi.sender.NickName;
         }
 
-        content.text += senderName + ": " + newLine + "\n";
-        scrollView.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+        AddLine(senderName + ": " + newLine + "\n");
     }
 
     public void AddLine(string newLine)
     {
         content.text += newLine;
+        scrollView.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
     }
 }
