@@ -3,7 +3,7 @@ using System.Collections;
 
 public static class FalloffGenerator
 {
-    public static float[,] GenerateFallofMap(int size)
+    public static float[,] GenerateFalloffMap(int size)
     {
         float[,] map = new float[size, size];
 
