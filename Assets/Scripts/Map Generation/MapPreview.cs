@@ -79,7 +79,6 @@ public class MapPreview : MonoBehaviour
         meshFilter.gameObject.SetActive(true);
 
         meshFilter.sharedMesh = meshData.CreateMesh();
-        //navmesh.BuildNavMesh();
     }
 
     private void OnValuesUpdated()

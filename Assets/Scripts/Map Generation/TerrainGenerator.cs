@@ -26,38 +26,23 @@ public class TerrainGenerator : Photon.MonoBehaviour
 
     private Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
     private List<TerrainChunk> visibleTerrainChunks = new List<TerrainChunk>();
-
-    private int RandomSeed => (new System.Random()).Next(0, int.MaxValue);
-
-    [PunRPC]
-    public void SetSeed(int seed)
-    {
-        heightMapSettings.noiseSettings.seed = seed;
-        UnityEngine.Debug.Log($"Received generation rpc, building map with seed: {heightMapSettings.noiseSettings.seed}");
-    }
+    
+    private bool seedSet = false;
 
     private void Start()
     {
         if (PhotonNetwork.isMasterClient)
         {
-            int seed = RandomSeed;
+            int seed = (new System.Random()).Next(0, int.MaxValue); ;
             photonView.RPC("SetSeed", PhotonTargets.AllBuffered, seed);
         }
-
-        textureSettings.ApplyToMaterial(terrainMaterial);
-        textureSettings.UpdateMeshHeights(terrainMaterial, heightMapSettings.MinHeight, heightMapSettings.MaxHeight);
-        
-        float maxViewDistance = detailLevels[detailLevels.Length - 1].visibleDistanceThreshold;
-        meshWorldSize = meshSettings.MeshWorldSize;
-        chunksVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / meshWorldSize);
-
-        viewer = PlayerNetwork.PlayerObject.transform;
-        
-        UpdateVisibleChunks();
     }
 
     private void Update()
     {
+        if (!seedSet)
+            return;
+
         viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
 
         if (viewerPosition != viewerPositionOld)
@@ -71,6 +56,22 @@ public class TerrainGenerator : Photon.MonoBehaviour
             viewerPositionOld = viewerPosition;
             UpdateVisibleChunks();
         }
+    }
+
+    private void Setup()
+    {
+        seedSet = true;
+
+        textureSettings.ApplyToMaterial(terrainMaterial);
+        textureSettings.UpdateMeshHeights(terrainMaterial, heightMapSettings.MinHeight, heightMapSettings.MaxHeight);
+
+        float maxViewDistance = detailLevels[detailLevels.Length - 1].visibleDistanceThreshold;
+        meshWorldSize = meshSettings.MeshWorldSize;
+        chunksVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / meshWorldSize);
+
+        viewer = PlayerNetwork.PlayerObject.transform;
+
+        UpdateVisibleChunks();
     }
 
     private void UpdateVisibleChunks()
@@ -114,6 +115,14 @@ public class TerrainGenerator : Photon.MonoBehaviour
             visibleTerrainChunks.Add(chunk);
         else
             visibleTerrainChunks.Remove(chunk);
+    }
+
+    [PunRPC]
+    public void SetSeed(int seed)
+    {
+        heightMapSettings.noiseSettings.seed = seed;
+        UnityEngine.Debug.Log($"Received generation rpc, building map with seed: {heightMapSettings.noiseSettings.seed}");
+        Setup();
     }
 }
 
