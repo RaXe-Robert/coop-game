@@ -62,8 +62,8 @@ public class TerrainGenerator : Photon.MonoBehaviour
     {
         seedSet = true;
 
-        textureSettings.ApplyToMaterial(terrainMaterial);
         textureSettings.UpdateMeshHeights(terrainMaterial, heightMapSettings.MinHeight, heightMapSettings.MaxHeight);
+        textureSettings.ApplyToMaterial(terrainMaterial);
 
         float maxViewDistance = detailLevels[detailLevels.Length - 1].visibleDistanceThreshold;
         meshWorldSize = meshSettings.MeshWorldSize;

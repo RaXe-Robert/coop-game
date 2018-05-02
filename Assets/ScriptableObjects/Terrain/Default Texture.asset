@@ -16,12 +16,12 @@ MonoBehaviour:
   - tint: {r: 0, g: 0.37931037, b: 1, a: 1}
     tintStrength: 0.35
     startHeight: 0
-    blendStrength: 0.2
+    blendStrength: 0.5
   - tint: {r: 0, g: 0.7931037, b: 1, a: 1}
     tintStrength: 0.35
-    startHeight: 0.2
-    blendStrength: 0.2
-  - tint: {r: 0.1376267, g: 0.86764705, b: 0, a: 1}
+    startHeight: 0.4
+    blendStrength: 0.408
+  - tint: {r: 0.1586206, g: 1, b: 0, a: 1}
     tintStrength: 0.35
-    startHeight: 0.5
-    blendStrength: 0.2
+    startHeight: 0.9
+    blendStrength: 0.1

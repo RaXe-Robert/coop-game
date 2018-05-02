@@ -28,24 +28,18 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 0.09215262
+      outSlope: 0.09215262
       tangentMode: 0
     - serializedVersion: 2
-      time: 0.15029696
-      value: 0.00037734024
-      inSlope: 0
-      outSlope: 0
+      time: 0.11258087
+      value: 0.4977188
+      inSlope: -1.2869285
+      outSlope: -1.2869285
       tangentMode: 0
     - serializedVersion: 2
-      time: 0.18725738
-      value: 0.1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.85251015
-      value: 0.1
+      time: 1.0064213
+      value: 0.123291016
       inSlope: 0
       outSlope: 0
       tangentMode: 0

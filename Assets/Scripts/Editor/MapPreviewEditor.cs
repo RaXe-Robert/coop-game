@@ -8,12 +8,10 @@ public class MapPreviewEditor : Editor {
 
     public override void OnInspectorGUI()
     {
+        DrawDefaultInspector();
+
         MapPreview mapPreview = (MapPreview)target;
-
-        if (DrawDefaultInspector())
-        { }
-            //mapGenerator.GenetateMap();
-
+        
         if (GUILayout.Button("Generate Map"))
             mapPreview.DrawMapInEditor();
     }
