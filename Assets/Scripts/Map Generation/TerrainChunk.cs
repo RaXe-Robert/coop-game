@@ -4,6 +4,7 @@ using System.Collections;
 public class TerrainChunk
 {
     private const float colliderGenerationDistanceThreshold = 5;
+
     public event System.Action<TerrainChunk, bool> OnVisibilityChanged;
     public Vector2 coord;
 
@@ -28,6 +29,14 @@ public class TerrainChunk
     private HeightMapSettings heightMapSettings;
     private MeshSettings meshSettings;
     private Transform viewer;
+
+    private Vector2 ViewerPosition => new Vector2(viewer.position.x, viewer.position.z);
+
+    public bool IsVisible => meshObject.activeSelf;
+    public void SetVisible(bool visible)
+    {
+        meshObject.SetActive(visible);
+    }
 
     public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material)
     {
@@ -78,19 +87,13 @@ public class TerrainChunk
         UpdateTerrainChunk();
     }
 
-    private Vector2 ViewerPosition
-    {
-        get { return new Vector2(viewer.position.x, viewer.position.z); }
-    }
-
-
     public void UpdateTerrainChunk()
     {
         if (heightMapReceived)
         {
             float viewerDstFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance(ViewerPosition));
 
-            bool wasVisible = IsVisible();
+            bool wasVisible = IsVisible;
             bool visible = viewerDstFromNearestEdge <= maxViewDst;
 
             if (visible)
@@ -100,13 +103,9 @@ public class TerrainChunk
                 for (int i = 0; i < detailLevels.Length - 1; i++)
                 {
                     if (viewerDstFromNearestEdge > detailLevels[i].visibleDistanceThreshold)
-                    {
                         lodIndex = i + 1;
-                    }
                     else
-                    {
                         break;
-                    }
                 }
 
                 if (lodIndex != previousLODIndex)
@@ -118,12 +117,8 @@ public class TerrainChunk
                         meshFilter.mesh = lodMesh.mesh;
                     }
                     else if (!lodMesh.hasRequestedMesh)
-                    {
                         lodMesh.RequestMesh(heightMap, meshSettings);
-                    }
                 }
-
-
             }
 
             if (wasVisible != visible)
@@ -155,16 +150,6 @@ public class TerrainChunk
                 }
             }
         }
-    }
-
-    public void SetVisible(bool visible)
-    {
-        meshObject.SetActive(visible);
-    }
-
-    public bool IsVisible()
-    {
-        return meshObject.activeSelf;
     }
 }
 

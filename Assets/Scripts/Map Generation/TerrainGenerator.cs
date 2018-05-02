@@ -34,7 +34,7 @@ public class TerrainGenerator : Photon.MonoBehaviour
         if (PhotonNetwork.isMasterClient)
         {
             int seed = (new System.Random()).Next(0, int.MaxValue); ;
-            photonView.RPC("SetSeed", PhotonTargets.AllBuffered, seed);
+            photonView.RPC("SetSeed", PhotonTargets.AllBuffered, 1014589222);
         }
     }
 
@@ -94,9 +94,7 @@ public class TerrainGenerator : Photon.MonoBehaviour
                 if (!alreadyUpdatedChunkCoords.Contains(viewedChunkCoord))
                 {
                     if (terrainChunkDictionary.ContainsKey(viewedChunkCoord))
-                    {
                         terrainChunkDictionary[viewedChunkCoord].UpdateTerrainChunk();
-                    }
                     else
                     {
                         TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, meshSettings, detailLevels, colliderLODIndex, transform, viewer, terrainMaterial);

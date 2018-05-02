@@ -228,36 +228,24 @@ public class MeshData
 
             Vector3 triangleNormal = SurfaceNormalFromIndices(vertexIndexA, vertexIndexB, vertexIndexC);
             if (vertexIndexA >= 0)
-            {
                 vertexNormals[vertexIndexA] += triangleNormal;
-            }
             if (vertexIndexB >= 0)
-            {
                 vertexNormals[vertexIndexB] += triangleNormal;
-            }
             if (vertexIndexC >= 0)
-            {
                 vertexNormals[vertexIndexC] += triangleNormal;
-            }
         }
-
 
         for (int i = 0; i < vertexNormals.Length; i++)
-        {
             vertexNormals[i].Normalize();
-        }
 
         return vertexNormals;
-
     }
 
 
     void ProcessEdgeConnectionVertices()
     {
         foreach (EdgeConnectionVertexData e in edgeConnectionVertices)
-        {
             bakedNormals[e.vertexIndex] = bakedNormals[e.mainVertexAIndex] * (1 - e.dstPercentFromAToB) + bakedNormals[e.mainVertexBIndex] * e.dstPercentFromAToB;
-        }
     }
 
     Vector3 SurfaceNormalFromIndices(int indexA, int indexB, int indexC)
@@ -274,9 +262,7 @@ public class MeshData
     public void ProcessMesh()
     {
         if (useFlatShading)
-        {
             FlatShading();
-        }
         else
         {
             BakeNormals();
@@ -284,12 +270,12 @@ public class MeshData
         }
     }
 
-    void BakeNormals()
+    private void BakeNormals()
     {
         bakedNormals = CalculateNormals();
     }
 
-    void FlatShading()
+    private void FlatShading()
     {
         Vector3[] flatShadedVertices = new Vector3[triangles.Length];
         Vector2[] flatShadedUvs = new Vector2[triangles.Length];
@@ -307,18 +293,18 @@ public class MeshData
 
     public Mesh CreateMesh()
     {
-        Mesh mesh = new Mesh();
-        mesh.vertices = vertices;
-        mesh.triangles = triangles;
-        mesh.uv = uvs;
+        Mesh mesh = new Mesh
+        {
+            vertices = vertices,
+            triangles = triangles,
+            uv = uvs
+        };
+
         if (useFlatShading)
-        {
             mesh.RecalculateNormals();
-        }
         else
-        {
             mesh.normals = bakedNormals;
-        }
+
         return mesh;
     }
 

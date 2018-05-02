@@ -21,5 +21,4 @@ public class UpdatableData : ScriptableObject {
     }
 
 #endif
-
 }

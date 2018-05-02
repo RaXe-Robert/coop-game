@@ -10,15 +10,9 @@ public class HeightMapSettings : UpdatableData
     public float heightMultiplier;
     public AnimationCurve heightCurve;
 
-    public float MinHeight
-    {
-        get { return heightMultiplier * heightCurve.Evaluate(0); }
-    }
+    public float MinHeight => heightMultiplier * heightCurve.Evaluate(0);
 
-    public float MaxHeight
-    {
-        get { return heightMultiplier * heightCurve.Evaluate(1); }
-    }
+    public float MaxHeight => heightMultiplier * heightCurve.Evaluate(1);
 
 #if UNITY_EDITOR
 
