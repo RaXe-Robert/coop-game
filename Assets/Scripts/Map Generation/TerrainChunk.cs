@@ -9,12 +9,15 @@ public class TerrainChunk
     public Vector2 coord;
 
     private GameObject meshObject;
-    private Vector2 sampleCentre;
+    private Vector2 sampleCenter;
     private Bounds bounds;
 
     private MeshRenderer meshRenderer;
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
+
+    private GameObject biomeTextureObject;
+    private Renderer biomeTextureRenderer;
 
     private LODInfo[] detailLevels;
     private LODMesh[] lodMeshes;
@@ -22,12 +25,18 @@ public class TerrainChunk
 
     private HeightMap heightMap;
     private bool heightMapReceived;
+
+    private BiomeMap biomeMap;
+    private Texture2D biomeTextureMap;
+    private bool biomeTextureMapReceived;
+
     private int previousLODIndex = -1;
     private bool hasSetCollider;
     private float maxViewDst;
 
     private HeightMapSettings heightMapSettings;
     private MeshSettings meshSettings;
+    private BiomeMapSettings biomeMapSettings;
     private Transform viewer;
 
     private Vector2 ViewerPosition => new Vector2(viewer.position.x, viewer.position.z);
@@ -38,16 +47,17 @@ public class TerrainChunk
         meshObject.SetActive(visible);
     }
 
-    public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material)
+    public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, BiomeMapSettings biomeMapSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material terrainMeshMaterial, Material terrainMaterial)
     {
         this.coord = coord;
         this.detailLevels = detailLevels;
         this.colliderLODIndex = colliderLODIndex;
         this.heightMapSettings = heightMapSettings;
         this.meshSettings = meshSettings;
+        this.biomeMapSettings = biomeMapSettings;
         this.viewer = viewer;
 
-        sampleCentre = coord * meshSettings.MeshWorldSize / meshSettings.meshScale;
+        sampleCenter = coord * meshSettings.MeshWorldSize / meshSettings.MeshScale;
         Vector2 position = coord * meshSettings.MeshWorldSize;
         bounds = new Bounds(position, Vector2.one * meshSettings.MeshWorldSize);
 
@@ -55,36 +65,63 @@ public class TerrainChunk
         meshRenderer = meshObject.AddComponent<MeshRenderer>();
         meshFilter = meshObject.AddComponent<MeshFilter>();
         meshCollider = meshObject.AddComponent<MeshCollider>();
-        meshRenderer.material = material;
+        meshRenderer.material = terrainMeshMaterial;
 
         meshObject.transform.position = new Vector3(position.x, 0, position.y);
         meshObject.transform.parent = parent;
+
+        if (TerrainGenerator.DrawBiomes)
+        {
+            biomeTextureObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            biomeTextureObject.name = "Biome Texture";
+            biomeTextureRenderer = biomeTextureObject.GetComponent<MeshRenderer>();
+            biomeTextureRenderer.material = terrainMaterial;
+            biomeTextureObject.transform.SetParent(meshObject.transform, false);
+
+            biomeTextureObject.transform.localScale = (Vector3.one * meshSettings.MeshWorldSize) / 10;
+            biomeTextureObject.transform.position += Vector3.up * 10f;
+        }
+
         SetVisible(false);
 
         lodMeshes = new LODMesh[detailLevels.Length];
         for (int i = 0; i < detailLevels.Length; i++)
         {
-            lodMeshes[i] = new LODMesh(detailLevels[i].lod);
+            lodMeshes[i] = new LODMesh(detailLevels[i].Lod);
             lodMeshes[i].UpdateCallback += UpdateTerrainChunk;
             if (i == colliderLODIndex)
                 lodMeshes[i].UpdateCallback += UpdateCollisionMesh;
         }
 
-        maxViewDst = detailLevels[detailLevels.Length - 1].visibleDistanceThreshold;
-
+        maxViewDst = detailLevels[detailLevels.Length - 1].VisibleDistanceThreshold;
     }
 
     public void Load()
     {
-        ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap(meshSettings.NumVertsPerLine, meshSettings.NumVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived);
+        ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap(meshSettings.NumVertsPerLine, heightMapSettings, sampleCenter), OnHeightMapReceived);
     }
     
     private void OnHeightMapReceived(object heightMapObject)
     {
         this.heightMap = (HeightMap)heightMapObject;
         heightMapReceived = true;
+        
+        ThreadedDataRequester.RequestData(() => BiomeMapGenerator.GenerateBiomeMap(meshSettings.NumVertsPerLine, biomeMapSettings, sampleCenter), OnBiomeMapReceived);
 
         UpdateTerrainChunk();
+    }
+
+    private void OnBiomeMapReceived(object biomeMapObject)
+    {
+        this.biomeMap = (BiomeMap)biomeMapObject;
+
+        if (TerrainGenerator.DrawBiomes)
+        {
+            biomeTextureMap = TextureGenerator.TextureFromBiomeMap(biomeMap);
+            biomeTextureMapReceived = true;
+
+            UpdateTerrainChunk();
+        }
     }
 
     public void UpdateTerrainChunk()
@@ -102,7 +139,7 @@ public class TerrainChunk
 
                 for (int i = 0; i < detailLevels.Length - 1; i++)
                 {
-                    if (viewerDstFromNearestEdge > detailLevels[i].visibleDistanceThreshold)
+                    if (viewerDstFromNearestEdge > detailLevels[i].VisibleDistanceThreshold)
                         lodIndex = i + 1;
                     else
                         break;
@@ -118,6 +155,11 @@ public class TerrainChunk
                     }
                     else if (!lodMesh.hasRequestedMesh)
                         lodMesh.RequestMesh(heightMap, meshSettings);
+                }
+
+                if (biomeTextureMapReceived)
+                {
+                    biomeTextureRenderer.material.mainTexture = biomeTextureMap;
                 }
             }
 

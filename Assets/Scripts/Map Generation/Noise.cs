@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public static class Noise
 {
@@ -9,7 +8,7 @@ public static class Noise
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
 
-        System.Random prng = new System.Random(noiseSettings.seed);
+        System.Random randomNum = new System.Random(noiseSettings.seed);
         Vector2[] octaveOffsets = new Vector2[noiseSettings.octaves];
 
         float maxPossibleHeight = 0;
@@ -18,8 +17,8 @@ public static class Noise
 
         for (int i = 0; i < noiseSettings.octaves; i++)
         {
-            float offsetX = prng.Next(-100000, 100000) + noiseSettings.offset.x + sampleCenter.x;
-            float offsetY = prng.Next(-100000, 100000) - noiseSettings.offset.y - sampleCenter.y;
+            float offsetX = randomNum.Next(-100000, 100000) + noiseSettings.offset.x + sampleCenter.x;
+            float offsetY = randomNum.Next(-100000, 100000) - noiseSettings.offset.y - sampleCenter.y;
             octaveOffsets[i] = new Vector2(offsetX, offsetY);
 
             maxPossibleHeight += amplitude;
@@ -62,7 +61,6 @@ public static class Noise
 
                 if (noiseSettings.normalizeMode == NormalizeMode.Global)
                 {
-
                     float normalizedHeight = (noiseMap[x, y] + 1) / (maxPossibleHeight / 2f);
                     noiseMap[x, y] = Mathf.Clamp(normalizedHeight, 0, int.MaxValue);
                 }

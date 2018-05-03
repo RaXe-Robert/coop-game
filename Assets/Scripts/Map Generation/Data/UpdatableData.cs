@@ -3,13 +3,13 @@
 public class UpdatableData : ScriptableObject {
 
     public event System.Action OnValuesUpdated;
-    public bool autoUpdate;
+    public bool AutoUpdate;
 
 #if UNITY_EDITOR
 
     protected virtual void OnValidate()
     {
-        if (autoUpdate)
+        if (AutoUpdate)
             UnityEditor.EditorApplication.update += NotifyOfUpdatedValues;
     }
 

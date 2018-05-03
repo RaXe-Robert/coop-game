@@ -9,21 +9,20 @@ using UnityEngine.AI;
 /// </summary>
 public class MapPreview : MonoBehaviour
 {
-    public enum DrawMode { NoiseMap, Mesh, FalloffMap }
+    public enum DrawMode { NoiseMap, Mesh, FalloffMap, BiomeMap }
     public DrawMode drawMode;
 
     public MeshSettings meshSettings;
     public HeightMapSettings heightMapSettings;
     public TextureData textureSettings;
+    public BiomeMapSettings biomeMapSettings;
 
     public Material terrainMaterial;
 
-    [Range(0, MeshSettings.numSupportedLODs - 1)]
+    [Range(0, MeshSettings.MumOfSupportedLODs - 1)]
     public int editorPreviewLOD;
 
     public bool autoUpdate;
-
-    private NavMeshSurface navmesh;
 
     [SerializeField]
     private Renderer textureRenderer;
@@ -33,18 +32,13 @@ public class MapPreview : MonoBehaviour
 
     [SerializeField]
     private MeshRenderer meshRenderer;
-
-    private void Awake()
-    {
-        navmesh = GetComponent<NavMeshSurface>();
-    }
-
+    
     public void DrawMapInEditor()
     {
         textureSettings.UpdateMeshHeights(terrainMaterial, heightMapSettings.MinHeight, heightMapSettings.MaxHeight);
         textureSettings.ApplyToMaterial(terrainMaterial);
 
-        HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(meshSettings.NumVertsPerLine, meshSettings.NumVertsPerLine, heightMapSettings, Vector2.zero);
+        HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(meshSettings.NumVertsPerLine, heightMapSettings, Vector2.zero);
         
         switch (drawMode)
         {
@@ -57,6 +51,10 @@ public class MapPreview : MonoBehaviour
             case DrawMode.FalloffMap:
                 DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(meshSettings.NumVertsPerLine), 0, 1)));
                 break;
+            case DrawMode.BiomeMap:
+                DrawTexture(TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.values.GetLength(0), biomeMapSettings, Vector2.zero)));
+                break;
+
         }
     }
 
@@ -103,6 +101,11 @@ public class MapPreview : MonoBehaviour
         {
             textureSettings.OnValuesUpdated -= OnValuesUpdated;
             textureSettings.OnValuesUpdated += OnValuesUpdated;
+        }
+        if (biomeMapSettings != null)
+        {
+            biomeMapSettings.OnValuesUpdated -= OnValuesUpdated;
+            biomeMapSettings.OnValuesUpdated += OnValuesUpdated;
         }
     }
 }

@@ -3,22 +3,22 @@
 [CreateAssetMenu()]
 public class HeightMapSettings : UpdatableData
 {
-    public NoiseSettings noiseSettings;
+    public NoiseSettings NoiseSettings;
     
-    public bool useFalloff;
+    public bool UseFalloff;
 
-    public float heightMultiplier;
-    public AnimationCurve heightCurve;
+    public float HeightMultiplier;
+    public AnimationCurve HeightCurve;
 
-    public float MinHeight => heightMultiplier * heightCurve.Evaluate(0);
+    public float MinHeight => HeightMultiplier * HeightCurve.Evaluate(0);
 
-    public float MaxHeight => heightMultiplier * heightCurve.Evaluate(1);
+    public float MaxHeight => HeightMultiplier * HeightCurve.Evaluate(1);
 
 #if UNITY_EDITOR
 
     protected override void OnValidate()
     {
-        noiseSettings.ValidateValues();
+        NoiseSettings.ValidateValues();
 
         base.OnValidate();
     }

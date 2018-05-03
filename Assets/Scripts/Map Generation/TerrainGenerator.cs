@@ -7,17 +7,21 @@ public class TerrainGenerator : Photon.MonoBehaviour
 {
     private const float viewerMoveThresholdForChunkUpdate = 25f;
     private const float sqrViewerMoveThreasholdForChunkUpdate = viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate;
+    public static bool DrawBiomes = false;
 
     public int colliderLODIndex;
     public LODInfo[] detailLevels;
 
-    public MeshSettings meshSettings;
-    public HeightMapSettings heightMapSettings;
-    public TextureData textureSettings;
+    public MeshSettings MeshSettings;
+    public HeightMapSettings HeightMapSettings;
+    public TextureData TextureSettings;
+    public BiomeMapSettings BiomeMapSettings;
 
-    public Transform viewer;
-    public Material terrainMaterial;
+    public Material TerrainMeshMaterial;
+    
+    public Material TerrainMaterial;
 
+    private Transform viewer;
     private Vector2 viewerPosition;
     private Vector2 viewerPositionOld;
 
@@ -27,20 +31,19 @@ public class TerrainGenerator : Photon.MonoBehaviour
     private Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
     private List<TerrainChunk> visibleTerrainChunks = new List<TerrainChunk>();
     
-    private bool seedSet = false;
+    private bool isSeedSet = false;
 
     private void Start()
     {
         if (PhotonNetwork.isMasterClient)
         {
-            int seed = (new System.Random()).Next(0, int.MaxValue); ;
-            photonView.RPC("SetSeed", PhotonTargets.AllBuffered, 1014589222);
+            photonView.RPC("SetSeed", PhotonTargets.AllBuffered, (new System.Random()).Next(0, int.MaxValue));
         }
     }
 
     private void Update()
     {
-        if (!seedSet)
+        if (!isSeedSet)
             return;
 
         viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
@@ -60,13 +63,13 @@ public class TerrainGenerator : Photon.MonoBehaviour
 
     private void Setup()
     {
-        seedSet = true;
+        isSeedSet = true;
 
-        textureSettings.UpdateMeshHeights(terrainMaterial, heightMapSettings.MinHeight, heightMapSettings.MaxHeight);
-        textureSettings.ApplyToMaterial(terrainMaterial);
+        TextureSettings.UpdateMeshHeights(TerrainMeshMaterial, HeightMapSettings.MinHeight, HeightMapSettings.MaxHeight);
+        TextureSettings.ApplyToMaterial(TerrainMeshMaterial);
 
-        float maxViewDistance = detailLevels[detailLevels.Length - 1].visibleDistanceThreshold;
-        meshWorldSize = meshSettings.MeshWorldSize;
+        float maxViewDistance = detailLevels[detailLevels.Length - 1].VisibleDistanceThreshold;
+        meshWorldSize = MeshSettings.MeshWorldSize;
         chunksVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / meshWorldSize);
 
         viewer = PlayerNetwork.PlayerObject.transform;
@@ -97,7 +100,7 @@ public class TerrainGenerator : Photon.MonoBehaviour
                         terrainChunkDictionary[viewedChunkCoord].UpdateTerrainChunk();
                     else
                     {
-                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, meshSettings, detailLevels, colliderLODIndex, transform, viewer, terrainMaterial);
+                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, HeightMapSettings, MeshSettings, BiomeMapSettings, detailLevels, colliderLODIndex, transform, viewer, TerrainMeshMaterial, TerrainMaterial);
                         terrainChunkDictionary.Add(viewedChunkCoord, newChunk);
                         newChunk.OnVisibilityChanged += OnTerrainChunkVisibilityChanged;
                         newChunk.Load();
@@ -118,8 +121,8 @@ public class TerrainGenerator : Photon.MonoBehaviour
     [PunRPC]
     public void SetSeed(int seed)
     {
-        heightMapSettings.noiseSettings.seed = seed;
-        UnityEngine.Debug.Log($"Received generation rpc, building map with seed: {heightMapSettings.noiseSettings.seed}");
+        HeightMapSettings.NoiseSettings.seed = seed;
+        UnityEngine.Debug.Log($"Received generation rpc, building map with seed: {HeightMapSettings.NoiseSettings.seed}");
         Setup();
     }
 }
@@ -127,12 +130,9 @@ public class TerrainGenerator : Photon.MonoBehaviour
 [System.Serializable]
 public struct LODInfo
 {
-    [Range(0, MeshSettings.numSupportedLODs - 1)]
-    public int lod;
-    public float visibleDistanceThreshold;
+    [Range(0, MeshSettings.MumOfSupportedLODs - 1)]
+    public int Lod;
+    public float VisibleDistanceThreshold;
     
-    public float SqrVisibleDistanceThreshold
-    {
-        get { return visibleDistanceThreshold * visibleDistanceThreshold; }
-    }
+    public float SqrVisibleDistanceThreshold => VisibleDistanceThreshold * VisibleDistanceThreshold;
 }

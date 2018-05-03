@@ -10,7 +10,7 @@ public static class MeshGenerator
 
         Vector2 topLeft = new Vector2(-1, 1) * meshSettings.MeshWorldSize / 2f;
 
-        MeshData meshData = new MeshData(numVertsPerLine, skipIncrement, meshSettings.useFlatShading);
+        MeshData meshData = new MeshData(numVertsPerLine, skipIncrement, meshSettings.UseFlatShading);
 
         int[,] vertexIndicesMap = new int[numVertsPerLine, numVertsPerLine];
         int meshVertexIndex = 0;

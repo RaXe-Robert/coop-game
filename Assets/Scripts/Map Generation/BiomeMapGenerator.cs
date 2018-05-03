@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public static class HeightMapGenerator
+public static class BiomeMapGenerator
 {
-    public static HeightMap GenerateHeightMap(int size, HeightMapSettings settings, Vector2 sampleCenter)
+    public static BiomeMap GenerateBiomeMap(int size, BiomeMapSettings settings, Vector2 sampleCenter)
     {
         float[,] values = Noise.GenerateNoiseMap(size, size, settings.NoiseSettings, sampleCenter);
-
-        AnimationCurve heightCurve_threadSafe = new AnimationCurve(settings.HeightCurve.keys);
 
         float minValue = float.MaxValue;
         float maxValue = float.MinValue;
@@ -16,7 +14,7 @@ public static class HeightMapGenerator
         {
             for (int j = 0; j < size; j++)
             {
-                values[i, j] *= heightCurve_threadSafe.Evaluate(values[i, j]) * settings.HeightMultiplier;
+                values[i, j] *= 1f;
 
                 if (values[i, j] > maxValue)
                     maxValue = values[i, j];
@@ -24,19 +22,25 @@ public static class HeightMapGenerator
                     minValue = values[i, j];
             }
         }
-        return new HeightMap(values, minValue, maxValue);
+        return new BiomeMap(settings, values, settings.Biomes.Length, minValue, maxValue);
     }
 }
 
-public struct HeightMap
+public struct BiomeMap
 {
+    public readonly BiomeMapSettings settings;
+
     public readonly float[,] values;
+    public readonly int numOfBiomes;
+
     public readonly float minValue;
     public readonly float maxValue;
 
-    public HeightMap(float[,] values, float minValue, float maxValue)
+    public BiomeMap(BiomeMapSettings settings, float[,] values, int numBiomes, float minValue, float maxValue)
     {
+        this.settings = settings;
         this.values = values;
+        this.numOfBiomes = numBiomes;
         this.minValue = minValue;
         this.maxValue = maxValue;
     }
