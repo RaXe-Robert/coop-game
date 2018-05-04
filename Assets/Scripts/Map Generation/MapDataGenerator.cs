@@ -5,7 +5,7 @@ public class MapDataGenerator : MonoBehaviour
 {
     public static MapData GenerateDataMap(int size, HeightMapSettings heightMapSettings, BiomeMapSettings biomeMapSettings, Vector2 sampleCenter)
     {
-        BiomeMap biomeMap = BiomeMapGenerator.GenerateBiomeMap(size, biomeMapSettings, sampleCenter);
+        BiomeMap biomeMap = BiomeMapGenerator.GenerateBiomeMap(size - 3, biomeMapSettings, sampleCenter);
         HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(size, heightMapSettings, sampleCenter);
 
         return new MapData(biomeMap, heightMap);

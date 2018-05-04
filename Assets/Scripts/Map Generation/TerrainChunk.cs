@@ -109,9 +109,8 @@ public class TerrainChunk
         {
             biomeTextureMap = TextureGenerator.TextureFromBiomeMap(MapData.BiomeMap);
             biomeTextureMapReceived = true;
-
-            UpdateTerrainChunk();
         }
+        meshRenderer.material.mainTexture = TextureGenerator.TextureFromBiomeMap(MapData.BiomeMap);
 
         UpdateTerrainChunk();
     }
