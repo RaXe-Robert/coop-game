@@ -11,17 +11,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd3ed57d125be534a9c0505096ad7756, type: 3}
   m_Name: Default Texture
   m_EditorClassIdentifier: 
-  autoUpdate: 1
+  AutoUpdate: 0
   layers:
-  - tint: {r: 0, g: 0.37931037, b: 1, a: 1}
+  - UseBiomeTint: 0
+    tint: {r: 0, g: 0.37931037, b: 1, a: 1}
     tintStrength: 0.35
     startHeight: 0
     blendStrength: 0.5
-  - tint: {r: 0, g: 0.7931037, b: 1, a: 1}
+  - UseBiomeTint: 0
+    tint: {r: 0, g: 0.7931037, b: 1, a: 1}
     tintStrength: 0.35
     startHeight: 0.4
     blendStrength: 0.408
-  - tint: {r: 0.1586206, g: 1, b: 0, a: 1}
+  - UseBiomeTint: 1
+    tint: {r: 0.1586206, g: 1, b: 0, a: 1}
     tintStrength: 0.35
     startHeight: 0.9
     blendStrength: 0.1

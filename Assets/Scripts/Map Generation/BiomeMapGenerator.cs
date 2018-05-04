@@ -28,20 +28,39 @@ public static class BiomeMapGenerator
 
 public struct BiomeMap
 {
-    public readonly BiomeMapSettings settings;
+    public readonly BiomeMapSettings Settings;
 
-    public readonly float[,] values;
-    public readonly int numOfBiomes;
+    public readonly float[,] Values;
+    public readonly int NumOfBiomes;
 
-    public readonly float minValue;
-    public readonly float maxValue;
+    public readonly float MinValue;
+    public readonly float MaxValue;
 
     public BiomeMap(BiomeMapSettings settings, float[,] values, int numBiomes, float minValue, float maxValue)
     {
-        this.settings = settings;
-        this.values = values;
-        this.numOfBiomes = numBiomes;
-        this.minValue = minValue;
-        this.maxValue = maxValue;
+        this.Settings = settings;
+        this.Values = values;
+        this.NumOfBiomes = numBiomes;
+        this.MinValue = minValue;
+        this.MaxValue = maxValue;
+    }
+
+    public Biome GetBiomeFromValue(int x, int z)
+    {
+        Biome biome = Settings.Biomes[0];
+        
+        if (NumOfBiomes > 2)
+        {
+            // Loop through all other biomes
+            for (int biomeIndex = 1; biomeIndex < NumOfBiomes; biomeIndex++)
+            {
+                if (Values[x, z] > (MaxValue - MinValue) / NumOfBiomes * biomeIndex)
+                {
+                    biome = Settings.Biomes[biomeIndex];
+                }
+            }
+        }
+
+        return biome;
     }
 }

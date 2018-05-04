@@ -6,11 +6,14 @@ public class TerrainChunk
     private const float colliderGenerationDistanceThreshold = 5;
 
     public event System.Action<TerrainChunk, bool> OnVisibilityChanged;
-    public Vector2 coord;
+    public Vector2 Coord { get; private set; }
+
+    public MapData MapData { get; private set; }
+    public bool MapDataReceived { get; private set; }
 
     private GameObject meshObject;
-    private Vector2 sampleCenter;
-    private Bounds bounds;
+    public Vector2 SampleCenter { get; private set; }
+    public Bounds Bounds { get; private set; }
 
     private MeshRenderer meshRenderer;
     private MeshFilter meshFilter;
@@ -18,25 +21,20 @@ public class TerrainChunk
 
     private GameObject biomeTextureObject;
     private Renderer biomeTextureRenderer;
+    private Texture2D biomeTextureMap;
+    private bool biomeTextureMapReceived;
 
     private LODInfo[] detailLevels;
     private LODMesh[] lodMeshes;
     private int colliderLODIndex;
-
-    private HeightMap heightMap;
-    private bool heightMapReceived;
-
-    private BiomeMap biomeMap;
-    private Texture2D biomeTextureMap;
-    private bool biomeTextureMapReceived;
-
+    
     private int previousLODIndex = -1;
     private bool hasSetCollider;
-    private float maxViewDst;
+    private float maxViewDistance;
 
-    private HeightMapSettings heightMapSettings;
-    private MeshSettings meshSettings;
-    private BiomeMapSettings biomeMapSettings;
+    public readonly HeightMapSettings HeightMapSettings;
+    public readonly BiomeMapSettings BiomeMapSettings;
+    public readonly MeshSettings MeshSettings;
     private Transform viewer;
 
     private Vector2 ViewerPosition => new Vector2(viewer.position.x, viewer.position.z);
@@ -49,22 +47,23 @@ public class TerrainChunk
 
     public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, BiomeMapSettings biomeMapSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material terrainMeshMaterial, Material terrainMaterial)
     {
-        this.coord = coord;
+        this.Coord = coord;
         this.detailLevels = detailLevels;
         this.colliderLODIndex = colliderLODIndex;
-        this.heightMapSettings = heightMapSettings;
-        this.meshSettings = meshSettings;
-        this.biomeMapSettings = biomeMapSettings;
+        this.HeightMapSettings = heightMapSettings;
+        this.MeshSettings = meshSettings;
+        this.BiomeMapSettings = biomeMapSettings;
         this.viewer = viewer;
 
-        sampleCenter = coord * meshSettings.MeshWorldSize / meshSettings.MeshScale;
+        SampleCenter = coord * meshSettings.MeshWorldSize / meshSettings.MeshScale;
         Vector2 position = coord * meshSettings.MeshWorldSize;
-        bounds = new Bounds(position, Vector2.one * meshSettings.MeshWorldSize);
+        Bounds = new Bounds(position, Vector2.one * meshSettings.MeshWorldSize);
 
         meshObject = new GameObject("Terrain Chunk");
         meshRenderer = meshObject.AddComponent<MeshRenderer>();
         meshFilter = meshObject.AddComponent<MeshFilter>();
         meshCollider = meshObject.AddComponent<MeshCollider>();
+        meshObject.AddComponent<TerrainChunkInteraction>().SetTerrainChunk = this;
         meshRenderer.material = terrainMeshMaterial;
 
         meshObject.transform.position = new Vector3(position.x, 0, position.y);
@@ -93,45 +92,38 @@ public class TerrainChunk
                 lodMeshes[i].UpdateCallback += UpdateCollisionMesh;
         }
 
-        maxViewDst = detailLevels[detailLevels.Length - 1].VisibleDistanceThreshold;
+        maxViewDistance = detailLevels[detailLevels.Length - 1].VisibleDistanceThreshold;
     }
 
     public void Load()
     {
-        ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap(meshSettings.NumVertsPerLine, heightMapSettings, sampleCenter), OnHeightMapReceived);
+        ThreadedDataRequester.RequestData(() => MapDataGenerator.GenerateDataMap(MeshSettings.NumVertsPerLine, HeightMapSettings, BiomeMapSettings, SampleCenter), OnMapDataReceived);
     }
     
-    private void OnHeightMapReceived(object heightMapObject)
+    private void OnMapDataReceived(object mapDataObject)
     {
-        this.heightMap = (HeightMap)heightMapObject;
-        heightMapReceived = true;
-        
-        ThreadedDataRequester.RequestData(() => BiomeMapGenerator.GenerateBiomeMap(meshSettings.NumVertsPerLine, biomeMapSettings, sampleCenter), OnBiomeMapReceived);
-
-        UpdateTerrainChunk();
-    }
-
-    private void OnBiomeMapReceived(object biomeMapObject)
-    {
-        this.biomeMap = (BiomeMap)biomeMapObject;
+        this.MapData = (MapData)mapDataObject;
+        MapDataReceived = true;
 
         if (TerrainGenerator.DrawBiomes)
         {
-            biomeTextureMap = TextureGenerator.TextureFromBiomeMap(biomeMap);
+            biomeTextureMap = TextureGenerator.TextureFromBiomeMap(MapData.BiomeMap);
             biomeTextureMapReceived = true;
 
             UpdateTerrainChunk();
         }
+
+        UpdateTerrainChunk();
     }
 
     public void UpdateTerrainChunk()
     {
-        if (heightMapReceived)
+        if (MapDataReceived)
         {
-            float viewerDstFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance(ViewerPosition));
+            float viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(ViewerPosition));
 
             bool wasVisible = IsVisible;
-            bool visible = viewerDstFromNearestEdge <= maxViewDst;
+            bool visible = viewerDstFromNearestEdge <= maxViewDistance;
 
             if (visible)
             {
@@ -154,7 +146,7 @@ public class TerrainChunk
                         meshFilter.mesh = lodMesh.mesh;
                     }
                     else if (!lodMesh.hasRequestedMesh)
-                        lodMesh.RequestMesh(heightMap, meshSettings);
+                        lodMesh.RequestMesh(MapData.HeightMap, MeshSettings);
                 }
 
                 if (biomeTextureMapReceived)
@@ -175,12 +167,12 @@ public class TerrainChunk
     {
         if (!hasSetCollider)
         {
-            float sqrDstFromViewerToEdge = bounds.SqrDistance(ViewerPosition);
+            float sqrDstFromViewerToEdge = Bounds.SqrDistance(ViewerPosition);
 
             if (sqrDstFromViewerToEdge < detailLevels[colliderLODIndex].SqrVisibleDistanceThreshold)
             {
                 if (!lodMeshes[colliderLODIndex].hasRequestedMesh)
-                    lodMeshes[colliderLODIndex].RequestMesh(heightMap, meshSettings);
+                    lodMeshes[colliderLODIndex].RequestMesh(MapData.HeightMap, MeshSettings);
             }
 
             if (sqrDstFromViewerToEdge < colliderGenerationDistanceThreshold * colliderGenerationDistanceThreshold)

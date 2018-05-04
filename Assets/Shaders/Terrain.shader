@@ -17,6 +17,7 @@
 		const static float epsilon = 1E-4;
 
 		int layerCount;
+		float baseUseBiomeTint[maxLayerCount];
 		float3 baseColors[maxLayerCount];
 		float baseStartHeights[maxLayerCount];
 		float baseBlends[maxLayerCount];
@@ -40,11 +41,17 @@
 			blendAxes /= blendAxes.x + blendAxes.y + blendAxes.z;
 
 			for (int i = 0; i < layerCount; i++) {
+
 				float drawStrength = inverseLerp(-baseBlends[i] / 2 - epsilon, baseBlends[i] / 2, heightPercent - baseStartHeights[i]);
 
-				float3 baseColor = baseColors[i] * baseColorStrength[i];
+				float3 baseColor = float4(1.0, 0.0, 0.0, 1.0);;
 
-				o.Albedo = o.Albedo * (1 - drawStrength) + (baseColor) * drawStrength;
+				if (baseUseBiomeTint[i] == 0)
+				{
+					baseColor = baseColors[i] * baseColorStrength[i];
+				}
+
+				o.Albedo = o.Albedo * (1 - drawStrength) + (baseColor)* drawStrength;
 			}
 		}
 		ENDCG

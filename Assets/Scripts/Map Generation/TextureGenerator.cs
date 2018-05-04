@@ -33,31 +33,15 @@ public static class TextureGenerator
 
     public static Texture2D TextureFromBiomeMap(BiomeMap biomeMap)
     {
-        int width = biomeMap.values.GetLength(0);
-        int height = biomeMap.values.GetLength(1);
-        int numOfBiomes = biomeMap.numOfBiomes;
+        int width = biomeMap.Values.GetLength(0);
+        int height = biomeMap.Values.GetLength(1);
         
-        float range = biomeMap.maxValue - biomeMap.minValue;
-
         Color[] colorMap = new Color[width * height];
-        for (int y = 0; y < height; y++)
+        for (int x = 0; x < height; x++)
         {
-            for (int x = 0; x < width; x++)
+            for (int z = 0; z < width; z++)
             {
-                // Set the color of the first biome
-                colorMap[y * width + x] = biomeMap.settings.Biomes[0].color;
-
-                if (numOfBiomes > 2)
-                {
-                    // Loop through all other biomes
-                    for (int biomeIndex = 1; biomeIndex < numOfBiomes; biomeIndex++)
-                    {
-                        if (biomeMap.values[x, y] > range / numOfBiomes * biomeIndex)
-                        {
-                            colorMap[y * width + x] = biomeMap.settings.Biomes[biomeIndex].color;
-                        }
-                    }
-                }
+                colorMap[x * width + z] = biomeMap.GetBiomeFromValue(z, x).color;
             }
         }
 

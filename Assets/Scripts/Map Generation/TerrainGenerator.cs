@@ -82,7 +82,7 @@ public class TerrainGenerator : Photon.MonoBehaviour
         HashSet<Vector2> alreadyUpdatedChunkCoords = new HashSet<Vector2>();
         for (int i = visibleTerrainChunks.Count - 1; i >= 0; i--)
         {
-            alreadyUpdatedChunkCoords.Add(visibleTerrainChunks[i].coord);
+            alreadyUpdatedChunkCoords.Add(visibleTerrainChunks[i].Coord);
             visibleTerrainChunks[i].UpdateTerrainChunk();
         }
 

@@ -18,10 +18,11 @@ public class BiomeMapSettings : UpdatableData
 
 #endif
 
-    [System.Serializable]
-    public class Biome
-    {
-        public string name;
-        public Color color;
-    }
+}
+
+[System.Serializable]
+public class Biome
+{
+    public string name;
+    public Color color;
 }

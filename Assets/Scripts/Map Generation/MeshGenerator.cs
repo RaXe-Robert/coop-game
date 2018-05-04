@@ -200,7 +200,7 @@ public class MeshData
         edgeConnectionVertexIndex++;
     }
 
-    Vector3[] CalculateNormals()
+    private Vector3[] CalculateNormals()
     {
 
         Vector3[] vertexNormals = new Vector3[vertices.Length];
