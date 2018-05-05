@@ -7,15 +7,16 @@ public class TerrainGenerator : Photon.MonoBehaviour
 {
     private const float viewerMoveThresholdForChunkUpdate = 25f;
     private const float sqrViewerMoveThreasholdForChunkUpdate = viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate;
-    public static bool DrawBiomes = false;
 
-    public int colliderLODIndex;
+    [SerializeField]
+    private int colliderLODIndex;
     public LODInfo[] detailLevels;
 
     public MeshSettings MeshSettings;
     public HeightMapSettings HeightMapSettings;
     public TextureData TextureSettings;
     public BiomeMapSettings BiomeMapSettings;
+    public ObjectMapSettings ObjectMapSettings;
 
     public Material TerrainMeshMaterial;
     
@@ -100,7 +101,7 @@ public class TerrainGenerator : Photon.MonoBehaviour
                         terrainChunkDictionary[viewedChunkCoord].UpdateTerrainChunk();
                     else
                     {
-                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, HeightMapSettings, MeshSettings, BiomeMapSettings, detailLevels, colliderLODIndex, transform, viewer, TerrainMeshMaterial, TerrainMaterial);
+                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, HeightMapSettings, BiomeMapSettings, ObjectMapSettings, MeshSettings, detailLevels, colliderLODIndex, transform, viewer, TerrainMeshMaterial);
                         terrainChunkDictionary.Add(viewedChunkCoord, newChunk);
                         newChunk.OnVisibilityChanged += OnTerrainChunkVisibilityChanged;
                         newChunk.Load();

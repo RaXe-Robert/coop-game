@@ -10,42 +10,39 @@ public static class BiomeMapGenerator
         float minValue = float.MaxValue;
         float maxValue = float.MinValue;
 
-        for (int i = 0; i < size; i++)
+        for (int x = 0; x < size; x++)
         {
-            for (int j = 0; j < size; j++)
+            for (int y = 0; y < size; y++)
             {
-                values[i, j] *= 1f;
-
-                if (values[i, j] > maxValue)
-                    maxValue = values[i, j];
-                if (values[i, j] < minValue)
-                    minValue = values[i, j];
+                if (values[x, y] > maxValue)
+                    maxValue = values[x, y];
+                if (values[x, y] < minValue)
+                    minValue = values[x, y];
             }
         }
-        return new BiomeMap(settings, values, settings.Biomes.Length, minValue, maxValue);
+        return new BiomeMap(values, minValue, maxValue, settings);
     }
 }
 
 public struct BiomeMap
 {
-    public readonly BiomeMapSettings Settings;
-
     public readonly float[,] Values;
-    public readonly int NumOfBiomes;
 
     public readonly float MinValue;
     public readonly float MaxValue;
 
-    public BiomeMap(BiomeMapSettings settings, float[,] values, int numBiomes, float minValue, float maxValue)
+    public readonly BiomeMapSettings Settings;
+    public int NumOfBiomes => Settings.Biomes.Length;
+
+    public BiomeMap(float[,] values, float minValue, float maxValue, BiomeMapSettings settings)
     {
-        this.Settings = settings;
         this.Values = values;
-        this.NumOfBiomes = numBiomes;
         this.MinValue = minValue;
         this.MaxValue = maxValue;
+        this.Settings = settings;
     }
 
-    public Biome GetBiomeFromValue(int x, int z)
+    public Biome GetBiome(int x, int z)
     {
         Biome biome = Settings.Biomes[0];
         

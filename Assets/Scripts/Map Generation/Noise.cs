@@ -4,6 +4,14 @@ public static class Noise
 {
     public enum NormalizeMode { Local, Global };
 
+    /// <summary>
+    /// Generates a Perlin Noise Map
+    /// </summary>
+    /// <param name="mapWidth">The width of the map.</param>
+    /// <param name="mapHeight">The height of the map.</param>
+    /// <param name="noiseSettings">Noise Settings</param>
+    /// <param name="sampleCenter">The noise offset.</param>
+    /// <returns>Float[,] that contains values ranging from -1 to 1.</returns>
     public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, NoiseSettings noiseSettings, Vector2 sampleCenter)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
@@ -45,6 +53,7 @@ public static class Noise
                     float sampleY = (y - halfHeight + octaveOffsets[i].y) / noiseSettings.scale * frequency;
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
+
                     noiseHeight += perlinValue * amplitude;
 
                     amplitude *= noiseSettings.persistance;
@@ -75,7 +84,6 @@ public static class Noise
                     noiseMap[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y]);
             }
         }
-            
         return noiseMap;
     }
 }
@@ -94,7 +102,7 @@ public class NoiseSettings
 
     public int seed;
     public Vector2 offset;
-
+    
     public void ValidateValues()
     {
         scale = Mathf.Max(scale, 0.01f);

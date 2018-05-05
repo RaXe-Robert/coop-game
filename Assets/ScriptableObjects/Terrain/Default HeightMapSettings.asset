@@ -18,8 +18,9 @@ MonoBehaviour:
     octaves: 6
     persistance: 0.6
     lacunarity: 2
-    seed: 1175778257
+    seed: 1417655820
     offset: {x: 0, y: 0}
+    NegativeValues: 1
   UseFalloff: 0
   HeightMultiplier: 30
   HeightCurve:

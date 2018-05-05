@@ -8,7 +8,7 @@ public class TerrainChunk
     public event System.Action<TerrainChunk, bool> OnVisibilityChanged;
     public Vector2 Coord { get; private set; }
 
-    public MapData MapData { get; private set; }
+    public DataMap DataMap { get; private set; }
     public bool MapDataReceived { get; private set; }
 
     private GameObject meshObject;
@@ -18,12 +18,7 @@ public class TerrainChunk
     private MeshRenderer meshRenderer;
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
-
-    private GameObject biomeTextureObject;
-    private Renderer biomeTextureRenderer;
-    private Texture2D biomeTextureMap;
-    private bool biomeTextureMapReceived;
-
+    
     private LODInfo[] detailLevels;
     private LODMesh[] lodMeshes;
     private int colliderLODIndex;
@@ -34,6 +29,7 @@ public class TerrainChunk
 
     public readonly HeightMapSettings HeightMapSettings;
     public readonly BiomeMapSettings BiomeMapSettings;
+    public readonly ObjectMapSettings ObjectMapSettings;
     public readonly MeshSettings MeshSettings;
     private Transform viewer;
 
@@ -45,14 +41,15 @@ public class TerrainChunk
         meshObject.SetActive(visible);
     }
 
-    public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, BiomeMapSettings biomeMapSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material terrainMeshMaterial, Material terrainMaterial)
+    public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, BiomeMapSettings biomeMapSettings, ObjectMapSettings objectMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material terrainMeshMaterial)
     {
         this.Coord = coord;
+        this.HeightMapSettings = heightMapSettings;
+        this.BiomeMapSettings = biomeMapSettings;
+        this.ObjectMapSettings = objectMapSettings;
+        this.MeshSettings = meshSettings;
         this.detailLevels = detailLevels;
         this.colliderLODIndex = colliderLODIndex;
-        this.HeightMapSettings = heightMapSettings;
-        this.MeshSettings = meshSettings;
-        this.BiomeMapSettings = biomeMapSettings;
         this.viewer = viewer;
 
         SampleCenter = coord * meshSettings.MeshWorldSize / meshSettings.MeshScale;
@@ -63,24 +60,12 @@ public class TerrainChunk
         meshRenderer = meshObject.AddComponent<MeshRenderer>();
         meshFilter = meshObject.AddComponent<MeshFilter>();
         meshCollider = meshObject.AddComponent<MeshCollider>();
-        meshObject.AddComponent<TerrainChunkInteraction>().SetTerrainChunk = this;
+        meshObject.AddComponent<TerrainChunkController>().SetTerrainChunk = this;
         meshRenderer.material = terrainMeshMaterial;
 
         meshObject.transform.position = new Vector3(position.x, 0, position.y);
         meshObject.transform.parent = parent;
-
-        if (TerrainGenerator.DrawBiomes)
-        {
-            biomeTextureObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            biomeTextureObject.name = "Biome Texture";
-            biomeTextureRenderer = biomeTextureObject.GetComponent<MeshRenderer>();
-            biomeTextureRenderer.material = terrainMaterial;
-            biomeTextureObject.transform.SetParent(meshObject.transform, false);
-
-            biomeTextureObject.transform.localScale = (Vector3.one * meshSettings.MeshWorldSize) / 10;
-            biomeTextureObject.transform.position += Vector3.up * 10f;
-        }
-
+        
         SetVisible(false);
 
         lodMeshes = new LODMesh[detailLevels.Length];
@@ -97,20 +82,15 @@ public class TerrainChunk
 
     public void Load()
     {
-        ThreadedDataRequester.RequestData(() => MapDataGenerator.GenerateDataMap(MeshSettings.NumVertsPerLine, HeightMapSettings, BiomeMapSettings, SampleCenter), OnMapDataReceived);
+        ThreadedDataRequester.RequestData(() => DataMapGenerator.GenerateDataMap(MeshSettings.NumVertsPerLine, HeightMapSettings, BiomeMapSettings, ObjectMapSettings, SampleCenter), OnMapDataReceived);
     }
     
-    private void OnMapDataReceived(object mapDataObject)
+    private void OnMapDataReceived(object dataMapObject)
     {
-        this.MapData = (MapData)mapDataObject;
+        this.DataMap = (DataMap)dataMapObject;
         MapDataReceived = true;
 
-        if (TerrainGenerator.DrawBiomes)
-        {
-            biomeTextureMap = TextureGenerator.TextureFromBiomeMap(MapData.BiomeMap);
-            biomeTextureMapReceived = true;
-        }
-        meshRenderer.material.mainTexture = TextureGenerator.TextureFromBiomeMap(MapData.BiomeMap);
+        meshRenderer.material.mainTexture = TextureGenerator.TextureFromBiomeMap(DataMap.BiomeMap);
 
         UpdateTerrainChunk();
     }
@@ -145,12 +125,7 @@ public class TerrainChunk
                         meshFilter.mesh = lodMesh.mesh;
                     }
                     else if (!lodMesh.hasRequestedMesh)
-                        lodMesh.RequestMesh(MapData.HeightMap, MeshSettings);
-                }
-
-                if (biomeTextureMapReceived)
-                {
-                    biomeTextureRenderer.material.mainTexture = biomeTextureMap;
+                        lodMesh.RequestMesh(DataMap.HeightMap, MeshSettings);
                 }
             }
 
@@ -171,7 +146,7 @@ public class TerrainChunk
             if (sqrDstFromViewerToEdge < detailLevels[colliderLODIndex].SqrVisibleDistanceThreshold)
             {
                 if (!lodMeshes[colliderLODIndex].hasRequestedMesh)
-                    lodMeshes[colliderLODIndex].RequestMesh(MapData.HeightMap, MeshSettings);
+                    lodMeshes[colliderLODIndex].RequestMesh(DataMap.HeightMap, MeshSettings);
             }
 
             if (sqrDstFromViewerToEdge < colliderGenerationDistanceThreshold * colliderGenerationDistanceThreshold)
@@ -211,7 +186,7 @@ public class LODMesh
     public void RequestMesh(HeightMap heightMap, MeshSettings meshSettings)
     {
         hasRequestedMesh = true;
-        ThreadedDataRequester.RequestData(() => MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, lod), OnMeshDataReceived);
+        ThreadedDataRequester.RequestData(() => MeshGenerator.GenerateTerrainMesh(heightMap.Values, meshSettings, lod), OnMeshDataReceived);
     }
 }
 

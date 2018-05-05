@@ -9,15 +9,16 @@ using UnityEngine.AI;
 /// </summary>
 public class MapPreview : MonoBehaviour
 {
-    public enum DrawMode { NoiseMap, Mesh, FalloffMap, BiomeMap }
+    public enum DrawMode { NoiseMap, Mesh, FalloffMap, BiomeMap, ObjectMap }
     public DrawMode drawMode;
 
-    public MeshSettings meshSettings;
-    public HeightMapSettings heightMapSettings;
-    public TextureData textureSettings;
-    public BiomeMapSettings biomeMapSettings;
+    public MeshSettings MeshSettings;
+    public HeightMapSettings HeightMapSettings;
+    public TextureData TextureDataSettings;
+    public BiomeMapSettings BiomeMapSettings;
+    public ObjectMapSettings ObjectMapSettings;
 
-    public Material terrainMaterial;
+    public Material TerrainMaterial;
 
     [Range(0, MeshSettings.MumOfSupportedLODs - 1)]
     public int editorPreviewLOD;
@@ -35,10 +36,10 @@ public class MapPreview : MonoBehaviour
     
     public void DrawMapInEditor()
     {
-        textureSettings.UpdateMeshHeights(terrainMaterial, heightMapSettings.MinHeight, heightMapSettings.MaxHeight);
-        textureSettings.ApplyToMaterial(terrainMaterial);
+        TextureDataSettings.UpdateMeshHeights(TerrainMaterial, HeightMapSettings.MinHeight, HeightMapSettings.MaxHeight);
+        TextureDataSettings.ApplyToMaterial(TerrainMaterial);
 
-        HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(meshSettings.NumVertsPerLine, heightMapSettings, Vector2.zero);
+        HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(MeshSettings.NumVertsPerLine, HeightMapSettings, Vector2.zero);
         
         switch (drawMode)
         {
@@ -46,13 +47,16 @@ public class MapPreview : MonoBehaviour
                 DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
                 break;
             case DrawMode.Mesh:
-                DrawMesh(MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, editorPreviewLOD));
+                DrawMesh(MeshGenerator.GenerateTerrainMesh(heightMap.Values, MeshSettings, editorPreviewLOD));
                 break;
             case DrawMode.FalloffMap:
-                DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(meshSettings.NumVertsPerLine), 0, 1)));
+                DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(MeshSettings.NumVertsPerLine), 0, 1, HeightMapSettings)));
                 break;
             case DrawMode.BiomeMap:
-                DrawTexture(TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.values.GetLength(0), biomeMapSettings, Vector2.zero)));
+                DrawTexture(TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.Values.GetLength(0), BiomeMapSettings, Vector2.zero)));
+                break;
+            case DrawMode.ObjectMap:
+                DrawTexture(TextureGenerator.TextureFromObjectMap(ObjectMapGenerator.GenerateObjectMap(heightMap.Values.GetLength(0) - 3, ObjectMapSettings, Vector2.zero)));
                 break;
 
         }
@@ -87,25 +91,30 @@ public class MapPreview : MonoBehaviour
 
     private void OnValidate()
     {
-        if (meshSettings != null)
+        if (MeshSettings != null)
         {
-            meshSettings.OnValuesUpdated -= OnValuesUpdated;
-            meshSettings.OnValuesUpdated += OnValuesUpdated;
+            MeshSettings.OnValuesUpdated -= OnValuesUpdated;
+            MeshSettings.OnValuesUpdated += OnValuesUpdated;
         }
-        if (heightMapSettings != null)
+        if (HeightMapSettings != null)
         {
-            heightMapSettings.OnValuesUpdated -= OnValuesUpdated;
-            heightMapSettings.OnValuesUpdated += OnValuesUpdated;
+            HeightMapSettings.OnValuesUpdated -= OnValuesUpdated;
+            HeightMapSettings.OnValuesUpdated += OnValuesUpdated;
         }
-        if (textureSettings != null)
+        if (TextureDataSettings != null)
         {
-            textureSettings.OnValuesUpdated -= OnValuesUpdated;
-            textureSettings.OnValuesUpdated += OnValuesUpdated;
+            TextureDataSettings.OnValuesUpdated -= OnValuesUpdated;
+            TextureDataSettings.OnValuesUpdated += OnValuesUpdated;
         }
-        if (biomeMapSettings != null)
+        if (BiomeMapSettings != null)
         {
-            biomeMapSettings.OnValuesUpdated -= OnValuesUpdated;
-            biomeMapSettings.OnValuesUpdated += OnValuesUpdated;
+            BiomeMapSettings.OnValuesUpdated -= OnValuesUpdated;
+            BiomeMapSettings.OnValuesUpdated += OnValuesUpdated;
+        }
+        if (ObjectMapSettings != null)
+        {
+            ObjectMapSettings.OnValuesUpdated -= OnValuesUpdated;
+            ObjectMapSettings.OnValuesUpdated += OnValuesUpdated;
         }
     }
 }

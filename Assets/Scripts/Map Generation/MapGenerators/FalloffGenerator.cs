@@ -7,15 +7,15 @@ public static class FalloffGenerator
     {
         float[,] map = new float[size, size];
 
-        for (int i = 0; i < size; i++)
+        for (int x = 0; x < size; x++)
         {
-            for (int j = 0; j < size; j++)
+            for (int y = 0; y < size; y++)
             {
-                float x = i / (float)size * 2 - 1;
-                float y = j / (float)size * 2 - 1;
+                float a = x / (float)size * 2 - 1;
+                float b = y / (float)size * 2 - 1;
 
-                float value = Mathf.Max(Mathf.Abs(x), Mathf.Abs(y));
-                map[i,j] = Evaluate(value);
+                float value = Mathf.Max(Mathf.Abs(a), Mathf.Abs(b));
+                map[x,y] = Evaluate(value);
             }
         }
         return map;

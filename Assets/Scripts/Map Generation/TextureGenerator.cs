@@ -18,14 +18,14 @@ public static class TextureGenerator
 
     public static Texture2D TextureFromHeightMap(HeightMap heightMap)
     {
-        int width = heightMap.values.GetLength(0);
-        int height = heightMap.values.GetLength(1);
+        int width = heightMap.Values.GetLength(0);
+        int height = heightMap.Values.GetLength(1);
         
         Color[] colorMap = new Color[width * height];
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
-                colorMap[y * width + x] = Color.Lerp(Color.black, Color.white, Mathf.InverseLerp(heightMap.minValue, heightMap.maxValue, heightMap.values[x, y]));
+                colorMap[y * width + x] = Color.Lerp(Color.black, Color.white, Mathf.InverseLerp(heightMap.MinValue, heightMap.MaxValue, heightMap.Values[x, y]));
         }
 
         return TextureFromColorMap(colorMap, width, height);
@@ -37,11 +37,29 @@ public static class TextureGenerator
         int height = biomeMap.Values.GetLength(1);
         
         Color[] colorMap = new Color[width * height];
-        for (int x = 0; x < height; x++)
+        for (int y = 0; y < height; y++)
         {
-            for (int z = 0; z < width; z++)
+            for (int x = 0; x < width; x++)
+                colorMap[y * width + x] = biomeMap.GetBiome(x, y).color;
+        }
+
+        return TextureFromColorMap(colorMap, width, height);
+    }
+
+    public static Texture2D TextureFromObjectMap(ObjectMap objectMap)
+    {
+        int width = objectMap.Values.GetLength(0);
+        int height = objectMap.Values.GetLength(1);
+
+        Color[] colorMap = new Color[width * height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
             {
-                colorMap[x * width + z] = biomeMap.GetBiomeFromValue(z, x).color;
+                if (objectMap.Values[y,x] >= objectMap.Settings.Density)
+                    colorMap[y * width + x] = Color.white;
+                else
+                    colorMap[y * width + x] = Color.red;
             }
         }
 
