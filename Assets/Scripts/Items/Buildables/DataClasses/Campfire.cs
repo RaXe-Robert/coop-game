@@ -1,20 +1,13 @@
 ﻿using System.Collections;
-
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Campfire : BuildableBase
+public class Campfire : BuildableWorldObject
 {
-    private GameObject fireParticlesPrefab;
-
+    [SerializeField] private GameObject fireParticlesPrefab;
     private GameObject activeFireParticles = null;
 
     public bool IsBurning { get; private set; } = false;
-
-    public Campfire(CampfireData campfireData) : base(campfireData)
-    {
-        fireParticlesPrefab = campfireData.FireParticles;
-    }
 
     protected override UnityAction[] InitializeActions()
     {
@@ -37,12 +30,13 @@ public class Campfire : BuildableBase
         {
             if (IsBurning)
             {
-                activeFireParticles = GameObject.Instantiate(fireParticlesPrefab, BuildableInteractionMenu.Instance.Target.transform);
+                activeFireParticles = Instantiate(fireParticlesPrefab, BuildableInteractionMenu.Instance.Target.transform);
             }
             else
-                GameObject.Destroy(activeFireParticles);
+                Destroy(activeFireParticles);
         }
     }
+
     private void OpenCookingMenu()
     {
         Debug.Log("Opening");

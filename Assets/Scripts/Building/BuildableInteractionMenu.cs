@@ -6,17 +6,19 @@ using System.Collections.Generic;
 public class BuildableInteractionMenu : MonoBehaviour
 {
     private static BuildableInteractionMenu instance = null;
-    public static BuildableInteractionMenu Instance {
+    public static BuildableInteractionMenu Instance
+    {
         get
         {
             if (instance == null)
             {
-                UnityEngine.Object resource = Resources.Load("BuildableInteractionMenu");
+                var resource = Resources.Load("BuildableInteractionMenu");
                 if (resource)
                 {
                     GameObject go = Instantiate(resource) as GameObject;
                     instance = go.GetComponent<BuildableInteractionMenu>();
                 }
+                else Debug.Log("Cant find BuildableInteractionMenu in Resources");
             }
             return instance;
         }
@@ -70,7 +72,7 @@ public class BuildableInteractionMenu : MonoBehaviour
             interactionButtons[i].gameObject.SetActive(true);
             interactionButtons[i].onClick.AddListener(actions[i]);
         }
-        
+
         gameObject.SetActive(true);
     }
 
