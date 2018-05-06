@@ -15,7 +15,7 @@ public class TerrainChunkController : MonoBehaviour
         }
     }
 
-    private bool resourceSpawned = false;
+    private bool resourcesSpawned = false;
     GameObject treePrefab;
     GameObject rockPrefab;
     GameObject treeStumpPrefab;
@@ -29,11 +29,25 @@ public class TerrainChunkController : MonoBehaviour
 
     private void Update()
     {
-        if (!resourceSpawned && terrainChunk != null && terrainChunk.IsVisible)
+        if (!resourcesSpawned && terrainChunk != null && terrainChunk.IsVisible)
             SpawnRecources();
     }
 
     private void SpawnRecources()
+    {
+        ResourcePoint[] resourcePoints = terrainChunk.DataMap.ResourceMap.resourcePoints;
+
+        for (int i = 0; i < resourcePoints.Length; i++)
+        {
+            TerrainInfo terrainInfo = GetTerrainInfoFromIndex(resourcePoints[i].IndexX, resourcePoints[i].IndexZ);
+
+            Instantiate(resourcePoints[i].WorldResourcePrefab, terrainInfo.WorldPoint, Quaternion.identity, transform);
+        }
+
+        resourcesSpawned = true;
+    }
+
+    private void LoopThroughAllTerrainPointsExample()
     {
         int size = terrainChunk.DataMap.UniformSize;
 
@@ -43,47 +57,28 @@ public class TerrainChunkController : MonoBehaviour
         {
             for (int z = 0; z < size; z++)
             {
-                Vector3 pos = transform.position + new Vector3((x - halfSize) * terrainChunk.MeshSettings.MeshScale, 0f, (z - halfSize) * terrainChunk.MeshSettings.MeshScale);
-                TerrainInfo terrainInfo = GetTerrainInfo(pos.x, pos.z);
+                Vector3 pos = transform.position + new Vector3((x - halfSize) * terrainChunk.MeshSettings.MeshScale, 0f, (z - halfSize) * -terrainChunk.MeshSettings.MeshScale);
+                TerrainInfo terrainInfo = GetTerrainInfoFromWorldPoint(pos.x, pos.z);
 
-                if (terrainInfo.HasResourceIndex)
-                {
-                    if (terrainInfo.Biome.Name.Equals("Forest"))
-                        InstantiateResource(Mathf.Min(terrainInfo.ResourceIndex, 2), terrainInfo.Point);
-                    else if (terrainInfo.Biome.Name.Equals("Desert"))
-                        InstantiateResource(Mathf.Min(terrainInfo.ResourceIndex, 0), terrainInfo.Point);
-                    else if (terrainInfo.Biome.Name.Equals("Grassland"))
-                        InstantiateResource(Mathf.Min(terrainInfo.ResourceIndex, 1), terrainInfo.Point);
-                }
+                Debug.DrawRay(terrainInfo.WorldPoint, Vector3.up * 2f);
             }
-        }
-        resourceSpawned = true;
-    }
-
-    private void InstantiateResource(int index, Vector3 position)
-    {
-        switch(index)
-        {
-            case 0: Instantiate(rockPrefab, position, Quaternion.identity, transform); break;
-            case 1: Instantiate(treeStumpPrefab, position, Quaternion.identity, transform); break;
-            case 2: Instantiate(treePrefab, position, Quaternion.identity, transform); break;
         }
     }
 
     /// <summary>
-    /// Get terrain properties at a certain location.
+    /// Get terrain properties at the given world location.
     /// </summary>
     /// <param name="worldX">The X position in world space that lies within the TerrainChunk bounds.</param>
     /// <param name="worldZ">The Z position in world space that lies within the TerrainChunk bounds.</param>
     /// <returns>Biome properties etc.</returns>
-    public TerrainInfo GetTerrainInfo(float worldX, float worldZ)
+    public TerrainInfo GetTerrainInfoFromWorldPoint(float worldX, float worldZ)
     {
         if (terrainChunk == null)
         {
             Debug.LogError("TerrainChunk hasn't loaded");
             return new TerrainInfo(null, Vector3.zero);
         }
-
+        
         Vector3 distance = new Vector3(worldX, 0f, worldZ) - new Vector3(transform.position.x, 0f, transform.position.z);
 
         float xPercentage = distance.x / terrainChunk.Bounds.size.x * 100f + 50f; // +50 since distance from middle is on scale of 0 to 50 or 0 to -50
@@ -110,14 +105,30 @@ public class TerrainChunkController : MonoBehaviour
 
         Biome biome = terrainChunk.DataMap.BiomeMap.GetBiome(xIndex, zIndex);
         float height = terrainChunk.DataMap.HeightMap.Values[xIndex + indexOffsetX, zIndex + indexOffsetZ];
-
-        int resourceIndex = -1;
-        if (terrainChunk.DataMap.ResourceMap.Values[xIndex, zIndex] >= biome.ResourceDensity && terrainChunk.DataMap.ResourceMap.Values[xIndex, zIndex] >= terrainChunk.DataMap.ResourceMap.Settings.DensityThreshold)
+        
+        return new TerrainInfo(biome, new Vector3(worldX, height, worldZ));
+    }
+    
+    /// <summary>
+     /// Get terrain properties at the given index.
+     /// </summary>
+     /// <param name="x">The X index.</param>
+     /// <param name="z">The Z idnex.</param>
+     /// <returns>Biome properties etc.</returns>
+    public TerrainInfo GetTerrainInfoFromIndex(int x, int z)
+    {
+        if (terrainChunk == null)
         {
-            resourceIndex = terrainChunk.DataMap.ResourceMap.GetResourceIndex(xIndex, zIndex, 3);
+            Debug.LogError("TerrainChunk hasn't loaded");
+            return new TerrainInfo(null, Vector3.zero);
         }
+        
+        Biome biome = terrainChunk.DataMap.BiomeMap.GetBiome(x, z);
+        float height = terrainChunk.DataMap.HeightMap.Values[x + 1, z + 1];// These offsets are needed because our mesh has more vertices than that are actually shown on the terrain. This is because those extra vertices are used in Normal calculations. Only needed for the heightmap.
 
-        return new TerrainInfo(biome, new Vector3(worldX, height, worldZ), resourceIndex);
+        Vector3 pos = transform.position + new Vector3((x - terrainChunk.DataMap.UniformSize / 2f) * terrainChunk.MeshSettings.MeshScale, 0f, (z - terrainChunk.DataMap.UniformSize / 2f) * -terrainChunk.MeshSettings.MeshScale);
+        
+        return new TerrainInfo(biome, new Vector3(pos.x, height, pos.z));
     }
 
     #region Debugging
@@ -132,9 +143,9 @@ public class TerrainChunkController : MonoBehaviour
         {
             debugRayPosition = raycastHitInfo.point;
 
-            TerrainInfo terrainInfo = GetTerrainInfo(raycastHitInfo.point.x, raycastHitInfo.point.z);
+            TerrainInfo terrainInfo = GetTerrainInfoFromWorldPoint(raycastHitInfo.point.x, raycastHitInfo.point.z);
 
-            Debug.Log($"BiomeValue: {terrainInfo.Biome.Name}, Height: {terrainInfo.Point.y}, Actual:{raycastHitInfo.point.y}");
+            Debug.Log($"BiomeValue: {terrainInfo.Biome.Name}, Height: {terrainInfo.WorldPoint.y}, Actual:{raycastHitInfo.point.y}");
         }
     }
     #endregion //Debugging
@@ -143,14 +154,11 @@ public class TerrainChunkController : MonoBehaviour
 public struct TerrainInfo
 {
     public readonly Biome Biome;
-    public readonly Vector3 Point;
-    public readonly int ResourceIndex;
-    public bool HasResourceIndex => ResourceIndex != -1;
+    public readonly Vector3 WorldPoint;
 
-    public TerrainInfo(Biome biome, Vector3 point, int resourceIndex = -1)
+    public TerrainInfo(Biome biome, Vector3 point)
     {
         this.Biome = biome;
-        this.Point = point;
-        this.ResourceIndex = resourceIndex;
+        this.WorldPoint = point;
     }
 }

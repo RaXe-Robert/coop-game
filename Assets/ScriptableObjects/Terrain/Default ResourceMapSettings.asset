@@ -12,12 +12,19 @@ MonoBehaviour:
   m_Name: Default ResourceMapSettings
   m_EditorClassIdentifier: 
   AutoUpdate: 1
-  NoiseSettings:
+  noiseSettings:
     normalizeMode: 0
     scale: 1.16
     octaves: 3
-    persistance: 0.805
-    lacunarity: 1.24
+    persistance: 0.8
+    lacunarity: 2
     seed: 0
     offset: {x: 0, y: 0}
-  densityThreshold: 0.363
+  worldResourceEntries:
+  - worldResourcePrefab: {fileID: 1695406501947972, guid: 00e52d555c867374690f2256513d9e5a,
+      type: 2}
+  - worldResourcePrefab: {fileID: 1296203204362048, guid: cea2ad25b4540224a86b529aa39547f6,
+      type: 2}
+  - worldResourcePrefab: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
+      type: 2}
+  densityThreshold: 0.395
