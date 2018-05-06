@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu()]
-public class ObjectMapSettings : UpdatableData
+public class ResourceMapSettings : UpdatableData
 {
     public NoiseSettings NoiseSettings;
 
     [SerializeField]
     [Range(0,1)]
-    private float density;
+    private float densityThreshold;
 
-    public float Density { get { return density * 2f - 1f; } }
+    public float DensityThreshold { get { return 1f - densityThreshold; } }
 
 #if UNITY_EDITOR
 
@@ -17,7 +17,7 @@ public class ObjectMapSettings : UpdatableData
     {
         NoiseSettings.ValidateValues();
 
-        density = Mathf.Clamp(density, 0f, 1f);
+        densityThreshold = Mathf.Clamp(densityThreshold, 0f, 1f);
 
         base.OnValidate();
     }

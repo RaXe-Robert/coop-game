@@ -9,15 +9,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f444e2bec5221684daa3649c9fff4385, type: 3}
-  m_Name: Default ObjectMapSettings
+  m_Name: Default ResourceMapSettings
   m_EditorClassIdentifier: 
   AutoUpdate: 1
   NoiseSettings:
     normalizeMode: 0
-    scale: 0.12
+    scale: 1.16
     octaves: 3
-    persistance: 1
-    lacunarity: 1
+    persistance: 0.805
+    lacunarity: 1.24
     seed: 0
     offset: {x: 0, y: 0}
-  density: 0.844
+  densityThreshold: 0.363

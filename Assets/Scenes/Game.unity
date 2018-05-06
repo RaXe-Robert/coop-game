@@ -357,7 +357,7 @@ Transform:
   m_GameObject: {fileID: 278793261}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7.7, y: 0.1, z: 7.7}
+  m_LocalScale: {x: 7.4, y: 0.1, z: 7.4}
   m_Children: []
   m_Father: {fileID: 1459670268}
   m_RootOrder: 0
@@ -2036,7 +2036,8 @@ MonoBehaviour:
   TextureDataSettings: {fileID: 11400000, guid: 2ef5fc701957e874c8bea17b8d08163e,
     type: 2}
   BiomeMapSettings: {fileID: 11400000, guid: e17c58e275e5bc74cba8c8f5d1b8168c, type: 2}
-  ObjectMapSettings: {fileID: 11400000, guid: 15be9663026b64042a8b8a97a1b6088e, type: 2}
+  ResourceMapSettings: {fileID: 11400000, guid: 15be9663026b64042a8b8a97a1b6088e,
+    type: 2}
   TerrainMaterial: {fileID: 2100000, guid: 2b9336a43a2f5854b86f2ff219953cba, type: 2}
   editorPreviewLOD: 0
   autoUpdate: 0

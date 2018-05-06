@@ -29,7 +29,7 @@ public class TerrainChunk
 
     public readonly HeightMapSettings HeightMapSettings;
     public readonly BiomeMapSettings BiomeMapSettings;
-    public readonly ObjectMapSettings ObjectMapSettings;
+    public readonly ResourceMapSettings ObjectMapSettings;
     public readonly MeshSettings MeshSettings;
     private Transform viewer;
 
@@ -41,7 +41,7 @@ public class TerrainChunk
         meshObject.SetActive(visible);
     }
 
-    public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, BiomeMapSettings biomeMapSettings, ObjectMapSettings objectMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material terrainMeshMaterial)
+    public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, BiomeMapSettings biomeMapSettings, ResourceMapSettings objectMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material terrainMeshMaterial)
     {
         this.Coord = coord;
         this.HeightMapSettings = heightMapSettings;
@@ -91,6 +91,7 @@ public class TerrainChunk
         MapDataReceived = true;
 
         meshRenderer.material.mainTexture = TextureGenerator.TextureFromBiomeMap(DataMap.BiomeMap);
+        //meshRenderer.material.SetTexture("_MainTex2", TextureGenerator.TextureFromBiomeMap(DataMap.BiomeMap2));
 
         UpdateTerrainChunk();
     }

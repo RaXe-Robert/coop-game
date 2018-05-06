@@ -16,7 +16,7 @@ public class TerrainGenerator : Photon.MonoBehaviour
     public HeightMapSettings HeightMapSettings;
     public TextureData TextureSettings;
     public BiomeMapSettings BiomeMapSettings;
-    public ObjectMapSettings ObjectMapSettings;
+    public ResourceMapSettings ObjectMapSettings;
 
     public Material TerrainMeshMaterial;
     

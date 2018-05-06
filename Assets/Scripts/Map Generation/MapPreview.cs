@@ -16,7 +16,7 @@ public class MapPreview : MonoBehaviour
     public HeightMapSettings HeightMapSettings;
     public TextureData TextureDataSettings;
     public BiomeMapSettings BiomeMapSettings;
-    public ObjectMapSettings ObjectMapSettings;
+    public ResourceMapSettings ResourceMapSettings;
 
     public Material TerrainMaterial;
 
@@ -53,10 +53,10 @@ public class MapPreview : MonoBehaviour
                 DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(MeshSettings.NumVertsPerLine), 0, 1, HeightMapSettings)));
                 break;
             case DrawMode.BiomeMap:
-                DrawTexture(TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.Values.GetLength(0), BiomeMapSettings, Vector2.zero)));
+                DrawTexture(TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.Values.GetLength(0) - 3, BiomeMapSettings, Vector2.zero)));
                 break;
             case DrawMode.ObjectMap:
-                DrawTexture(TextureGenerator.TextureFromObjectMap(ObjectMapGenerator.GenerateObjectMap(heightMap.Values.GetLength(0) - 3, ObjectMapSettings, Vector2.zero)));
+                DrawTexture(TextureGenerator.TextureFromObjectMap(ResourceMapGenerator.GenerateResourceMap(heightMap.Values.GetLength(0) - 3, ResourceMapSettings, Vector2.zero)));
                 break;
 
         }
@@ -111,10 +111,10 @@ public class MapPreview : MonoBehaviour
             BiomeMapSettings.OnValuesUpdated -= OnValuesUpdated;
             BiomeMapSettings.OnValuesUpdated += OnValuesUpdated;
         }
-        if (ObjectMapSettings != null)
+        if (ResourceMapSettings != null)
         {
-            ObjectMapSettings.OnValuesUpdated -= OnValuesUpdated;
-            ObjectMapSettings.OnValuesUpdated += OnValuesUpdated;
+            ResourceMapSettings.OnValuesUpdated -= OnValuesUpdated;
+            ResourceMapSettings.OnValuesUpdated += OnValuesUpdated;
         }
     }
 }

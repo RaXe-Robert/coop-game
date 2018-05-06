@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ObjectMapGenerator
+public class ResourceMapGenerator
 {
-    public static ObjectMap GenerateObjectMap(int size, ObjectMapSettings settings, Vector2 sampleCenter)
+    public static ResourceMap GenerateResourceMap(int size, ResourceMapSettings settings, Vector2 sampleCenter)
     {
         float[,] values = Noise.GenerateNoiseMap(size, size, settings.NoiseSettings, sampleCenter);
         
@@ -15,33 +13,36 @@ public class ObjectMapGenerator
         {
             for (int y = 0; y < size; y++)
             {
-                //if (values[x, y] <= density)
-                //    values[x, y] = 1f;
-
                 if (values[x, y] > maxValue)
                     maxValue = values[x, y];
                 if (values[x, y] < minValue)
                     minValue = values[x, y];
             }
         }
-        return new ObjectMap(values, minValue, maxValue, settings);
+        return new ResourceMap(values, minValue, maxValue, settings);
     }
 }
 
-public struct ObjectMap
+public struct ResourceMap
 {
     public readonly float[,] Values;
     public readonly float MinValue;
     public readonly float MaxValue;
 
-    public readonly ObjectMapSettings Settings;
+    public readonly ResourceMapSettings Settings;
 
-    public ObjectMap(float[,] values, float minValue, float maxValue, ObjectMapSettings settings)
+    public ResourceMap(float[,] values, float minValue, float maxValue, ResourceMapSettings settings)
     {
         this.Values = values;
         this.MinValue = minValue;
         this.MaxValue = maxValue;
         this.Settings = settings;
+    }
+
+    public int GetResourceIndex(int x, int z, int numOfResources)
+    {
+        int resourceSeed = System.Convert.ToInt32(Values[x, z] * 100f);
+        return (new System.Random(resourceSeed)).Next(0, numOfResources);
     }
 }
 

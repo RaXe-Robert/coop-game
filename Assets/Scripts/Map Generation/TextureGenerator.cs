@@ -40,23 +40,23 @@ public static class TextureGenerator
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
-                colorMap[y * width + x] = biomeMap.GetBiome(x, y).color;
+                colorMap[y * width + x] = biomeMap.GetBiome(x, y).Color;
         }
 
         return TextureFromColorMap(colorMap, width, height);
     }
 
-    public static Texture2D TextureFromObjectMap(ObjectMap objectMap)
+    public static Texture2D TextureFromObjectMap(ResourceMap resourceMap)
     {
-        int width = objectMap.Values.GetLength(0);
-        int height = objectMap.Values.GetLength(1);
+        int width = resourceMap.Values.GetLength(0);
+        int height = resourceMap.Values.GetLength(1);
 
         Color[] colorMap = new Color[width * height];
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                if (objectMap.Values[y,x] >= objectMap.Settings.Density)
+                if (resourceMap.Values[y,x] >= resourceMap.Settings.DensityThreshold)
                     colorMap[y * width + x] = Color.white;
                 else
                     colorMap[y * width + x] = Color.red;

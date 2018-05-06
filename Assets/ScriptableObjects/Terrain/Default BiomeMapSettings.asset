@@ -20,11 +20,13 @@ MonoBehaviour:
     lacunarity: 2
     seed: 0
     offset: {x: 0, y: 0}
-    NegativeValues: 1
   Biomes:
   - name: Desert
-    color: {r: 0.99492896, g: 1, b: 0.63235295, a: 1}
+    color: {r: 0.99634886, g: 1, b: 0.7352941, a: 1}
+    resourceDensity: 0.557
   - name: Grassland
-    color: {r: 0.4572516, g: 0.9338235, b: 0, a: 1}
+    color: {r: 0.2827586, g: 1, b: 0, a: 1}
+    resourceDensity: 0.298
   - name: Forest
-    color: {r: 0.72794116, g: 0, b: 0, a: 1}
+    color: {r: 0.12941173, g: 0.64705884, b: 0, a: 1}
+    resourceDensity: 0.532

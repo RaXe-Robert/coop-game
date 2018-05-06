@@ -23,6 +23,17 @@ public class BiomeMapSettings : UpdatableData
 [System.Serializable]
 public class Biome
 {
-    public string name;
-    public Color color;
+    [SerializeField]
+    private string name;
+
+    [SerializeField]
+    private Color color;
+
+    [SerializeField]
+    [Range(0, 1)]
+    private float resourceDensity;
+
+    public string Name => name;
+    public Color Color => color;
+    public float ResourceDensity => 1f - resourceDensity;
 }
