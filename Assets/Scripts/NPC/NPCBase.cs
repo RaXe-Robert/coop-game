@@ -12,7 +12,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
     public UnityEngine.AI.NavMeshAgent Agent { get; private set; }
     public Vector3 Waypoint { get; private set; }
     public float NearWaypointRange { get; set; } = 4.0f; // The distance this has to be from the agent waypoint to reach it
-    private EntitiesToDropComponent entitiesToDropComponent;
+    private ItemsToDropComponent itemsToDropComponent;
 
     private HealthComponent healthComponent;
     private float searchNewTargetCountdown = 1f;
@@ -27,7 +27,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
         Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         animator = GetComponent<Animator>();
         healthComponent = GetComponent<HealthComponent>();
-        entitiesToDropComponent = GetComponent<EntitiesToDropComponent>();
+        itemsToDropComponent = GetComponent<ItemsToDropComponent>();
 
         healthComponent.SetValue(stats.maxHealth);
         Agent.speed = stats.movementSpeed;
@@ -132,7 +132,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
         }
 
-        entitiesToDropComponent?.SpawnEntitiesOnDepleted();
+        itemsToDropComponent?.SpawnItemsOnDepleted();
 
         photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }
