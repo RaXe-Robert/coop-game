@@ -46,8 +46,8 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
             return;
 
         BuildableInteractionMenu bim = BuildableInteractionMenu.Instance;
-        if (bim.TargetInstanceID != GetInstanceID() && Actions != null)
-            bim.Show(this, Actions.ToArray());
+        if (bim.TargetInstanceID != GetInstanceID())
+            bim.Show(this, Actions?.ToArray());
         else
             bim.Hide();
     }
@@ -59,7 +59,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
 
     #endregion //IInteractable Implementation
 
-    public virtual void DestroyWorldObject()
+    public void DestroyWorldObject()
     {
         PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(buildable.Id, buildable.StackSize);
         photonView.RPC("RPC_DestroyWorldObject", PhotonTargets.AllBuffered);

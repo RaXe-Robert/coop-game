@@ -8,7 +8,6 @@ public class BuildableBase : Item
     public bool SnapToGrid { get; }
     public GameObject PrefabToSpawn { get; }
 
-
     public BuildableBase(ScriptableBuildableData buildableData) : base(buildableData)
     {
         Recoverable = buildableData.Recoverable;

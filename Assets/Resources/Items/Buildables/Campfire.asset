@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22580a90e66e2f44ea7c1962e6362f2f, type: 3}
-  m_Name: Test
+  m_Name: Campfire
   m_EditorClassIdentifier: 
   id: 200
   itemName: Campfire
