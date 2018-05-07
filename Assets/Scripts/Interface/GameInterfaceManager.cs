@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu }
+public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu, Controls }
 
 public class GameInterfaceManager : MonoBehaviour
 {
@@ -13,6 +13,7 @@ public class GameInterfaceManager : MonoBehaviour
     [SerializeField] private GameObject inventoryUI;
     [SerializeField] private GameObject craftingUI;
     [SerializeField] private GameObject equipmentUI;
+    [SerializeField] private GameObject controlsUI;
 
     private Dictionary<GameInterface, GameObject> interfaceGameObjectDictionary;
 
@@ -29,7 +30,8 @@ public class GameInterfaceManager : MonoBehaviour
             {GameInterface.EscapeMenu, escapeMenuUI },
             {GameInterface.Crafting, craftingUI },
             {GameInterface.Equipment, equipmentUI },
-            {GameInterface.Inventory, inventoryUI }
+            {GameInterface.Inventory, inventoryUI },
+            {GameInterface.Controls, controlsUI }
         };
     }
 
