@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemsToDropComponent : Photon.MonoBehaviour {
+public class ItemsToDropComponent : MonoBehaviour {
 
     [SerializeField] private List<ScriptableItemData> ItemsToSpawn;
     [SerializeField] private List<int> ItemCountPerItem;

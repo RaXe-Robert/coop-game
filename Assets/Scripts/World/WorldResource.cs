@@ -3,43 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldResource : Photon.MonoBehaviour, IInteractable
+[RequireComponent(typeof(Animator), typeof(ItemsToDropComponent))]
+public class WorldResource : MonoBehaviour, IInteractable
 {
-    public new string name;
-    public ToolType requiredToolToHarvest;
-    public float interactDistance = 5f;
+    [SerializeField] private new string name;
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private ToolType requiredToolToHarvest;
+    [SerializeField] private float interactDistance = 5f;
     [SerializeField] private GameObject spawnOnDepleted;
-    [SerializeField] private HealthComponent healthComponent;
-    [SerializeField] private ItemsToDropComponent itemsToDrop;
+
     private Animator animator;
+    private ItemsToDropComponent itemsToDrop;
+
+    public string Name => name;
+    public float MaxHealth => maxHealth;
+    public ToolType RequiredToolToHarvest => requiredToolToHarvest;
+    public float InteractDistance => interactDistance;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        itemsToDrop = GetComponent<ItemsToDropComponent>();
     }
-
-    private void Update()
-    {
-        if (!photonView.isMine)
-            return;
-
-        if (healthComponent.IsDepleted())
-        {
-            StartCoroutine(PlayDepletedAnimation());
-        }
-    }
-
+    
     private IEnumerator PlayDepletedAnimation()
     {
         if (animator != null)
         {
-            photonView.RPC("CallAnimation", PhotonTargets.All);
+            //photonView.RPC("CallAnimation", PhotonTargets.All);
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
         }
 
         itemsToDrop?.SpawnItemsOnDepleted();
 
-        photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
+       // photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }
 
     #region IInteractable Implementation
@@ -54,7 +51,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
         if (Vector3.Distance(transform.position, invokerPosition) > interactDistance)
             return;
 
-        healthComponent.DecreaseValue(50f);
+        Debug.Log("interacting");
     }
 
     public string TooltipText()

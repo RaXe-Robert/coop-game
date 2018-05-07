@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Controller for a specific <see cref="TerrainChunk"/> instance.
+/// Controller for a specific <see cref="global::TerrainChunk"/> instance.
 /// </summary>
 public class TerrainChunkController : MonoBehaviour
 {
     private TerrainChunk terrainChunk;
-    public TerrainChunk SetTerrainChunk
+    public TerrainChunk TerrainChunk
     {
+        get { return this.terrainChunk; }
         set
         {
             this.terrainChunk = value;
@@ -32,7 +33,9 @@ public class TerrainChunkController : MonoBehaviour
             TerrainInfo terrainInfo = GetTerrainInfoFromIndex(resourcePoints[i].IndexX, resourcePoints[i].IndexZ);
 
             if (terrainInfo.Layer != null && !terrainInfo.Layer.IsWater)
-                Instantiate(resourcePoints[i].WorldResourcePrefab, terrainInfo.WorldPoint, Quaternion.identity, transform);
+            {
+                WorldResourceManager.Instance.AddWorldResource(resourcePoints[i].WorldResourcePrefab, this, terrainInfo);
+            }
         }
 
         resourcesSpawned = true;

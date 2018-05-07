@@ -57,13 +57,13 @@ public class MouseController : MonoBehaviour
 
     private void InteractWithWorldResource(IInteractable interactable, Transform target)
     {
-        if (((WorldResource)interactable).interactDistance > Vector3.Distance(transform.position, target.position))
+        if (((WorldResource)interactable).InteractDistance > Vector3.Distance(transform.position, target.position))
         {
             if (interactionTimeout <= 0)
             {
                 WorldResource resource = interactable as WorldResource;
                 EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
-                if (equipmentManager.HasToolEquipped(resource.requiredToolToHarvest))
+                if (equipmentManager.HasToolEquipped(resource.RequiredToolToHarvest))
                 {
                     interactionTimeout = 2;
                     interactable.Interact(transform.position);
