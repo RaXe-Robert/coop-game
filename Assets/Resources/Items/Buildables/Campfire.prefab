@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactDistance: 3
-  fireParticlesPrefab: {fileID: 1139308815913448, guid: 507939ca034a5e145a8351a3bda185e9,
+  fireParticlesPrefab: {fileID: 1133957135969282, guid: b08c019126dbade48ba96f388c91450c,
     type: 2}
 --- !u!114 &114647115454275278
 MonoBehaviour:

@@ -1373,7 +1373,6 @@ GameObject:
   - component: {fileID: 1307443139}
   - component: {fileID: 1307443147}
   - component: {fileID: 1307443148}
-  - component: {fileID: 1307443149}
   - component: {fileID: 1307443150}
   m_Layer: 5
   m_Name: PlayerUI
@@ -1571,22 +1570,6 @@ MonoBehaviour:
   toolSlots:
   - {fileID: 1753525989}
   - {fileID: 1753525987}
---- !u!114 &1307443149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1307443138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 025e7464736a344428238cf2a39fdb9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  escapeMenuUI: {fileID: 674402031}
-  inventoryUI: {fileID: 1463700543}
-  craftingUI: {fileID: 637407845}
-  equipmentUI: {fileID: 1753525988}
-  controlsUI: {fileID: 0}
 --- !u!114 &1307443150
 MonoBehaviour:
   m_ObjectHideFlags: 0
