@@ -169,7 +169,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
             }
 
             else 
-                inventory.SwapEntities(index, from.index);
+                inventory.SwapItems(index, from.index);
         }
     }
 

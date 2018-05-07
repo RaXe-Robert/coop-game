@@ -29,15 +29,15 @@ public class InventoryUI : MonoBehaviour {
     {
         for (int i = Inventory.HotbarSize; i < Inventory.InventorySize + Inventory.HotbarSize; i++)
         {
-            if (i < inventory.inventoryEntities.Count)
-                inventorySlots[i].CurrentItem = inventory.inventoryEntities[i];
+            if (i < inventory.inventoryItems.Count)
+                inventorySlots[i].CurrentItem = inventory.inventoryItems[i];
             else inventorySlots[i].Clear();
         }
 
         for (int i = 0; i < Inventory.HotbarSize; i++)
         {
-            if (i < inventory.inventoryEntities.Count)
-                inventorySlots[i].CurrentItem = inventory.inventoryEntities[i];
+            if (i < inventory.inventoryItems.Count)
+                inventorySlots[i].CurrentItem = inventory.inventoryItems[i];
             else inventorySlots[i].Clear();
         }
     }

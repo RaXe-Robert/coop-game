@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "New buildable", menuName = "Entities/Buildable")]
+[CreateAssetMenu(fileName = "New buildable", menuName = "Items/Buildable")]
 public class ScriptableBuildableData : ScriptableItemData
 {
     [Header("Building Settings")]

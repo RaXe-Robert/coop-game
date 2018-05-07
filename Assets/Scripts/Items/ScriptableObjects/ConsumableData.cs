@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-
 using UnityEngine;
 
-public abstract class ConsumableItemData : ScriptableItemData
+public class ConsumableItemData : ScriptableItemData
 {
     [SerializeField] private bool isConsumable;
     [SerializeField] private List<ScriptableStatusEffectData> onConsumedEffects;

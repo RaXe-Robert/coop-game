@@ -38,7 +38,7 @@ public class CraftingManager : MonoBehaviour
     /// <param name="recipe"></param>
     public void AddToQueue(CraftingRecipe recipe)
     {
-        if (inventory.RemoveEntitiesForCrafting(recipe))
+        if (inventory.RemoveItemsForCrafting(recipe))
             CraftingQueue.AddRecipe(recipe);
     }
 }
