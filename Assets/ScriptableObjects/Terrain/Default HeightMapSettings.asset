@@ -18,9 +18,8 @@ MonoBehaviour:
     octaves: 6
     persistance: 0.6
     lacunarity: 2
-    seed: 1417655820
+    seed: 1151506182
     offset: {x: 0, y: 0}
-    NegativeValues: 1
   UseFalloff: 0
   HeightMultiplier: 30
   HeightCurve:
@@ -47,3 +46,19 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+  layers:
+  - IsWater: 1
+    Tint: {r: 0, g: 0.3803922, b: 1, a: 1}
+    TintStrength: 0.35
+    StartHeight: 0
+    BlendStrength: 0.3
+  - IsWater: 1
+    Tint: {r: 0, g: 0.79215693, b: 1, a: 1}
+    TintStrength: 0.35
+    StartHeight: 0.33
+    BlendStrength: 0.39
+  - IsWater: 0
+    Tint: {r: 0.15686275, g: 1, b: 0, a: 1}
+    TintStrength: 1
+    StartHeight: 0.4
+    BlendStrength: 0

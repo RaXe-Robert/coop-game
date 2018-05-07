@@ -14,7 +14,6 @@ public class TerrainGenerator : Photon.MonoBehaviour
 
     public MeshSettings MeshSettings;
     public HeightMapSettings HeightMapSettings;
-    public TextureData TextureSettings;
     public BiomeMapSettings BiomeMapSettings;
     public ResourceMapSettings ObjectMapSettings;
 
@@ -66,8 +65,8 @@ public class TerrainGenerator : Photon.MonoBehaviour
     {
         isSeedSet = true;
 
-        TextureSettings.UpdateMeshHeights(TerrainMeshMaterial, HeightMapSettings.MinHeight, HeightMapSettings.MaxHeight);
-        TextureSettings.ApplyToMaterial(TerrainMeshMaterial);
+        HeightMapSettings.UpdateMeshHeights(TerrainMeshMaterial, HeightMapSettings.MinHeight, HeightMapSettings.MaxHeight);
+        HeightMapSettings.ApplyToMaterial(TerrainMeshMaterial);
 
         float maxViewDistance = detailLevels[detailLevels.Length - 1].VisibleDistanceThreshold;
         meshWorldSize = MeshSettings.MeshWorldSize;

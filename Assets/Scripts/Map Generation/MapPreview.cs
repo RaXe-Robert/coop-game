@@ -9,12 +9,11 @@ using UnityEngine.AI;
 /// </summary>
 public class MapPreview : MonoBehaviour
 {
-    public enum DrawMode { NoiseMap, Mesh, FalloffMap, BiomeMap, ObjectMap }
+    public enum DrawMode { NoiseMap, Mesh, FalloffMap, BiomeMap, ResourceMap }
     public DrawMode drawMode;
 
     public MeshSettings MeshSettings;
     public HeightMapSettings HeightMapSettings;
-    public TextureData TextureDataSettings;
     public BiomeMapSettings BiomeMapSettings;
     public ResourceMapSettings ResourceMapSettings;
 
@@ -36,8 +35,8 @@ public class MapPreview : MonoBehaviour
     
     public void DrawMapInEditor()
     {
-        TextureDataSettings.UpdateMeshHeights(TerrainMaterial, HeightMapSettings.MinHeight, HeightMapSettings.MaxHeight);
-        TextureDataSettings.ApplyToMaterial(TerrainMaterial);
+        HeightMapSettings.UpdateMeshHeights(TerrainMaterial, HeightMapSettings.MinHeight, HeightMapSettings.MaxHeight);
+        HeightMapSettings.ApplyToMaterial(TerrainMaterial);
 
         HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(MeshSettings.NumVertsPerLine, HeightMapSettings, Vector2.zero);
         
@@ -47,7 +46,9 @@ public class MapPreview : MonoBehaviour
                 DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
                 break;
             case DrawMode.Mesh:
-                DrawMesh(MeshGenerator.GenerateTerrainMesh(heightMap.Values, MeshSettings, editorPreviewLOD));
+                MeshData meshData = MeshGenerator.GenerateTerrainMesh(heightMap.Values, MeshSettings, editorPreviewLOD);
+                Texture2D texture = TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.Values.GetLength(0) - 3, BiomeMapSettings, Vector2.zero));
+                DrawMesh(meshData, texture);
                 break;
             case DrawMode.FalloffMap:
                 DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(MeshSettings.NumVertsPerLine), 0, 1, HeightMapSettings)));
@@ -55,7 +56,7 @@ public class MapPreview : MonoBehaviour
             case DrawMode.BiomeMap:
                 DrawTexture(TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.Values.GetLength(0) - 3, BiomeMapSettings, Vector2.zero)));
                 break;
-            case DrawMode.ObjectMap:
+            case DrawMode.ResourceMap:
                 DrawTexture(TextureGenerator.TextureFromObjectMap(ResourceMapGenerator.GenerateResourceMap(heightMap.Values.GetLength(0) - 3, ResourceMapSettings, Vector2.zero)));
                 break;
 
@@ -75,12 +76,13 @@ public class MapPreview : MonoBehaviour
         textureRenderer.transform.localScale = new Vector3(texture.width, 1, texture.height) / 10f;
     }
 
-    public void DrawMesh(MeshData meshData)
+    public void DrawMesh(MeshData meshData, Texture2D texture)
     {
         textureRenderer.gameObject.SetActive(false);
         meshFilter.gameObject.SetActive(true);
 
         meshFilter.sharedMesh = meshData.CreateMesh();
+        meshRenderer.sharedMaterial.mainTexture = texture;
     }
 
     private void OnValuesUpdated()
@@ -100,11 +102,6 @@ public class MapPreview : MonoBehaviour
         {
             HeightMapSettings.OnValuesUpdated -= OnValuesUpdated;
             HeightMapSettings.OnValuesUpdated += OnValuesUpdated;
-        }
-        if (TextureDataSettings != null)
-        {
-            TextureDataSettings.OnValuesUpdated -= OnValuesUpdated;
-            TextureDataSettings.OnValuesUpdated += OnValuesUpdated;
         }
         if (BiomeMapSettings != null)
         {

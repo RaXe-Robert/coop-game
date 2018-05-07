@@ -23,10 +23,10 @@ MonoBehaviour:
   Biomes:
   - name: Desert
     color: {r: 0.99634886, g: 1, b: 0.7352941, a: 1}
-    resourceDensity: 0.557
+    resourceDensity: 0.2
   - name: Grassland
     color: {r: 0.2827586, g: 1, b: 0, a: 1}
-    resourceDensity: 0.298
+    resourceDensity: 0.3
   - name: Forest
     color: {r: 0.12941173, g: 0.64705884, b: 0, a: 1}
-    resourceDensity: 0.532
+    resourceDensity: 0.5

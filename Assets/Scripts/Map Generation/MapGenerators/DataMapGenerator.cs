@@ -29,4 +29,20 @@ public struct DataMap
         this.BiomeMap = biomeMap;
         this.ResourceMap = resourceMap;
     }
+
+    public float GetHeight(int x, int z)
+    {
+        return HeightMap.Values[x + 1, z + 1];
+    }
+
+    public HeightMapLayer GetLayer(int x, int z)
+    {
+        return HeightMap.GetLayer(x + 1, z + 1);
+    }
+
+    public Biome GetBiome(int x, int z)
+    {
+        return BiomeMap.GetBiome(x,z);
+    }
+
 }

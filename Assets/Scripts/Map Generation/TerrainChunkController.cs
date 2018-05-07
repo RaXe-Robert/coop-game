@@ -16,17 +16,7 @@ public class TerrainChunkController : MonoBehaviour
     }
 
     private bool resourcesSpawned = false;
-    GameObject treePrefab;
-    GameObject rockPrefab;
-    GameObject treeStumpPrefab;
-
-    private void Start()
-    {
-        treePrefab = Resources.Load<GameObject>("Tree");
-        rockPrefab = Resources.Load<GameObject>("rock");
-        treeStumpPrefab = Resources.Load<GameObject>("TreeStump");
-    }
-
+    
     private void Update()
     {
         if (!resourcesSpawned && terrainChunk != null && terrainChunk.IsVisible)
@@ -41,7 +31,8 @@ public class TerrainChunkController : MonoBehaviour
         {
             TerrainInfo terrainInfo = GetTerrainInfoFromIndex(resourcePoints[i].IndexX, resourcePoints[i].IndexZ);
 
-            Instantiate(resourcePoints[i].WorldResourcePrefab, terrainInfo.WorldPoint, Quaternion.identity, transform);
+            if (terrainInfo.Layer != null && !terrainInfo.Layer.IsWater)
+                Instantiate(resourcePoints[i].WorldResourcePrefab, terrainInfo.WorldPoint, Quaternion.identity, transform);
         }
 
         resourcesSpawned = true;
@@ -60,7 +51,10 @@ public class TerrainChunkController : MonoBehaviour
                 Vector3 pos = transform.position + new Vector3((x - halfSize) * terrainChunk.MeshSettings.MeshScale, 0f, (z - halfSize) * -terrainChunk.MeshSettings.MeshScale);
                 TerrainInfo terrainInfo = GetTerrainInfoFromWorldPoint(pos.x, pos.z);
 
-                Debug.DrawRay(terrainInfo.WorldPoint, Vector3.up * 2f);
+                if (terrainInfo.Layer.IsWater)
+                    Debug.DrawRay(terrainInfo.WorldPoint, Vector3.up * 2f, Color.blue);
+                else
+                    Debug.DrawRay(terrainInfo.WorldPoint, Vector3.up * 2f, Color.red);
             }
         }
     }
@@ -76,7 +70,7 @@ public class TerrainChunkController : MonoBehaviour
         if (terrainChunk == null)
         {
             Debug.LogError("TerrainChunk hasn't loaded");
-            return new TerrainInfo(null, Vector3.zero);
+            return new TerrainInfo();
         }
         
         Vector3 distance = new Vector3(worldX, 0f, worldZ) - new Vector3(transform.position.x, 0f, transform.position.z);
@@ -94,19 +88,20 @@ public class TerrainChunkController : MonoBehaviour
 
         if (xPercentage < 50)
         {
-            indexOffsetX = zPercentage < 50f ? 1 : 1;
-            indexOffsetZ = zPercentage < 50f ? 2 : 1;
+            indexOffsetX = zPercentage < 50f ? 0 : 0;
+            indexOffsetZ = zPercentage < 50f ? 1 : 0;
         }
         else
         {
-            indexOffsetX = zPercentage < 50f ? 2 : 2;
-            indexOffsetZ = zPercentage < 50f ? 2 : 1;
+            indexOffsetX = zPercentage < 50f ? 1 : 1;
+            indexOffsetZ = zPercentage < 50f ? 1 : 0;
         }
 
         Biome biome = terrainChunk.DataMap.BiomeMap.GetBiome(xIndex, zIndex);
-        float height = terrainChunk.DataMap.HeightMap.Values[xIndex + indexOffsetX, zIndex + indexOffsetZ];
+        HeightMapLayer layer = terrainChunk.DataMap.GetLayer(xIndex + indexOffsetX, zIndex + indexOffsetZ);
+        float height = terrainChunk.DataMap.GetHeight(xIndex + indexOffsetX, zIndex + indexOffsetZ);
         
-        return new TerrainInfo(biome, new Vector3(worldX, height, worldZ));
+        return new TerrainInfo(biome, layer, new Vector3(worldX, height, worldZ));
     }
     
     /// <summary>
@@ -120,15 +115,16 @@ public class TerrainChunkController : MonoBehaviour
         if (terrainChunk == null)
         {
             Debug.LogError("TerrainChunk hasn't loaded");
-            return new TerrainInfo(null, Vector3.zero);
+            return new TerrainInfo();
         }
         
-        Biome biome = terrainChunk.DataMap.BiomeMap.GetBiome(x, z);
-        float height = terrainChunk.DataMap.HeightMap.Values[x + 1, z + 1];// These offsets are needed because our mesh has more vertices than that are actually shown on the terrain. This is because those extra vertices are used in Normal calculations. Only needed for the heightmap.
+        Biome biome = terrainChunk.DataMap.GetBiome(x, z);
+        float height = terrainChunk.DataMap.GetHeight(x, z);// These offsets are needed because our mesh has more vertices than that are actually shown on the terrain. This is because those extra vertices are used in Normal calculations. Only needed for the heightmap.
+        HeightMapLayer layer = terrainChunk.DataMap.GetLayer(x, z);
 
         Vector3 pos = transform.position + new Vector3((x - terrainChunk.DataMap.UniformSize / 2f) * terrainChunk.MeshSettings.MeshScale, 0f, (z - terrainChunk.DataMap.UniformSize / 2f) * -terrainChunk.MeshSettings.MeshScale);
         
-        return new TerrainInfo(biome, new Vector3(pos.x, height, pos.z));
+        return new TerrainInfo(biome, layer, new Vector3(pos.x, height, pos.z));
     }
 
     #region Debugging
@@ -154,11 +150,13 @@ public class TerrainChunkController : MonoBehaviour
 public struct TerrainInfo
 {
     public readonly Biome Biome;
+    public readonly HeightMapLayer Layer;
     public readonly Vector3 WorldPoint;
 
-    public TerrainInfo(Biome biome, Vector3 point)
+    public TerrainInfo(Biome biome, HeightMapLayer heightMapLayer, Vector3 point)
     {
         this.Biome = biome;
+        this.Layer = heightMapLayer;
         this.WorldPoint = point;
     }
 }

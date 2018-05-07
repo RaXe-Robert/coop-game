@@ -18,6 +18,8 @@ public static class HeightMapGenerator
             {
                 values[x, y] *= heightCurve_threadSafe.Evaluate(values[x, y]) * settings.HeightMultiplier;
 
+
+
                 if (values[x, y] > maxValue)
                     maxValue = values[x, y];
                 if (values[x, y] < minValue)
@@ -42,5 +44,18 @@ public struct HeightMap
         this.MinValue = minValue;
         this.MaxValue = maxValue;
         this.Settings = settings;
+    }
+
+    public HeightMapLayer GetLayer(int x, int z)
+    {
+        float heightPercent = Mathf.Clamp01((Values[x,z] - MinValue) / (MaxValue - MinValue));
+
+        for (int i = Settings.Layers.Length - 1; i >= 0; i--)
+        {
+            if (heightPercent >= Settings.Layers[i].StartHeight)
+                return Settings.Layers[i];
+        }
+
+        return null;
     }
 }
