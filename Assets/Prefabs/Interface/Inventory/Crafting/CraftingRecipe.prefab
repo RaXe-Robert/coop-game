@@ -232,7 +232,7 @@ GameObject:
   - component: {fileID: 114252277764589954}
   - component: {fileID: 114064908189807762}
   m_Layer: 5
-  m_Name: RequiredEntities
+  m_Name: RequiredItems
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1190,7 +1190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredItemPrefab: {fileID: 1966178791521778, guid: 80ad222dad8a19c48a37f0b66b370de5,
     type: 2}
-  requiredEntities: {fileID: 224544078932411198}
+  requiredItems: {fileID: 224544078932411198}
   recipeResultImage: {fileID: 114986774477546096}
   recipeResultText: {fileID: 114860130719130168}
   craftingTimeText: {fileID: 114794795167339760}

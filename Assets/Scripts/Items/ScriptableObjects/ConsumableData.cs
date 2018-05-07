@@ -8,4 +8,9 @@ public class ConsumableItemData : ScriptableItemData
 
     public bool IsConsumable { get { return isConsumable; } }
     public List<ScriptableStatusEffectData> OnConsumedEffects { get { return onConsumedEffects; } }
+
+    public override Item InitializeItem()
+    {
+        return new Consumable(this);
+    }
 }

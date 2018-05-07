@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public abstract class Consumable : Item
+public class Consumable : Item
 {
     public Consumable(ConsumableItemData itemData) : base(itemData)
     {

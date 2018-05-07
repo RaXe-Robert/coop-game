@@ -54,6 +54,7 @@ public class BuildableInteractionMenu : MonoBehaviour
 
     public void Show(BuildableWorldObject invoker, UnityAction[] actions)
     {
+        if (actions == null) return;
         Hide();
 
         Target = invoker;
