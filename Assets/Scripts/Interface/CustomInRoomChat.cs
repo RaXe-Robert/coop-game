@@ -33,9 +33,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
     public void Awake()
     {
         if (Instance == null)
-        {
-            Instance = this;            
-        }
+            Instance = this;  
     }
 
     private void Start()
@@ -47,9 +45,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
     public void Update()
     {        
         if (InputManager.GetButtonDown("Open Chat"))
-        {
             OpenChat();
-        }
 
         if (EventSystem.current.currentSelectedGameObject == input.gameObject)
         {
@@ -60,16 +56,12 @@ public class CustomInRoomChat : Photon.MonoBehaviour
             }
 
             if (InputManager.GetButtonDown("Close Chat"))
-            {
                 CloseChat();
-            }
         }
         else
         {
             if(state == State.Opened)
-            {
                 ResetAndStartTimer();
-            }
         }
     }
 
@@ -82,10 +74,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
         ClearMessage();        
     }
 
-    private void ClearMessage()
-    {
-        input.text = "";
-    }
+    private void ClearMessage() => input.text = "";
 
     [PunRPC]
     public void Chat(string newLine, PhotonMessageInfo mi)
@@ -161,10 +150,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
         StartCoroutine(Timer());
     }
 
-    private void SetCurrentInputToNull()
-    {
-        EventSystem.current.SetSelectedGameObject(null);
-    }
+    private void SetCurrentInputToNull() => EventSystem.current.SetSelectedGameObject(null);
 
     /// <summary>
     /// This Fades the chat when the state is closing or opening.
@@ -214,10 +200,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
         StartCoroutine(Timer());
     }
 
-    private void ResetWaitTime()
-    {
-        waitTime = resetWaitTime;
-    }
+    private void ResetWaitTime() => waitTime = resetWaitTime;
 
     /// <summary>
     /// This starts a timer to let the chat disappear after a while. waitTime will reset when the chat is active or when a message appears.
