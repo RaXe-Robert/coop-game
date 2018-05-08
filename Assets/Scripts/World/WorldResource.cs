@@ -44,15 +44,35 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
 
     #region IInteractable Implementation
 
-    public bool IsInteractable()
-    {
-        return true;
-    }
+    public bool IsInteractable => true;
+    public GameObject GameObject => gameObject;
 
-    public void Interact(Vector3 invokerPosition)
+    public bool InRange(Vector3 invokerPosition) =>
+        Vector3.Distance(invokerPosition, transform.position) < interactDistance;
+
+    public void Interact(GameObject invoker)
     {
-        if (Vector3.Distance(transform.position, invokerPosition) > interactDistance)
+        if (!InRange(invoker.transform.position))
             return;
+
+        var playerMovement = PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>();
+        if (!playerMovement.CanInteract)
+        {
+            WorldNotificationsManager.Instance
+                .ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
+            return;
+        }
+        
+        var stats = PlayerNetwork.PlayerObject.GetComponent<StatsComponent>();
+        playerMovement.AddInteractionTimeout(stats.TimeBetweenResourceHits);
+
+        var equipmentManager = PlayerNetwork.PlayerObject.GetComponent<EquipmentManager>();
+        if (!equipmentManager.HasToolEquipped(requiredToolToHarvest))
+        {
+            WorldNotificationsManager.Instance
+                .ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
+            return;
+        }
 
         healthComponent.DecreaseValue(50f);
     }
