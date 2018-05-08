@@ -10,6 +10,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private UnityEngine.AI.NavMeshAgent agent;
     private bool interruptedPickup = false;
     private float interactionTimeout = 0f;
+    private float pathUpdateTimeout = 0f;
 
     [SerializeField] private LayerMask rotationLayerMask;
     [SerializeField] private LayerMask waterLayerMask;
@@ -49,13 +50,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (photonView.isMine)
         {
             if (cameraController != null)
-            {
                 cameraController.StartFollowing();
-            }
             else
-            {
                 Debug.LogError("Missing CameraController Component on playerPrefab.");
-            }
         }
     }
 
@@ -66,6 +63,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
         if (interactionTimeout > 0)
             interactionTimeout -= Time.deltaTime;
+
+        if (pathUpdateTimeout > 0)
+            pathUpdateTimeout -= Time.deltaTime;
 
         RotatePlayer();
         
@@ -98,9 +98,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
             Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
 
             if (Vector3.Distance(transform.position, lookPos) > mouseDeadZoneFromPlayer)
-            {
                 transform.LookAt(lookPos);
-            }
         }
     }
 
@@ -132,8 +130,11 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// </summary>
     private void HandleInteraction()
     {
-        if (!agent.hasPath)
+        if (!agent.hasPath || pathUpdateTimeout <= 0)
+        {
             agent.SetDestination(CurrentInteraction.transform.position);
+            pathUpdateTimeout = 0.1f;
+        }
 
         var interactable = CurrentInteraction.GetComponent<IInteractable>();
         if (interactable.InRange(transform.position))
