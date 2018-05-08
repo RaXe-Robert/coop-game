@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Tool : ItemBase
+public class Tool : Item
 {
     public Tool(ToolData toolData) : base(toolData)
     {

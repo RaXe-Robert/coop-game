@@ -10,7 +10,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
     public float interactDistance = 5f;
     [SerializeField] private GameObject spawnOnDepleted;
     [SerializeField] private HealthComponent healthComponent;
-    [SerializeField] private ItemsToDropComponent itemsToDrop;
+    [SerializeField] private ItemsToDropComponent itemsToDropComponent;
     private Animator animator;
 
     private void Start()
@@ -37,7 +37,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
         }
 
-        itemsToDrop?.SpawnItemsOnDepleted();
+        itemsToDropComponent?.SpawnItemsOnDepleted();
 
         photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }

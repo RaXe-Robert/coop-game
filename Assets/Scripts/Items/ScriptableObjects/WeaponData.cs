@@ -15,7 +15,7 @@ public class WeaponData : ScriptableItemData
     public float MaxDamage { get { return maxDamage; } }
     public float TimeBetweenAttacks { get { return timeBetweenAttacks; } }
 
-    public override ItemBase InitializeItem()
+    public override Item InitializeItem()
     {
         return new Weapon(this);
     }

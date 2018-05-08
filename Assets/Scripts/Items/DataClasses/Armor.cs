@@ -1,4 +1,4 @@
-﻿public class Armor : ItemBase
+﻿public class Armor : Item
 {
     public Armor(ArmorData armorData) : base(armorData)
     {

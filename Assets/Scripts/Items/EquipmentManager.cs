@@ -121,9 +121,9 @@ public class EquipmentManager : MonoBehaviour
         OnArmorEquippedCallback?.Invoke(armorToEquip);
     }
 
-    public void EquipItem(ItemBase item, int inventoryIndex)
+    public void EquipItem(Item item, int inventoryIndex)
     {
-        if (!item.Equippable)
+        if (item.GetType() != typeof(Equippable))
             return;
 
         if (item.GetType() == typeof(Armor))
@@ -191,7 +191,7 @@ public class EquipmentManager : MonoBehaviour
         else return null;
     }
 
-    public void UnEquipItem(ItemBase itemToUnequip, int index)
+    public void UnequipItem(Item itemToUnequip, int index)
     {
         if(itemToUnequip.GetType() == typeof(Armor))
         {
@@ -226,7 +226,7 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
-    public void DropEquippedItem(ItemBase itemToUnequip)
+    public void DropEquippedItem(Item itemToUnequip)
     {
         if (itemToUnequip.GetType() == typeof(Armor))
         {

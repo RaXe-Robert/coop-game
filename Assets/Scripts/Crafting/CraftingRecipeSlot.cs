@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class CraftingRecipeSlot : MonoBehaviour
 {
-
     [SerializeField] private GameObject requiredItemPrefab;
     [SerializeField] private Transform requiredItems;
     [SerializeField] private Image recipeResultImage;
@@ -49,15 +48,15 @@ public class CraftingRecipeSlot : MonoBehaviour
             Destroy(gameObject);
             return false;
         }
-        foreach (var item in craftingRecipe.requiredItems)
+        foreach (var craftingItem in craftingRecipe.requiredItems)
         {
-            if (item.item == null)
+            if (craftingItem.item == null)
             {
                 Debug.LogError($"{craftingRecipe.result.item.name} crafting recipe is missing some data");
                 Destroy(gameObject);
                 return false;
             }
-            if (item.amount <= 0)
+            if (craftingItem.amount <= 0)
             {
                 Debug.LogError($"{craftingRecipe.result.item.name} recipe has a required item with an invalid amount");
                 Destroy(gameObject);

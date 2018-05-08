@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Resource : ItemBase
+public class Resource : Item
 {
     public Resource(ResourceData resourceData) : base(resourceData)
     {

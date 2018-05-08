@@ -1199,8 +1199,8 @@ MonoBehaviour:
     result:
       item: {fileID: 0}
       amount: 0
-    amountToCraft: 0
     craftingTime: 0
+    amountToCraft: 0
 --- !u!114 &114854981301054920
 MonoBehaviour:
   m_ObjectHideFlags: 1

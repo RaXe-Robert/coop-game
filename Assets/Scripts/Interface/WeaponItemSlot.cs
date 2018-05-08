@@ -9,8 +9,8 @@ public class WeaponItemSlot : InventoryItemSlot
         InventoryItemSlot from;
         if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
-            if (from.Item.GetType() == typeof(Weapon))
-                equipmentManager.EquipWeapon(from.Item as Weapon, from.index);
+            if (from.CurrentItem.GetType() == typeof(Weapon))
+                equipmentManager.EquipWeapon(from.CurrentItem as Weapon, from.index);
         }
     }
 
@@ -27,7 +27,7 @@ public class WeaponItemSlot : InventoryItemSlot
         transform.localPosition = Vector3.zero;
 
         if (!EventSystem.current.IsPointerOverGameObject())
-            equipmentManager.DropEquippedItem(Item);
+            equipmentManager.DropEquippedItem(CurrentItem as Item);
     }
 }
 

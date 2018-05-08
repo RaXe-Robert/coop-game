@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Buildable", menuName = "Items/Builable")]
-public class BuildableData : ScriptableItemData
+[CreateAssetMenu(fileName = "New buildable", menuName = "Items/Buildable")]
+public class ScriptableBuildableData : ScriptableItemData
 {
     [Header("Building Settings")]
-
     [Tooltip("Can this buildable be picked up after it's placed?")]
     [SerializeField] private bool recoverable;
     public bool Recoverable { get { return recoverable; } }
@@ -13,9 +12,13 @@ public class BuildableData : ScriptableItemData
     [SerializeField] private bool snapToGrid;
     public bool SnapToGrid { get { return snapToGrid; } }
 
-    public override ItemBase InitializeItem()
+    [Tooltip("Prefab to spawn")]
+    [SerializeField] private GameObject prefabToSpawn;
+    public GameObject PrefabToSpawn { get { return prefabToSpawn; } }
+
+    public override Item InitializeItem()
     {
-        return new Buildable(this);
+        return new BuildableBase(this);
     }
 }
 
