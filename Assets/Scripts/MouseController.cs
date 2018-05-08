@@ -12,10 +12,17 @@ public class MouseController : MonoBehaviour
     private bool isMine;
     private float interactionTimeout;
 
+    private PlayerStatsComponent statsComponent;
+    private EquipmentManager equipmentManager;
+    private PlayerCombatController combatController;
+
     private void Start()
     {
         playerCamera = GetComponent<PlayerCameraController>().CameraReference;
         isMine = GetComponent<PhotonView>().isMine;
+        statsComponent = GetComponent<PlayerStatsComponent>();
+        equipmentManager = GetComponent<EquipmentManager>();
+        combatController = GetComponent<PlayerCombatController>();
     }
 
     private void Update()
@@ -29,19 +36,29 @@ public class MouseController : MonoBehaviour
         ray = playerCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity) && !EventSystem.current.IsPointerOverGameObject())
         {
+            //We hit ourself
+            if (hit.transform == transform)
+                return;
+
+            //TODO: Handle tooltips
+
+            //We aren't ready to interact yet.
+            if (interactionTimeout > 0)
+                return;
+
+            HandleEnemies();
+
             var interactable = hit.transform.GetComponent<IInteractable>();
             if (interactable == null)
             {
                 Tooltip.Instance.Hide();
             }
-            else if(interactable != null)
+            else if (interactable != null)
             {
                 if (Input.GetMouseButtonDown(0) && interactable.IsInteractable())
                 {
                     if (interactable.GetType() == typeof(WorldResource))
                         InteractWithWorldResource(interactable, hit.transform);
-                    else if (interactable.GetType() == typeof(EnemyNPC) || interactable.GetType() == typeof(FriendlyNPC))
-                        AttackEnemy(interactable, hit.transform);
                     else
                         interactable.Interact(gameObject.transform.position);
                 }
@@ -50,7 +67,7 @@ public class MouseController : MonoBehaviour
                 {
                     //This show will not dissapear when hovering from world item to a UI element. {BUG}
                     Tooltip.Instance.Show(interactable.TooltipText());
-                }                
+                }
             }
         }
     }
@@ -70,27 +87,23 @@ public class MouseController : MonoBehaviour
                 }
                 else
                 {
-                    WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1), true);
+                    WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1));
                 }
             }
             else
             {
-                WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
+                WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1));
             }
         }
     }
 
-    private void AttackEnemy(IInteractable interactable, Transform target)
+    private void HandleEnemies()
     {
-        if (Vector3.Distance(transform.position, target.position) < 3)
+        var enemy = hit.transform.GetComponent<IAttackable>();
+        if (enemy != null && Input.GetMouseButtonDown(0) && Vector3.Distance(transform.position, enemy.Position) < 3)
         {
-            if (interactionTimeout <= 0)
-            {
-                StatsComponent stats = GetComponent<StatsComponent>();
-                NPCBase enemy = interactable as NPCBase;
-                enemy.TakeDamage(UnityEngine.Random.Range(stats.MinDamage, stats.MaxDamage));
-                interactionTimeout = stats.TimeBetweenAttacks;
-            }
+            enemy.TakeHit(combatController);
+            interactionTimeout = statsComponent.TimeBetweenAttacks;
         }
     }
 }

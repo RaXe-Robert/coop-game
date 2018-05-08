@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(PlayerCameraController))]
-[RequireComponent(typeof(StatsComponent))]
+[RequireComponent(typeof(PlayerStatsComponent))]
 public class PlayerMovementController : Photon.MonoBehaviour
 {
     private Rigidbody rigidbodyComponent;
@@ -15,7 +15,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
     [SerializeField] private float mouseDeadZoneFromPlayer;
 
     private PlayerCameraController cameraController = null;
-    private StatsComponent stats;
+    private PlayerStatsComponent stats;
 
     public GameObject ItemToPickup { get; set; }
 
@@ -25,7 +25,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
-        stats = GetComponent<StatsComponent>();
+        stats = GetComponent<PlayerStatsComponent>();
     }
 
     private void Start()

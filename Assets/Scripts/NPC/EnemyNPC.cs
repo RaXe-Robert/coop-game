@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyNPC : NPCBase
 {
-
     /// <summary>
     /// Handle attacking when the enemy reaches this state.
     /// </summary>
@@ -13,7 +12,7 @@ public class EnemyNPC : NPCBase
         if(Vector3.Distance(transform.position, Target.transform.position) < 3)
         {
             //TODO: this should be changed
-            Target.gameObject.GetComponent<HealthComponent>().DecreaseValue((Random.Range(stats.minDamage, stats.maxDamage) - Target.gameObject.GetComponent<StatsComponent>().Defense));
+            Target.gameObject.GetComponent<HealthComponent>().DecreaseValue((Random.Range(stats.minDamage, stats.maxDamage) - Target.gameObject.GetComponent<PlayerStatsComponent>().Defense));
         }
     }
 

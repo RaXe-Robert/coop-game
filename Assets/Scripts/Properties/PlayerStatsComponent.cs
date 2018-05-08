@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StatsComponent : MonoBehaviour
+public class PlayerStatsComponent : MonoBehaviour
 {
     [SerializeField] private BaseStatsData baseStats;
 
@@ -21,6 +21,7 @@ public class StatsComponent : MonoBehaviour
     public float MaxDamage => maxDamage.CurrentValue;
     public float TimeBetweenAttacks => timeBetweenAttacks.CurrentValue;
     public float Defense => defense.CurrentValue;
+    public float Damage => Random.Range(minDamage.CurrentValue, maxDamage.CurrentValue);
 
     private void Awake()
     {
