@@ -10,7 +10,6 @@ public class MouseController : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
     private bool isMine;
-    private float interactionTimeout;
 
     private void Start()
     {
@@ -22,9 +21,6 @@ public class MouseController : MonoBehaviour
     {
         if (!isMine)
             return;
-
-        if (interactionTimeout > 0)
-            interactionTimeout -= Time.deltaTime;
 
         ray = playerCamera.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out hit, Mathf.Infinity) || EventSystem.current.IsPointerOverGameObject()) 
