@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 20
   movementSpeed: 3.75
-  minDamage: 3
-  maxDamage: 7
+  minDamage: 20
+  maxDamage: 5000
   timeBetweenAttacks: 1
   defense: 2
   NPCName: Carl

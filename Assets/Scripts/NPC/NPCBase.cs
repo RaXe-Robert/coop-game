@@ -35,6 +35,8 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
         itemsToDropComponent = GetComponent<ItemsToDropComponent>();
 
         healthComponent.SetValue(stats.maxHealth);
+        healthComponent.OnDeathCallback += Die;
+
         Agent.speed = stats.movementSpeed;
 
         foreach (NPCBaseFSM fsm in animator.GetBehaviours<NPCBaseFSM>())
@@ -61,12 +63,15 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
     /// </summary>
     public void SetClosestOpponent()
     {
-        PlayerNameTag[] players = FindObjectsOfType<PlayerNameTag>();
+        PlayerCombatController[] players = FindObjectsOfType<PlayerCombatController>();
         GameObject closestOpponent = null;
         float distance = Mathf.Infinity;
 
         for (int i = 0; i < players.Length; i++)
         {
+            if (players[i].IsDead)
+                continue;
+
             float distanceToObject = Vector3.Distance(players[i].transform.position, transform.position);
             if (distanceToObject < distance)
             {
@@ -117,14 +122,14 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
         photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }
 
+    private void Die()
+    {
+        StartCoroutine(PlayDepletedAnimation());
+    }
+
     public void TakeHit(IAttacker attacker)
     {
         healthComponent.DecreaseValue(attacker.Damage - stats.defense);
-
-        if (healthComponent.IsDepleted())
-        {
-            StartCoroutine(PlayDepletedAnimation());
-        }
     }
 
     [PunRPC]

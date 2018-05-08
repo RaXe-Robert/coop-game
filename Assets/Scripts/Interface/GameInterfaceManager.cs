@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu, Controls }
+public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu, Controls, DeathScreen }
 
 public class GameInterfaceManager : MonoBehaviour
 {
@@ -14,6 +14,7 @@ public class GameInterfaceManager : MonoBehaviour
     [SerializeField] private GameObject craftingUI;
     [SerializeField] private GameObject equipmentUI;
     [SerializeField] private GameObject controlsUI;
+    [SerializeField] private GameObject deathScreen;
 
     private Dictionary<GameInterface, GameObject> interfaceGameObjectDictionary;
 
@@ -31,7 +32,8 @@ public class GameInterfaceManager : MonoBehaviour
             {GameInterface.Crafting, craftingUI },
             {GameInterface.Equipment, equipmentUI },
             {GameInterface.Inventory, inventoryUI },
-            {GameInterface.Controls, controlsUI }
+            {GameInterface.Controls, controlsUI },
+            {GameInterface.DeathScreen, deathScreen }
         };
     }
 
@@ -49,10 +51,10 @@ public class GameInterfaceManager : MonoBehaviour
                 ToggleGivenDisableOthers(GameInterface.Inventory);
                 break;
             case GameInterface.EscapeMenu:
-                if (IsAnyInterfaceOpen())
-                    CloseAllInterfaces();
-                else
-                    ToggleGivenDisableOthers(GameInterface.EscapeMenu);
+                ToggleGivenDisableOthers(GameInterface.EscapeMenu);
+                break;
+            case GameInterface.DeathScreen:
+                ToggleGivenDisableOthers(GameInterface.DeathScreen);
                 break;
         }
 

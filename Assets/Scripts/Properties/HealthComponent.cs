@@ -2,6 +2,9 @@
 
 public class HealthComponent : PropertyComponentBase
 {
+    public delegate void OnHealthDepleted();
+    public OnHealthDepleted OnDeathCallback;
+
     public override void IncreaseValue(float amount)
     {
         if (amount <= 0)
@@ -49,5 +52,7 @@ public class HealthComponent : PropertyComponentBase
     private void DecreaseHealthValue(float amount)
     {
         Value -= amount;
+        if (Value <= 0)
+            OnDeathCallback?.Invoke();
     }
 }

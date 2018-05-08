@@ -55,6 +55,7 @@ public class CraftingEditor : EditorWindow
         if (selectedRecipe != null)
         {
             DrawRecipeDataFields();
+            EditorUtility.SetDirty(selectedCraftingList);
         }
         GUILayout.EndArea();
     }
@@ -111,6 +112,7 @@ public class CraftingEditor : EditorWindow
             requiredItem.item = (ScriptableItemData)EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width * 0.5f, EditorGUIUtility.singleLineHeight), "Required Item", requiredItem.item, typeof(ScriptableItemData), false);
             requiredItem.amount = EditorGUI.IntField(new Rect(rect.width * 0.55f, rect.y, rect.width * 0.4f, EditorGUIUtility.singleLineHeight), "Required Amount", requiredItem.amount);
         };
+
     }
 
     private void AddNewRecipe(ReorderableList reorderableList)

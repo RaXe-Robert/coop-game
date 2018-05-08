@@ -47,53 +47,34 @@ public class MouseController : MonoBehaviour
                 return;
 
             HandleEnemies();
-
-            var interactable = hit.transform.GetComponent<IInteractable>();
-            if (interactable == null)
-            {
-                Tooltip.Instance.Hide();
-            }
-            else if (interactable != null)
-            {
-                if (Input.GetMouseButtonDown(0) && interactable.IsInteractable())
-                {
-                    if (interactable.GetType() == typeof(WorldResource))
-                        InteractWithWorldResource(interactable, hit.transform);
-                    else
-                        interactable.Interact(gameObject.transform.position);
-                }
-
-                if (interactable.TooltipText() != string.Empty)
-                {
-                    //This show will not dissapear when hovering from world item to a UI element. {BUG}
-                    Tooltip.Instance.Show(interactable.TooltipText());
-                }
-            }
+            HandleInteractables();
         }
     }
 
-    private void InteractWithWorldResource(IInteractable interactable, Transform target)
+    private void HandleInteractables()
     {
-        if (((WorldResource)interactable).interactDistance > Vector3.Distance(transform.position, target.position))
+        var interactable = hit.transform.GetComponent<IInteractable>();
+        if (interactable != null && Input.GetMouseButtonDown(0) && interactable.IsInteractable())
         {
-            if (interactionTimeout <= 0)
-            {
-                WorldResource resource = interactable as WorldResource;
-                EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
-                if (equipmentManager.HasToolEquipped(resource.requiredToolToHarvest))
-                {
-                    interactionTimeout = 2;
-                    interactable.Interact(transform.position);
-                }
-                else
-                {
-                    WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1));
-                }
-            }
+            //Check if we are interacting with a resource
+            if (interactable.GetType() == typeof(WorldResource))
+                InteractWithWorldResource(interactable);
             else
-            {
-                WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1));
-            }
+                interactable.Interact(transform.position);
+        }
+    }
+
+    private void InteractWithWorldResource(IInteractable interactable)
+    {
+        WorldResource resource = interactable as WorldResource;
+        if (equipmentManager.HasToolEquipped(resource.requiredToolToHarvest))
+        {
+            interactionTimeout = 2;
+            interactable.Interact(transform.position);
+        }
+        else
+        {
+            WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1), true);
         }
     }
 
