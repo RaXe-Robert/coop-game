@@ -17,7 +17,10 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private PlayerCameraController cameraController = null;
     private StatsComponent stats;
 
-    public GameObject ItemToPickup { get; set; }
+    public GameObject CurrentInteraction { get; set; }
+
+    public void StartInteraction(IInteractable interactable) =>
+        CurrentInteraction = interactable.GameObject;
 
     private void Awake()
     {
@@ -50,10 +53,10 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
         RotatePlayer();
         
-        if (ItemToPickup == null || interruptedPickup)
-            StopAutoWalkToItem();
+        if (CurrentInteraction == null || interruptedPickup)
+            StopInteraction();
         else
-            AutoWalkToItem();
+            HandleInteraction();
     }
 
     private void FixedUpdate()
@@ -111,15 +114,16 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// When there is an item to pickup this method moves to the item and checks if it needs to interact with the item.
     /// As soon as the player is near the item it will pick up the item and reset the agent.
     /// </summary>
-    private void AutoWalkToItem()
+    private void HandleInteraction()
     {
         if (!agent.hasPath)
-            agent.SetDestination(ItemToPickup.transform.position);
+            agent.SetDestination(CurrentInteraction.transform.position);
 
-        if (Vector3.Distance(ItemToPickup.transform.position, transform.position) < ItemToPickup.GetComponent<ItemWorldObject>().pickupDistance)
+        var interactable = CurrentInteraction.GetComponent<IInteractable>();
+        if (interactable.InRange(transform.position))
         {
-            ItemToPickup.GetComponent<ItemWorldObject>().Interact(transform.position);
-            StopAutoWalkToItem();
+            interactable.Interact(gameObject);
+            StopInteraction();
         }
         else
             animator.SetBool("IsRunning", true);
@@ -128,9 +132,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// <summary>
     /// Interrupts the agent and clears the ItemToPickup.
     /// </summary>
-    private void StopAutoWalkToItem()
+    private void StopInteraction()
     {
-        ItemToPickup = null;
+        CurrentInteraction = null;
         interruptedPickup = false;
 
         if (agent.hasPath)

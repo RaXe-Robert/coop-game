@@ -38,18 +38,22 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
 
     #region IInteractable Implementation
 
-    public bool IsInteractable() => interactDistance > 0f;
+    public bool IsInteractable => true;
+    public GameObject GameObject => gameObject;
 
-    public void Interact(Vector3 invokerPosition)
+    public bool InRange(Vector3 invokerPosition) =>
+        Vector3.Distance(invokerPosition, transform.position) < interactDistance;
+
+    public void Interact(GameObject invoker)
     {
-        if (!IsInteractable() || Vector3.Distance(transform.position, invokerPosition) > interactDistance)
+        if (!InRange(invoker.transform.position))
             return;
 
-        BuildableInteractionMenu bim = BuildableInteractionMenu.Instance;
-        if (bim.TargetInstanceID != GetInstanceID())
-            bim.Show(this, Actions?.ToArray());
+        var buildableInteractionMenu = BuildableInteractionMenu.Instance;
+        if (buildableInteractionMenu.TargetInstanceID != GetInstanceID())
+            buildableInteractionMenu.Show(this, Actions?.ToArray());
         else
-            bim.Hide();
+            buildableInteractionMenu.Hide();
     }
 
     public string TooltipText()
