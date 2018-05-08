@@ -9,6 +9,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private Animator animator;
     private UnityEngine.AI.NavMeshAgent agent;
     private bool interruptedPickup = false;
+    private float interactionTimeout = 0f;
 
     [SerializeField] private LayerMask rotationLayerMask;
     [SerializeField] private LayerMask waterLayerMask;
@@ -22,6 +23,18 @@ public class PlayerMovementController : Photon.MonoBehaviour
     public void StartInteraction(IInteractable interactable) =>
         CurrentInteraction = interactable.GameObject;
 
+    /// <summary>
+    /// Returns true if the player has no more interaction timeout
+    /// </summary>
+    public bool CanInteract => interactionTimeout <= 0;
+
+    /// <summary>
+    /// Adds delay to the timeout which the player needs to wait before it can interact with certain things
+    /// </summary>
+    /// <param name="timeout"></param>
+    public void AddInteractionTimeout(float timeout) => 
+        interactionTimeout += timeout;
+    
     private void Awake()
     {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -50,6 +63,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
     {
         if (!photonView.isMine)
             return;
+
+        if (interactionTimeout > 0)
+            interactionTimeout -= Time.deltaTime;
 
         RotatePlayer();
         

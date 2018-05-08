@@ -18,7 +18,6 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
     private HealthComponent healthComponent;
     private float searchNewTargetCountdown = 1f;
     private Animator animator;
-    private float interactionTimeout = 0f;
 
     public delegate void OnNPCKilled();
     public OnNPCKilled OnNPCKilledCallback;
@@ -43,9 +42,6 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
     private void Update()
     {
         if (!PhotonNetwork.isMasterClient) return;
-
-        if (interactionTimeout > 0)
-            interactionTimeout -= Time.deltaTime;
         
         if(searchNewTargetCountdown < 0)
         {
@@ -124,13 +120,14 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
         if (!InRange(invoker.transform.position))
             return;
 
-        if (interactionTimeout > 0)
+        var playerMovement = PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>();
+        if (!playerMovement.CanInteract)
             return;
         
         var stats = PlayerNetwork.PlayerObject.GetComponent<StatsComponent>();
         TakeDamage(UnityEngine.Random.Range(stats.MinDamage, stats.MaxDamage));
 
-        interactionTimeout = stats.TimeBetweenAttacks;
+        playerMovement.AddInteractionTimeout(stats.TimeBetweenAttacks);
     }
 
     public string TooltipText()
@@ -146,7 +143,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
         }
 
-        itemsToDropComponent?.SpawnItemsOnDepleted();
+        if (itemsToDropComponent != null) itemsToDropComponent.SpawnItemsOnDepleted();
 
         photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }

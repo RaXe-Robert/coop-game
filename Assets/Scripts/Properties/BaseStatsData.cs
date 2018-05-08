@@ -9,5 +9,6 @@ public class BaseStatsData : ScriptableObject
     public float minDamage;
     public float maxDamage;
     public float timeBetweenAttacks;
+    public float timeBetweenResourceHits;
     public float defense;
 }

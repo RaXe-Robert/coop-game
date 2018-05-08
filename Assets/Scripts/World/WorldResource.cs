@@ -12,7 +12,6 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
     [SerializeField] private HealthComponent healthComponent;
     [SerializeField] private ItemsToDropComponent itemsToDropComponent;
     private Animator animator;
-    private float interactionTimeout = 0f;
 
     private void Start()
     {
@@ -56,13 +55,16 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
         if (!InRange(invoker.transform.position))
             return;
 
-        if (interactionTimeout > 0)
+        var playerMovement = PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>();
+        if (!playerMovement.CanInteract)
         {
             WorldNotificationsManager.Instance
                 .ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
             return;
         }
-        interactionTimeout = 2f;
+        
+        var stats = PlayerNetwork.PlayerObject.GetComponent<StatsComponent>();
+        playerMovement.AddInteractionTimeout(stats.TimeBetweenResourceHits);
 
         var equipmentManager = PlayerNetwork.PlayerObject.GetComponent<EquipmentManager>();
         if (!equipmentManager.HasToolEquipped(requiredToolToHarvest))

@@ -24,25 +24,19 @@ public class MouseController : MonoBehaviour
 
         ray = playerCamera.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out hit, Mathf.Infinity) || EventSystem.current.IsPointerOverGameObject()) 
-            
             return;
+        
         var interactable = hit.transform.GetComponent<IInteractable>();
         if (interactable == null)
-        {
             Tooltip.Instance.Hide();
-        }
         else
         {
             if (Input.GetMouseButtonDown(0) && interactable.IsInteractable)
-            {
                 PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>().StartInteraction(interactable);
-            }
 
+            //This show will not dissapear when hovering from world item to a UI element. {BUG}
             if (interactable.TooltipText() != string.Empty)
-            {
-                //This show will not dissapear when hovering from world item to a UI element. {BUG}
                 Tooltip.Instance.Show(interactable.TooltipText());
-            }                
         }
     }
 }
