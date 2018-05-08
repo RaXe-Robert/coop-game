@@ -12,8 +12,8 @@ public class ToolItemSlot : InventoryItemSlot
         InventoryItemSlot from;
         if((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
-            if (from.Item.GetType() == typeof(Tool))
-                equipmentManager.EquipTool(from.Item as Tool, from.index);
+            if (from.CurrentItem.GetType() == typeof(Tool))
+                equipmentManager.EquipTool(from.CurrentItem as Tool, from.index);
         }
     }
 
@@ -30,7 +30,7 @@ public class ToolItemSlot : InventoryItemSlot
         transform.localPosition = Vector3.zero;
 
         if (!EventSystem.current.IsPointerOverGameObject())
-            equipmentManager.DropEquippedItem(Item);
+            equipmentManager.DropEquippedItem(CurrentItem as Item);
     }
 }
 

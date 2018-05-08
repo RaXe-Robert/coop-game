@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(PhotonView))]
 public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
 {
-    public ItemBase item;
+    public Item item;
     public float pickupDistance = 1f;
 
     [PunRPC]

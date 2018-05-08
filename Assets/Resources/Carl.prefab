@@ -630,11 +630,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemsToSpawn:
-  - {fileID: 11400000, guid: 453a7fe97a8cca04a955ee16fef2a3a3, type: 2}
-  ItemCountPerItem: 02000000
-  minRadius: -3
-  maxRadius: 3
+  EntitiesToSpawn:
+  - {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+  - {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
+  AmounPerEntity: 0400000004000000
+  minRadius: -2
+  maxRadius: 2
 --- !u!135 &135850484510566660
 SphereCollider:
   m_ObjectHideFlags: 1
