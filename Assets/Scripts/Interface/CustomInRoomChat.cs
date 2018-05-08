@@ -55,7 +55,8 @@ public class CustomInRoomChat : Photon.MonoBehaviour
         {
             if (InputManager.GetButtonDown("Send Chat"))
             {
-                SendMessage();                
+                SendMessage();
+                SetCurrentInputToNull();
             }
 
             if (InputManager.GetButtonDown("Close Chat"))
@@ -78,8 +79,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
             return;
                 
         photonView.RPC("Chat", PhotonTargets.All, input.text);
-        ClearMessage();
-        CloseChat();
+        ClearMessage();        
     }
 
     private void ClearMessage()
@@ -99,7 +99,10 @@ public class CustomInRoomChat : Photon.MonoBehaviour
         }
 
         AddLine(senderName + ": " + newLine);
+    }
 
+    private void CheckState()
+    {
         switch (state)
         {
             case State.Closing:
@@ -114,13 +117,14 @@ public class CustomInRoomChat : Photon.MonoBehaviour
             default:
                 ResetAndStartTimer();
                 break;
-        }   
+        }
     }
 
     public void AddLine(string newLine)
     {
         content.text += newLine + "\n";
         scrollView.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+        CheckState();
     }
 
     void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
@@ -142,6 +146,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
 
     private void OpenChat()
     {
+        input.enabled = true;
         EventSystem.current.SetSelectedGameObject(input.gameObject, null);
         state = State.Opening;
         StartCoroutine(FadeChat());
@@ -150,11 +155,21 @@ public class CustomInRoomChat : Photon.MonoBehaviour
     private void CloseChat()
     {
         ClearMessage();
-        EventSystem.current.SetSelectedGameObject(null);
+        input.enabled = false;
+        SetCurrentInputToNull();
         state = State.TimerOn;
         StartCoroutine(Timer());
     }
 
+    private void SetCurrentInputToNull()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    /// <summary>
+    /// This Fades the chat when the state is closing or opening.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator FadeChat()
     {
         while (state == State.Closing)
@@ -219,8 +234,7 @@ public class CustomInRoomChat : Photon.MonoBehaviour
                 ResetWaitTime();
                 state = State.Closing;            
                 StartCoroutine(FadeChat());             
-            }
-            Debug.Log(waitTime);            
+            }         
         }
     }
 }
