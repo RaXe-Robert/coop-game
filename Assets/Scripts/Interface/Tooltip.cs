@@ -11,14 +11,6 @@ public class Tooltip : MonoBehaviour
     [SerializeField] private Text title;
     [SerializeField] private Text description;
 
-    private Vector3 position = new Vector3();
-    private float defaultX;
-    private float defaultY;
-    private float distanceFromHorizontal;
-    private float distanceFromVertical;
-    private float preferredWidth;
-    private float preferredHeight;
-
     private void Awake()
     {
         if (Instance == null)
@@ -33,15 +25,16 @@ public class Tooltip : MonoBehaviour
 
     private Vector3 CalculatePosition()
     {
-        defaultX = Input.mousePosition.x;
-        defaultY = Input.mousePosition.y + 50F;
+        Vector3 position = new Vector3();
+        float defaultX = Input.mousePosition.x;
+        float defaultY = Input.mousePosition.y + 50F;
         position.z = Input.mousePosition.z;
 
-        distanceFromHorizontal = defaultX;
-        distanceFromVertical = defaultY;
+        float distanceFromHorizontal = defaultX;
+        float distanceFromVertical = defaultY;
 
-        preferredWidth = title.preferredWidth;
-        preferredHeight = title.preferredHeight + description.preferredHeight + 50F;
+        float preferredWidth = title.preferredWidth;
+        float preferredHeight = title.preferredHeight + description.preferredHeight + 50F;
 
         if (title.preferredWidth < description.preferredWidth)
             preferredWidth = description.preferredWidth;
