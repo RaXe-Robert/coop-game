@@ -17,27 +17,21 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
 
     #region IInteractable Implementation
 
-    public bool IsInteractable()
-    {
-        return true;
-    }
+    public bool IsInteractable => true;
+    public GameObject GameObject => gameObject;
+    public bool InRange(Vector3 invokerPosition) =>
+        Vector3.Distance(invokerPosition, transform.position) < pickupDistance;
 
-    public void Interact(Vector3 invokerPosition)
+    public void Interact(GameObject invoker)
     {
-        if (Vector3.Distance(transform.position, invokerPosition) > pickupDistance)
-        {
-            PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>().ItemToPickup = this.gameObject;
+        if (!InRange(invoker.transform.position))
             return;
-        }
 
         PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(item.Id, item.StackSize);
         photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
     }
 
-    public string TooltipText()
-    {
-        return $"{item.Name} ({item.StackSize})";
-    }
+    public string TooltipText => $"{item.Name} ({item.StackSize})";
 
     #endregion //IInteractable Implementation
 }

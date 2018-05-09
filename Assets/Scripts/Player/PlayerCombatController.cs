@@ -4,19 +4,21 @@ using Photon;
 
 public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 {
-    public Vector3 Position => transform.position;
     public string TooltipText => photonView.owner.NickName;
+    public Vector3 Position => transform.position;
     public float Damage => stats.Damage;
     public bool IsDead { get; private set; }
 
     private PlayerStatsComponent stats;
     private HealthComponent healthComponent;
 
+    public float TimeBetweenAttacks => stats.TimeBetweenAttacks;
+
     private void Awake()
     {
         stats = GetComponent<PlayerStatsComponent>();
         healthComponent = GetComponent<HealthComponent>();
-        healthComponent.OnDeathCallback += Die;
+        healthComponent.OnDepletedCallback += Die;
     }
 
     private void Die()

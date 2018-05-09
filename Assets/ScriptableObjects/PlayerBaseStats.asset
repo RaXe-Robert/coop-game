@@ -16,4 +16,5 @@ MonoBehaviour:
   minDamage: 10
   maxDamage: 20
   timeBetweenAttacks: 1
+  timeBetweenResourceHits: 1
   defense: 0

@@ -12,13 +12,17 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
     public Vector3 Waypoint { get; private set; }
     public float NearWaypointRange { get; set; } = 4.0f; // The distance this has to be from the agent waypoint to reach it
     private float searchNewTargetCountdown = 1f;
+    public float InteractionDistance { get; set; } = 4.0f;
 
     //Interfaces
     public Vector3 Position => transform.position;
     public float Damage => Random.Range(stats.minDamage, stats.maxDamage);
+    public string TooltipText => stats.NPCName;
 
     //Components
     public NavMeshAgent Agent { get; private set; }
+
+
     private ItemsToDropComponent itemsToDropComponent;
     private HealthComponent healthComponent;
     private Animator animator;
@@ -35,7 +39,7 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
         itemsToDropComponent = GetComponent<ItemsToDropComponent>();
 
         healthComponent.SetValue(stats.maxHealth);
-        healthComponent.OnDeathCallback += Die;
+        healthComponent.OnDepletedCallback += Die;
 
         Agent.speed = stats.movementSpeed;
 
@@ -47,15 +51,14 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
 
     private void Update()
     {
-        if (PhotonNetwork.isMasterClient)
+        if (!PhotonNetwork.isMasterClient) return;
+        
+        if(searchNewTargetCountdown < 0)
         {
-            if(searchNewTargetCountdown <= 0)
-            {
-                SetClosestOpponent();
-                UpdateDistanceToOpponent();
-            }
-            searchNewTargetCountdown -= Time.deltaTime;
+            SetClosestOpponent();
+            UpdateDistanceToOpponent();
         }
+        searchNewTargetCountdown -= Time.deltaTime;
     }
 
     /// <summary>
@@ -117,7 +120,7 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
         }
 
-        itemsToDropComponent?.SpawnItemsOnDepleted();
+        if (itemsToDropComponent != null) itemsToDropComponent.SpawnItemsOnDepleted();
 
         photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }
