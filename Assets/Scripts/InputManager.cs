@@ -23,6 +23,7 @@ public static class InputManager {
         ["Equipment"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("EquipmentKey", KeyCode.F.ToString())),
         ["Left camera rotation"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("LeftCameraRotationKey", KeyCode.Q.ToString())),
         ["Right camera rotation"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("RightCameraRotationKey", KeyCode.E.ToString())),
+        ["Open Chat"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("ChatKey", KeyCode.Y.ToString()))
     };
 
     private static Dictionary<string, KeyCode> staticButtonKeys = new Dictionary<string, KeyCode>
@@ -30,8 +31,8 @@ public static class InputManager {
         ["Escape"] = KeyCode.Escape,
         ["Camera rotation"] = KeyCode.Mouse1,
         ["Spawn item"] = KeyCode.R,
-        ["Chat key 1"] = KeyCode.KeypadEnter,
-        ["Chat key 2"] = KeyCode.Return
+        ["Send Chat"] = KeyCode.Return,
+        ["Close Chat"] = KeyCode.Escape
     };
 
     public static float GetAxis(string axisName)
