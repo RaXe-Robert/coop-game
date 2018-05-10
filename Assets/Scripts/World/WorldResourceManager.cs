@@ -12,15 +12,12 @@ public class WorldResourceManager : Photon.MonoBehaviour {
         get
         {
             if (instance == null)
-            {
-                GameObject go = new GameObject("WorldResourceManager");
-                instance = go.AddComponent<WorldResourceManager>();
-            }
+                instance = (new GameObject("WorldResourceManager")).AddComponent<WorldResourceManager>();
             return instance;
         }
     }
 
-    private Dictionary<int, WorldResourceTracker> worldResources = new Dictionary<int, WorldResourceTracker>();
+    private Dictionary<int, WorldResourceTracker> worldResourcesNetworked = new Dictionary<int, WorldResourceTracker>();
 
     private void Awake()
     {
@@ -33,9 +30,9 @@ public class WorldResourceManager : Photon.MonoBehaviour {
     public void Update()
     {
         Vector3 playerPos = PlayerNetwork.PlayerObject?.transform.position ?? Vector3.zero;
-        for (int i = 0; i < worldResources.Count; i++)
+        for (int i = 0; i < worldResourcesNetworked.Count; i++)
         {
-            KeyValuePair<int, WorldResourceTracker> kvp = worldResources.ElementAt(i);
+            KeyValuePair<int, WorldResourceTracker> kvp = worldResourcesNetworked.ElementAt(i);
             if (Vector3.Distance(kvp.Value.Position, playerPos) <= 50f)
             {
                 kvp.Value.SetVisible(true);
@@ -47,19 +44,19 @@ public class WorldResourceManager : Photon.MonoBehaviour {
         }
     }
 
-    public void AddWorldResource(GameObject worldResourcePrefab, TerrainChunkController parent, TerrainInfo terrainInfo)
+    public void AddNetworkedWorldResource(GameObject worldResourcePrefab, TerrainChunkController parent, TerrainInfo terrainInfo)
     {
         WorldResource worldResource = worldResourcePrefab.GetComponent<WorldResource>();
         if (worldResource == null)
             throw new MissingComponentException("No WorldResource component attached to the given prefab.");
 
-        int id = System.Convert.ToInt32(terrainInfo.WorldPoint.x * 100f + terrainInfo.WorldPoint.y * 10f + terrainInfo.WorldPoint.z); //Point 3,2,1 gives 321 as an id
+        int id = Convert.ToInt32(terrainInfo.WorldPosition.x * 100f + terrainInfo.WorldPosition.y * 10f + terrainInfo.WorldPosition.z + (parent.TerrainChunk.SampleCenter.x + parent.TerrainChunk.SampleCenter.y) * parent.TerrainChunk.MeshSettings.MeshScale); //Point 3,2,1 gives 321 as an id
 
-        WorldResourceTracker worldResourceTracker = new WorldResourceTracker(id, parent, worldResource, worldResourcePrefab, terrainInfo.WorldPoint);
-        if (worldResources.ContainsKey(id) == false)
-            worldResources.Add(id, worldResourceTracker);
+        WorldResourceTracker worldResourceTracker = new WorldResourceTracker(id, parent, worldResource, worldResourcePrefab, terrainInfo.WorldPosition);
+        if (worldResourcesNetworked.ContainsKey(id) == false)
+            worldResourcesNetworked.Add(id, worldResourceTracker);
         else
-            Debug.LogError($"An element with the same position: `{terrainInfo.WorldPoint}` already exists.");
+            Debug.LogError($"An element with the same position: `{terrainInfo.WorldPosition}` already exists.");
     }
 
     public class WorldResourceTracker

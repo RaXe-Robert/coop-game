@@ -7,6 +7,7 @@ public class MeshSettings : UpdatableData {
     public const int NumOfSupportedChunkSizes = 9;
     public const int NumOfSupportedFlatshadedChunkSizes = 3;
     public static readonly int[] SupportedChunkSizes = { 48, 72, 96, 120, 144, 168, 192, 216, 240 };
+    public static readonly int[] SupportedChunkPartSizes = { 3, 6 };
 
     public float MeshScale = 5f;
     public bool UseFlatShading;

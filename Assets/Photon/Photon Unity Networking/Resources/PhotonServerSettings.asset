@@ -58,4 +58,5 @@ MonoBehaviour:
   - IncreaseHealthValue
   - IncreaseHungerValue
   - SetSeed
+  - RPC_DestroyWorldObject
   DisableAutoOpenWizard: 1
