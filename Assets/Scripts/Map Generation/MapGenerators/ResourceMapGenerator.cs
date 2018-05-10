@@ -40,7 +40,7 @@ public struct ResourceMap
     public readonly float MinValue;
     public readonly float MaxValue;
 
-    public readonly ResourcePoint[] resourcePoints;
+    public readonly ResourcePoint[] ResourcePoints;
 
     public readonly ResourceMapSettings Settings;
 
@@ -49,7 +49,7 @@ public struct ResourceMap
         this.Values = values;
         this.MinValue = minValue;
         this.MaxValue = maxValue;
-        this.resourcePoints = resourcePoints;
+        this.ResourcePoints = resourcePoints;
         this.Settings = settings;
     }
 }

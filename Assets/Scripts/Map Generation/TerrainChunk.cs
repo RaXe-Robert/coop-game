@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// Chunk of the terrain.
@@ -9,15 +11,17 @@ public class TerrainChunk
     private const float colliderGenerationDistanceThreshold = 5;
     private const float sqrColliderGenerationDistanceThreshold = colliderGenerationDistanceThreshold * colliderGenerationDistanceThreshold;
 
+    private const float chunkPartLoadDistanceThreshold = 12;
+    private const float sqrChunkPartLoadDistanceThreshold = chunkPartLoadDistanceThreshold * chunkPartLoadDistanceThreshold;
+
     public event System.Action<TerrainChunk, bool> OnVisibilityChanged;
-    public event System.Action<TerrainChunk, int> OnLODIndexChanged;
     public Vector2 Coord { get; private set; }
 
     public DataMap DataMap { get; private set; }
-    public bool MapDataReceived { get; private set; }
-
+    public bool DataMapReceived { get; private set; }
+    
     public readonly GameObject MeshObject;
-    public readonly TerrainChunkController TerrainChunkController;
+
     public Vector2 SampleCenter { get; private set; }
     public Bounds Bounds { get; private set; }
 
@@ -44,6 +48,16 @@ public class TerrainChunk
     public bool IsVisible => MeshObject.activeSelf;
     public void SetVisible(bool visible)
     {
+        // Clean up any visible chunkparts
+        if (DataMapReceived)
+        {
+            foreach (ChunkPart chunkPart in DataMap.ChunkParts.Values)
+            {
+                if (chunkPart.Visible)
+                    chunkPart.Visible = false;
+            }
+        }
+
         MeshObject.SetActive(visible);
     }
 
@@ -68,12 +82,12 @@ public class TerrainChunk
         meshCollider = MeshObject.AddComponent<MeshCollider>();
         meshRenderer.material = terrainMeshMaterial;
 
-        TerrainChunkController = MeshObject.AddComponent<TerrainChunkController>();
+        MeshObject.AddComponent<TerrainChunkController>().TerrainChunk = this;
 
         MeshObject.transform.position = new Vector3(position.x, 0, position.y);
         MeshObject.transform.parent = parent;
         MeshObject.layer = parent.gameObject.layer;
-        
+
         SetVisible(false);
 
         lodMeshes = new LODMesh[detailLevels.Length];
@@ -90,24 +104,23 @@ public class TerrainChunk
 
     public void Load()
     {
-        ThreadedDataRequester.RequestData(() => DataMapGenerator.GenerateDataMap(MeshSettings.NumVertsPerLine, HeightMapSettings, BiomeMapSettings, ResourceMapSettings, SampleCenter), OnMapDataReceived);
+        ThreadedDataRequester.RequestData(() => DataMapGenerator.GenerateDataMap(MeshSettings, HeightMapSettings, BiomeMapSettings, ResourceMapSettings, this), OnMapDataReceived);
     }
     
     private void OnMapDataReceived(object dataMapObject)
     {
         this.DataMap = (DataMap)dataMapObject;
-        MapDataReceived = true;
+        DataMapReceived = true;
 
         meshRenderer.material.mainTexture = TextureGenerator.TextureFromBiomeMap(DataMap.BiomeMap);
 
-        TerrainChunkController.Load(this);
-
         UpdateTerrainChunk();
+        UpdateTerrainChunkParts();
     }
 
     public void UpdateTerrainChunk()
     {
-        if (!MapDataReceived)
+        if (!DataMapReceived)
             return;
 
         float viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(ViewerPosition));
@@ -147,6 +160,26 @@ public class TerrainChunk
         }
     }
 
+    public void UpdateTerrainChunkParts()
+    {
+        if (!DataMapReceived)
+            return;
+
+        Vector2 viewerPosition = ViewerPosition;
+        
+        foreach (var chunkPartKVP in DataMap.ChunkParts)
+        {
+
+            float viewerDistanceFromChunkPart = Vector2.Distance(new Vector2(chunkPartKVP.Value.WorldPosition.x, chunkPartKVP.Value.WorldPosition.z), viewerPosition);
+
+            bool wasVisible = chunkPartKVP.Value.Visible;
+            bool visible = viewerDistanceFromChunkPart <= sqrChunkPartLoadDistanceThreshold;
+            
+            if (wasVisible != visible)
+                chunkPartKVP.Value.Visible = visible;
+        }
+    }
+
     public void UpdateCollisionMesh()
     {
         if (HasSetCollider)
@@ -168,6 +201,82 @@ public class TerrainChunk
                 HasSetCollider = true;
             }
         }
+    }
+
+    public ChunkPart GetChunkPart(int x, int z)
+    {
+        if (x < 0 || z < 0 || x >= DataMap.UniformSize || z >= DataMap.UniformSize)
+            throw new System.IndexOutOfRangeException("Index was greater than the DataMap size.");
+
+        int chunkPartSize = DataMap.UniformSize / MeshSettings.ChunkPartSizeRoot + 1;
+
+        int coordX = Mathf.FloorToInt(x / chunkPartSize) - 1;
+        int coordZ = Mathf.FloorToInt(z / chunkPartSize) - 1;
+
+        Vector2 chunkPartCoords = Coord * MeshSettings.ChunkPartSizeRoot + new Vector2(coordX, -coordZ);
+
+        return DataMap.ChunkParts[chunkPartCoords];
+    }
+}
+
+public class ChunkPart
+{
+    public readonly Vector2 Coord;
+    public readonly Vector3 WorldPosition;
+
+    private readonly TerrainChunk terrainChunk;
+
+    private readonly Dictionary<double, Tuple<ResourcePoint, Vector3>> resourcePoints = new Dictionary<double, Tuple<ResourcePoint, Vector3>>();
+
+    private readonly List<GameObject> spawnedInstances = new List<GameObject>();
+
+    private bool isVisible;
+    public bool Visible
+    {
+        get { return isVisible; }
+        set
+        {
+            if (isVisible != value)
+            {
+                isVisible = value;
+                if (isVisible)
+                    SpawnResources();
+                else
+                    DespawnResources();
+            }
+        }
+    }
+
+    public ChunkPart(Vector2 coord, Vector3 worldPosition, TerrainChunk terrainChunk)
+    {
+        this.Coord = coord;
+        this.WorldPosition = worldPosition;
+        this.terrainChunk = terrainChunk;
+    }
+
+    public void AddResourcePoint(ResourcePoint resourcePoint, Vector3 resourcePointPosition)
+    {
+        int a = resourcePoint.IndexX;
+        int b = resourcePoint.IndexZ;
+        double id = 0.5 * (a + b) * (a + b + 1) + b;
+
+        if (!this.resourcePoints.ContainsKey(id))
+            this.resourcePoints.Add(id, Tuple.Create(resourcePoint, resourcePointPosition));
+        else
+            Debug.LogError($"An ResourcePoint with the same position: `{resourcePointPosition}` already exists.");
+    }
+
+    private void SpawnResources()
+    {
+        foreach (var resourcePoint in resourcePoints)
+            spawnedInstances.Add(UnityEngine.Object.Instantiate(resourcePoint.Value.Item1.WorldResourcePrefab, resourcePoint.Value.Item2, Quaternion.identity, terrainChunk.MeshObject.transform));
+    }
+
+    private void DespawnResources()
+    {
+        for (int i = spawnedInstances.Count - 1; i >= 0; i--)
+            UnityEngine.Object.Destroy(spawnedInstances[i]);
+        spawnedInstances.Clear();
     }
 }
 

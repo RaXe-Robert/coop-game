@@ -128,6 +128,6 @@ MonoBehaviour:
   MeshSettings: {fileID: 11400000, guid: d3847878fad179449bee444cc89677e0, type: 2}
   HeightMapSettings: {fileID: 11400000, guid: 54724914dda45e84b995e017dbd99f97, type: 2}
   BiomeMapSettings: {fileID: 11400000, guid: e17c58e275e5bc74cba8c8f5d1b8168c, type: 2}
-  ObjectMapSettings: {fileID: 11400000, guid: 15be9663026b64042a8b8a97a1b6088e, type: 2}
+  ResourceMapSettings: {fileID: 11400000, guid: 15be9663026b64042a8b8a97a1b6088e,
+    type: 2}
   TerrainMeshMaterial: {fileID: 2100000, guid: 2b9336a43a2f5854b86f2ff219953cba, type: 2}
-  TerrainMaterial: {fileID: 2100000, guid: 08bdc9229c40ec34cb6c443f1bd4220c, type: 2}

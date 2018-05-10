@@ -6,7 +6,10 @@ using System.Collections.Generic;
 public class TerrainGenerator : Photon.MonoBehaviour
 {
     private const float viewerMoveThresholdForChunkUpdate = 25f;
-    private const float sqrViewerMoveThreasholdForChunkUpdate = viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate;
+    private const float sqrViewerMoveThresholdForChunkUpdate = viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate;
+
+    private const float viewerMoveThresholdForChunkPartUpdate = 5f;
+    private const float sqrViewerMoveThresholdForChunkPartUpdate = viewerMoveThresholdForChunkPartUpdate * viewerMoveThresholdForChunkPartUpdate;
 
     [SerializeField]
     private int colliderLODIndex;
@@ -15,15 +18,14 @@ public class TerrainGenerator : Photon.MonoBehaviour
     public MeshSettings MeshSettings;
     public HeightMapSettings HeightMapSettings;
     public BiomeMapSettings BiomeMapSettings;
-    public ResourceMapSettings ObjectMapSettings;
+    public ResourceMapSettings ResourceMapSettings;
 
     public Material TerrainMeshMaterial;
-    
-    public Material TerrainMaterial;
 
     private Transform viewer;
     private Vector2 viewerPosition;
-    private Vector2 viewerPositionOld;
+    private Vector2 viewerPositionOld_ChunkUpdate;
+    private Vector2 viewerPositionOld_ChunkPartUpdate;
 
     private float meshWorldSize;
     private int chunksVisibleInViewDistance;
@@ -36,9 +38,7 @@ public class TerrainGenerator : Photon.MonoBehaviour
     private void Start()
     {
         if (PhotonNetwork.isMasterClient)
-        {
             photonView.RPC("SetSeed", PhotonTargets.AllBuffered, (new System.Random()).Next(0, int.MaxValue));
-        }
     }
 
     private void Update()
@@ -48,19 +48,35 @@ public class TerrainGenerator : Photon.MonoBehaviour
 
         viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
 
-        if (viewerPosition != viewerPositionOld)
+        // Update collision meshes for all visibleTerrainChunks if the viewer has moved at all since the previous frame.
+        if (viewerPosition != viewerPositionOld_ChunkUpdate)
         {
             foreach (TerrainChunk terrainChunk in visibleTerrainChunks)
                 terrainChunk.UpdateCollisionMesh();
         }
 
-        if ((viewerPositionOld - viewerPosition).sqrMagnitude > sqrViewerMoveThreasholdForChunkUpdate)
+        // Update all visible terrain chunks if the viewer has moved by a certain amount
+        if ((viewerPositionOld_ChunkUpdate - viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate)
         {
-            viewerPositionOld = viewerPosition;
+            viewerPositionOld_ChunkUpdate = viewerPosition;
             UpdateVisibleChunks();
+        }
+        
+        // Update chunk parts of all the visible terrain chunks if the viewer has moved by a certain amount
+        if ((viewerPositionOld_ChunkPartUpdate - viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkPartUpdate || true)
+        {
+            viewerPositionOld_ChunkPartUpdate = viewerPosition;
+
+            foreach (TerrainChunk terrainChunk in visibleTerrainChunks)
+            {
+                terrainChunk.UpdateTerrainChunkParts();
+            }
         }
     }
 
+    /// <summary>
+    /// Setup is called when the seed is set through the SetSeed RPC call
+    /// </summary>
     private void Setup()
     {
         isSeedSet = true;
@@ -77,8 +93,12 @@ public class TerrainGenerator : Photon.MonoBehaviour
         UpdateVisibleChunks();
     }
 
+    /// <summary>
+    /// Update all visible chunks, tries to find new chunks aswell.
+    /// </summary>
     private void UpdateVisibleChunks()
     {
+        // Update the current visible chunks
         HashSet<Vector2> alreadyUpdatedChunkCoords = new HashSet<Vector2>();
         for (int i = visibleTerrainChunks.Count - 1; i >= 0; i--)
         {
@@ -86,6 +106,7 @@ public class TerrainGenerator : Photon.MonoBehaviour
             visibleTerrainChunks[i].UpdateTerrainChunk();
         }
 
+        // Find new chunks based on viewer position
         int currentChunkCoordX = Mathf.RoundToInt(viewerPosition.x / meshWorldSize);
         int currentChunkCoordY = Mathf.RoundToInt(viewerPosition.y / meshWorldSize);
 
@@ -100,7 +121,7 @@ public class TerrainGenerator : Photon.MonoBehaviour
                         terrainChunkDictionary[viewedChunkCoord].UpdateTerrainChunk();
                     else
                     {
-                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, HeightMapSettings, BiomeMapSettings, ObjectMapSettings, MeshSettings, detailLevels, colliderLODIndex, transform, viewer, TerrainMeshMaterial);
+                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, HeightMapSettings, BiomeMapSettings, ResourceMapSettings, MeshSettings, detailLevels, colliderLODIndex, transform, viewer, TerrainMeshMaterial);
                         terrainChunkDictionary.Add(viewedChunkCoord, newChunk);
                         newChunk.OnVisibilityChanged += OnTerrainChunkVisibilityChanged;
                         newChunk.Load();
