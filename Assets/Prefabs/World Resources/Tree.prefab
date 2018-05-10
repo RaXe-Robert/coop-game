@@ -378,9 +378,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemsToSpawn:
+  EntitiesToSpawn:
   - {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-  ItemCountPerItem: 05000000
+  AmounPerEntity: 05000000
   minRadius: -5
   maxRadius: 5
 --- !u!114 &114253825787940496
@@ -435,7 +435,7 @@ MonoBehaviour:
   spawnOnDepleted: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
     type: 2}
   healthComponent: {fileID: 114253825787940496}
-  itemsToDrop: {fileID: 114126515727490142}
+  entitiesToDropComponent: {fileID: 114126515727490142}
 --- !u!137 &137618772171973266
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

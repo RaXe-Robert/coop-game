@@ -11,10 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
   m_Name: Pebble
   m_EditorClassIdentifier: 
+  id: 0
   itemName: Pebble
   sprite: {fileID: 21300000, guid: 596fa2bb3f7484346a0cffeae2532bac, type: 3}
   model: {fileID: 100000, guid: 0c636770a08d26e4ab7ca57ffe776b5c, type: 3}
   description: Pebble
-  isConsumable: 0
-  onConsumedEffects: []
-  id: 0

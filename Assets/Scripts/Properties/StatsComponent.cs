@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//TODO, worth checkig out on refactor run, seems like a lot of boilerplate
 public class StatsComponent : MonoBehaviour
 {
     [SerializeField] private BaseStatsData baseStats;
@@ -13,6 +14,7 @@ public class StatsComponent : MonoBehaviour
     private Stat minDamage;
     private Stat maxDamage;
     private Stat timeBetweenAttacks;
+    private Stat timeBetweenResourceHits;
     private Stat defense;
     private EquipmentManager equipmentManager;
 
@@ -20,6 +22,7 @@ public class StatsComponent : MonoBehaviour
     public float MinDamage => minDamage.CurrentValue;
     public float MaxDamage => maxDamage.CurrentValue;
     public float TimeBetweenAttacks => timeBetweenAttacks.CurrentValue;
+    public float TimeBetweenResourceHits => timeBetweenResourceHits.CurrentValue;
     public float Defense => defense.CurrentValue;
 
     private void Awake()
@@ -40,6 +43,7 @@ public class StatsComponent : MonoBehaviour
         minDamage = new Stat(baseStats.minDamage, this);
         maxDamage = new Stat(baseStats.maxDamage, this);
         timeBetweenAttacks = new Stat(baseStats.timeBetweenAttacks, this);
+        timeBetweenResourceHits = new Stat(baseStats.timeBetweenResourceHits, this);
         defense = new Stat(baseStats.defense, this);
     }
 

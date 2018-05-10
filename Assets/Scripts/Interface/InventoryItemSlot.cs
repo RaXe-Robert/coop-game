@@ -13,25 +13,25 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     protected Inventory inventory;
     protected EquipmentManager equipmentManager;
 
-    protected ItemBase item;
+    protected Item currentItem;
 
     protected CanvasGroup canvasGroup;
     protected Transform initialParentTransform;
 
-    public ItemBase Item
+    public Item CurrentItem
     {
         get
         {
-            return item;
+            return currentItem;
         }
         
         set
         {
-            item = value;
-            image.sprite = item?.Sprite;
-            if (item?.StackSize > 1)
+            currentItem = value;
+            image.sprite = currentItem?.Sprite;
+            if (currentItem?.StackSize > 1)
             {
-                stackSizeText.text = item.StackSize.ToString();
+                stackSizeText.text = currentItem.StackSize.ToString();
                 textBackground.enabled = true;
             }
             else
@@ -56,16 +56,16 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void Clear()
     {
-        item = null;
+        currentItem = null;
         image.sprite = null;
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
-        if (item == null)
+        if (currentItem == null)
             return;
 
-        Tooltip.Instance.Show(item.Name, item.Description);
+        Tooltip.Instance.Show(currentItem.Name, currentItem.Description);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -75,35 +75,37 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        if (item == null)
+        if (CurrentItem == null)
             return;
 
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-
-            if (item is Buildable)
+            if (currentItem is BuildableBase)
             {
-                inventory.BuildingController?.ActivateBuildMode(item as Buildable);
+                inventory.BuildingController?.ActivateBuildMode(currentItem as BuildableBase);
             }
-
-            else if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
+            else if (CurrentItem is Item)
             {
-                PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
-
-                if (item.StackSize > 1)
+                Consumable item = currentItem as Consumable;
+                if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
                 {
-                    item.StackSize--;
-                    inventory.OnItemChangedCallback?.Invoke();
+                    PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
+
+                    if (item.StackSize > 1)
+                    {
+                        item.StackSize--;
+                        inventory.OnItemChangedCallback?.Invoke();
+                    }
+                    else
+                        inventory.RemoveItemAtIndex(index);
+
+                    Tooltip.Instance.Hide();
                 }
-                else
-                    inventory.RemoveItemAtIndex(index);
 
-                Tooltip.Instance.Hide();
             }
-
-            else if(item.Equippable)
+            else if (CurrentItem is Equippable)
             {
-                equipmentManager.EquipItem(item, index);
+                equipmentManager.EquipItem(CurrentItem, index);
                 Tooltip.Instance.Hide();
             }
         }
@@ -111,7 +113,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (item == null)
+        if (currentItem == null)
         {
             eventData.pointerDrag = null;
             return;
@@ -125,7 +127,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (item == null)
+        if (currentItem == null)
             return;
 
         transform.position = eventData.position;
@@ -138,36 +140,36 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
             //We got an item from our equipment.
-            if(from.index == -1 && Item != null)
+            if(from.index == -1 && CurrentItem != null)
             {
                 //We cant equip a non equippable item.
-                if (!item.Equippable)
+                if (CurrentItem is Equippable)
                     return;
 
                 //We cant swap the items it they arent the same type
-                if (from.Item.GetType() != Item.GetType())
+                if (from.CurrentItem.GetType() != CurrentItem.GetType())
                     return;
 
                 //Check if our item is an Armor and see if it's the same type of armor, if so we can swap the items around.
-                if ((from.Item.GetType() == typeof(Armor) && ((Armor)from.Item).ArmorType == ((Armor)Item).ArmorType))
-                    equipmentManager.EquipArmor(Item as Armor, index);
+                if ((from.CurrentItem.GetType() == typeof(Armor) && ((Armor)from.CurrentItem).ArmorType == ((Armor)CurrentItem).ArmorType))
+                    equipmentManager.EquipArmor(CurrentItem as Armor, index);
 
                 //Check if our item is a Tool and see if it's the same type of tool, if so we can swap the items around.
-                else if ((from.Item.GetType() == typeof(Tool) && ((Tool)from.Item).ToolType == ((Tool)Item).ToolType))
-                    equipmentManager.EquipTool(Item as Tool, index);
+                else if ((from.CurrentItem.GetType() == typeof(Tool) && ((Tool)from.CurrentItem).ToolType == ((Tool)CurrentItem).ToolType))
+                    equipmentManager.EquipTool(CurrentItem as Tool, index);
 
                 //Check if we both have weapons if so we can swap them around.
-                else if ((from.Item.GetType() == typeof(Weapon) && Item.GetType() == typeof(Weapon)))
-                    equipmentManager.EquipWeapon(Item as Weapon, index);
+                else if ((from.CurrentItem.GetType() == typeof(Weapon) && CurrentItem.GetType() == typeof(Weapon)))
+                    equipmentManager.EquipWeapon(CurrentItem as Weapon, index);
             }
-            else if(from.index == -1 && Item == null)
+            else if(from.index == -1 && CurrentItem == null)
             {
                 //We are dragging an equipment piece on an empty inventory slot.
-                equipmentManager.UnEquipItem(from.Item, index);
+                equipmentManager.UnequipItem(from.CurrentItem as Item, index);
             }
 
             else 
-                inventory.SwapItem(index, from.index);
+                inventory.SwapItems(index, from.index);
         }
     }
 
@@ -180,7 +182,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, item.StackSize);
+            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, currentItem.Id, currentItem.StackSize);
             inventory.RemoveItemAtIndex(index);
         }
     }

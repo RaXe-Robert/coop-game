@@ -5,22 +5,22 @@ using System.Linq;
 
 public class ItemFactory : MonoBehaviour {
 
-    private static ScriptableItemData[] itemLookUpTable;
+    private static ScriptableItemData[] itemLookupTable;
     private static PhotonView photonView;
-    public ItemBase test;
+    public Item test;
 
     private void Awake()
     {
         photonView = GetComponent<PhotonView>();
 
-        itemLookUpTable = Resources.LoadAll<ScriptableItemData>("Items");        
+        itemLookupTable = Resources.LoadAll<ScriptableItemData>("Items");        
     }
 
-    public static ItemBase CreateNewItem(int itemId, int stackSize = 1)
+    public static Item CreateNewItem(int itemId, int stackSize = 1)
     {
-        var itemData = itemLookUpTable.First(x => x.Id == itemId);
+        var itemData = itemLookupTable.First(x => x.Id == itemId);
 
-        ItemBase item = itemData.InitializeItem();
+        Item item = itemData.InitializeItem();
         item.StackSize = stackSize;
         
         return item;
@@ -37,7 +37,7 @@ public class ItemFactory : MonoBehaviour {
     {
         GameObject go = Resources.Load<GameObject>("Item");
 
-        ItemBase item = CreateNewItem(itemId, stackSize);
+        Item item = CreateNewItem(itemId, stackSize);
 
         //Get the mesh and materials from the referenced model.
         var itemMesh = item.Model.GetComponent<MeshFilter>().sharedMesh;

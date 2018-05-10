@@ -8,7 +8,7 @@ public class ToolData : ScriptableItemData
     [SerializeField] private ToolType toolType;
     public ToolType ToolType { get { return toolType; } }
 
-    public override ItemBase InitializeItem()
+    public override Item InitializeItem()
     {
         return new Tool(this);
     }

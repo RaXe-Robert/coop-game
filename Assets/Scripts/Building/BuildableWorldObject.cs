@@ -1,24 +1,59 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(PhotonView))]
 public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
 {
-    public Buildable buildable;
+    public BuildableBase buildable;
 
     public float interactDistance = 1f;
-    
-    #region IInteractable Implementation
+    public List<UnityAction> Actions { get; private set; }
 
-    public bool IsInteractable()
+    private void Start()
     {
-        return interactDistance > 0f;
+        Actions = new List<UnityAction>();
+        
+        if (buildable.Recoverable)
+            Actions.Add(new UnityAction(Pickup));
+
+        Actions.AddRange(InitializeActions());
     }
 
-    public void Interact(Vector3 invokerPosition)
+    protected void Pickup()
     {
-        //TODO: Needs interaction menu
-        Debug.Log("Interacting");
+        // If null the action will be cancelled
+        if (BuildableInteractionMenu.Instance?.Target == null)
+            return;
+
+        BuildableInteractionMenu.Instance.Target.DestroyWorldObject();
+    }
+
+    protected virtual UnityAction[] InitializeActions()
+    {
+        return new UnityAction[0];
+    }
+
+    #region IInteractable Implementation
+
+    public bool IsInteractable => true;
+    public GameObject GameObject => gameObject;
+
+    public bool InRange(Vector3 invokerPosition) =>
+        Vector3.Distance(invokerPosition, transform.position) < interactDistance;
+
+    public void Interact(GameObject invoker)
+    {
+        if (!InRange(invoker.transform.position))
+            return;
+
+        var buildableInteractionMenu = BuildableInteractionMenu.Instance;
+        if (buildableInteractionMenu.TargetInstanceID != GetInstanceID())
+            buildableInteractionMenu.Show(this, Actions?.ToArray());
+        else
+            buildableInteractionMenu.Hide();
     }
 
     public string TooltipText()
@@ -28,8 +63,14 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
 
     #endregion //IInteractable Implementation
 
+    public void DestroyWorldObject()
+    {
+        PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(buildable.Id, buildable.StackSize);
+        photonView.RPC("RPC_DestroyWorldObject", PhotonTargets.AllBuffered);
+    }
+
     [PunRPC]
-    private void DestroyWorldObject()
+    protected void RPC_DestroyWorldObject()
     {
         Destroy(gameObject);
     }

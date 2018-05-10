@@ -12,7 +12,8 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
     public UnityEngine.AI.NavMeshAgent Agent { get; private set; }
     public Vector3 Waypoint { get; private set; }
     public float NearWaypointRange { get; set; } = 4.0f; // The distance this has to be from the agent waypoint to reach it
-    private ItemsToDropComponent itemToDrop;
+    public float InteractionDistance { get; set; } = 4.0f;
+    private ItemsToDropComponent itemsToDropComponent;
 
     private HealthComponent healthComponent;
     private float searchNewTargetCountdown = 1f;
@@ -27,7 +28,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
         Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         animator = GetComponent<Animator>();
         healthComponent = GetComponent<HealthComponent>();
-        itemToDrop = GetComponent<ItemsToDropComponent>();
+        itemsToDropComponent = GetComponent<ItemsToDropComponent>();
 
         healthComponent.SetValue(stats.maxHealth);
         Agent.speed = stats.movementSpeed;
@@ -40,15 +41,14 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (PhotonNetwork.isMasterClient)
+        if (!PhotonNetwork.isMasterClient) return;
+        
+        if(searchNewTargetCountdown < 0)
         {
-            if(searchNewTargetCountdown < 0)
-            {
-                SetClosestOpponent();
-                UpdateDistanceToOpponent();
-            }
-            searchNewTargetCountdown -= Time.deltaTime;
+            SetClosestOpponent();
+            UpdateDistanceToOpponent();
         }
+        searchNewTargetCountdown -= Time.deltaTime;
     }
 
     /// <summary>
@@ -109,14 +109,25 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
         }
     }
 
-    public bool IsInteractable()
-    {
-        return true;
-    }
+    public bool IsInteractable => true;
+    public GameObject GameObject => gameObject;
 
-    public void Interact(Vector3 invokerPosition)
+    public bool InRange(Vector3 invokerPosition) =>
+        Vector3.Distance(invokerPosition, transform.position) < InteractionDistance;
+
+    public void Interact(GameObject invoker)
     {
-        //For now interaction is done with the TakeDamage method
+        if (!InRange(invoker.transform.position))
+            return;
+
+        var playerMovement = PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>();
+        if (!playerMovement.CanInteract)
+            return;
+        
+        var stats = PlayerNetwork.PlayerObject.GetComponent<StatsComponent>();
+        TakeDamage(UnityEngine.Random.Range(stats.MinDamage, stats.MaxDamage));
+
+        playerMovement.AddInteractionTimeout(stats.TimeBetweenAttacks);
     }
 
     public string TooltipText()
@@ -132,7 +143,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
         }
 
-        itemToDrop?.SpawnItemsOnDepleted();
+        if (itemsToDropComponent != null) itemsToDropComponent.SpawnItemsOnDepleted();
 
         photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
     }

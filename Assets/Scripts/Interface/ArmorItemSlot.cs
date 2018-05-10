@@ -12,8 +12,8 @@ public class ArmorItemSlot : InventoryItemSlot
         InventoryItemSlot from;
         if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
-            if (from.Item.GetType() == typeof(Armor))
-                equipmentManager.EquipArmor(from.Item as Armor, from.index);
+            if (from.CurrentItem.GetType() == typeof(Armor))
+                equipmentManager.EquipArmor(from.CurrentItem as Armor, from.index);
         }
     }
 
@@ -30,7 +30,7 @@ public class ArmorItemSlot : InventoryItemSlot
         transform.localPosition = Vector3.zero;
 
         if (!EventSystem.current.IsPointerOverGameObject())
-            equipmentManager.DropEquippedItem(Item);
+            equipmentManager.DropEquippedItem(CurrentItem as Item);
     }
 }
 
