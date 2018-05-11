@@ -5,9 +5,9 @@ using Photon;
 public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 {
     public string TooltipText => photonView.owner.NickName;
-    public Vector3 Position => transform.position;
+    public GameObject GameObject => gameObject;
     public float Damage => stats.Damage;
-    public bool IsDead { get; private set; }
+    public bool IsDead { get; set; }
 
     private PlayerStatsComponent stats;
     private HealthComponent healthComponent;
@@ -23,13 +23,18 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 
     private void Die()
     {
-        IsDead = true;
+        if(photonView.isMine)
+        {
+            GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.DeathScreen);
+            IsDead = true;
+            GetComponent<Inventory>().DropAllItem();
+            GetComponent<PlayerMovementController>().enabled = false;
+        }
         Debug.Log("Played died");
-        GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.DeathScreen);
     }
 
     public void TakeHit(IAttacker attacker)
     {
-        healthComponent.DecreaseValue(attacker.Damage);
+        healthComponent.DecreaseValue(attacker.Damage - stats.Defense);
     }
 }

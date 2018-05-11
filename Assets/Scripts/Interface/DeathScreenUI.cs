@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 public class DeathScreenUI : MonoBehaviour
 {
-    [SerializeField] private Button respawnButton;
-    [SerializeField] private Button disconnectButton;
-
-    private void Start()
+    public void Click_Respawn()
     {
-        
+        PlayerNetwork.RespawnPlayer();
+        PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>().enabled = true;
+        PlayerNetwork.PlayerObject.GetComponent<PlayerCombatController>().IsDead = false;
+        GameInterfaceManager.Instance.CloseAllInterfaces();
     }
 }

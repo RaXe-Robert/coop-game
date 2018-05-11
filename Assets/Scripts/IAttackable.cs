@@ -3,7 +3,7 @@ using UnityEngine;
 
 public interface IAttackable : ITooltip
 {
-    Vector3 Position { get; }
+    GameObject GameObject { get; }
     void TakeHit(IAttacker attacker);
 }
 

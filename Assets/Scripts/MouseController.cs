@@ -47,7 +47,7 @@ public class MouseController : MonoBehaviour
             return;
 
         if (Input.GetMouseButtonDown(0) && interactable.IsInteractable)
-            playerMovementController.StartInteraction(interactable);
+            playerMovementController.StartInteraction(interactable.GameObject);
     }
 
     private void HandleEnemies()
@@ -56,10 +56,9 @@ public class MouseController : MonoBehaviour
         if (enemy == null && hit.transform != transform)
             return;
 
-        if (Input.GetMouseButtonDown(0) && playerMovementController.CanInteract && Vector3.Distance(transform.position, enemy.Position) < 3)
+        if (Input.GetMouseButtonDown(0))
         {
-            enemy.TakeHit(combatController);
-            playerMovementController.AddInteractionTimeout(combatController.TimeBetweenAttacks);
+            playerMovementController.StartInteraction(enemy.GameObject);      
         }
     }
 }

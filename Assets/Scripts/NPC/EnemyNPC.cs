@@ -9,11 +9,14 @@ public class EnemyNPC : NPCBase
     /// </summary>
     void Attack()
     {
-        if(Vector3.Distance(transform.position, Target.transform.position) < 3)
+        if (Target == null)
         {
-            //TODO: this should be changed
-            Target.gameObject.GetComponent<HealthComponent>().DecreaseValue((Random.Range(stats.minDamage, stats.maxDamage) - Target.gameObject.GetComponent<PlayerStatsComponent>().Defense));
+            GetComponent<Animator>().SetBool("hasTarget", false);
+            return;
         }
+
+        if(Vector3.Distance(transform.position, Target.transform.position) < 3)
+            Target.GetComponent<IAttackable>().TakeHit(this);
     }
 
     /// <summary>

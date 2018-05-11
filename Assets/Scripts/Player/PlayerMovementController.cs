@@ -19,11 +19,12 @@ public class PlayerMovementController : Photon.MonoBehaviour
 
     private PlayerCameraController cameraController = null;
     private PlayerStatsComponent stats;
+    private PlayerCombatController combatController;
 
     public GameObject CurrentInteraction { get; set; }
 
-    public void StartInteraction(IInteractable interactable) =>
-        CurrentInteraction = interactable.GameObject;
+    public void StartInteraction(GameObject interactable) =>
+        CurrentInteraction = interactable;
 
     /// <summary>
     /// Returns true if the player has no more interaction timeout
@@ -44,6 +45,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
         stats = GetComponent<PlayerStatsComponent>();
+        combatController = GetComponent<PlayerCombatController>();
     }
 
     private void Start()
@@ -134,13 +136,20 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (!agent.hasPath || pathUpdateTimeout <= 0)
         {
             agent.SetDestination(CurrentInteraction.transform.position);
-            pathUpdateTimeout = 0.1f;
+            pathUpdateTimeout = 0.01f;
         }
 
         var interactable = CurrentInteraction.GetComponent<IInteractable>();
-        if (interactable.InRange(transform.position))
+        var enemy = CurrentInteraction.GetComponent<IAttackable>();
+        if (interactable != null && interactable.InRange(transform.position))
         {
             interactable.Interact(gameObject);
+            StopInteraction();
+        }
+        else if(enemy != null && Vector3.Distance(transform.position, enemy.GameObject.transform.position) < 3 && CanInteract)
+        {
+            enemy.TakeHit(combatController);
+            AddInteractionTimeout(combatController.TimeBetweenAttacks);
             StopInteraction();
         }
         else

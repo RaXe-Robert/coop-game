@@ -15,13 +15,12 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
     public float InteractionDistance { get; set; } = 4.0f;
 
     //Interfaces
-    public Vector3 Position => transform.position;
+    public GameObject GameObject => gameObject;
     public float Damage => Random.Range(stats.minDamage, stats.maxDamage);
     public string TooltipText => stats.NPCName;
 
     //Components
     public NavMeshAgent Agent { get; private set; }
-
 
     private ItemsToDropComponent itemsToDropComponent;
     private HealthComponent healthComponent;
@@ -83,6 +82,8 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
             }
         }
         Target = closestOpponent;
+        if(Target != null)
+            animator.SetBool("hasTarget", true);
     }
 
     /// <summary>
@@ -90,6 +91,7 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
     /// </summary>
     public void SetFleeWaypoint()
     {
+        if (Target == null) return;
         Vector3 heading = Npc.transform.position - Target.transform.position;
         Vector3 direction = heading / heading.magnitude;
         direction.y = 0f;
@@ -109,6 +111,8 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
     /// </summary>
     protected void UpdateDistanceToOpponent()
     {
+        if (Target == null) return;
+
         animator.SetFloat("Distance", Vector3.Distance(transform.position, Target.transform.position));
     }
 

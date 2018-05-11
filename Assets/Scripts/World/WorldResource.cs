@@ -58,16 +58,14 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
         var playerMovement = PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>();
         if (!playerMovement.CanInteract)
         {
-            WorldNotificationsManager.Instance
-                .ShowLocalNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1));
+            WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1));
             return;
         }
         
         var equipmentManager = PlayerNetwork.PlayerObject.GetComponent<EquipmentManager>();
         if (!equipmentManager.HasToolEquipped(requiredToolToHarvest))
         {
-            WorldNotificationsManager.Instance
-                .ShowLocalNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1));
+            WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1));
             return;
         }
 

@@ -6,7 +6,6 @@ public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu, Controls
 
 public class GameInterfaceManager : MonoBehaviour
 {
-
     public static GameInterfaceManager Instance { get; private set; }
 
     [SerializeField] private GameObject escapeMenuUI;
@@ -17,6 +16,7 @@ public class GameInterfaceManager : MonoBehaviour
     [SerializeField] private GameObject deathScreen;
 
     private Dictionary<GameInterface, GameObject> interfaceGameObjectDictionary;
+    private PlayerCombatController playerCombatController;
 
     private void Awake()
     {
@@ -26,6 +26,7 @@ public class GameInterfaceManager : MonoBehaviour
 
     private void Start()
     {
+        playerCombatController = PlayerNetwork.PlayerObject.GetComponent<PlayerCombatController>();
         interfaceGameObjectDictionary = new Dictionary<GameInterface, GameObject>
         {
             {GameInterface.EscapeMenu, escapeMenuUI },
@@ -39,6 +40,8 @@ public class GameInterfaceManager : MonoBehaviour
 
     public void ToggleGameInterface(GameInterface interfaceToToggle)
     {
+        if (playerCombatController.IsDead) return;
+
         switch (interfaceToToggle)
         {
             case GameInterface.Crafting:
@@ -76,7 +79,7 @@ public class GameInterfaceManager : MonoBehaviour
         return false;
     }
 
-    private void CloseAllInterfaces()
+    public void CloseAllInterfaces()
     {
         foreach (var panel in interfaceGameObjectDictionary)
         {
@@ -90,13 +93,9 @@ public class GameInterfaceManager : MonoBehaviour
         foreach (var panel in interfaceGameObjectDictionary)
         {
             if (panel.Key != gameInterface)
-            {
                 panel.Value.SetActive(false);
-            }
             else
-            {
                 panel.Value.SetActive(!panel.Value.activeSelf);
-            }
         }
     }
 }

@@ -8,7 +8,7 @@ public class FleeState : NPCBaseFSM {
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (PhotonNetwork.isMasterClient)
+        if (PhotonNetwork.isMasterClient && NPCScript.Target != null)
         {
             if (Vector3.Distance(NPCScript.Waypoint, NPCScript.Npc.transform.position) < NPCScript.NearWaypointRange || Vector3.Distance(NPCScript.Target.transform.position, NPCScript.Npc.transform.position) < fleeRange)
             {

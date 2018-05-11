@@ -7,7 +7,7 @@ public class HealthComponent : PropertyComponentBase
 
     public override void IncreaseValue(float amount)
     {
-        if (amount <= 0)
+        if (amount <= 0 || value <= 0)
             return;
 
         photonView.RPC("IncreaseHealthValue", PhotonTargets.MasterClient, amount);
@@ -15,7 +15,7 @@ public class HealthComponent : PropertyComponentBase
 
     public override void DecreaseValue(float amount)
     {
-        if (amount <= 0)
+        if (amount <= 0 || value <= 0)
             return;
 
         photonView.RPC("DecreaseHealthValue", PhotonTargets.MasterClient, amount);

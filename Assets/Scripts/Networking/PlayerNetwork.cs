@@ -21,12 +21,25 @@ public class PlayerNetwork : MonoBehaviour
         //TODO: HARDCODED
         if (scene.name == "Game")
         {
-            Vector3 position = new Vector3(Random.Range(-5f, 5f), 0.2f, Random.Range(0.5f, 5f));
-            PlayerObject = PhotonNetwork.Instantiate("Player", position, Quaternion.identity, 0);
+            SpawnPlayer();
         }
         else if (scene.name == "MainMenu")
         {
             Debug.Log("Returned to main menu");
         }
+    }
+
+    public static void SpawnPlayer()
+    {
+        Vector3 position = new Vector3(Random.Range(-5f, 5f), 0.2f, Random.Range(0.5f, 5f));
+        PlayerObject = PhotonNetwork.Instantiate("Player", position, Quaternion.identity, 0);
+    }
+
+    public static void RespawnPlayer()
+    {
+        Vector3 position = new Vector3(Random.Range(-5f, 5f), 0.2f, Random.Range(0.5f, 5f));
+        PlayerObject.transform.position = position;
+        PlayerObject.GetComponent<HealthComponent>().SetValue(100);
+        PlayerObject.GetComponent<HungerComponent>().SetValue(100);
     }
 }

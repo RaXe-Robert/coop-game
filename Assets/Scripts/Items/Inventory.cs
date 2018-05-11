@@ -344,4 +344,19 @@ public class Inventory : MonoBehaviour
         }
         return maxCrafts;
     }
+
+    public void DropAllItem()
+    {
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            var item = inventoryItems[i];
+            if (item == null)
+                continue;
+
+            var position = transform.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2));
+            ItemFactory.CreateWorldObject(position, item.Id, item.StackSize);
+            inventoryItems[i] = null;
+        }
+        OnItemChangedCallback?.Invoke();
+    }
 }
