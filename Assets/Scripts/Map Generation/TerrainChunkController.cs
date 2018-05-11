@@ -12,9 +12,7 @@ public class TerrainChunkController : MonoBehaviour
     private void LoopThroughAllTerrainPointsExample()
     {
         int size = TerrainChunk.DataMap.UniformSize;
-
-        float halfSize = size / 2f;
-
+        
         for (int x = 0; x < size; x++)
         {
             for (int z = 0; z < size; z++)

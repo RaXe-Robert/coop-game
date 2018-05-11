@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.AI;
 
 /// <summary>
 /// Chunk of the terrain.
@@ -14,14 +15,14 @@ public class TerrainChunk
     private const float chunkPartLoadDistanceThreshold = 12;
     private const float sqrChunkPartLoadDistanceThreshold = chunkPartLoadDistanceThreshold * chunkPartLoadDistanceThreshold;
 
-    public event System.Action<TerrainChunk, bool> OnVisibilityChanged;
+    public event Action<TerrainChunk, bool> OnVisibilityChanged;
+    public event Action<TerrainChunk> OnColliderChanged;
     public Vector2 Coord { get; private set; }
 
     public DataMap DataMap { get; private set; }
     public bool DataMapReceived { get; private set; }
     
     public readonly GameObject MeshObject;
-
     public Vector2 SampleCenter { get; private set; }
     public Bounds Bounds { get; private set; }
 
@@ -83,7 +84,7 @@ public class TerrainChunk
         meshRenderer.material = terrainMeshMaterial;
 
         MeshObject.AddComponent<TerrainChunkController>().TerrainChunk = this;
-
+        
         MeshObject.transform.position = new Vector3(position.x, 0, position.y);
         MeshObject.transform.parent = parent;
         MeshObject.layer = parent.gameObject.layer;
@@ -160,6 +161,9 @@ public class TerrainChunk
         }
     }
 
+    /// <summary>
+    /// Activates or deactives chunk parts based on the distance to the viewer.
+    /// </summary>
     public void UpdateTerrainChunkParts()
     {
         if (!DataMapReceived)
@@ -169,7 +173,6 @@ public class TerrainChunk
         
         foreach (var chunkPartKVP in DataMap.ChunkParts)
         {
-
             float viewerDistanceFromChunkPart = Vector2.Distance(new Vector2(chunkPartKVP.Value.WorldPosition.x, chunkPartKVP.Value.WorldPosition.z), viewerPosition);
 
             bool wasVisible = chunkPartKVP.Value.Visible;
@@ -199,10 +202,16 @@ public class TerrainChunk
             {
                 meshCollider.sharedMesh = lodMeshes[colliderLODIndex].Mesh;
                 HasSetCollider = true;
+                OnColliderChanged?.Invoke(this);
             }
         }
     }
 
+    /// <summary>
+    /// Get a chunk part by DataMap index.
+    /// </summary>
+    /// <param name="x">The x position in the DataMap.</param>
+    /// <param name="z">The z position in the DataMap.</param>
     public ChunkPart GetChunkPart(int x, int z)
     {
         if (x < 0 || z < 0 || x >= DataMap.UniformSize || z >= DataMap.UniformSize)
@@ -219,6 +228,9 @@ public class TerrainChunk
     }
 }
 
+/// <summary>
+/// Container class for a collection of resources. Able to spawn instances or destroy them.
+/// </summary>
 public class ChunkPart
 {
     public readonly Vector2 Coord;
@@ -280,6 +292,9 @@ public class ChunkPart
     }
 }
 
+/// <summary>
+/// Container for mesh data that can be applied to a chunk.
+/// </summary>
 public class LODMesh
 {
     public Mesh Mesh { get; private set; }

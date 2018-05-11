@@ -92,20 +92,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_CollectObjects: 0
+  m_CollectObjects: 2
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967279
-  m_UseGeometry: 0
+    m_Bits: 4294967247
+  m_UseGeometry: 1
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
-  m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_OverrideTileSize: 1
+  m_TileSize: 128
+  m_OverrideVoxelSize: 1
+  m_VoxelSize: 0.25
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 0}
 --- !u!114 &114352064440319934
@@ -122,9 +122,9 @@ MonoBehaviour:
   colliderLODIndex: 0
   detailLevels:
   - Lod: 0
-    VisibleDistanceThreshold: 100
+    VisibleDistanceThreshold: 75
   - Lod: 2
-    VisibleDistanceThreshold: 300
+    VisibleDistanceThreshold: 150
   MeshSettings: {fileID: 11400000, guid: d3847878fad179449bee444cc89677e0, type: 2}
   HeightMapSettings: {fileID: 11400000, guid: 54724914dda45e84b995e017dbd99f97, type: 2}
   BiomeMapSettings: {fileID: 11400000, guid: e17c58e275e5bc74cba8c8f5d1b8168c, type: 2}
