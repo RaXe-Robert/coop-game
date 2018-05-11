@@ -54,7 +54,10 @@ public class GameInterfaceManager : MonoBehaviour
                 ToggleGivenDisableOthers(GameInterface.Inventory);
                 break;
             case GameInterface.EscapeMenu:
-                ToggleGivenDisableOthers(GameInterface.EscapeMenu);
+                if (IsAnyInterfaceOpen())
+                    CloseAllInterfaces();
+                else
+                    ToggleGivenDisableOthers(GameInterface.EscapeMenu);
                 break;
             case GameInterface.DeathScreen:
                 ToggleGivenDisableOthers(GameInterface.DeathScreen);
