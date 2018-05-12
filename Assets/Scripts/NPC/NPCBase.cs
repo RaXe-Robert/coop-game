@@ -26,7 +26,6 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
     private ItemsToDropComponent itemsToDropComponent;
     private HealthComponent healthComponent;
     private Animator animator;
-    private PlayerCombatController[] players;
 
     public delegate void OnNPCKilled();
     public OnNPCKilled OnNPCKilledCallback;
@@ -58,7 +57,6 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
         {
             SetClosestOpponent();
             UpdateDistanceToOpponent();
-            PlayerCombatController[] players = FindObjectsOfType<PlayerCombatController>();
         }
         searchNewTargetCountdown -= Time.deltaTime;
     }
@@ -68,6 +66,7 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
     /// </summary>
     public void SetClosestOpponent()
     {
+        PlayerCombatController[] players = FindObjectsOfType<PlayerCombatController>();
         GameObject closestOpponent = null;
         float distance = Mathf.Infinity;
 
