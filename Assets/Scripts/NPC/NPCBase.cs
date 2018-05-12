@@ -17,7 +17,8 @@ public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
     //Interfaces
     public GameObject GameObject => gameObject;
     public float Damage => Random.Range(stats.minDamage, stats.maxDamage);
-    public string TooltipText => stats.NPCName;
+    public string Name => stats.NPCName;
+    public string TooltipText => Name;
 
     //Components
     public NavMeshAgent Agent { get; private set; }

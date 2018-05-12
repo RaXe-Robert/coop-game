@@ -4,10 +4,12 @@ using Photon;
 
 public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 {
-    public string TooltipText => photonView.owner.NickName;
+    public string Name => photonView.owner.NickName;
+    public string TooltipText => Name;
     public GameObject GameObject => gameObject;
     public float Damage => stats.Damage;
     public bool IsDead { get; set; }
+    private IAttacker lastAttacker;
 
     private PlayerStatsComponent stats;
     private HealthComponent healthComponent;
@@ -18,14 +20,9 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
     {
         stats = GetComponent<PlayerStatsComponent>();
         healthComponent = GetComponent<HealthComponent>();
+
         if(photonView.isMine)
             healthComponent.OnDepletedCallback += Die;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-            TakeHit(new IAttackTester());
     }
 
     private void Die()
@@ -36,24 +33,16 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
             IsDead = true;
             GetComponent<Inventory>().DropAllItem();
             GetComponent<PlayerMovementController>().enabled = false;
+            CustomInRoomChat.Instance.AddLine($"{Name} got killed by {lastAttacker.Name}");
         }
-        Debug.Log("Played died");
     }
 
     public void TakeHit(IAttacker attacker)
     {
-        if(photonView.isMine)
-            healthComponent.DecreaseValue(attacker.Damage - stats.Defense);
-    }
-}
-
-public class IAttackTester : IAttacker
-{
-    public float Damage
-    {
-        get
+        if (photonView.isMine)
         {
-            return 1000000;
+            lastAttacker = attacker;
+            healthComponent.DecreaseValue(attacker.Damage - stats.Defense);
         }
     }
 }
