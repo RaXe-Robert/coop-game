@@ -10,14 +10,12 @@ public class MouseController : MonoBehaviour
     private bool isMine;
 
     private Camera playerCamera;
-    private PlayerCombatController combatController;
     private PlayerMovementController playerMovementController;
 
     private void Start()
     {
         playerCamera = GetComponent<PlayerCameraController>().CameraReference;
         isMine = GetComponent<PhotonView>().isMine;
-        combatController = GetComponent<PlayerCombatController>();
         playerMovementController = PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>();
     }
 

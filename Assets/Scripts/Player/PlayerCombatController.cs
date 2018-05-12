@@ -34,6 +34,7 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
             GetComponent<Inventory>().DropAllItem();
             GetComponent<PlayerMovementController>().enabled = false;
             CustomInRoomChat.Instance.AddLine($"{Name} got killed by {lastAttacker.Name}");
+            TogglePlayerModel(false);
         }
     }
 
@@ -43,6 +44,14 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
         {
             lastAttacker = attacker;
             healthComponent.DecreaseValue(attacker.Damage - stats.Defense);
+        }
+    }
+
+    public void TogglePlayerModel(bool showModel)
+    {
+        foreach (var rend in GetComponentsInChildren<Renderer>())
+        {
+            rend.enabled = showModel;
         }
     }
 }

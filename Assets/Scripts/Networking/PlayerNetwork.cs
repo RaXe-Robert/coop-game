@@ -41,5 +41,6 @@ public class PlayerNetwork : MonoBehaviour
         PlayerObject.transform.position = position;
         PlayerObject.GetComponent<HealthComponent>().SetValue(100);
         PlayerObject.GetComponent<HungerComponent>().SetValue(100);
+        PlayerObject.GetComponent<PlayerCombatController>().TogglePlayerModel(true);
     }
 }
