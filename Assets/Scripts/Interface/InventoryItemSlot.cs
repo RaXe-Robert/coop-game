@@ -75,20 +75,18 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button != PointerEventData.InputButton.Right || CurrentItem == null)
+        if (eventData.button != PointerEventData.InputButton.Right)
             return;
         var @base = currentItem as BuildableBase;
         if (@base != null && inventory != null)
             inventory.BuildingController.ActivateBuildMode(@base);
         else if (CurrentItem is Equippable)
         {
-            Debug.Log("Post OnClick equipable");
             equipmentManager.EquipItem(CurrentItem, index);
             Tooltip.Instance.Hide();
         }
-        else if (CurrentItem != null)
+        else
         {
-            Debug.Log("Post OnClick just item");
             var item = currentItem as Consumable;
             if (item == null || !item.IsConsumable || item.OnConsumedEffects == null || item.OnConsumedEffects.Count <= 0)
                 return;
