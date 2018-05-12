@@ -18,7 +18,14 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
     {
         stats = GetComponent<PlayerStatsComponent>();
         healthComponent = GetComponent<HealthComponent>();
-        healthComponent.OnDepletedCallback += Die;
+        if(photonView.isMine)
+            healthComponent.OnDepletedCallback += Die;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+            TakeHit(new IAttackTester());
     }
 
     private void Die()
@@ -35,6 +42,18 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 
     public void TakeHit(IAttacker attacker)
     {
-        healthComponent.DecreaseValue(attacker.Damage - stats.Defense);
+        if(photonView.isMine)
+            healthComponent.DecreaseValue(attacker.Damage - stats.Defense);
+    }
+}
+
+public class IAttackTester : IAttacker
+{
+    public float Damage
+    {
+        get
+        {
+            return 1000000;
+        }
     }
 }
