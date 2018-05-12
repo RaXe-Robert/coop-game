@@ -34,7 +34,7 @@ public class Tooltip : MonoBehaviour
         float distanceFromVertical = defaultY;
 
         float preferredWidth = title.preferredWidth;
-        float preferredHeight = title.preferredHeight + description.preferredHeight + 50F;
+        float preferredHeight = title.preferredHeight + description.preferredHeight;
 
         if (title.preferredWidth < description.preferredWidth)
             preferredWidth = description.preferredWidth;
@@ -54,19 +54,19 @@ public class Tooltip : MonoBehaviour
         if (distanceFromHorizontal < preferredWidth)
         {
             if (defaultX < Screen.width / 2)
-                position.x = preferredWidth + distanceFromHorizontal;
+                position.x = preferredWidth + distanceFromHorizontal / preferredWidth;
             else if (defaultX > Screen.width / 2)
-                position.x = Screen.width - preferredWidth - distanceFromHorizontal;
+                position.x = Screen.width - preferredWidth - distanceFromHorizontal / preferredWidth;
         }
         else
             position.x = defaultX;
 
         if (distanceFromVertical < preferredHeight)
         {
-            if (defaultY < Screen.height / 2) //Eventually replace defaultY with (preferredHeight + distanceFromVertical) to let the bottom border have extra offset.
-                position.y = defaultY;
+            if (defaultY < Screen.height / 2)
+                position.y = preferredHeight + distanceFromVertical / preferredHeight;
             else if (defaultY > Screen.height / 2)
-                position.y = Screen.height - preferredHeight - distanceFromVertical;
+                position.y = Screen.height - preferredHeight - distanceFromVertical / preferredHeight;
         }
         else
             position.y = defaultY;
