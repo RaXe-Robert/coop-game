@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224075429476743164}
   - component: {fileID: 114147177453714166}
+  - component: {fileID: 114086566553250062}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -175,6 +176,7 @@ GameObject:
   - component: {fileID: 222125686760127674}
   - component: {fileID: 114659386274837216}
   - component: {fileID: 114379495683686398}
+  - component: {fileID: 114133925487034064}
   m_Layer: 5
   m_Name: CloseButton
   m_TagString: Untagged
@@ -293,6 +295,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114086566553250062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1038039039333602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 1
 --- !u!114 &114124136653828536
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -320,6 +335,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114133925487034064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1560843545002074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c264360529765a84b9638e6888521003, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114147177453714166
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -533,8 +559,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114168022328927810}
   m_HandleRect: {fileID: 224113996752688282}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.7149952
+  m_Value: 0
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -606,8 +632,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114052140403225610}
   m_HandleRect: {fileID: 224743736756442406}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0.75
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -832,8 +858,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000022868133, y: 0.000043769334}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchoredPosition: {x: -0.000022868133, y: 0.000008360438}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224078722847460882
 RectTransform:
