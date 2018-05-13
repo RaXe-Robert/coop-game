@@ -14,5 +14,5 @@ MonoBehaviour:
   id: 0
   itemName: Log
   sprite: {fileID: 21300000, guid: 30c825091fafbdb40a9732de51b724d1, type: 3}
-  model: {fileID: 100000, guid: 9ab3a4986a77093449d82eeafdcbceaf, type: 3}
+  model: {fileID: 100000, guid: a80b675658146274cb4c2dfe20f859ec, type: 3}
   description: A piece of tree
