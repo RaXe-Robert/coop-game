@@ -11,26 +11,26 @@ public class DataMapGenerator
     /// </summary>
     /// <param name="terrainChunk">The terrain chunk that requested the DataMap.</param>
     /// <returns></returns>
-    public static DataMap GenerateDataMap(MeshSettings meshSettings, HeightMapSettings heightMapSettings, BiomeMapSettings biomeMapSettings, ResourceMapSettings objectMapSettings, TerrainChunk terrainChunk)
+    public static DataMap GenerateDataMap(MeshSettings meshSettings, HeightMapSettings heightMapSettings, BiomeMapSettings biomeMapSettings, ResourceMapSettings resourceMapSettings, TerrainChunk terrainChunk)
     {
         int size = meshSettings.NumVertsPerLine;
         int uniformSize = size - 2;
 
+        // Generate data maps
         HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(size, heightMapSettings, terrainChunk.SampleCenter);
         BiomeMap biomeMap = BiomeMapGenerator.GenerateBiomeMap(uniformSize, biomeMapSettings, terrainChunk.SampleCenter);
-        ResourceMap resourceMap = ResourceMapGenerator.GenerateResourceMap(uniformSize, objectMapSettings, terrainChunk.SampleCenter);
 
-        Dictionary<Vector2, ChunkPart> chunkParts = CreateChunkParts(uniformSize, meshSettings, heightMap, resourceMap, terrainChunk);
-
-        return new DataMap(uniformSize, heightMap, biomeMap, resourceMap, chunkParts);
+        // Create chunk parts 
+        Dictionary<Vector2, TerrainChunkPart> chunkParts = CreateChunkParts(uniformSize, meshSettings, terrainChunk);
+        FillChunkParts(uniformSize, ref chunkParts, meshSettings, resourceMapSettings, heightMap, terrainChunk);
+        
+        return new DataMap(uniformSize, heightMap, biomeMap, chunkParts);
     }
 
-    private static Dictionary<Vector2, ChunkPart> CreateChunkParts(int uniformSize, MeshSettings meshSettings, HeightMap heightMap, ResourceMap resourceMap, TerrainChunk terrainChunk)
+    private static Dictionary<Vector2, TerrainChunkPart> CreateChunkParts(int uniformSize, MeshSettings meshSettings, TerrainChunk terrainChunk)
     {
-        Dictionary<Vector2, ChunkPart> chunkParts = new Dictionary<Vector2, ChunkPart>();
-
-        ObjectPoint[] objectPoints = resourceMap.ObjectPoints;
-
+        Dictionary<Vector2, TerrainChunkPart> chunkParts = new Dictionary<Vector2, TerrainChunkPart>();
+        
         int chunkRangeHalf = Mathf.FloorToInt(meshSettings.ChunkPartSizeRoot / 2f); // ONLY WORKS FOR UNEVEN NUMBERS AT THE MOMENT
 
         for (int x = -chunkRangeHalf; x <= chunkRangeHalf; x++)
@@ -40,47 +40,64 @@ public class DataMapGenerator
                 Vector2 chunkPartCoord = terrainChunk.Coord * meshSettings.ChunkPartSizeRoot + new Vector2(x, z);
                 Vector3 partWorldPosition = new Vector3(terrainChunk.Bounds.size.x / meshSettings.ChunkPartSizeRoot * chunkPartCoord.x, 0f, terrainChunk.Bounds.size.y / meshSettings.ChunkPartSizeRoot * chunkPartCoord.y);
 
-                chunkParts.Add(chunkPartCoord, new ChunkPart(chunkPartCoord, partWorldPosition, terrainChunk));
+                chunkParts.Add(chunkPartCoord, new TerrainChunkPart(chunkPartCoord, partWorldPosition, terrainChunk));
             }
         }
-
-        FillChunkParts(uniformSize, meshSettings, heightMap, terrainChunk, chunkParts, objectPoints);
 
         return chunkParts;
     }
 
-    private static void FillChunkParts(int uniformSize, MeshSettings meshSettings, HeightMap heightMap, TerrainChunk terrainChunk, Dictionary<Vector2, ChunkPart> chunkParts, ObjectPoint[] objectPoints)
+    private static void FillChunkParts(int uniformSize, ref Dictionary<Vector2, TerrainChunkPart> chunkParts, MeshSettings meshSettings, ResourceMapSettings resourceMapSettings, HeightMap heightMap, TerrainChunk terrainChunk)
     {
         string fileName = $"/chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
+
+        ObjectPoint[] objectPoints;
         
         if (File.Exists(TerrainGenerator.WorldDataPath + fileName))
             objectPoints = Load(terrainChunk);
         else
-            Save(terrainChunk, objectPoints);
-
-        // Fill chunks
-        for (int i = 0; i < objectPoints.Length; i++)
         {
-            int x = objectPoints[i].IndexX;
-            int z = objectPoints[i].IndexZ;
+            ResourceMap resourceMap = ResourceMapGenerator.GenerateResourceMap(uniformSize, resourceMapSettings, terrainChunk.SampleCenter);
 
-            float height = heightMap.Values[x + 1, z + 1];
-            HeightMapLayer layer = heightMap.GetLayer(x + 1, z + 1);
+            List<ObjectPoint> tempObjectPoints = new List<ObjectPoint>();
 
-            if (!layer.IsWater)
+            // Resource points to object points
+            foreach (var resourcePoint in resourceMap.ResourcePoints)
             {
+                int x = resourcePoint.x;
+                int z = resourcePoint.z;
+
+                HeightMapLayer layer = heightMap.GetLayer(x + 1, z + 1);
+
+                if (layer.IsWater)
+                    continue;
+
+                float height = heightMap.Values[x + 1, z + 1];
+                Vector3 position = new Vector3(terrainChunk.Bounds.center.x, 0f, terrainChunk.Bounds.center.y) + new Vector3((x - (uniformSize - 1) / 2f) * meshSettings.MeshScale, height, (z - (uniformSize - 1) / 2f) * -meshSettings.MeshScale);
+                Quaternion rotation = Quaternion.identity;
+                
                 int chunkPartSize = uniformSize / meshSettings.ChunkPartSizeRoot + 1;
 
                 int coordX = Mathf.FloorToInt(x / chunkPartSize) - 1;
                 int coordZ = Mathf.FloorToInt(z / chunkPartSize) - 1;
 
-                Vector3 pos = new Vector3(terrainChunk.Bounds.center.x, 0f, terrainChunk.Bounds.center.y) + new Vector3((x - (uniformSize - 1) / 2f) * meshSettings.MeshScale, height, (z - (uniformSize - 1) / 2f) * -meshSettings.MeshScale);
-
                 Vector2 chunkPartCoords = terrainChunk.Coord * meshSettings.ChunkPartSizeRoot + new Vector2(coordX, -coordZ);
-                ChunkPart terrainChunkPart = chunkParts[chunkPartCoords];
-
-                terrainChunkPart.AddObjectPoint(objectPoints[i], pos);
+                
+                tempObjectPoints.Add(new ObjectPoint(position, rotation, resourcePoint.WorldResourcePrefabID, chunkPartCoords.x, chunkPartCoords.y));
             }
+
+            objectPoints = tempObjectPoints.ToArray();
+            Save(terrainChunk, objectPoints);
+        }
+
+
+        // Fill chunk parts
+        for (int i = 0; i < objectPoints.Length; i++)
+        {
+            Vector2 chunkPartCoords = new Vector2(objectPoints[i].chunkPartCoordX, objectPoints[i].chunkPartCoordZ);
+            TerrainChunkPart terrainChunkPart = chunkParts[chunkPartCoords];
+
+            terrainChunkPart.AddObjectPoint(objectPoints[i]);
         }
     }
 
@@ -88,15 +105,15 @@ public class DataMapGenerator
     {
         string fileName = $"/chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
+        Debug.Log($"Saving: {TerrainGenerator.WorldDataPath + fileName}");
+
+        FileStream file = File.Create(TerrainGenerator.WorldDataPath + fileName);
         try
         {
-            Debug.Log($"Saving: {TerrainGenerator.WorldDataPath + fileName}");
-
             if (!Directory.Exists(TerrainGenerator.WorldDataPath))
                 Directory.CreateDirectory(TerrainGenerator.WorldDataPath);
 
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Create(TerrainGenerator.WorldDataPath + fileName);
 
             MapObjectData data = new MapObjectData
             {
@@ -104,11 +121,14 @@ public class DataMapGenerator
             };
 
             bf.Serialize(file, data);
-            file.Close();
         }
         catch (IOException e)
         {
             Debug.LogError(e);
+        }
+        finally
+        {
+            file.Close();
         }
     }
 
@@ -116,14 +136,13 @@ public class DataMapGenerator
     {
         string fileName = $"/chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
+        FileStream file = File.Open(TerrainGenerator.WorldDataPath + fileName, FileMode.Open);
         try
         {
             Debug.Log($"Loading: {TerrainGenerator.WorldDataPath + fileName}");
 
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(TerrainGenerator.WorldDataPath + fileName, FileMode.Open);
             MapObjectData data = (MapObjectData)bf.Deserialize(file);
-            file.Close();
 
             return data.objectPoints;
         }
@@ -131,6 +150,10 @@ public class DataMapGenerator
         {
             Debug.LogError(e);
             return new ObjectPoint[0];
+        }
+        finally
+        {
+            file.Close();
         }
     }
 
@@ -147,17 +170,15 @@ public struct DataMap
 
     public readonly HeightMap HeightMap;
     public readonly BiomeMap BiomeMap;
-    public readonly ResourceMap ResourceMap;
     
-    public readonly Dictionary<Vector2, ChunkPart> ChunkParts;
+    public readonly Dictionary<Vector2, TerrainChunkPart> ChunkParts;
 
-    public DataMap(int uniformSize, HeightMap heightMap, BiomeMap biomeMap, ResourceMap resourceMap, Dictionary<Vector2, ChunkPart> chunkParts)
+    public DataMap(int uniformSize, HeightMap heightMap, BiomeMap biomeMap, Dictionary<Vector2, TerrainChunkPart> chunkParts)
     {
         this.UniformSize = uniformSize;
 
         this.HeightMap = heightMap;
         this.BiomeMap = biomeMap;
-        this.ResourceMap = resourceMap;
         this.ChunkParts = chunkParts;
     }
 
@@ -178,4 +199,25 @@ public struct DataMap
         return BiomeMap.GetBiome(x,z);
     }
 
+}
+
+[System.Serializable]
+public struct ObjectPoint
+{
+    public readonly SerializableVector3 position;
+    public readonly SerializableQuaternion rotation;
+    public readonly int WorldResourcePrefabID;
+
+    public readonly float chunkPartCoordX;
+    public readonly float chunkPartCoordZ;
+
+    public ObjectPoint(Vector3 position, Quaternion rotation, int worldResourcePrefabID, float chunkPartCoordX, float chunkPartCoordZ)
+    {
+        this.position = position;
+        this.rotation = rotation;
+        this.WorldResourcePrefabID = worldResourcePrefabID;
+
+        this.chunkPartCoordX = chunkPartCoordX;
+        this.chunkPartCoordZ = chunkPartCoordZ;
+    }
 }

@@ -6,7 +6,7 @@ public class ResourceMapGenerator
     public static ResourceMap GenerateResourceMap(int size, ResourceMapSettings settings, Vector2 sampleCenter)
     {
         float[,] values = Noise.GenerateNoiseMap(size, size, settings.NoiseSettings, sampleCenter);
-        List<ObjectPoint> resourcePoints = new List<ObjectPoint>();
+        List<ResourcePoint> resourcePoints = new List<ResourcePoint>();
 
         float minValue = float.MaxValue;
         float maxValue = float.MinValue;
@@ -21,7 +21,7 @@ public class ResourceMapGenerator
                     int resourceSeed = System.Convert.ToInt32(x + z + values[x, z] * 100f);
                     int resourceIndex = (new System.Random(resourceSeed)).Next(0, settings.WorldResourceEntries.Length);
 
-                    resourcePoints.Add(new ObjectPoint(x, z, resourceIndex));
+                    resourcePoints.Add(new ResourcePoint(x, z, resourceIndex));
                 }
 
                 if (values[x, z] > maxValue)
@@ -40,31 +40,30 @@ public struct ResourceMap
     public readonly float MinValue;
     public readonly float MaxValue;
 
-    public readonly ObjectPoint[] ObjectPoints;
+    public readonly ResourcePoint[] ResourcePoints;
 
     public readonly ResourceMapSettings Settings;
 
-    public ResourceMap(float[,] values, float minValue, float maxValue, ObjectPoint[] objectPoints, ResourceMapSettings settings)
+    public ResourceMap(float[,] values, float minValue, float maxValue, ResourcePoint[] resourcePoints, ResourceMapSettings settings)
     {
         this.Values = values;
         this.MinValue = minValue;
         this.MaxValue = maxValue;
-        this.ObjectPoints = objectPoints;
+        this.ResourcePoints = resourcePoints;
         this.Settings = settings;
     }
 }
 
-[System.Serializable]
-public struct ObjectPoint
+public struct ResourcePoint
 {
-    public readonly int IndexX; 
-    public readonly int IndexZ;
+    public readonly int x;
+    public readonly int z;
     public readonly int WorldResourcePrefabID;
 
-    public ObjectPoint(int x, int z, int worldResourcePrefabID)
+    public ResourcePoint(int x, int z, int worldResourcePrefabID)
     {
-        this.IndexX = x;
-        this.IndexZ = z;
+        this.x = x;
+        this.z = z;
         this.WorldResourcePrefabID = worldResourcePrefabID;
     }
 }

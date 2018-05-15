@@ -75,11 +75,8 @@ public class WorldResourceManager : Photon.MonoBehaviour {
 
         foreach (var chunkPart in terrainChunk.DataMap.ChunkParts)
         {
-            if (chunkPart.Value.ObjectPoints.ContainsKey(id))
-            {
-                chunkPart.Value.RemoveObjectPoint(id);
+            if (chunkPart.Value.RemoveObjectPoint(id))
                 break;
-            }
         }
 
         TerrainGenerator.GetTerrainChunk(terrainChunkCoord)?.SaveChanges();

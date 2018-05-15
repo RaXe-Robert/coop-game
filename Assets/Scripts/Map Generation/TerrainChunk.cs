@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
-using System.Linq;
 
 /// <summary>
 /// Chunk of the terrain.
@@ -51,7 +50,7 @@ public class TerrainChunk
         // Clean up any visible chunkparts
         if (DataMapReceived)
         {
-            foreach (ChunkPart chunkPart in DataMap.ChunkParts.Values)
+            foreach (TerrainChunkPart chunkPart in DataMap.ChunkParts.Values)
             {
                 if (chunkPart.Visible)
                     chunkPart.Visible = false;
@@ -82,7 +81,7 @@ public class TerrainChunk
         meshCollider = MeshObject.AddComponent<MeshCollider>();
         meshRenderer.material = terrainMeshMaterial;
 
-        MeshObject.AddComponent<TerrainChunkController>().TerrainChunk = this;
+        MeshObject.AddComponent<TerrainChunkInteraction>().TerrainChunk = this;
         
         MeshObject.transform.position = new Vector3(position.x, 0, position.y);
         MeshObject.transform.parent = parent;
@@ -211,7 +210,7 @@ public class TerrainChunk
     /// </summary>
     /// <param name="x">The x position in the DataMap.</param>
     /// <param name="z">The z position in the DataMap.</param>
-    public ChunkPart GetChunkPart(int x, int z)
+    public TerrainChunkPart GetChunkPart(int x, int z)
     {
         if (x < 0 || z < 0 || x >= DataMap.UniformSize || z >= DataMap.UniformSize)
             throw new IndexOutOfRangeException("Index was greater than the DataMap size.");
@@ -226,91 +225,17 @@ public class TerrainChunk
         return DataMap.ChunkParts[chunkPartCoords];
     }
 
+    /// <summary>
+    /// Saves all current objects to disk (POSSIBLE REWORK NEEDED)
+    /// </summary>
     public void SaveChanges()
     {
         List<ObjectPoint> objectPoints = new List<ObjectPoint>();
 
         foreach (var chunkPart in DataMap.ChunkParts)
-        {
-            objectPoints.AddRange(chunkPart.Value.ObjectPoints.Values.Select(x => x.Item1));
-        }
+            objectPoints.AddRange(chunkPart.Value.ObjectPoints.Values);
 
         DataMapGenerator.Save(this, objectPoints.ToArray());
-    }
-}
-
-/// <summary>
-/// Container class for a collection of resources. Able to spawn instances or destroy them.
-/// </summary>
-public class ChunkPart
-{
-    public readonly Vector2 Coord;
-    public readonly Vector3 WorldPosition;
-
-    private readonly TerrainChunk terrainChunk;
-
-    public readonly Dictionary<double, Tuple<ObjectPoint, Vector3>> ObjectPoints = new Dictionary<double, Tuple<ObjectPoint, Vector3>>();
-
-    private readonly List<GameObject> spawnedInstances = new List<GameObject>();
-
-    private bool isVisible;
-    public bool Visible
-    {
-        get { return isVisible; }
-        set
-        {
-            if (isVisible != value)
-            {
-                isVisible = value;
-                if (isVisible)
-                    SpawnResources();
-                else
-                    DespawnResources();
-            }
-        }
-    }
-
-    public ChunkPart(Vector2 coord, Vector3 worldPosition, TerrainChunk terrainChunk)
-    {
-        this.Coord = coord;
-        this.WorldPosition = worldPosition;
-        this.terrainChunk = terrainChunk;
-    }
-
-    public void AddObjectPoint(ObjectPoint resourcePoint, Vector3 resourcePointPosition)
-    {
-        int a = resourcePoint.IndexX;
-        int b = resourcePoint.IndexZ;
-        double id = 0.5 * (a + b) * (a + b + 1) + b;
-
-        if (!ObjectPoints.ContainsKey(id))
-            ObjectPoints.Add(id, Tuple.Create(resourcePoint, resourcePointPosition));
-        else
-            Debug.LogError($"An ResourcePoint with the same id: `{id}` already exists.");
-    }
-
-    public void RemoveObjectPoint(double id)
-    {
-        if (ObjectPoints.ContainsKey(id))
-            ObjectPoints.Remove(id);
-    }
-
-    private void SpawnResources()
-    {
-        foreach (var resourcePoint in ObjectPoints)
-        {
-            GameObject go = UnityEngine.Object.Instantiate(terrainChunk.ResourceMapSettings.WorldResourceEntries[resourcePoint.Value.Item1.WorldResourcePrefabID].WorldResourcePrefab, resourcePoint.Value.Item2, Quaternion.identity, terrainChunk.MeshObject.transform);
-            go.GetComponent<WorldResource>().Setup(terrainChunk, resourcePoint.Key);
-            spawnedInstances.Add(go);
-        }
-            
-    }
-
-    private void DespawnResources()
-    {
-        for (int i = spawnedInstances.Count - 1; i >= 0; i--)
-            UnityEngine.Object.Destroy(spawnedInstances[i]);
-        spawnedInstances.Clear();
     }
 }
 

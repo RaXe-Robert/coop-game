@@ -4,11 +4,22 @@ using UnityEngine;
 /// <summary>
 /// Controller for a specific <see cref="global::TerrainChunk"/> instance. Manages the resources loading based on the data within the TerrainChunk.
 /// </summary>
-public class TerrainChunkController : MonoBehaviour
+public class TerrainChunkInteraction : MonoBehaviour
 {
     public TerrainChunk TerrainChunk { get; set; }
     public bool Loaded => TerrainChunk?.DataMapReceived ?? false;
     
+    
+    public void AddObjectPoint(ObjectPoint objectPoint)
+    {
+        Debug.Log("Not implemented");
+    }
+
+    public void RemoveObjectPoint(int x)
+    {
+        Debug.Log("Not implemented");
+    }
+
     private void LoopThroughAllTerrainPointsExample()
     {
         int size = TerrainChunk.DataMap.UniformSize;
