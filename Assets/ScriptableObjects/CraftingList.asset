@@ -28,3 +28,11 @@ MonoBehaviour:
       amount: 1
     craftingTime: 2
     amountToCraft: 0
+  - requiredItems:
+    - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+      amount: 1
+    result:
+      item: {fileID: 11400000, guid: d77d6ef02105b1949b526e4b31bf77c0, type: 2}
+      amount: 1
+    craftingTime: 1
+    amountToCraft: 1

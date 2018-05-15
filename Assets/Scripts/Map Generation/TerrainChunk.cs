@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System;
-using UnityEngine.AI;
+using System.Linq;
 
 /// <summary>
 /// Chunk of the terrain.
@@ -215,7 +214,7 @@ public class TerrainChunk
     public ChunkPart GetChunkPart(int x, int z)
     {
         if (x < 0 || z < 0 || x >= DataMap.UniformSize || z >= DataMap.UniformSize)
-            throw new System.IndexOutOfRangeException("Index was greater than the DataMap size.");
+            throw new IndexOutOfRangeException("Index was greater than the DataMap size.");
 
         int chunkPartSize = DataMap.UniformSize / MeshSettings.ChunkPartSizeRoot + 1;
 
@@ -225,6 +224,18 @@ public class TerrainChunk
         Vector2 chunkPartCoords = Coord * MeshSettings.ChunkPartSizeRoot + new Vector2(coordX, -coordZ);
 
         return DataMap.ChunkParts[chunkPartCoords];
+    }
+
+    public void SaveChanges()
+    {
+        List<ObjectPoint> objectPoints = new List<ObjectPoint>();
+
+        foreach (var chunkPart in DataMap.ChunkParts)
+        {
+            objectPoints.AddRange(chunkPart.Value.ObjectPoints.Values.Select(x => x.Item1));
+        }
+
+        DataMapGenerator.Save(this, objectPoints.ToArray());
     }
 }
 
@@ -238,7 +249,7 @@ public class ChunkPart
 
     private readonly TerrainChunk terrainChunk;
 
-    private readonly Dictionary<double, Tuple<ResourcePoint, Vector3>> resourcePoints = new Dictionary<double, Tuple<ResourcePoint, Vector3>>();
+    public readonly Dictionary<double, Tuple<ObjectPoint, Vector3>> ObjectPoints = new Dictionary<double, Tuple<ObjectPoint, Vector3>>();
 
     private readonly List<GameObject> spawnedInstances = new List<GameObject>();
 
@@ -266,22 +277,33 @@ public class ChunkPart
         this.terrainChunk = terrainChunk;
     }
 
-    public void AddResourcePoint(ResourcePoint resourcePoint, Vector3 resourcePointPosition)
+    public void AddObjectPoint(ObjectPoint resourcePoint, Vector3 resourcePointPosition)
     {
         int a = resourcePoint.IndexX;
         int b = resourcePoint.IndexZ;
         double id = 0.5 * (a + b) * (a + b + 1) + b;
 
-        if (!this.resourcePoints.ContainsKey(id))
-            this.resourcePoints.Add(id, Tuple.Create(resourcePoint, resourcePointPosition));
+        if (!ObjectPoints.ContainsKey(id))
+            ObjectPoints.Add(id, Tuple.Create(resourcePoint, resourcePointPosition));
         else
-            Debug.LogError($"An ResourcePoint with the same position: `{resourcePointPosition}` already exists.");
+            Debug.LogError($"An ResourcePoint with the same id: `{id}` already exists.");
+    }
+
+    public void RemoveObjectPoint(double id)
+    {
+        if (ObjectPoints.ContainsKey(id))
+            ObjectPoints.Remove(id);
     }
 
     private void SpawnResources()
     {
-        foreach (var resourcePoint in resourcePoints)
-            spawnedInstances.Add(UnityEngine.Object.Instantiate(resourcePoint.Value.Item1.WorldResourcePrefab, resourcePoint.Value.Item2, Quaternion.identity, terrainChunk.MeshObject.transform));
+        foreach (var resourcePoint in ObjectPoints)
+        {
+            GameObject go = UnityEngine.Object.Instantiate(terrainChunk.ResourceMapSettings.WorldResourceEntries[resourcePoint.Value.Item1.WorldResourcePrefabID].WorldResourcePrefab, resourcePoint.Value.Item2, Quaternion.identity, terrainChunk.MeshObject.transform);
+            go.GetComponent<WorldResource>().Setup(terrainChunk, resourcePoint.Key);
+            spawnedInstances.Add(go);
+        }
+            
     }
 
     private void DespawnResources()

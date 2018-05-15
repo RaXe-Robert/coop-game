@@ -17,7 +17,7 @@ public class WorldResourceManager : Photon.MonoBehaviour {
         }
     }
 
-    private Dictionary<int, WorldResourceTracker> worldResourcesNetworked = new Dictionary<int, WorldResourceTracker>();
+    private Dictionary<double, WorldResourceTracker> networkedWorldResources = new Dictionary<double, WorldResourceTracker>();
 
     private void Awake()
     {
@@ -27,79 +27,78 @@ public class WorldResourceManager : Photon.MonoBehaviour {
             instance = this;
     }
 
-    public void Update()
+    public void DecreaseHealth(WorldResource worldResource, TerrainChunk terrainChunk, float amount)
     {
-        Vector3 playerPos = PlayerNetwork.PlayerObject?.transform.position ?? Vector3.zero;
-        for (int i = 0; i < worldResourcesNetworked.Count; i++)
-        {
-            KeyValuePair<int, WorldResourceTracker> kvp = worldResourcesNetworked.ElementAt(i);
-            if (Vector3.Distance(kvp.Value.Position, playerPos) <= 50f)
-            {
-                kvp.Value.SetVisible(true);
-            }
-            else if (kvp.Value.IsVisible)
-            {
-                kvp.Value.SetVisible(false);
-            }
-        }
-    }
+        if (!networkedWorldResources.ContainsKey(worldResource.ID))
+            AddNetworkedWorldResource(worldResource, terrainChunk.Coord);
 
-    public void AddNetworkedWorldResource(GameObject worldResourcePrefab, TerrainChunkController parent, TerrainInfo terrainInfo)
+        photonView.RPC(nameof(RPC_DecreaseHealth), PhotonTargets.All, worldResource.ID, terrainChunk.Coord, amount);
+    }
+    
+    private void AddNetworkedWorldResource(WorldResource worldResource, Vector2 terrainChunkCoord)
     {
-        WorldResource worldResource = worldResourcePrefab.GetComponent<WorldResource>();
         if (worldResource == null)
             throw new MissingComponentException("No WorldResource component attached to the given prefab.");
 
-        int id = Convert.ToInt32(terrainInfo.WorldPosition.x * 100f + terrainInfo.WorldPosition.y * 10f + terrainInfo.WorldPosition.z + (parent.TerrainChunk.SampleCenter.x + parent.TerrainChunk.SampleCenter.y) * parent.TerrainChunk.MeshSettings.MeshScale); //Point 3,2,1 gives 321 as an id
-
-        WorldResourceTracker worldResourceTracker = new WorldResourceTracker(id, parent, worldResource, worldResourcePrefab, terrainInfo.WorldPosition);
-        if (worldResourcesNetworked.ContainsKey(id) == false)
-            worldResourcesNetworked.Add(id, worldResourceTracker);
-        else
-            Debug.LogError($"An element with the same position: `{terrainInfo.WorldPosition}` already exists.");
+        if (!networkedWorldResources.ContainsKey(worldResource.ID))
+            photonView.RPC(nameof(RPC_AddNetworkedWorldResource), PhotonTargets.All, worldResource.ID, terrainChunkCoord, worldResource.MaxHealth);
     }
 
-    public class WorldResourceTracker
+    [PunRPC]
+    private void RPC_DecreaseHealth(double id, Vector2 terrainChunkCoord, float amount)
     {
-        public readonly int ID;
-        public readonly TerrainChunkController Parent;
-        public readonly WorldResource WorldResource;
-        public readonly GameObject WorldResourcePrefab;
-        public readonly Vector3 Position;
+        networkedWorldResources[id].Health -= amount;
+        Debug.Log(networkedWorldResources[id].Health);
 
-        private WorldResource worldResourceInstance;
-
-        private bool isVisible;
-        public bool IsVisible => isVisible;
-        public void SetVisible(bool state)
+        if (PhotonNetwork.isMasterClient)
         {
-            if (state == isVisible)
-                return;
-
-            isVisible = state;
-
-            if (state)
+            if (networkedWorldResources[id].Health <= 0)
             {
-                if (worldResourceInstance == null)
-                    worldResourceInstance = Instantiate(WorldResourcePrefab, Position, Quaternion.identity, Parent.transform).GetComponent<WorldResource>();
-                else
-                    Debug.LogError("Trying to create an instance but an already active instance exists!");
+                photonView.RPC(nameof(RPC_RemoveNetworkedWorldResource), PhotonTargets.All, id, terrainChunkCoord);
             }
-            else
-                Destroy(worldResourceInstance.gameObject);
+        }
+    }
+
+    [PunRPC]
+    private void RPC_AddNetworkedWorldResource(double id, Vector2 terrainChunkCoord, float maxHealth)
+    {
+        WorldResourceTracker worldResourceTracker = new WorldResourceTracker(id, terrainChunkCoord, maxHealth);
+        networkedWorldResources.Add(id, worldResourceTracker);
+    }
+
+    [PunRPC]
+    private void RPC_RemoveNetworkedWorldResource(double id, Vector2 terrainChunkCoord)
+    {
+        Debug.Log("removing");
+        networkedWorldResources.Remove(id);
+        TerrainChunk terrainChunk = TerrainGenerator.GetTerrainChunk(terrainChunkCoord);
+
+        foreach (var chunkPart in terrainChunk.DataMap.ChunkParts)
+        {
+            if (chunkPart.Value.ObjectPoints.ContainsKey(id))
+            {
+                chunkPart.Value.RemoveObjectPoint(id);
+                break;
+            }
         }
 
-        private float health;
-        public float Health => health;
+        TerrainGenerator.GetTerrainChunk(terrainChunkCoord)?.SaveChanges();
+    }
+    
+    public class WorldResourceTracker
+    {
+        public readonly double ID;
+        public readonly Vector2 TerrainChunkCoord;
+        public readonly float MaxHealth;
 
-        public WorldResourceTracker(int id, TerrainChunkController parent, WorldResource worldResource, GameObject worldResourcePrefab, Vector3 position)
+        public float Health { get; set; }
+
+        public WorldResourceTracker(double id, Vector2 terrainChunkCoord, float maxHealth)
         {
             this.ID = id;
-            this.Parent = parent;
-            this.WorldResource = worldResource;
-            this.WorldResourcePrefab = worldResourcePrefab;
-            this.Position = position;
-            this.health = worldResource.MaxHealth;
+            this.TerrainChunkCoord = terrainChunkCoord;
+            this.MaxHealth = maxHealth;
+            this.Health = maxHealth;
         }
     }
 }

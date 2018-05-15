@@ -15,6 +15,11 @@ public class TerrainGenerator : Photon.MonoBehaviour
     private const float viewerMoveThresholdForChunkPartUpdate = 5f;
     private const float sqrViewerMoveThresholdForChunkPartUpdate = viewerMoveThresholdForChunkPartUpdate * viewerMoveThresholdForChunkPartUpdate;
 
+    // Testing, refactor required
+    public static string PersistentDataPath { get; private set; }
+    public static int Seed { get; private set; }
+    public static string WorldDataPath { get { return $"{PersistentDataPath}/{Seed}"; } }
+
     [SerializeField]
     private int colliderLODIndex;
     public LODInfo[] detailLevels;
@@ -36,7 +41,15 @@ public class TerrainGenerator : Photon.MonoBehaviour
     private float meshWorldSize;
     private int chunksVisibleInViewDistance;
 
-    private Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
+    private static Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
+    public static TerrainChunk GetTerrainChunk(Vector2 coord)
+    {
+        if (terrainChunkDictionary.ContainsKey(coord))
+            return terrainChunkDictionary[coord];
+        return null;
+    }
+
+
     private List<TerrainChunk> visibleTerrainChunks = new List<TerrainChunk>();
     
     private bool isSeedSet = false;
@@ -44,6 +57,7 @@ public class TerrainGenerator : Photon.MonoBehaviour
     private void Awake()
     {
         navMeshSurface = GetComponent<NavMeshSurface>();
+        PersistentDataPath = Application.persistentDataPath;
     }
 
     private void Start()
@@ -219,8 +233,14 @@ public class TerrainGenerator : Photon.MonoBehaviour
     [PunRPC]
     public void SetSeed(int seed)
     {
+        seed = 349260201;
         HeightMapSettings.NoiseSettings.seed = seed;
-        Debug.Log($"Received generation rpc, building map with seed: {HeightMapSettings.NoiseSettings.seed}");
+        BiomeMapSettings.NoiseSettings.seed = seed;
+        ResourceMapSettings.NoiseSettings.seed = seed;
+
+        Seed = seed;
+        Debug.Log($"Received generation rpc, building map with seed: {Seed}");
+
         Setup();
     }
 }

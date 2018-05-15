@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 public class DataMapGenerator
@@ -18,16 +20,16 @@ public class DataMapGenerator
         BiomeMap biomeMap = BiomeMapGenerator.GenerateBiomeMap(uniformSize, biomeMapSettings, terrainChunk.SampleCenter);
         ResourceMap resourceMap = ResourceMapGenerator.GenerateResourceMap(uniformSize, objectMapSettings, terrainChunk.SampleCenter);
 
-        Dictionary<Vector2, ChunkPart> chunkParts = CreateAndFillChunkParts(uniformSize, meshSettings, heightMap, resourceMap, terrainChunk);
+        Dictionary<Vector2, ChunkPart> chunkParts = CreateChunkParts(uniformSize, meshSettings, heightMap, resourceMap, terrainChunk);
 
         return new DataMap(uniformSize, heightMap, biomeMap, resourceMap, chunkParts);
     }
 
-    private static Dictionary<Vector2, ChunkPart> CreateAndFillChunkParts(int uniformSize, MeshSettings meshSettings, HeightMap heightMap, ResourceMap resourceMap, TerrainChunk terrainChunk)
+    private static Dictionary<Vector2, ChunkPart> CreateChunkParts(int uniformSize, MeshSettings meshSettings, HeightMap heightMap, ResourceMap resourceMap, TerrainChunk terrainChunk)
     {
         Dictionary<Vector2, ChunkPart> chunkParts = new Dictionary<Vector2, ChunkPart>();
 
-        ResourcePoint[] resourcePoints = resourceMap.ResourcePoints;
+        ObjectPoint[] objectPoints = resourceMap.ObjectPoints;
 
         int chunkRangeHalf = Mathf.FloorToInt(meshSettings.ChunkPartSizeRoot / 2f); // ONLY WORKS FOR UNEVEN NUMBERS AT THE MOMENT
 
@@ -42,30 +44,100 @@ public class DataMapGenerator
             }
         }
 
-        for (int i = 0; i < resourcePoints.Length; i++)
+        FillChunkParts(uniformSize, meshSettings, heightMap, terrainChunk, chunkParts, objectPoints);
+
+        return chunkParts;
+    }
+
+    private static void FillChunkParts(int uniformSize, MeshSettings meshSettings, HeightMap heightMap, TerrainChunk terrainChunk, Dictionary<Vector2, ChunkPart> chunkParts, ObjectPoint[] objectPoints)
+    {
+        string fileName = $"/chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
+        
+        if (File.Exists(TerrainGenerator.WorldDataPath + fileName))
+            objectPoints = Load(terrainChunk);
+        else
+            Save(terrainChunk, objectPoints);
+
+        // Fill chunks
+        for (int i = 0; i < objectPoints.Length; i++)
         {
-            int x = resourcePoints[i].IndexX;
-            int z = resourcePoints[i].IndexZ;
-            
+            int x = objectPoints[i].IndexX;
+            int z = objectPoints[i].IndexZ;
+
             float height = heightMap.Values[x + 1, z + 1];
             HeightMapLayer layer = heightMap.GetLayer(x + 1, z + 1);
-            
+
             if (!layer.IsWater)
             {
                 int chunkPartSize = uniformSize / meshSettings.ChunkPartSizeRoot + 1;
 
                 int coordX = Mathf.FloorToInt(x / chunkPartSize) - 1;
                 int coordZ = Mathf.FloorToInt(z / chunkPartSize) - 1;
-                
+
                 Vector3 pos = new Vector3(terrainChunk.Bounds.center.x, 0f, terrainChunk.Bounds.center.y) + new Vector3((x - (uniformSize - 1) / 2f) * meshSettings.MeshScale, height, (z - (uniformSize - 1) / 2f) * -meshSettings.MeshScale);
 
                 Vector2 chunkPartCoords = terrainChunk.Coord * meshSettings.ChunkPartSizeRoot + new Vector2(coordX, -coordZ);
                 ChunkPart terrainChunkPart = chunkParts[chunkPartCoords];
 
-                terrainChunkPart.AddResourcePoint(resourcePoints[i], pos);
+                terrainChunkPart.AddObjectPoint(objectPoints[i], pos);
             }
         }
-        return chunkParts;
+    }
+
+    public static void Save(TerrainChunk terrainChunk, ObjectPoint[] objectPoints)
+    {
+        string fileName = $"/chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
+
+        try
+        {
+            Debug.Log($"Saving: {TerrainGenerator.WorldDataPath + fileName}");
+
+            if (!Directory.Exists(TerrainGenerator.WorldDataPath))
+                Directory.CreateDirectory(TerrainGenerator.WorldDataPath);
+
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Create(TerrainGenerator.WorldDataPath + fileName);
+
+            MapObjectData data = new MapObjectData
+            {
+                objectPoints = objectPoints
+            };
+
+            bf.Serialize(file, data);
+            file.Close();
+        }
+        catch (IOException e)
+        {
+            Debug.LogError(e);
+        }
+    }
+
+    public static ObjectPoint[] Load(TerrainChunk terrainChunk)
+    {
+        string fileName = $"/chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
+
+        try
+        {
+            Debug.Log($"Loading: {TerrainGenerator.WorldDataPath + fileName}");
+
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(TerrainGenerator.WorldDataPath + fileName, FileMode.Open);
+            MapObjectData data = (MapObjectData)bf.Deserialize(file);
+            file.Close();
+
+            return data.objectPoints;
+        }
+        catch (IOException e)
+        {
+            Debug.LogError(e);
+            return new ObjectPoint[0];
+        }
+    }
+
+    [System.Serializable]
+    public class MapObjectData
+    {
+        public ObjectPoint[] objectPoints;
     }
 }
 

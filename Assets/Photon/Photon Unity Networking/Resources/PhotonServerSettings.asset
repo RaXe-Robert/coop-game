@@ -58,4 +58,7 @@ MonoBehaviour:
   - IncreaseHungerValue
   - RPC_DestroyWorldObject
   - SetSeed
+  - RPC_AddNetworkedWorldResource
+  - RPC_DecreaseHealth
+  - RPC_RemoveNetworkedWorldResource
   DisableAutoOpenWizard: 1
