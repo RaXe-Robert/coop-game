@@ -18,16 +18,16 @@ namespace Assets.Scripts.Map_Generation
         private const float sqrViewerMoveThresholdForChunkPartUpdate = viewerMoveThresholdForChunkPartUpdate * viewerMoveThresholdForChunkPartUpdate;
 
         // Testing, refactor required
-        private static string PersistentDataPath;
-        private static int Seed;
+        public static string PersistentDataPath { get; private set; }
+        public static int Seed { get; private set; }
         public static string WorldDataPath
         {
             get
             {
 #if UNITY_EDITOR
-                return $"{PersistentDataPath}/{Seed}/Editor";
+                return $"{PersistentDataPath}/{Seed}/Editor/";
 #else
-                return $"{PersistentDataPath}/{Seed}";
+                return $"{PersistentDataPath}/{Seed}/";
 #endif
             }
         }
@@ -63,7 +63,7 @@ namespace Assets.Scripts.Map_Generation
         
         private List<TerrainChunk> visibleTerrainChunks;
 
-        private bool isSeedSet = false;
+        private bool setupFinished;
 
         private void Awake()
         {
@@ -73,6 +73,8 @@ namespace Assets.Scripts.Map_Generation
 
             terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
             visibleTerrainChunks = new List<TerrainChunk>();
+
+            setupFinished = false;
         }
 
         private void Start()
@@ -83,7 +85,7 @@ namespace Assets.Scripts.Map_Generation
 
         private void Update()
         {
-            if (!isSeedSet && PlayerNetwork.IsWorldDownloaded)
+            if (!setupFinished)
                 return;
 
             viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
@@ -117,8 +119,6 @@ namespace Assets.Scripts.Map_Generation
         /// </summary>
         private void Setup()
         {
-            isSeedSet = true;
-
             HeightMapSettings.UpdateMeshHeights(TerrainMeshMaterial, HeightMapSettings.MinHeight, HeightMapSettings.MaxHeight);
             HeightMapSettings.ApplyToMaterial(TerrainMeshMaterial);
 
@@ -129,6 +129,8 @@ namespace Assets.Scripts.Map_Generation
             viewer = PlayerNetwork.PlayerObject.transform;
 
             UpdateVisibleChunks();
+
+            setupFinished = true;
         }
 
         /// <summary>
@@ -245,8 +247,15 @@ namespace Assets.Scripts.Map_Generation
             return NavMeshBuilder.BuildNavMeshData(navMeshSurface.GetBuildSettings(), buildSources, bounds, navMeshSurface.transform.position, navMeshSurface.transform.rotation);
         }
 
+        private void OnWorldLoaded(bool loaded)
+        {
+            Debug.Log("ONWORLDLOADED");
+            if (loaded)
+                Setup();
+        }
+
         [PunRPC]
-        public void SetSeed(int seed)
+        private void SetSeed(int seed)
         {
             seed = 349260201;
             HeightMapSettings.NoiseSettings.seed = seed;
@@ -254,9 +263,13 @@ namespace Assets.Scripts.Map_Generation
             ResourceMapSettings.NoiseSettings.seed = seed;
 
             Seed = seed;
-            Debug.Log($"Received generation rpc, building map with seed: {Seed}");
 
-            Setup();
+            if (PlayerNetwork.IsWorldDownloaded == false)
+                PlayerNetwork.OnWorldDownloaded += OnWorldLoaded;
+            else
+                OnWorldLoaded(true);
+
+            Debug.Log($"Received seed RPC, building map with seed: {Seed}");
         }
     }
 

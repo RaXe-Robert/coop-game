@@ -24,7 +24,11 @@ public class PlayerNetwork : Photon.PunBehaviour
     public static List<PhotonPlayer> OtherPlayers = new List<PhotonPlayer>();
     private static List<PhotonPlayer> otherPlayersToLoad = new List<PhotonPlayer>();
 
-    public static bool IsWorldDownloaded { get; private set; }
+    /// <summary>
+    /// Clears all event handlers after the invoke has taken place.
+    /// </summary>
+    public static event Action<bool> OnWorldDownloaded;
+    public static bool IsWorldDownloaded { get; private set; } = false;
 
     private void Awake()
     {  
@@ -39,7 +43,7 @@ public class PlayerNetwork : Photon.PunBehaviour
             Vector3 position = new Vector3(UnityEngine.Random.Range(-5f, 5f), 10f, UnityEngine.Random.Range(0.5f, 5f));
             PlayerObject = PhotonNetwork.Instantiate("Player", position, Quaternion.identity, 0);
 
-            // The owner already has acces to the save files
+            // The owner already has access to the save files
             if (PhotonNetwork.isMasterClient)
                 IsWorldDownloaded = true;
             else
@@ -77,8 +81,8 @@ public class PlayerNetwork : Photon.PunBehaviour
 
             for (int y = 0; y < files.Count; y++)
             {
-                photonView.RPC(nameof(SendMapData), PhotonTargets.Others, files[y].Item1, files[y].Item2, files.Count - i - 1);
-                yield return new WaitForSeconds(0.5f);
+                photonView.RPC(nameof(SendMapData), PhotonTargets.Others, files[y].Item1, files[y].Item2, files.Count - y - 1);
+                yield return new WaitForSeconds(0.1f);
             }
 
             otherPlayersToLoad.RemoveAt(i);
@@ -95,7 +99,7 @@ public class PlayerNetwork : Photon.PunBehaviour
         
         try
         {
-            using (var fs = new FileStream(TerrainGenerator.WorldDataPath + "/" + fileName, FileMode.Create, FileAccess.Write))
+            using (var fs = new FileStream(TerrainGenerator.WorldDataPath + fileName, FileMode.Create, FileAccess.Write))
             {
                 fs.Write(fileRaw, 0, fileRaw.Length);
             }
@@ -108,6 +112,9 @@ public class PlayerNetwork : Photon.PunBehaviour
         if (filesRemaining == 0)
         {
             IsWorldDownloaded = true;
+
+            OnWorldDownloaded?.Invoke(true);
+            OnWorldDownloaded = null;
         }
     }
 

@@ -51,7 +51,7 @@ namespace Assets.Scripts.Map_Generation
 
         private static void FillChunkParts(int uniformSize, ref Dictionary<Vector2, TerrainChunkPart> chunkParts, MeshSettings meshSettings, ResourceMapSettings resourceMapSettings, HeightMap heightMap, TerrainChunk terrainChunk)
         {
-            string fileName = $"/chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
+            string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
             ObjectPoint[] objectPoints;
 
@@ -105,7 +105,7 @@ namespace Assets.Scripts.Map_Generation
 
         public static void Save(TerrainChunk terrainChunk, ObjectPoint[] objectPoints)
         {
-            string fileName = $"/chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
+            string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
             Debug.Log($"Saving: {TerrainGenerator.WorldDataPath + fileName}");
 
@@ -136,7 +136,7 @@ namespace Assets.Scripts.Map_Generation
 
         public static ObjectPoint[] Load(TerrainChunk terrainChunk)
         {
-            string fileName = $"/chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
+            string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
             FileStream file = File.Open(TerrainGenerator.WorldDataPath + fileName, FileMode.Open);
             try
