@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Assets.Scripts.Map_Generation;
+
 [RequireComponent(typeof(PhotonView))]
 public class WorldResourceManager : Photon.MonoBehaviour {
     private static WorldResourceManager instance;

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
+
+using Assets.Scripts.Map_Generation;
 
 [RequireComponent(typeof(Animator), typeof(ItemsToDropComponent))]
 public class WorldResource : MonoBehaviour, IInteractable

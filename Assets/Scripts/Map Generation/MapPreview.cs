@@ -1,117 +1,120 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>
-/// This class takes a generated array of MapTiles and instantiates the propper planes and resources for the biomes.
-/// 
-/// The root is the gameobject that will recieve all the instantiated tiles and resources.
-/// The tree and rock prefabs are the resources that will be placed on the generated tiles.
-/// </summary>
-public class MapPreview : MonoBehaviour
+namespace Assets.Scripts.Map_Generation
 {
-    public enum DrawMode { NoiseMap, Mesh, FalloffMap, BiomeMap, ResourceMap }
-    public DrawMode drawMode;
-
-    public MeshSettings MeshSettings;
-    public HeightMapSettings HeightMapSettings;
-    public BiomeMapSettings BiomeMapSettings;
-    public ResourceMapSettings ResourceMapSettings;
-
-    public Material TerrainMaterial;
-
-    [Range(0, MeshSettings.MumOfSupportedLODs - 1)]
-    public int editorPreviewLOD;
-
-    public bool autoUpdate;
-
-    [SerializeField]
-    private Renderer textureRenderer;
-
-    [SerializeField]
-    private MeshFilter meshFilter;
-
-    [SerializeField]
-    private MeshRenderer meshRenderer;
-    
-    public void DrawMapInEditor()
-    {
-        HeightMapSettings.UpdateMeshHeights(TerrainMaterial, HeightMapSettings.MinHeight, HeightMapSettings.MaxHeight);
-        HeightMapSettings.ApplyToMaterial(TerrainMaterial);
-
-        HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(MeshSettings.NumVertsPerLine, HeightMapSettings, Vector2.zero);
-        
-        switch (drawMode)
-        {
-            case DrawMode.NoiseMap:
-                DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
-                break;
-            case DrawMode.Mesh:
-                MeshData meshData = MeshGenerator.GenerateTerrainMesh(heightMap.Values, MeshSettings, editorPreviewLOD);
-                Texture2D texture = TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.Values.GetLength(0) - 3, BiomeMapSettings, Vector2.zero));
-                DrawMesh(meshData, texture);
-                break;
-            case DrawMode.FalloffMap:
-                DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(MeshSettings.NumVertsPerLine), 0, 1, HeightMapSettings)));
-                break;
-            case DrawMode.BiomeMap:
-                DrawTexture(TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.Values.GetLength(0) - 3, BiomeMapSettings, Vector2.zero)));
-                break;
-            case DrawMode.ResourceMap:
-                DrawTexture(TextureGenerator.TextureFromObjectMap(ResourceMapGenerator.GenerateResourceMap(heightMap.Values.GetLength(0) - 3, ResourceMapSettings, Vector2.zero)));
-                break;
-
-        }
-    }
-
     /// <summary>
-    /// Places all the tiles and resources according to the generated tileMap.
+    /// This class takes a generated array of MapTiles and instantiates the propper planes and resources for the biomes.
+    /// 
+    /// The root is the gameobject that will recieve all the instantiated tiles and resources.
+    /// The tree and rock prefabs are the resources that will be placed on the generated tiles.
     /// </summary>
-    /// <param name="noiseMap"></param>
-    public void DrawTexture(Texture2D texture)
+    public class MapPreview : MonoBehaviour
     {
-        textureRenderer.gameObject.SetActive(true);
-        meshFilter.gameObject.SetActive(false);
+        public enum DrawMode { NoiseMap, Mesh, FalloffMap, BiomeMap, ResourceMap }
+        public DrawMode drawMode;
 
-        textureRenderer.sharedMaterial.mainTexture = texture;
-        textureRenderer.transform.localScale = new Vector3(texture.width, 1, texture.height) / 10f;
-    }
+        public MeshSettings MeshSettings;
+        public HeightMapSettings HeightMapSettings;
+        public BiomeMapSettings BiomeMapSettings;
+        public ResourceMapSettings ResourceMapSettings;
 
-    public void DrawMesh(MeshData meshData, Texture2D texture)
-    {
-        textureRenderer.gameObject.SetActive(false);
-        meshFilter.gameObject.SetActive(true);
+        public Material TerrainMaterial;
 
-        meshFilter.sharedMesh = meshData.CreateMesh();
-        meshRenderer.sharedMaterial.mainTexture = texture;
-    }
+        [Range(0, MeshSettings.MumOfSupportedLODs - 1)]
+        public int editorPreviewLOD;
 
-    private void OnValuesUpdated()
-    {
-        if (!Application.isPlaying)
-            DrawMapInEditor();
-    }
+        public bool autoUpdate;
 
-    private void OnValidate()
-    {
-        if (MeshSettings != null)
+        [SerializeField]
+        private Renderer textureRenderer;
+
+        [SerializeField]
+        private MeshFilter meshFilter;
+
+        [SerializeField]
+        private MeshRenderer meshRenderer;
+
+        public void DrawMapInEditor()
         {
-            MeshSettings.OnValuesUpdated -= OnValuesUpdated;
-            MeshSettings.OnValuesUpdated += OnValuesUpdated;
+            HeightMapSettings.UpdateMeshHeights(TerrainMaterial, HeightMapSettings.MinHeight, HeightMapSettings.MaxHeight);
+            HeightMapSettings.ApplyToMaterial(TerrainMaterial);
+
+            HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(MeshSettings.NumVertsPerLine, HeightMapSettings, Vector2.zero);
+
+            switch (drawMode)
+            {
+                case DrawMode.NoiseMap:
+                    DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
+                    break;
+                case DrawMode.Mesh:
+                    MeshData meshData = MeshGenerator.GenerateTerrainMesh(heightMap.Values, MeshSettings, editorPreviewLOD);
+                    Texture2D texture = TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.Values.GetLength(0) - 3, BiomeMapSettings, Vector2.zero));
+                    DrawMesh(meshData, texture);
+                    break;
+                case DrawMode.FalloffMap:
+                    DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(MeshSettings.NumVertsPerLine), 0, 1, HeightMapSettings)));
+                    break;
+                case DrawMode.BiomeMap:
+                    DrawTexture(TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.Values.GetLength(0) - 3, BiomeMapSettings, Vector2.zero)));
+                    break;
+                case DrawMode.ResourceMap:
+                    DrawTexture(TextureGenerator.TextureFromObjectMap(ResourceMapGenerator.GenerateResourceMap(heightMap.Values.GetLength(0) - 3, ResourceMapSettings, Vector2.zero)));
+                    break;
+
+            }
         }
-        if (HeightMapSettings != null)
+
+        /// <summary>
+        /// Places all the tiles and resources according to the generated tileMap.
+        /// </summary>
+        /// <param name="noiseMap"></param>
+        public void DrawTexture(Texture2D texture)
         {
-            HeightMapSettings.OnValuesUpdated -= OnValuesUpdated;
-            HeightMapSettings.OnValuesUpdated += OnValuesUpdated;
+            textureRenderer.gameObject.SetActive(true);
+            meshFilter.gameObject.SetActive(false);
+
+            textureRenderer.sharedMaterial.mainTexture = texture;
+            textureRenderer.transform.localScale = new Vector3(texture.width, 1, texture.height) / 10f;
         }
-        if (BiomeMapSettings != null)
+
+        public void DrawMesh(MeshData meshData, Texture2D texture)
         {
-            BiomeMapSettings.OnValuesUpdated -= OnValuesUpdated;
-            BiomeMapSettings.OnValuesUpdated += OnValuesUpdated;
+            textureRenderer.gameObject.SetActive(false);
+            meshFilter.gameObject.SetActive(true);
+
+            meshFilter.sharedMesh = meshData.CreateMesh();
+            meshRenderer.sharedMaterial.mainTexture = texture;
         }
-        if (ResourceMapSettings != null)
+
+        private void OnValuesUpdated()
         {
-            ResourceMapSettings.OnValuesUpdated -= OnValuesUpdated;
-            ResourceMapSettings.OnValuesUpdated += OnValuesUpdated;
+            if (!Application.isPlaying)
+                DrawMapInEditor();
+        }
+
+        private void OnValidate()
+        {
+            if (MeshSettings != null)
+            {
+                MeshSettings.OnValuesUpdated -= OnValuesUpdated;
+                MeshSettings.OnValuesUpdated += OnValuesUpdated;
+            }
+            if (HeightMapSettings != null)
+            {
+                HeightMapSettings.OnValuesUpdated -= OnValuesUpdated;
+                HeightMapSettings.OnValuesUpdated += OnValuesUpdated;
+            }
+            if (BiomeMapSettings != null)
+            {
+                BiomeMapSettings.OnValuesUpdated -= OnValuesUpdated;
+                BiomeMapSettings.OnValuesUpdated += OnValuesUpdated;
+            }
+            if (ResourceMapSettings != null)
+            {
+                ResourceMapSettings.OnValuesUpdated -= OnValuesUpdated;
+                ResourceMapSettings.OnValuesUpdated += OnValuesUpdated;
+            }
         }
     }
 }

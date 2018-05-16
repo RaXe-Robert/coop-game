@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
+using Assets.Scripts.Map_Generation;
+
 [CustomEditor(typeof(UpdatableData), true)]
 public class UpdatableDataEditor : Editor
 {

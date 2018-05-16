@@ -1,61 +1,64 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public static class HeightMapGenerator
+namespace Assets.Scripts.Map_Generation
 {
-    public static HeightMap GenerateHeightMap(int size, HeightMapSettings settings, Vector2 sampleCenter)
+    public static class HeightMapGenerator
     {
-        float[,] values = Noise.GenerateNoiseMap(size, size, settings.NoiseSettings, sampleCenter);
-
-        AnimationCurve heightCurve_threadSafe = new AnimationCurve(settings.HeightCurve.keys);
-
-        float minValue = float.MaxValue;
-        float maxValue = float.MinValue;
-
-        for (int x = 0; x < size; x++)
+        public static HeightMap GenerateHeightMap(int size, HeightMapSettings settings, Vector2 sampleCenter)
         {
-            for (int y = 0; y < size; y++)
+            float[,] values = Noise.GenerateNoiseMap(size, size, settings.NoiseSettings, sampleCenter);
+
+            AnimationCurve heightCurve_threadSafe = new AnimationCurve(settings.HeightCurve.keys);
+
+            float minValue = float.MaxValue;
+            float maxValue = float.MinValue;
+
+            for (int x = 0; x < size; x++)
             {
-                values[x, y] *= heightCurve_threadSafe.Evaluate(values[x, y]) * settings.HeightMultiplier;
+                for (int y = 0; y < size; y++)
+                {
+                    values[x, y] *= heightCurve_threadSafe.Evaluate(values[x, y]) * settings.HeightMultiplier;
 
 
 
-                if (values[x, y] > maxValue)
-                    maxValue = values[x, y];
-                if (values[x, y] < minValue)
-                    minValue = values[x, y];
+                    if (values[x, y] > maxValue)
+                        maxValue = values[x, y];
+                    if (values[x, y] < minValue)
+                        minValue = values[x, y];
+                }
             }
+            return new HeightMap(values, minValue, maxValue, settings);
         }
-        return new HeightMap(values, minValue, maxValue, settings);
-    }
-}
-
-public struct HeightMap
-{
-    public readonly float[,] Values;
-    public readonly float MinValue;
-    public readonly float MaxValue;
-
-    public readonly HeightMapSettings Settings;
-
-    public HeightMap(float[,] values, float minValue, float maxValue, HeightMapSettings settings)
-    {
-        this.Values = values;
-        this.MinValue = minValue;
-        this.MaxValue = maxValue;
-        this.Settings = settings;
     }
 
-    public HeightMapLayer GetLayer(int x, int z)
+    public struct HeightMap
     {
-        float heightPercent = Mathf.Clamp01((Values[x,z] - MinValue) / (MaxValue - MinValue));
+        public readonly float[,] Values;
+        public readonly float MinValue;
+        public readonly float MaxValue;
 
-        for (int i = Settings.Layers.Length - 1; i >= 0; i--)
+        public readonly HeightMapSettings Settings;
+
+        public HeightMap(float[,] values, float minValue, float maxValue, HeightMapSettings settings)
         {
-            if (heightPercent >= Settings.Layers[i].StartHeight)
-                return Settings.Layers[i];
+            this.Values = values;
+            this.MinValue = minValue;
+            this.MaxValue = maxValue;
+            this.Settings = settings;
         }
 
-        return null;
+        public HeightMapLayer GetLayer(int x, int z)
+        {
+            float heightPercent = Mathf.Clamp01((Values[x, z] - MinValue) / (MaxValue - MinValue));
+
+            for (int i = Settings.Layers.Length - 1; i >= 0; i--)
+            {
+                if (heightPercent >= Settings.Layers[i].StartHeight)
+                    return Settings.Layers[i];
+            }
+
+            return null;
+        }
     }
 }

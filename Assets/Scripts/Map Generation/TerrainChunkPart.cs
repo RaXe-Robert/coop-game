@@ -2,98 +2,101 @@
 
 using UnityEngine;
 
-/// <summary>
-/// Container class for a collection of resources. Able to spawn instances or destroy them.
-/// </summary>
-public class TerrainChunkPart
+namespace Assets.Scripts.Map_Generation
 {
-    public readonly Vector2 Coord;
-    public readonly Vector3 WorldPosition;
-
-    private readonly TerrainChunk terrainChunk;
-
-    public readonly Dictionary<double, ObjectPoint> ObjectPoints = new Dictionary<double, ObjectPoint>();
-    private readonly Dictionary<double, GameObject> spawnedInstances = new Dictionary<double, GameObject>();
-
-    private bool isVisible;
-    public bool Visible
+    /// <summary>
+    /// Container class for a collection of resources. Able to spawn instances or destroy them.
+    /// </summary>
+    public class TerrainChunkPart
     {
-        get { return isVisible; }
-        set
+        public readonly Vector2 Coord;
+        public readonly Vector3 WorldPosition;
+
+        private readonly TerrainChunk terrainChunk;
+
+        public readonly Dictionary<double, ObjectPoint> ObjectPoints = new Dictionary<double, ObjectPoint>();
+        private readonly Dictionary<double, GameObject> spawnedInstances = new Dictionary<double, GameObject>();
+
+        private bool isVisible;
+        public bool Visible
         {
-            if (isVisible != value)
+            get { return isVisible; }
+            set
             {
-                isVisible = value;
-                if (isVisible)
-                    SpawnObjects();
-                else
-                    DespawnObjects();
+                if (isVisible != value)
+                {
+                    isVisible = value;
+                    if (isVisible)
+                        SpawnObjects();
+                    else
+                        DespawnObjects();
+                }
             }
         }
-    }
 
-    public TerrainChunkPart(Vector2 coord, Vector3 worldPosition, TerrainChunk terrainChunk)
-    {
-        this.Coord = coord;
-        this.WorldPosition = worldPosition;
-        this.terrainChunk = terrainChunk;
-    }
-
-    public void AddObjectPoint(ObjectPoint objectPoint)
-    {
-        float a = objectPoint.position.x + WorldPosition.x;
-        float b = objectPoint.position.z + WorldPosition.z;
-        double id = 0.5 * (a + b) * (a + b + 1) + b;
-
-        if (!ObjectPoints.ContainsKey(id))
-            ObjectPoints.Add(id, objectPoint);
-        else
-            Debug.LogError($"An ResourcePoint with the same id: `{id}` already exists.");
-    }
-
-    /// <summary>
-    /// Returns if the object was found and removed.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public bool RemoveObjectPoint(double id)
-    {
-        bool objectPointFound = false;
-
-        // See if the object is spawned, if so it has to be destroyed aswell
-        if (spawnedInstances.ContainsKey(id))
+        public TerrainChunkPart(Vector2 coord, Vector3 worldPosition, TerrainChunk terrainChunk)
         {
-            GameObject go = spawnedInstances[id];
-            spawnedInstances.Remove(id);
-            Object.Destroy(go);
-
-            objectPointFound = true;
+            this.Coord = coord;
+            this.WorldPosition = worldPosition;
+            this.terrainChunk = terrainChunk;
         }
 
-        if (ObjectPoints.ContainsKey(id))
+        public void AddObjectPoint(ObjectPoint objectPoint)
         {
-            ObjectPoints.Remove(id);
+            float a = objectPoint.position.x + WorldPosition.x;
+            float b = objectPoint.position.z + WorldPosition.z;
+            double id = 0.5 * (a + b) * (a + b + 1) + b;
 
-            objectPointFound = true;
+            if (!ObjectPoints.ContainsKey(id))
+                ObjectPoints.Add(id, objectPoint);
+            else
+                Debug.LogError($"An ResourcePoint with the same id: `{id}` already exists.");
         }
 
-        return objectPointFound;
-    }
-
-    private void SpawnObjects()
-    {
-        foreach (var objectPoint in ObjectPoints)
+        /// <summary>
+        /// Returns if the object was found and removed.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool RemoveObjectPoint(double id)
         {
-            GameObject go = Object.Instantiate(terrainChunk.ResourceMapSettings.WorldResourceEntries[objectPoint.Value.WorldResourcePrefabID].WorldResourcePrefab, objectPoint.Value.position, objectPoint.Value.rotation, terrainChunk.MeshObject.transform);
-            go.GetComponent<WorldResource>().Setup(terrainChunk, objectPoint.Key);
-            spawnedInstances.Add(objectPoint.Key, go);
-        }
-    }
+            bool objectPointFound = false;
 
-    private void DespawnObjects()
-    {
-        foreach (var instance in spawnedInstances)
-            Object.Destroy(instance.Value);
-        spawnedInstances.Clear();
+            // See if the object is spawned, if so it has to be destroyed aswell
+            if (spawnedInstances.ContainsKey(id))
+            {
+                GameObject go = spawnedInstances[id];
+                spawnedInstances.Remove(id);
+                Object.Destroy(go);
+
+                objectPointFound = true;
+            }
+
+            if (ObjectPoints.ContainsKey(id))
+            {
+                ObjectPoints.Remove(id);
+
+                objectPointFound = true;
+            }
+
+            return objectPointFound;
+        }
+
+        private void SpawnObjects()
+        {
+            foreach (var objectPoint in ObjectPoints)
+            {
+                GameObject go = Object.Instantiate(terrainChunk.ResourceMapSettings.WorldResourceEntries[objectPoint.Value.WorldResourcePrefabID].WorldResourcePrefab, objectPoint.Value.position, objectPoint.Value.rotation, terrainChunk.MeshObject.transform);
+                go.GetComponent<WorldResource>().Setup(terrainChunk, objectPoint.Key);
+                spawnedInstances.Add(objectPoint.Key, go);
+            }
+        }
+
+        private void DespawnObjects()
+        {
+            foreach (var instance in spawnedInstances)
+                Object.Destroy(instance.Value);
+            spawnedInstances.Clear();
+        }
     }
 }

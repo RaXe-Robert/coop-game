@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 15980278}
-  m_IndirectSpecularColor: {r: 0.17082843, g: 0.21428229, b: 0.29056215, a: 1}
+  m_IndirectSpecularColor: {r: 0.18302567, g: 0.22870848, b: 0.30675137, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -51,7 +51,7 @@ LightmapSettings:
     m_AlbedoBoost: 1
     m_TemporalCoherenceThreshold: 1
     m_EnvironmentLightingMode: 0
-    m_EnableBakedLightmaps: 1
+    m_EnableBakedLightmaps: 0
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
     serializedVersion: 9
@@ -89,8 +89,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 112000002, guid: 305bf9f2b94c7f24e8e530b6e291f83a,
-    type: 2}
+  m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -2005,7 +2004,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationCurveOffset: 25
   tickRate: 1
-  initialStartTime: {x: 9, y: 0, z: 0}
+  initialStartTime: {x: 12, y: 0, z: 0}
   dayStartHour: 7
   nightStartHour: 23
   sunLight: {fileID: 15980278}

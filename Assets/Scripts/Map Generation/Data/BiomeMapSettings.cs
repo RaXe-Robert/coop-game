@@ -1,39 +1,42 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu()]
-public class BiomeMapSettings : UpdatableData
+namespace Assets.Scripts.Map_Generation
 {
-    public NoiseSettings NoiseSettings;
+    [CreateAssetMenu()]
+    public class BiomeMapSettings : UpdatableData
+    {
+        public NoiseSettings NoiseSettings;
 
-    public Biome[] Biomes;
+        public Biome[] Biomes;
 
 #if UNITY_EDITOR
 
-    protected override void OnValidate()
-    {
-        NoiseSettings.ValidateValues();
+        protected override void OnValidate()
+        {
+            NoiseSettings.ValidateValues();
 
-        base.OnValidate();
-    }
+            base.OnValidate();
+        }
 
 #endif
 
-}
+    }
 
-[System.Serializable]
-public class Biome
-{
-    [SerializeField]
-    private string name;
+    [System.Serializable]
+    public class Biome
+    {
+        [SerializeField]
+        private string name;
 
-    [SerializeField]
-    private Color color;
+        [SerializeField]
+        private Color color;
 
-    [SerializeField]
-    [Range(0, 1)]
-    private float resourceDensity;
+        [SerializeField]
+        [Range(0, 1)]
+        private float resourceDensity;
 
-    public string Name => name;
-    public Color Color => color;
-    public float ResourceDensity => 1f - resourceDensity;
+        public string Name => name;
+        public Color Color => color;
+        public float ResourceDensity => 1f - resourceDensity;
+    }
 }

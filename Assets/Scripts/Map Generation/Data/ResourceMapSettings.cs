@@ -1,41 +1,44 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu()]
-public class ResourceMapSettings : UpdatableData
+namespace Assets.Scripts.Map_Generation
 {
-    [SerializeField]
-    private NoiseSettings noiseSettings;
+    [CreateAssetMenu()]
+    public class ResourceMapSettings : UpdatableData
+    {
+        [SerializeField]
+        private NoiseSettings noiseSettings;
 
-    [SerializeField]
-    private WorldResourceEntry[] worldResourceEntries;
+        [SerializeField]
+        private WorldResourceEntry[] worldResourceEntries;
 
-    [SerializeField]
-    [Range(0,1)]
-    private float densityThreshold;
+        [SerializeField]
+        [Range(0, 1)]
+        private float densityThreshold;
 
-    public NoiseSettings NoiseSettings => noiseSettings;
-    public WorldResourceEntry[] WorldResourceEntries => worldResourceEntries;
-    public float DensityThreshold { get { return 1f - densityThreshold; } }
+        public NoiseSettings NoiseSettings => noiseSettings;
+        public WorldResourceEntry[] WorldResourceEntries => worldResourceEntries;
+        public float DensityThreshold => 1f - densityThreshold;
 
 #if UNITY_EDITOR
 
-    protected override void OnValidate()
-    {
-        NoiseSettings.ValidateValues();
+        protected override void OnValidate()
+        {
+            NoiseSettings.ValidateValues();
 
-        densityThreshold = Mathf.Clamp(densityThreshold, 0f, 1f);
+            densityThreshold = Mathf.Clamp(densityThreshold, 0f, 1f);
 
-        base.OnValidate();
-    }
+            base.OnValidate();
+        }
 
 #endif
-}
+    }
 
-[System.Serializable]
-public class WorldResourceEntry
-{
-    [SerializeField]
-    private GameObject worldResourcePrefab;
+    [System.Serializable]
+    public class WorldResourceEntry
+    {
+        [SerializeField]
+        private GameObject worldResourcePrefab;
 
-    public GameObject WorldResourcePrefab => worldResourcePrefab;
+        public GameObject WorldResourcePrefab => worldResourcePrefab;
+    }
 }

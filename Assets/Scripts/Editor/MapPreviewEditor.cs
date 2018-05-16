@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
+
+using Assets.Scripts.Map_Generation;
 
 [CustomEditor(typeof(MapPreview))]
 public class MapPreviewEditor : Editor {
