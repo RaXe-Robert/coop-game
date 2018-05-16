@@ -61,4 +61,5 @@ MonoBehaviour:
   - RPC_AddNetworkedWorldResource
   - RPC_DecreaseHealth
   - RPC_RemoveNetworkedWorldResource
+  - SendMapData
   DisableAutoOpenWizard: 1

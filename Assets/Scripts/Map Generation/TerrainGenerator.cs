@@ -60,8 +60,7 @@ namespace Assets.Scripts.Map_Generation
                 return terrainChunkDictionary[coord];
             return null;
         }
-
-
+        
         private List<TerrainChunk> visibleTerrainChunks;
 
         private bool isSeedSet = false;
@@ -84,7 +83,7 @@ namespace Assets.Scripts.Map_Generation
 
         private void Update()
         {
-            if (!isSeedSet)
+            if (!isSeedSet && PlayerNetwork.IsWorldDownloaded)
                 return;
 
             viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
