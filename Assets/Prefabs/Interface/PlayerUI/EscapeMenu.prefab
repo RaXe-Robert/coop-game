@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 222021646690702984}
   - component: {fileID: 114562313743355380}
   - component: {fileID: 114088367455722714}
+  - component: {fileID: 114161217527032856}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -57,6 +58,7 @@ GameObject:
   - component: {fileID: 222883726656633480}
   - component: {fileID: 114116190526456528}
   - component: {fileID: 114009733619711130}
+  - component: {fileID: 114581428430537264}
   m_Layer: 5
   m_Name: ResumeButton
   m_TagString: Untagged
@@ -109,6 +111,7 @@ GameObject:
   - component: {fileID: 222113245687356746}
   - component: {fileID: 114678056727856596}
   - component: {fileID: 114759544562385302}
+  - component: {fileID: 114144853537005776}
   m_Layer: 5
   m_Name: ControlsButton
   m_TagString: Untagged
@@ -264,6 +267,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114144853537005776
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1775409591161098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c264360529765a84b9638e6888521003, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114145994022740608
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -297,6 +311,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: QUIT
+--- !u!114 &114161217527032856
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1452369509034634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c264360529765a84b9638e6888521003, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114293418727998690
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -384,6 +409,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: CONTROLS
+--- !u!114 &114581428430537264
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1526128497507812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c264360529765a84b9638e6888521003, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114678056727856596
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -574,7 +610,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3586729, y: 0.23080069}
   m_AnchorMax: {x: 0.643, y: 0.84940195}
-  m_AnchoredPosition: {x: 0.000004053116, y: -0.000015258789}
+  m_AnchoredPosition: {x: 0.0000038146973, y: -0.000015258789}
   m_SizeDelta: {x: -0.000030518, y: -0.000030518}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224278530656740614
@@ -648,7 +684,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.037, y: 0.5777784}
   m_AnchorMax: {x: 0.9620001, y: 0.73}
-  m_AnchoredPosition: {x: -0.000010251999, y: 0.00009536743}
+  m_AnchoredPosition: {x: -0.000010251999, y: 0.000091552734}
   m_SizeDelta: {x: 0.0007782, y: -0.000061035}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224559407742163944

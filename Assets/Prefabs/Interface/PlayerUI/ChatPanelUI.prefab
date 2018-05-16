@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 222771882164901354}
   - component: {fileID: 114464375153270922}
   - component: {fileID: 114226184135421548}
+  - component: {fileID: 114037814512499718}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -272,6 +273,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114037814512499718
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1294355433622630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c264360529765a84b9638e6888521003, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114063053471816224
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -301,7 +313,7 @@ MonoBehaviour:
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 0
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
@@ -616,7 +628,6 @@ MonoBehaviour:
   input: {fileID: 114936945540647322}
   sendButton: {fileID: 114226184135421548}
   scrollView: {fileID: 1226792488007376}
-  IsVisible: 1
 --- !u!114 &114610166618715150
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -878,10 +889,10 @@ MonoBehaviour:
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
-  m_LineType: 0
+  m_LineType: 1
   m_HideMobileInput: 0
   m_CharacterValidation: 0
-  m_CharacterLimit: 0
+  m_CharacterLimit: 256
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -1321,7 +1332,7 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1676269541531752}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
