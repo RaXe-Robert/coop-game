@@ -38,6 +38,11 @@ public class CustomInRoomChat : Photon.MonoBehaviour
 
     private void Start()
     {
+        if (PhotonNetwork.offlineMode == true)
+            gameObject.SetActive(false);
+        else
+            gameObject.SetActive(true);
+        
         resetWaitTime = waitTime;
         canvasGroup = GetComponent<CanvasGroup>();
     }
