@@ -27,7 +27,7 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
         if (!InRange(invoker.transform.position))
             return;
 
-        PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(item.Id, item.StackSize);
+        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().AddItemById(item.Id, item.StackSize);
         photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
     }
 

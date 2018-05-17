@@ -12,6 +12,7 @@ public class EnemyNPC : NPCBase
         if (Target == null)
         {
             GetComponent<Animator>().SetBool("hasTarget", false);
+            CancelInvoke("Attack");
             return;
         }
 

@@ -16,7 +16,7 @@ public class MouseController : MonoBehaviour
     {
         playerCamera = GetComponent<PlayerCameraController>().CameraReference;
         isMine = GetComponent<PhotonView>().isMine;
-        playerMovementController = PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>();
+        playerMovementController = PlayerNetwork.LocalPlayer.GetComponent<PlayerMovementController>();
     }
 
     private void Update()
@@ -51,7 +51,7 @@ public class MouseController : MonoBehaviour
     private void HandleEnemies()
     {
         var enemy = hit.transform.GetComponent<IAttackable>();
-        if (enemy == null && hit.transform != transform)
+        if (enemy == null || hit.transform == transform)
             return;
 
         if (Input.GetMouseButtonDown(0))

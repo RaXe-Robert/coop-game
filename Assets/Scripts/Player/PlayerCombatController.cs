@@ -21,30 +21,24 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
         stats = GetComponent<PlayerStatsComponent>();
         healthComponent = GetComponent<HealthComponent>();
 
-        if(photonView.isMine)
-            healthComponent.OnDepletedCallback += Die;
+        healthComponent.OnDepletedCallback += Die;
     }
 
     private void Die()
     {
-        if(photonView.isMine)
+        if (photonView.isMine)
         {
             GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.DeathScreen);
-            IsDead = true;
             GetComponent<Inventory>().DropAllItem();
             GetComponent<PlayerMovementController>().enabled = false;
-            CustomInRoomChat.Instance.AddLine($"{Name} got killed by {lastAttacker.Name}");
-            TogglePlayerModel(false);
         }
+        photonView.RPC(nameof(KillPlayer), PhotonTargets.All, Name, lastAttacker.Name);
     }
 
     public void TakeHit(IAttacker attacker)
     {
-        if (photonView.isMine)
-        {
-            lastAttacker = attacker;
-            healthComponent.DecreaseValue(attacker.Damage - stats.Defense);
-        }
+        lastAttacker = attacker;
+        healthComponent.DecreaseValue(attacker.Damage - stats.Defense);
     }
 
     public void TogglePlayerModel(bool showModel)
@@ -53,5 +47,31 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
         {
             rend.enabled = showModel;
         }
+    }
+
+    public void RespawnPlayer()
+    {
+        Vector3 position = new Vector3(UnityEngine.Random.Range(-5f, 5f), 0.2f, UnityEngine.Random.Range(0.5f, 5f));
+        transform.position = position;
+        GetComponent<HealthComponent>().SetValue(100);
+        GetComponent<HungerComponent>().SetValue(100);
+        GetComponent<PhotonView>().RPC(nameof(RPC_RespawnPlayer), PhotonTargets.All);
+    }
+
+    [PunRPC]
+    private void RPC_RespawnPlayer()
+    {
+        IsDead = false;
+        TogglePlayerModel(true);
+    }
+
+    [PunRPC]
+    private void KillPlayer(string playerName, string killerName)
+    {
+        Debug.Log("Die");
+        
+        CustomInRoomChat.Instance.AddLine($"{playerName} got killed by {killerName}");
+        IsDead = true;
+        TogglePlayerModel(false);
     }
 }

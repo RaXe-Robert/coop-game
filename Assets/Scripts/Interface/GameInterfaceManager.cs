@@ -26,7 +26,7 @@ public class GameInterfaceManager : MonoBehaviour
 
     private void Start()
     {
-        playerCombatController = PlayerNetwork.PlayerObject.GetComponent<PlayerCombatController>();
+        playerCombatController = PlayerNetwork.LocalPlayer.GetComponent<PlayerCombatController>();
         interfaceGameObjectDictionary = new Dictionary<GameInterface, GameObject>
         {
             {GameInterface.EscapeMenu, escapeMenuUI },

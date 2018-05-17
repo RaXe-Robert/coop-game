@@ -6,10 +6,7 @@ public class AttackState : NPCBaseFSM
 {
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (PhotonNetwork.isMasterClient)
-        {
             ((EnemyNPC)NPCScript).StartAttack();
-        }
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

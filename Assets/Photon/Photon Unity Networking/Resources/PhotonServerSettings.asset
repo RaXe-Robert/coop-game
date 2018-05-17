@@ -58,4 +58,6 @@ MonoBehaviour:
   - IncreaseHealthValue
   - IncreaseHungerValue
   - RPC_DestroyWorldObject
+  - KillPlayer
+  - RPC_RespawnPlayer
   DisableAutoOpenWizard: 1

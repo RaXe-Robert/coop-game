@@ -277,7 +277,7 @@ public class Inventory : MonoBehaviour
                     FillItemStacksById(itemId, stackSize);
 
                 else
-                    ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);
+                    ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, item.Id, stackSize);
         }
         else
         {

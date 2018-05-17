@@ -6,9 +6,8 @@ public class DeathScreenUI : MonoBehaviour
 {
     public void Click_Respawn()
     {
-        PlayerNetwork.RespawnPlayer();
-        PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>().enabled = true;
-        PlayerNetwork.PlayerObject.GetComponent<PlayerCombatController>().IsDead = false;
+        PlayerNetwork.LocalPlayer.GetComponent<PlayerMovementController>().enabled = true;
+        PlayerNetwork.LocalPlayer.GetComponent<PlayerCombatController>().RespawnPlayer();
         GameInterfaceManager.Instance.CloseAllInterfaces();
     }
 }

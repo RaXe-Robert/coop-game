@@ -62,7 +62,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
 
     public void DestroyWorldObject()
     {
-        PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(buildable.Id, buildable.StackSize);
+        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().AddItemById(buildable.Id, buildable.StackSize);
         photonView.RPC("RPC_DestroyWorldObject", PhotonTargets.AllBuffered);
     }
 
