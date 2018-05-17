@@ -195,6 +195,7 @@ GameObject:
   - component: {fileID: 224618589225508988}
   - component: {fileID: 222317726033927098}
   - component: {fileID: 114986774477546096}
+  - component: {fileID: 114591079568358828}
   m_Layer: 5
   m_Name: CraftingResult
   m_TagString: Untagged
@@ -945,6 +946,19 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Enter text...
+--- !u!114 &114591079568358828
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1455023909029480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d39b9d3a005782d4ebff974912b087d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemName: 
+  Amount: 0
 --- !u!114 &114591546930308938
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1193,6 +1207,7 @@ MonoBehaviour:
   requiredItems: {fileID: 224544078932411198}
   recipeResultImage: {fileID: 114986774477546096}
   recipeResultText: {fileID: 114860130719130168}
+  recipeResultTooltip: {fileID: 114591079568358828}
   craftingTimeText: {fileID: 114794795167339760}
   craftingRecipe:
     requiredItems: []
