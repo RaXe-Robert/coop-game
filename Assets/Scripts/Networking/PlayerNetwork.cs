@@ -82,7 +82,7 @@ public class PlayerNetwork : Photon.PunBehaviour
             for (int y = 0; y < files.Count; y++)
             {
                 photonView.RPC(nameof(SendMapData), PhotonTargets.Others, files[y].Item1, files[y].Item2, files.Count - y - 1);
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSecondsRealtime(0.02f);
             }
 
             otherPlayersToLoad.RemoveAt(i);
@@ -92,6 +92,9 @@ public class PlayerNetwork : Photon.PunBehaviour
     [PunRPC]
     private void SendMapData(string fileName, byte[] fileRaw, int filesRemaining)
     {
+        if (IsWorldDownloaded)
+            return;
+
         Debug.Log($"Saving: {TerrainGenerator.WorldDataPath + fileName}");
 
         if (!Directory.Exists(TerrainGenerator.WorldDataPath))

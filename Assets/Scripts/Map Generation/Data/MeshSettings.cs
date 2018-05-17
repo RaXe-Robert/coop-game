@@ -8,9 +8,9 @@ namespace Assets.Scripts.Map_Generation
 
         public const int MumOfSupportedLODs = 5;
 
-        public const int NumOfSupportedChunkSizes = 9;
-        public const int NumOfSupportedFlatshadedChunkSizes = 3;
-        public static readonly int[] SupportedChunkSizes = { 48, 72, 96, 120, 144, 168, 192, 216, 240 };
+        public const int NumOfSupportedChunkSizes = 10;
+        public const int NumOfSupportedFlatshadedChunkSizes = 4;
+        public static readonly int[] SupportedChunkSizes = { 24, 48, 72, 96, 120, 144, 168, 192, 216, 240 };
 
         public const int NumOfSupportedChunkPartSizesRoot = 1;
         public static readonly int[] SupportedChunkPartSizesRoot = { 3 };
