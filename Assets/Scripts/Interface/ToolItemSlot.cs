@@ -19,7 +19,15 @@ public class ToolItemSlot : InventoryItemSlot
 
     public override void OnPointerClick(PointerEventData eventData)
     {
-        //Just to override the base method.
+        if (eventData.button != PointerEventData.InputButton.Right)
+            return;
+
+        InventoryItemSlot from;
+        if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
+        {
+            if (from.CurrentItem.GetType() == typeof(Tool))
+                equipmentManager.UnequipItem(from.CurrentItem as Tool, from.index);
+        }
     }
 
     public override void OnEndDrag(PointerEventData eventData)
