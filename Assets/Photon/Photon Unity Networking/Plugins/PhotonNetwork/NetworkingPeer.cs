@@ -12,6 +12,7 @@ using System.Reflection;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using SupportClassPun = ExitGames.Client.Photon.SupportClass;
+using UnityEngine.SceneManagement;
 
 
 
@@ -161,7 +162,7 @@ public enum DisconnectCause
     /// If that file is unavailable or not configured to let the client connect, this exception is thrown.
     /// Photon usually provides this crossdomain file for Unity.
     /// If it fails, read:
-    /// http://doc.exitgames.com/photon-server/PolicyApp
+    /// https://doc.photonengine.com/en-us/onpremise/current/operations/policy-files
     /// </remarks>
     SecurityExceptionOnConnect = StatusCode.SecurityExceptionOnConnect,
 
@@ -437,6 +438,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
 
     /// <summary>For automatic scene syncing, the loaded scene is put into a room property. This is the name of said prop.</summary>
     protected internal const string CurrentSceneProperty = "curScn";
+	protected internal const string CurrentScenePropertyLoadAsync = "curScnLa";
 
     public static bool UsePrefabCache = true;
 
@@ -458,6 +460,10 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
     private ServerConnection cachedServerType;
 
     // TODO: CAS must be implemented for OfflineMode
+
+	// for asynchronous loading network synched loading.
+	private AsyncOperation _AsyncLevelLoadingOperation;
+
 
     public NetworkingPeer(string playername, ConnectionProtocol connectionProtocol) : base(connectionProtocol)
     {
@@ -717,7 +723,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
     {
         ConnectionProtocol protocolOverride = this.TransportProtocol;
 
-        #if UNITY_XBOXONE
+        #if !UNITY_EDITOR && UNITY_XBOXONE
         this.AuthMode = AuthModeOption.Auth;
         if (this.AuthValues == null)
         {
@@ -736,8 +742,8 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
         }
         if (this.TransportProtocol != ConnectionProtocol.WebSocketSecure)
         {
-            UnityEngine.Debug.LogWarning("UNITY_XBOXONE builds must use WSS (Secure WebSockets) as Transport Protocol. Changing to WSS from your selection: " + this.TransportProtocol);
-            this.TransportProtocol = ConnectionProtocol.WebSocketSecure;
+            UnityEngine.Debug.LogWarning("UNITY_XBOXONE builds must use WSS (Secure WebSockets) as Transport Protocol. Overriding PhotonServerSettings.");
+            protocolOverride = ConnectionProtocol.WebSocketSecure;
         }
         #endif
 
@@ -762,7 +768,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
         }
 
         Type socketTcp = null;
-        #if UNITY_XBOXONE
+        #if !UNITY_EDITOR && UNITY_XBOXONE
         socketTcp = Type.GetType("ExitGames.Client.Photon.SocketWebTcpNativeDynamic, Assembly-CSharp", false);
         if (socketTcp == null)
         {
@@ -1840,7 +1846,21 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
                 // PUN assumes you fetch the name-server's list of regions to ping them
                 if (PhotonNetwork.PhotonServerSettings.HostType == ServerSettings.HostingOption.BestRegion)
                 {
-                    PhotonHandler.PingAvailableRegionsAndConnectToBest();
+					
+			        CloudRegionCode bestFromPrefs = PhotonHandler.BestRegionCodeInPreferences;
+					if (bestFromPrefs != CloudRegionCode.none && 
+				    this.AvailableRegions.Exists(x => x.Code == bestFromPrefs) 
+				    )
+			        {
+						Debug.Log("Best region found in PlayerPrefs. Connecting to: " + bestFromPrefs);
+						if (!this.ConnectToRegionMaster(bestFromPrefs))
+						{
+							PhotonHandler.PingAvailableRegionsAndConnectToBest();
+						}
+			        }else{
+
+	                    PhotonHandler.PingAvailableRegionsAndConnectToBest();
+					}
                 }
                 break;
 
@@ -2611,7 +2631,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
                 }
                 else
                 {
-                    PhotonNetwork.LeaveRoom();
+                    PhotonNetwork.LeaveRoom(false);
                 }
 
                 break;
@@ -4568,13 +4588,26 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
         return false;
     }
 
+
+
+
     /// <summary>Internally used to detect the current scene and load it if PhotonNetwork.automaticallySyncScene is enabled.</summary>
     internal protected void LoadLevelIfSynced()
     {
-        if (!PhotonNetwork.automaticallySyncScene || PhotonNetwork.isMasterClient || PhotonNetwork.room == null)
+		if (!PhotonNetwork.automaticallySyncScene || PhotonNetwork.isMasterClient || PhotonNetwork.room == null)
         {
             return;
         }
+
+		// we only check if scene is not loading in the background.
+		if (_AsyncLevelLoadingOperation != null) {
+			if (_AsyncLevelLoadingOperation.isDone)
+			{
+				_AsyncLevelLoadingOperation = null;
+			}else{
+				return;
+			}
+		}
 
         // check if "current level" is set in props
         if (!PhotonNetwork.room.CustomProperties.ContainsKey(NetworkingPeer.CurrentSceneProperty))
@@ -4582,21 +4615,38 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
             return;
         }
 
+		// check if we are loading asynchronously
+		bool LoadAsync = PhotonNetwork.room.CustomProperties.ContainsKey (NetworkingPeer.CurrentScenePropertyLoadAsync);
+
         // if loaded level is not the one defined my master in props, load that level
         object sceneId = PhotonNetwork.room.CustomProperties[NetworkingPeer.CurrentSceneProperty];
         if (sceneId is int)
         {
             if (SceneManagerHelper.ActiveSceneBuildIndex != (int)sceneId)
-                PhotonNetwork.LoadLevel((int)sceneId);
+			{
+				if (LoadAsync)
+				{
+					PhotonNetwork.LoadLevelAsync((int)sceneId);
+				}else{
+                	PhotonNetwork.LoadLevel((int)sceneId);
+				}
+			}
         }
         else if (sceneId is string)
         {
             if (SceneManagerHelper.ActiveSceneName != (string)sceneId)
-                PhotonNetwork.LoadLevel((string)sceneId);
+			{
+				if (LoadAsync)
+				{
+					PhotonNetwork.LoadLevelAsync((string)sceneId);
+				}else{
+                	PhotonNetwork.LoadLevel((string)sceneId);
+				}
+			}
         }
     }
-
-    protected internal void SetLevelInPropsIfSynced(object levelId)
+	
+	protected internal void SetLevelInPropsIfSynced(object levelId, bool asyncLoading = false)
     {
         if (!PhotonNetwork.automaticallySyncScene || !PhotonNetwork.isMasterClient || PhotonNetwork.room == null)
         {
@@ -4609,7 +4659,7 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
         }
 
         // check if "current level" is already set in props
-        if (PhotonNetwork.room.CustomProperties.ContainsKey(NetworkingPeer.CurrentSceneProperty))
+		if (!asyncLoading && PhotonNetwork.room.CustomProperties.ContainsKey(NetworkingPeer.CurrentSceneProperty))
         {
             object levelIdInProps = PhotonNetwork.room.CustomProperties[NetworkingPeer.CurrentSceneProperty];
             if (levelIdInProps is int && SceneManagerHelper.ActiveSceneBuildIndex == (int)levelIdInProps)
@@ -4628,9 +4678,16 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
         else if (levelId is string) setScene[NetworkingPeer.CurrentSceneProperty] = (string)levelId;
         else Debug.LogError("Parameter levelId must be int or string!");
 
+
+		if (asyncLoading) {
+			setScene[NetworkingPeer.CurrentScenePropertyLoadAsync] = true;
+		}
+
         PhotonNetwork.room.SetCustomProperties(setScene);
         this.SendOutgoingCommands();    // send immediately! because: in most cases the client will begin to load and not send for a while
     }
+
+
 
     public void SetApp(string appId, string gameVersion)
     {
