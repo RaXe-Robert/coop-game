@@ -4,14 +4,24 @@ using UnityEngine;
 
 public class FeedItem : MonoBehaviour {
 
+    public enum FeedColor
+    {
+        None,
+        Succes,
+        Fail,
+        Error,
+        World
+    }
+
     private float WaitTime = 2;
     private float FadeScale = 0.1F;
     private CanvasGroup CanvasGroup;
+    private RectTransform RectTransform;
     private bool Fading = false;
     
     private void Start () {
         CanvasGroup = GetComponent<CanvasGroup>();
-        Debug.Log("Timer??");
+        RectTransform = GetComponent<RectTransform>();
         StartCoroutine(Timer());
     }
 
@@ -53,7 +63,10 @@ public class FeedItem : MonoBehaviour {
     private void FadeOutItem()
     {
         if (CanvasGroup.alpha != 0)
+        {
             CanvasGroup.alpha -= FadeScale;
+            RectTransform.sizeDelta = new Vector2(RectTransform.sizeDelta.x, RectTransform.sizeDelta.y - FadeScale * RectTransform.sizeDelta.y);
+        }
         else
         {
             FeedUI.Instance.RemoveFromCurrentItems(gameObject);

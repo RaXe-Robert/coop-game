@@ -24,7 +24,14 @@ public class FeedUI : MonoBehaviour {
         currentItems = new List<GameObject>();
     }
 
-    public void AddFeedItem(Sprite sprite, string message)
+    /// <summary>
+    /// This method spawns a ui item in the feed with given Sprite, string and FeedItem.FeedType. The feedtype will decide what color the message gets.
+    /// When the feedType is not specified the message will be grey.
+    /// </summary>
+    /// <param name="sprite"></param>
+    /// <param name="message"></param>
+    /// <param name="feedType"></param>
+    public void AddFeedItem(string message, Sprite sprite = null, FeedItem.FeedColor feedType = FeedItem.FeedColor.None)
     {
         GameObject go = Instantiate(feedItemPrefab);
         go.transform.SetParent(feed.transform);
@@ -35,6 +42,28 @@ public class FeedUI : MonoBehaviour {
 
         Image FeedImage = go.transform.Find("FeedImage").GetComponent<Image>();
         FeedImage.sprite = sprite;
+
+        Image BackgroundImage = go.transform.GetComponent<Image>();
+
+        switch (feedType)
+        {
+            case FeedItem.FeedColor.None:
+                BackgroundImage.color = new Color32(0, 0, 0, 100);  //Grey
+                break;
+            case FeedItem.FeedColor.Succes:
+                BackgroundImage.color = new Color32(0, 128, 16, 100);  //Green
+                break;
+            case FeedItem.FeedColor.Fail:
+                BackgroundImage.color = new Color32(191, 0, 6, 100);  //Red
+                break;
+            case FeedItem.FeedColor.Error:
+                BackgroundImage.color = new Color32(191, 0, 6, 200);  //Red but less transparant
+                break;
+            case FeedItem.FeedColor.World:
+                BackgroundImage.color = new Color32(0, 65, 191, 100);  //Blue
+                break;
+        }
+
 
         currentItems.Add(go);
         if(currentItems.Count > preferredAmount)
