@@ -66,8 +66,7 @@ namespace Assets.Scripts.Map_Generation
 
         private void Start()
         {
-            if (PhotonNetwork.isMasterClient)
-                photonView.RPC("SetSeed", PhotonTargets.AllBuffered, (new System.Random()).Next(0, int.MaxValue));
+            ApplySeed();
         }
 
         private void Update()
@@ -239,23 +238,18 @@ namespace Assets.Scripts.Map_Generation
             if (loaded)
                 Setup();
         }
-
-        [PunRPC]
-        private void SetSeed(int seed)
+        
+        private void ApplySeed()
         {
-            seed = 349260201;
-            HeightMapSettings.NoiseSettings.seed = seed;
-            BiomeMapSettings.NoiseSettings.seed = seed;
-            ResourceMapSettings.NoiseSettings.seed = seed;
-
-            Seed = seed;
+            Seed = (int)PhotonNetwork.room.CustomProperties["seed"];
+            HeightMapSettings.NoiseSettings.seed = Seed;
+            BiomeMapSettings.NoiseSettings.seed = Seed;
+            ResourceMapSettings.NoiseSettings.seed = Seed;
 
             if (PlayerSaveDataExchanger.Instance.IsWorldDownloaded == false)
                 PlayerSaveDataExchanger.Instance.OnWorldDownloaded += OnWorldLoaded;
             else
                 OnWorldLoaded(true);
-
-            Debug.Log($"Received seed RPC, building map with seed: {Seed}");
         }
     }
 

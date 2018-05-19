@@ -49,17 +49,14 @@ MonoBehaviour:
   - SpawnObjectOnParent
   - CallAnimation
   - CreateNotification
-  - SetParents
   - RPC_SpawnBuildable
-  - SpawnResource
   - DecreaseHealthValue
   - DecreaseHungerValue
   - IncreaseHealthValue
   - IncreaseHungerValue
   - RPC_DestroyWorldObject
-  - SetSeed
   - RPC_AddNetworkedWorldResource
   - RPC_DecreaseHealth
   - RPC_RemoveNetworkedWorldResource
-  - SendMapData
+  - SendWorldData
   DisableAutoOpenWizard: 1

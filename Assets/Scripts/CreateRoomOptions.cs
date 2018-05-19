@@ -17,7 +17,8 @@ public class CreateRoomOptions : MonoBehaviour
             CleanupCacheOnLeave = false,
             IsVisible = roomVisibilityDropdown.options[roomVisibilityDropdown.value].text == "PUBLIC" ? true : false,            
             MaxPlayers = Convert.ToByte(playerCountDropdown.options[playerCountDropdown.value].text.Substring(0, 1)),
-            IsOpen = true
+            IsOpen = true,
+            CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "seed", 123456789 } }
         };
 
         string roomName = string.IsNullOrEmpty(roomNameText?.text) ? PlayerNetwork.PlayerName : roomNameText.text;

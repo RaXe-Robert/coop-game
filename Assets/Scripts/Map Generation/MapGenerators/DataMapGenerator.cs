@@ -107,9 +107,6 @@ namespace Assets.Scripts.Map_Generation
 
             Debug.Log($"Saving: {TerrainGenerator.WorldDataPath + fileName}");
 
-            if (!Directory.Exists(TerrainGenerator.WorldDataPath))
-                Directory.CreateDirectory(TerrainGenerator.WorldDataPath);
-
             FileStream file = File.Create(TerrainGenerator.WorldDataPath + fileName);
             try
             {
@@ -199,7 +196,6 @@ namespace Assets.Scripts.Map_Generation
         {
             return BiomeMap.GetBiome(x, z);
         }
-
     }
 
     [System.Serializable]

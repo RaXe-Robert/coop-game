@@ -60,24 +60,19 @@ public class MainMenu : MonoBehaviour
             IsOpen = false,
             MaxPlayers = 1,
             IsVisible = false,
-            CleanupCacheOnLeave = true
+            CleanupCacheOnLeave = true,
+            CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "seed", 123456789 } }
         };
+
         CreateGame("Singleplayer Game", roomOptions);
     }
 
     public void CreateGame(string roomName, RoomOptions roomOptions)
     {
         if (!PhotonNetwork.connected)
-        {
             OnPhotonCreateRoomFailed(new object[] { 1, "Not connected to master server!" });
-        }
-        else
-        {
-            if (!PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default))
-            {
-                OnPhotonCreateRoomFailed(new object[] { 2, "Room with the smae name already exists!" });
-            }
-        }
+        else if(!PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default))
+            OnPhotonCreateRoomFailed(new object[] { 2, "Room with the smae name already exists!" });
 
     }
 

@@ -98,12 +98,12 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
             List<Tuple<string, byte[]>> files = LoadWorldFiles();
 
             if (files.Count == 0)
-                photonView.RPC(nameof(SendMapData), PhotonTargets.Others, "empty", null, 0);
+                photonView.RPC(nameof(SendWorldData), PhotonTargets.Others, "empty", null, 0);
             else
             {
                 for (int y = 0; y < files.Count; y++)
                 {
-                    photonView.RPC(nameof(SendMapData), PhotonTargets.Others, files[y].Item1, files[y].Item2, files.Count - y - 1);
+                    photonView.RPC(nameof(SendWorldData), PhotonTargets.Others, files[y].Item1, files[y].Item2, files.Count - y - 1);
                     yield return new WaitForSecondsRealtime(0.02f);
                 }
             }
@@ -112,9 +112,8 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
         }
     }
 
-
     [PunRPC]
-    private void SendMapData(string fileName, byte[] fileRaw, int filesRemaining)
+    private void SendWorldData(string fileName, byte[] fileRaw, int filesRemaining)
     {
         if (IsWorldDownloaded)
             return;
