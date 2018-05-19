@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
+using Assets.Scripts.Utilities;
 
 public class WeaponItemSlot : InventoryItemSlot
 {
@@ -22,8 +23,13 @@ public class WeaponItemSlot : InventoryItemSlot
         InventoryItemSlot from;
         if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
-            if (from.CurrentItem.GetType() == typeof(Weapon))
-                equipmentManager.UnequipItem(from.CurrentItem as Weapon, from.index);
+            if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
+            {
+                if (from.CurrentItem.GetType() == typeof(Weapon))
+                    equipmentManager.UnequipItem(from.CurrentItem as Weapon, from.index);
+            }
+            else
+                equipmentManager.DropEquippedItem(from.CurrentItem as Item);
         }
     }
 

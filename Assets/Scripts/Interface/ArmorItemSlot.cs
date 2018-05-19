@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
+using Assets.Scripts.Utilities;
 
 public class ArmorItemSlot : InventoryItemSlot
 {
@@ -25,18 +26,14 @@ public class ArmorItemSlot : InventoryItemSlot
         InventoryItemSlot from;
         if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
-            if (from.CurrentItem.GetType() == typeof(Armor))
-                equipmentManager.UnequipItem(from.CurrentItem as Armor, from.index);
+            if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
+            {
+                if (from.CurrentItem.GetType() == typeof(Armor))
+                    equipmentManager.UnequipItem(from.CurrentItem as Armor, from.index);
+            }
+            else
+                equipmentManager.DropEquippedItem(from.CurrentItem as Item);
         }
-
-        //if(inventory.inventoryItems.Capacity > 0) // Inventory.InventorySize)
-        //{
-        //    Debug.Log(inventory.inventoryItems.Capacity);
-        //    //Get inventory space
-        //    // add to inventory
-        //}
-        //else
-        //    equipmentManager.DropEquippedItem(CurrentItem as Item);
     }
 
     public override void OnEndDrag(PointerEventData eventData)
