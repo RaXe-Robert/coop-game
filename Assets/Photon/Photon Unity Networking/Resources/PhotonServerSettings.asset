@@ -27,8 +27,16 @@ MonoBehaviour:
   NetworkLogging: 1
   RunInBackground: 1
   RpcList:
+  - CallAnimation
   - Chat
+  - CreateNotification
+  - DecreaseHealthValue
+  - DecreaseHungerValue
+  - DestroyObject
   - DestroyRpc
+  - DestroyWorldObject
+  - IncreaseHealthValue
+  - IncreaseHungerValue
   - InstantiateRpc
   - PickupItemInit
   - PunPickup
@@ -36,27 +44,11 @@ MonoBehaviour:
   - PunRespawn
   - RequestForPickupItems
   - RequestForPickupTimes
-  - SwitchAnimation
-  - SpawnItemOnNetwork
-  - ReduceHealth
-  - DestroyObject
-  - SpawnMultipleObjects
-  - SpawnObject
-  - DestroyWorldObject
-  - OnHealthChanged
-  - TakeDamage
-  - SpawnObjectInRadius
-  - SpawnObjectOnParent
-  - CallAnimation
-  - CreateNotification
-  - RPC_SpawnBuildable
-  - DecreaseHealthValue
-  - DecreaseHungerValue
-  - IncreaseHealthValue
-  - IncreaseHungerValue
-  - RPC_DestroyWorldObject
   - RPC_AddNetworkedWorldResource
   - RPC_DecreaseHealth
+  - RPC_DestroyWorldObject
   - RPC_RemoveNetworkedWorldResource
+  - RPC_SpawnBuildable
   - SendWorldData
+  - SpawnItemOnNetwork
   DisableAutoOpenWizard: 1
