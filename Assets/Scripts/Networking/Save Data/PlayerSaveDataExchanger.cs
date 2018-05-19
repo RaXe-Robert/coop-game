@@ -83,10 +83,11 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
 
             PhotonPlayer sender = PhotonPlayer.Find(senderid);
             byte[] selected = content as byte[];
+            /*
             for (int i = 0; i < selected.Length; i++)
             {
                 byte unitId = selected[i];
-            }
+            }*/
         }
     }
 
@@ -146,10 +147,10 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
 
     private List<Tuple<string, byte[]>> LoadWorldFiles()
     {
-        string directoryPath = string.Empty;
-        directoryPath = WorldDataPath;
+        string directoryPath = WorldDataPath;
 
         string[] files = Directory.GetFiles(directoryPath);
+
         List<Tuple<string, byte[]>> filesRaw = new List<Tuple<string, byte[]>>();
 
         foreach (var file in files)
@@ -201,6 +202,11 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
             SetWorldDownloaded(true);
         else
             SetWorldDownloaded(false);
+    }
+
+    public override void OnJoinedLobby()
+    {
+        SetWorldDownloaded(false);
     }
 
     #endregion //Photon Callbacks
