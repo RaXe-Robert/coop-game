@@ -80,7 +80,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         var @base = currentItem as BuildableBase;
         if (@base != null && inventory != null)
             inventory.BuildingController.ActivateBuildMode(@base);
-        else if (CurrentItem is Equippable)
+        else if (CurrentItem is Armor || CurrentItem is Tool || CurrentItem is Weapon)
         {
             equipmentManager.EquipItem(CurrentItem, index);
             Tooltip.Instance.Hide();
