@@ -82,6 +82,7 @@ public class WorldResourceManager : Photon.MonoBehaviour {
         }
 
         TerrainGenerator.GetTerrainChunk(terrainChunkCoord)?.SaveChanges();
+        PlayerSaveDataExchanger.Instance.UpdateManifest();
     }
     
     public class WorldResourceTracker

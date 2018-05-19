@@ -237,7 +237,7 @@ namespace Assets.Scripts.Map_Generation
             foreach (var chunkPart in DataMap.ChunkParts)
                 objectPoints.AddRange(chunkPart.Value.ObjectPoints.Values);
 
-            DataMapGenerator.Save(this, objectPoints.ToArray());
+            DataMapGenerator.SaveObjectMap(this, objectPoints.ToArray());
         }
     }
 

@@ -56,7 +56,7 @@ namespace Assets.Scripts.Map_Generation
             ObjectPoint[] objectPoints;
 
             if (File.Exists(TerrainGenerator.WorldDataPath + fileName))
-                objectPoints = Load(terrainChunk);
+                objectPoints = LoadObjectMap(terrainChunk);
             else
             {
                 ResourceMap resourceMap = ResourceMapGenerator.GenerateResourceMap(uniformSize, resourceMapSettings, terrainChunk.SampleCenter);
@@ -101,7 +101,7 @@ namespace Assets.Scripts.Map_Generation
             }
         }
 
-        public static void Save(TerrainChunk terrainChunk, ObjectPoint[] objectPoints)
+        public static void SaveObjectMap(TerrainChunk terrainChunk, ObjectPoint[] objectPoints)
         {
             string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
@@ -129,10 +129,11 @@ namespace Assets.Scripts.Map_Generation
             finally
             {
                 file.Close();
+
             }
         }
 
-        public static ObjectPoint[] Load(TerrainChunk terrainChunk)
+        public static ObjectPoint[] LoadObjectMap(TerrainChunk terrainChunk)
         {
             string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 

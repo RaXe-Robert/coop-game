@@ -18,19 +18,8 @@ namespace Assets.Scripts.Map_Generation
         private const float sqrViewerMoveThresholdForChunkPartUpdate = viewerMoveThresholdForChunkPartUpdate * viewerMoveThresholdForChunkPartUpdate;
 
         // Testing, refactor required
-        public static string PersistentDataPath { get; private set; }
         public static int Seed { get; private set; }
-        public static string WorldDataPath
-        {
-            get
-            {
-#if UNITY_EDITOR
-                return $"{PersistentDataPath}/{Seed}/Editor/";
-#else
-                return $"{PersistentDataPath}/{Seed}/";
-#endif
-            }
-        }
+        public static string WorldDataPath => PlayerSaveDataExchanger.Instance.WorldDataPath;
 
         [SerializeField]
         private int colliderLODIndex;
@@ -68,8 +57,6 @@ namespace Assets.Scripts.Map_Generation
         private void Awake()
         {
             navMeshSurface = GetComponent<NavMeshSurface>();
-
-            PersistentDataPath = Application.persistentDataPath;
 
             terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
             visibleTerrainChunks = new List<TerrainChunk>();
@@ -249,7 +236,6 @@ namespace Assets.Scripts.Map_Generation
 
         private void OnWorldLoaded(bool loaded)
         {
-            Debug.Log("ONWORLDLOADED");
             if (loaded)
                 Setup();
         }
@@ -264,8 +250,8 @@ namespace Assets.Scripts.Map_Generation
 
             Seed = seed;
 
-            if (PlayerNetwork.IsWorldDownloaded == false)
-                PlayerNetwork.OnWorldDownloaded += OnWorldLoaded;
+            if (PlayerSaveDataExchanger.Instance.IsWorldDownloaded == false)
+                PlayerSaveDataExchanger.Instance.OnWorldDownloaded += OnWorldLoaded;
             else
                 OnWorldLoaded(true);
 
