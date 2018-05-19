@@ -38,8 +38,8 @@ public class Inventory : MonoBehaviour
 #if UNITY_EDITOR
         if (InputManager.GetButtonDown("Spawn item"))
         {
-            AddItemById(stick.Id, 10);
-            AddItemById(diamond.Id, 10);
+            AddItemById(stick.Id, 64);
+            AddItemById(diamond.Id, 64);
         }
 #endif
     }

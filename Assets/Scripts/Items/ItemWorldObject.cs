@@ -27,7 +27,12 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
         if (!InRange(invoker.transform.position))
             return;
 
-        FeedUI.Instance.AddFeedItem("Trying to pick up " + item.Name, item.Sprite, FeedItem.FeedColor.World);
+        //FeedUI.Instance.AddFeedItem("Trying to pick up " + item.Name, item.Sprite, FeedItem.Type.Fail);
+        FeedUI.Instance.AddFeedItem("Picked up " + item.Name, item.Sprite, FeedItem.Type.Succes);
+        //FeedUI.Instance.AddFeedItem("You need another tool to chop " + item.Name, feedType: FeedItem.Type.World);
+        //FeedUI.Instance.AddFeedItem("Something went wrong", feedType: FeedItem.Type.Error);
+        //FeedUI.Instance.AddFeedItem("No FeedItem.Type selected" + item.Name, item.Sprite);
+        //FeedUI.Instance.AddFeedItem("This is the default color", item.Sprite, FeedItem.Type.Default);
 
         PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(item.Id, item.StackSize);
         photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);

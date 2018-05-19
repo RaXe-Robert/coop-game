@@ -4,24 +4,29 @@ using UnityEngine;
 
 public class FeedItem : MonoBehaviour {
 
-    public enum FeedColor
+    /// <summary>
+    /// This specifies the type of the message, did the user succeed on something? Or did something went wrong?
+    /// In FeedUI this enum decides which color the message gets.
+    /// </summary>
+    public enum Type
     {
         None,
+        Default,
         Succes,
         Fail,
         Error,
-        World
+        World        
     }
 
     private float WaitTime = 2;
     private float FadeScale = 0.1F;
     private CanvasGroup CanvasGroup;
-    private RectTransform RectTransform;
+    private RectTransform ItemRectTransform;
     private bool Fading = false;
     
     private void Start () {
         CanvasGroup = GetComponent<CanvasGroup>();
-        RectTransform = GetComponent<RectTransform>();
+        ItemRectTransform = GetComponent<RectTransform>();
         StartCoroutine(Timer());
     }
 
@@ -65,7 +70,8 @@ public class FeedItem : MonoBehaviour {
         if (CanvasGroup.alpha != 0)
         {
             CanvasGroup.alpha -= FadeScale;
-            RectTransform.sizeDelta = new Vector2(RectTransform.sizeDelta.x, RectTransform.sizeDelta.y - FadeScale * RectTransform.sizeDelta.y);
+            transform.localScale = new Vector3(1, transform.localScale.y - FadeScale, 1);
+            ItemRectTransform.sizeDelta = new Vector2(ItemRectTransform.sizeDelta.x, ItemRectTransform.sizeDelta.y * transform.localScale.y);
         }
         else
         {

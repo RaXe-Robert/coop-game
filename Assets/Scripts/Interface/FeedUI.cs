@@ -11,7 +11,7 @@ public class FeedUI : MonoBehaviour {
     public static FeedUI Instance { get; private set; }
 
     private List<GameObject> currentItems;
-    private int preferredAmount = 4;
+    private int preferredAmount = 5;
 
     public void Awake()
     {
@@ -31,7 +31,7 @@ public class FeedUI : MonoBehaviour {
     /// <param name="sprite"></param>
     /// <param name="message"></param>
     /// <param name="feedType"></param>
-    public void AddFeedItem(string message, Sprite sprite = null, FeedItem.FeedColor feedType = FeedItem.FeedColor.None)
+    public void AddFeedItem(string message, Sprite sprite = null, FeedItem.Type feedType = FeedItem.Type.None)
     {
         GameObject go = Instantiate(feedItemPrefab);
         go.transform.SetParent(feed.transform);
@@ -41,29 +41,35 @@ public class FeedUI : MonoBehaviour {
         FeedText.text = message;
 
         Image FeedImage = go.transform.Find("FeedImage").GetComponent<Image>();
-        FeedImage.sprite = sprite;
+
+        if (sprite != null)
+            FeedImage.sprite = sprite;
+        else
+            FeedImage.color = new Color32(0, 0, 0, 0);
 
         Image BackgroundImage = go.transform.GetComponent<Image>();
 
         switch (feedType)
         {
-            case FeedItem.FeedColor.None:
-                BackgroundImage.color = new Color32(0, 0, 0, 100);  //Grey
+            case FeedItem.Type.None:
+                BackgroundImage.color = new Color32(0, 0, 0, 0);  //0 Alpha
                 break;
-            case FeedItem.FeedColor.Succes:
-                BackgroundImage.color = new Color32(0, 128, 16, 100);  //Green
+            case FeedItem.Type.Default:
+                BackgroundImage.color = new Color32(0, 0, 0, 50);  //Grey
                 break;
-            case FeedItem.FeedColor.Fail:
-                BackgroundImage.color = new Color32(191, 0, 6, 100);  //Red
+            case FeedItem.Type.Succes:
+                BackgroundImage.color = new Color32(0, 128, 16, 50);  //Green
                 break;
-            case FeedItem.FeedColor.Error:
-                BackgroundImage.color = new Color32(191, 0, 6, 200);  //Red but less transparant
+            case FeedItem.Type.Fail:
+                BackgroundImage.color = new Color32(191, 0, 6, 50);  //Red
                 break;
-            case FeedItem.FeedColor.World:
-                BackgroundImage.color = new Color32(0, 65, 191, 100);  //Blue
+            case FeedItem.Type.Error:
+                BackgroundImage.color = new Color32(191, 0, 6, 100);  //Red but more alpha
+                break;
+            case FeedItem.Type.World:
+                BackgroundImage.color = new Color32(0, 65, 191, 50);  //Blue
                 break;
         }
-
 
         currentItems.Add(go);
         if(currentItems.Count > preferredAmount)
