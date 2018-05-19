@@ -10,4 +10,15 @@ public class DeathScreenUI : MonoBehaviour
         PlayerNetwork.LocalPlayer.GetComponent<PlayerCombatController>().RespawnPlayer();
         GameInterfaceManager.Instance.CloseAllInterfaces();
     }
+
+    public void Click_ReturnToMainMenu()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
+    private void OnLeftRoom()
+    {
+        Debug.Log("Succesfully left the room");
+        PhotonNetwork.LoadLevel("MainMenu");
+    }
 }

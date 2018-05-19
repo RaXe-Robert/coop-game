@@ -29,7 +29,7 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
         if (photonView.isMine)
         {
             GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.DeathScreen);
-            GetComponent<Inventory>().DropAllItem();
+            GetComponent<Inventory>().DropAllItems();
             GetComponent<PlayerMovementController>().enabled = false;
         }
         photonView.RPC(nameof(KillPlayer), PhotonTargets.All, Name, lastAttacker.Name);

@@ -747,11 +747,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1307443146}
     m_Modifications:
-    - target: {fileID: 114829898721775626, guid: 5a8693f552d85194296b0c499612e2ee,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 224652245073816754, guid: 5a8693f552d85194296b0c499612e2ee,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -842,35 +837,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1156930166402860, guid: 5a8693f552d85194296b0c499612e2ee, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114829898721775626, guid: 5a8693f552d85194296b0c499612e2ee,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114829898721775626, guid: 5a8693f552d85194296b0c499612e2ee,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114829898721775626, guid: 5a8693f552d85194296b0c499612e2ee,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 751131205}
-    - target: {fileID: 114829898721775626, guid: 5a8693f552d85194296b0c499612e2ee,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Click_Respawn
-      objectReference: {fileID: 0}
-    - target: {fileID: 114829898721775626, guid: 5a8693f552d85194296b0c499612e2ee,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5a8693f552d85194296b0c499612e2ee, type: 2}
   m_IsPrefabParent: 0
@@ -884,12 +850,6 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224652245073816754, guid: 5a8693f552d85194296b0c499612e2ee,
     type: 2}
   m_PrefabInternal: {fileID: 751131202}
---- !u!114 &751131205 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114964871382921084, guid: 5a8693f552d85194296b0c499612e2ee,
-    type: 2}
-  m_PrefabInternal: {fileID: 751131202}
-  m_Script: {fileID: 11500000, guid: 3318daa7fdb046b48b790745492b0262, type: 3}
 --- !u!224 &781114146 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224075559956338896, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,

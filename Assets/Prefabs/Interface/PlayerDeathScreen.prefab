@@ -26,7 +26,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1359086151905326
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,7 +245,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114010623168693644}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114964871382921084}
+        m_MethodName: Click_ReturnToMainMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114232651190782730
@@ -319,7 +330,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114969249909428374}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114964871382921084}
+        m_MethodName: Click_Respawn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114964871382921084
@@ -333,8 +355,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3318daa7fdb046b48b790745492b0262, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawnButton: {fileID: 114829898721775626}
-  disconnectButton: {fileID: 114225515663313428}
 --- !u!114 &114969249909428374
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -345,7 +345,7 @@ public class Inventory : MonoBehaviour
         return maxCrafts;
     }
 
-    public void DropAllItem()
+    public void DropAllItems()
     {
         for (int i = 0; i < inventoryItems.Count; i++)
         {
