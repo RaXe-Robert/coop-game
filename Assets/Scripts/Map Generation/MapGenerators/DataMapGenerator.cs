@@ -89,9 +89,7 @@ namespace Assets.Scripts.Map_Generation
                 }
 
                 objectPoints = tempObjectPoints.ToArray();
-                Save(terrainChunk, objectPoints);
             }
-
 
             // Fill chunk parts
             for (int i = 0; i < objectPoints.Length; i++)
