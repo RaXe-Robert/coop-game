@@ -27,6 +27,8 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
         if (!InRange(invoker.transform.position))
             return;
 
+        FeedUI.Instance.AddFeedItem(item.Sprite, "Trying to pick up " + item.Name);
+
         PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(item.Id, item.StackSize);
         photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
     }
