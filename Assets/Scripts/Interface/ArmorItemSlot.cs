@@ -27,10 +27,6 @@ public class ArmorItemSlot : InventoryItemSlot
         {
             if (from.CurrentItem.GetType() == typeof(Armor))
                 equipmentManager.UnequipItem(from.CurrentItem as Armor, from.index);
-            else if (from.CurrentItem.GetType() == typeof(Tool))
-                equipmentManager.UnequipItem(from.CurrentItem as Tool, from.index);
-            else if (from.CurrentItem.GetType() == typeof(Weapon))
-                equipmentManager.UnequipItem(from.CurrentItem as Weapon, from.index);
         }
 
         //if(inventory.inventoryItems.Capacity > 0) // Inventory.InventorySize)
