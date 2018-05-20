@@ -31,10 +31,11 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
         if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
         {
             inventory.AddItemById(item.Id, item.StackSize);
+            FeedUI.Instance.AddFeedItem("Picked up " + item.Name, item.Sprite, FeedItem.Type.Succes);
             photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
         }
         else
-            WorldNotificationsManager.Instance?.ShowNotification(new WorldNotificationArgs(transform.position, "Inventory full", 1), true);
+            FeedUI.Instance.AddFeedItem("Inventory full", feedType: FeedItem.Type.Fail);
     }
 
     public string TooltipText()
