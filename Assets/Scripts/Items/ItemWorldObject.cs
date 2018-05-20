@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Utilities;
+
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(PhotonView))]
 public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
@@ -19,16 +18,23 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
 
     public bool IsInteractable => true;
     public GameObject GameObject => gameObject;
-    public bool InRange(Vector3 invokerPosition) =>
-        Vector3.Distance(invokerPosition, transform.position) < pickupDistance;
+    public bool InRange(Vector3 invokerPosition) => Vector3.Distance(invokerPosition, transform.position) < pickupDistance;
 
     public void Interact(GameObject invoker)
     {
         if (!InRange(invoker.transform.position))
             return;
 
-        PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(item.Id, item.StackSize);
-        photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
+        Inventory inventory = PlayerNetwork.PlayerObject.GetComponent<Inventory>();
+
+        // Check if inventory is not full
+        if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
+        {
+            inventory.AddItemById(item.Id, item.StackSize);
+            photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
+        }
+        else
+            WorldNotificationsManager.Instance?.ShowNotification(new WorldNotificationArgs(transform.position, "Inventory full", 1), true);
     }
 
     public string TooltipText()
