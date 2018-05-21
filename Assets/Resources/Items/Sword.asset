@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 90
   itemName: Sword
-  sprite: {fileID: 21300000, guid: e2a03d351a0854b45902369420521c75, type: 3}
-  model: {fileID: 100000, guid: b6fe1de474d3ee7438e5e351cb9c1904, type: 3}
+  sprite: {fileID: 21300000, guid: bee6668ab22d87b4c910e848be8a58d9, type: 3}
+  model: {fileID: 100000, guid: 928231d188c47374dbb4568aed9f8626, type: 3}
   description: A sword
   type: 0
   minDamage: 5

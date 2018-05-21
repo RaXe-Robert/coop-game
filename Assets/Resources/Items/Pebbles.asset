@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
+  m_Name: Pebbles
+  m_EditorClassIdentifier: 
+  id: 52
+  itemName: Pebbles
+  sprite: {fileID: 21300000, guid: 61590b9bd185a0841abdfa8a557ea9c5, type: 3}
+  model: {fileID: 100000, guid: 5308ed4f77e3d924dae44cf68f1126d3, type: 3}
+  description: A bunch of rock

@@ -38,8 +38,8 @@ public class Inventory : MonoBehaviour
 #if UNITY_EDITOR
         if (InputManager.GetButtonDown("Spawn item"))
         {
-            AddItemById(stick.Id, 10);
-            AddItemById(diamond.Id, 10);
+            AddItemById(stick.Id, 64);
+            AddItemById(diamond.Id, 64);
         }
 #endif
     }
@@ -101,14 +101,10 @@ public class Inventory : MonoBehaviour
                     AddNewItemStackById(itemId, itemsToAdd);
             }
             else
-            {
                 AddNewItemStackById(itemId, itemsToAdd);
-            }
         }
         else
-        {
             AddNewItemStackById(itemId, stackSize);
-        }
     }
 
     /// <summary>
@@ -273,22 +269,21 @@ public class Inventory : MonoBehaviour
         {
             //Check if we are adding a resource item, if so we check if we have full stacks of the item.
             if (item.GetType() == typeof(Resource))
+            {
                 if (GetItemAmountById(item.Id) % 64 != 0)
                     FillItemStacksById(itemId, stackSize);
-
                 else
                     ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);
+            }
+            else
+                ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);
         }
         else
         {
             if (item.GetType() == typeof(Resource))
-            {
                 FillItemStacksById(itemId, stackSize);
-            }
             else
-            {
                 AddNewItemStackById(itemId, stackSize);
-            }
         }
     }
 
