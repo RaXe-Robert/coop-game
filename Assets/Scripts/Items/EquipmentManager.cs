@@ -124,11 +124,20 @@ public class EquipmentManager : MonoBehaviour
     public void EquipItem(Item item, int inventoryIndex)
     {
         if (item.GetType() == typeof(Armor))
+        {
             EquipArmor(item as Armor, inventoryIndex);
+            SoundManager.Instance.PlaySound(SoundManager.Sound.EQUIP);
+        }
         else if (item.GetType() == typeof(Weapon))
+        {
             EquipWeapon(item as Weapon, inventoryIndex);
+            SoundManager.Instance.PlaySound(SoundManager.Sound.EQUIP);
+        }
         else if (item.GetType() == typeof(Tool))
+        {
             EquipTool(item as Tool, inventoryIndex);
+            SoundManager.Instance.PlaySound(SoundManager.Sound.EQUIP);
+        }
     }
 
     public bool HasToolEquipped(ToolType toolType)

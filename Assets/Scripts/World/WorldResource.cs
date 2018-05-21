@@ -55,6 +55,12 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
         if (!InRange(invoker.transform.position))
             return;
 
+        //We need to make a way to get the type of material from a world item.
+        if (this.gameObject.name.Contains("Tree"))
+            SoundManager.Instance.PlayAttackSound(SoundManager.AttackSound.WOOD);
+        if (gameObject.name.Contains("rock"))
+            SoundManager.Instance.PlayAttackSound(SoundManager.AttackSound.STONE);
+
         var playerMovement = PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>();
         if (!playerMovement.CanInteract)
         {
@@ -73,6 +79,9 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
                 .ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
             return;
         }
+
+        
+
 
         healthComponent.DecreaseValue(50f);
     }
