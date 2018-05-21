@@ -106,27 +106,24 @@ namespace Assets.Scripts.Map_Generation
             string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
             Debug.Log($"Saving: {TerrainGenerator.WorldDataPath + fileName}");
-
-            FileStream file = File.Create(TerrainGenerator.WorldDataPath + fileName);
+            
             try
             {
-                BinaryFormatter bf = new BinaryFormatter();
-
-                MapObjectData data = new MapObjectData
+                using (FileStream file = File.Create(TerrainGenerator.WorldDataPath + fileName))
                 {
-                    objectPoints = objectPoints
-                };
+                    BinaryFormatter bf = new BinaryFormatter();
 
-                bf.Serialize(file, data);
+                    MapObjectData data = new MapObjectData
+                    {
+                        objectPoints = objectPoints
+                    };
+
+                    bf.Serialize(file, data);
+                }
             }
             catch (IOException e)
             {
                 Debug.LogError(e);
-            }
-            finally
-            {
-                file.Close();
-
             }
         }
 
@@ -134,24 +131,23 @@ namespace Assets.Scripts.Map_Generation
         {
             string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
-            FileStream file = File.Open(TerrainGenerator.WorldDataPath + fileName, FileMode.Open);
+            Debug.Log($"Loading: {TerrainGenerator.WorldDataPath + fileName}");
+
             try
             {
-                Debug.Log($"Loading: {TerrainGenerator.WorldDataPath + fileName}");
+                using (FileStream file = File.Open(TerrainGenerator.WorldDataPath + fileName, FileMode.Open))
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
 
-                BinaryFormatter bf = new BinaryFormatter();
-                MapObjectData data = (MapObjectData)bf.Deserialize(file);
+                    MapObjectData data = (MapObjectData)bf.Deserialize(file);
 
-                return data.objectPoints;
+                    return data.objectPoints;
+                }
             }
             catch (IOException e)
             {
                 Debug.LogError(e);
                 return new ObjectPoint[0];
-            }
-            finally
-            {
-                file.Close();
             }
         }
 

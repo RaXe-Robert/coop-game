@@ -4,6 +4,8 @@ using System;
 
 public class DaytimeController : Photon.MonoBehaviour, IPunObservable
 {
+    public static DaytimeController Instance { get; private set; }
+
     public const int MINUTESPERDAY = 24 * 60; 
     
     [Range(0, 45)]
@@ -74,6 +76,11 @@ public class DaytimeController : Photon.MonoBehaviour, IPunObservable
     }
 
     public bool IsDaytime { get { return CurrentSunAngle >= 0 && CurrentSunAngle <= 180; } }
+
+    private void Awake()
+    {
+        Instance = FindObjectOfType<DaytimeController>();
+    }
 
     private void Start()
     {

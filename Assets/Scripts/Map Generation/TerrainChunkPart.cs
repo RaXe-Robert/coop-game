@@ -43,8 +43,9 @@ namespace Assets.Scripts.Map_Generation
 
         public void AddObjectPoint(ObjectPoint objectPoint)
         {
-            float a = objectPoint.position.x + WorldPosition.x;
-            float b = objectPoint.position.z + WorldPosition.z;
+            // Create an unique id.
+            float a = objectPoint.position.x + objectPoint.position.y;
+            float b = objectPoint.position.z + objectPoint.position.y;
             double id = 0.5 * (a + b) * (a + b + 1) + b;
 
             if (!ObjectPoints.ContainsKey(id))
