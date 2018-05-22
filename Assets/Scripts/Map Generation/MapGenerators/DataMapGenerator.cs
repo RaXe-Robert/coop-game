@@ -51,12 +51,25 @@ namespace Assets.Scripts.Map_Generation
 
         private static void FillChunkParts(int uniformSize, ref Dictionary<Vector2, TerrainChunkPart> chunkParts, MeshSettings meshSettings, ResourceMapSettings resourceMapSettings, HeightMap heightMap, TerrainChunk terrainChunk)
         {
+            ObjectPoint[] objectPoints = CreateObjectPoints(uniformSize, meshSettings, resourceMapSettings, heightMap, terrainChunk);
+
+            // Fill chunk parts
+            for (int i = 0; i < objectPoints.Length; i++)
+            {
+                Vector2 chunkPartCoords = new Vector2(objectPoints[i].chunkPartCoordX, objectPoints[i].chunkPartCoordZ);
+                TerrainChunkPart terrainChunkPart = chunkParts[chunkPartCoords];
+
+                terrainChunkPart.AddObjectPoint(objectPoints[i]);
+            }
+        }
+
+        public static ObjectPoint[] CreateObjectPoints(int uniformSize, MeshSettings meshSettings, ResourceMapSettings resourceMapSettings, HeightMap heightMap, TerrainChunk terrainChunk)
+        {
             string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
-
-            ObjectPoint[] objectPoints;
-
+            
+            // Try to load a save file
             if (File.Exists(TerrainGenerator.WorldDataPath + fileName))
-                objectPoints = LoadObjectMap(terrainChunk);
+                return ObjectMapLoader.LoadObjectMap(terrainChunk);
             else
             {
                 ResourceMap resourceMap = ResourceMapGenerator.GenerateResourceMap(uniformSize, resourceMapSettings, terrainChunk.SampleCenter);
@@ -71,15 +84,21 @@ namespace Assets.Scripts.Map_Generation
 
                     HeightMapLayer layer = heightMap.GetLayer(x + 1, z + 1);
 
+                    // Don't spawn objects on water.
                     if (layer.IsWater)
                         continue;
 
                     float height = heightMap.Values[x + 1, z + 1];
                     Vector3 position = new Vector3(terrainChunk.Bounds.center.x, 0f, terrainChunk.Bounds.center.y) + new Vector3((x - (uniformSize - 1) / 2f) * meshSettings.MeshScale, height, (z - (uniformSize - 1) / 2f) * -meshSettings.MeshScale);
-                    Quaternion rotation = Quaternion.identity;
+
+                    // Create a seeded System.Random for the rotation based on the position
+                    float a = position.x + position.y;
+                    float b = position.z + position.y;
+                    System.Random rand = new System.Random((int)(0.5 * (a + b) * (a + b + 1) + b));
+
+                    Quaternion rotation = Quaternion.Euler(new Vector3(0f, rand.Next(0, 360), 0f));
 
                     int chunkPartSize = uniformSize / meshSettings.ChunkPartSizeRoot + 1;
-
                     int coordX = Mathf.FloorToInt(x / chunkPartSize) - 1;
                     int coordZ = Mathf.FloorToInt(z / chunkPartSize) - 1;
 
@@ -88,73 +107,8 @@ namespace Assets.Scripts.Map_Generation
                     tempObjectPoints.Add(new ObjectPoint(position, rotation, resourcePoint.WorldResourcePrefabID, chunkPartCoords.x, chunkPartCoords.y));
                 }
 
-                objectPoints = tempObjectPoints.ToArray();
+                return tempObjectPoints.ToArray();
             }
-
-            // Fill chunk parts
-            for (int i = 0; i < objectPoints.Length; i++)
-            {
-                Vector2 chunkPartCoords = new Vector2(objectPoints[i].chunkPartCoordX, objectPoints[i].chunkPartCoordZ);
-                TerrainChunkPart terrainChunkPart = chunkParts[chunkPartCoords];
-
-                terrainChunkPart.AddObjectPoint(objectPoints[i]);
-            }
-        }
-
-        public static void SaveObjectMap(TerrainChunk terrainChunk, ObjectPoint[] objectPoints)
-        {
-            string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
-
-            Debug.Log($"Saving: {TerrainGenerator.WorldDataPath + fileName}");
-            
-            try
-            {
-                using (FileStream file = File.Create(TerrainGenerator.WorldDataPath + fileName))
-                {
-                    BinaryFormatter bf = new BinaryFormatter();
-
-                    MapObjectData data = new MapObjectData
-                    {
-                        objectPoints = objectPoints
-                    };
-
-                    bf.Serialize(file, data);
-                }
-            }
-            catch (IOException e)
-            {
-                Debug.LogError(e);
-            }
-        }
-
-        public static ObjectPoint[] LoadObjectMap(TerrainChunk terrainChunk)
-        {
-            string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
-
-            Debug.Log($"Loading: {TerrainGenerator.WorldDataPath + fileName}");
-
-            try
-            {
-                using (FileStream file = File.Open(TerrainGenerator.WorldDataPath + fileName, FileMode.Open))
-                {
-                    BinaryFormatter bf = new BinaryFormatter();
-
-                    MapObjectData data = (MapObjectData)bf.Deserialize(file);
-
-                    return data.objectPoints;
-                }
-            }
-            catch (IOException e)
-            {
-                Debug.LogError(e);
-                return new ObjectPoint[0];
-            }
-        }
-
-        [System.Serializable]
-        public class MapObjectData
-        {
-            public ObjectPoint[] objectPoints;
         }
     }
 

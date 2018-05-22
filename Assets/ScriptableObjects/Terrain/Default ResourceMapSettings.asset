@@ -18,7 +18,7 @@ MonoBehaviour:
     octaves: 3
     persistance: 0.8
     lacunarity: 2
-    seed: 0
+    seed: 123456789
     offset: {x: 0, y: 0}
   worldResourceEntries:
   - worldResourcePrefab: {fileID: 1695406501947972, guid: 00e52d555c867374690f2256513d9e5a,

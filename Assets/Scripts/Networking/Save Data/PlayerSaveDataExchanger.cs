@@ -41,7 +41,7 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
         private set { persistentDataPath = value; }
     }
     public string WorldDataPath => $"{PersistentDataPath}World/";
-    public string PlayerInfoDataPath => $"{PersistentDataPath}Players/";
+    public string PlayerDataPath => $"{PersistentDataPath}Players/";
 
 
     /// <summary>
@@ -71,8 +71,8 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
     {
         if (!Directory.Exists(WorldDataPath))
             Directory.CreateDirectory(WorldDataPath);
-        if (!Directory.Exists(PlayerInfoDataPath))
-            Directory.CreateDirectory(PlayerInfoDataPath);
+        if (!Directory.Exists(PlayerDataPath))
+            Directory.CreateDirectory(PlayerDataPath);
     }
 
     private void OnEnable()
@@ -87,7 +87,7 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
 
     public void UpdateManifest()
     {
-        List<Tuple<string, byte[]>> worldFiles = LoadWorldFiles();
+        List<Tuple<string, byte[]>> worldFiles = FileLoader.LoadFiles(WorldDataPath); // TODO: We dont want to do this every time we are saving the manifest
         ChunkSaveInfo[] chunkSaveInfo = worldFiles.Select(x => new ChunkSaveInfo(x.Item1)).ToArray();
 
         SaveDataManifest saveDataManifest = new SaveDataManifest
@@ -104,6 +104,10 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
         PhotonNetwork.RaiseEvent(0, new byte[0], true, null);
     }
 
+    /// <summary>
+    /// Saves the manifest to disk.
+    /// </summary>
+    /// <param name="saveDataManifest"></param>
     private void SaveManifest(SaveDataManifest saveDataManifest)
     {
         string json = JsonUtility.ToJson(saveDataManifest);
@@ -134,13 +138,15 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Send save files to recently joined players.
+    /// </summary>
     private IEnumerator ProcessPlayersToLoad()
     {
         for (int i = otherPlayersToLoad.Count - 1; i >= 0; i--)
         {
             // Send world files
-            List<Tuple<string, byte[]>> files = LoadWorldFiles();
+            List<Tuple<string, byte[]>> files = FileLoader.LoadFiles(WorldDataPath);
 
             if (files.Count == 0)
                 photonView.RPC(nameof(SendWorldData), otherPlayersToLoad[i], "empty", null, 0);
@@ -187,38 +193,6 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
         {
             Debug.LogError(e);
         }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns>List of Tuples that contains -FileName,FileContent-.</returns>
-    private List<Tuple<string, byte[]>> LoadWorldFiles()
-    {
-        string[] files = Directory.GetFiles(WorldDataPath);
-
-        List<Tuple<string, byte[]>> filesRaw = new List<Tuple<string, byte[]>>();
-
-        foreach (var file in files)
-        {
-            try
-            {
-                using (MemoryStream ms = new MemoryStream())
-                using (FileStream fileStream = File.Open(file, FileMode.Open))
-                {
-                    fileStream.CopyTo(ms);
-                    Tuple<string, byte[]> dataTuple = Tuple.Create(Path.GetFileName(file), ms.ToArray());
-                    filesRaw.Add(dataTuple);
-                }
-
-            }
-            catch (IOException e)
-            {
-                Debug.LogError(e);
-            }
-        }
-
-        return filesRaw;
     }
 
     #region Photon Callbacks

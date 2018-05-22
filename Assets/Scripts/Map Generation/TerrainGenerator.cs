@@ -47,6 +47,10 @@ namespace Assets.Scripts.Map_Generation
         {
             if (terrainChunkDictionary.ContainsKey(coord))
                 return terrainChunkDictionary[coord];
+            else
+            {
+
+            }
             return null;
         }
         
@@ -175,9 +179,10 @@ namespace Assets.Scripts.Map_Generation
         /// Responds to chunk collider callbacks. Updates the navmesh based on the new collider data.
         /// </summary>
         /// <param name="chunk"></param>
-        private void OnTerrainChunkColliderChanged(TerrainChunk chunk)
+        private void OnTerrainChunkColliderChanged(TerrainChunk chunk, bool hasSetCollider)
         {
-            StartCoroutine(BuildNavMeshAsync());
+            if (hasSetCollider)
+                StartCoroutine(BuildNavMeshAsync());
         }
 
         /// <summary>

@@ -9,14 +9,14 @@ namespace Assets.Scripts.Map_Generation
     /// </summary>
     public class TerrainChunk
     {
-        private const float colliderGenerationDistanceThreshold = 5;
+        private const float colliderGenerationDistanceThreshold = 20;
         private const float sqrColliderGenerationDistanceThreshold = colliderGenerationDistanceThreshold * colliderGenerationDistanceThreshold;
 
-        private const float chunkPartLoadDistanceThreshold = 12;
+        private const float chunkPartLoadDistanceThreshold = 9;
         private const float sqrChunkPartLoadDistanceThreshold = chunkPartLoadDistanceThreshold * chunkPartLoadDistanceThreshold;
 
         public event Action<TerrainChunk, bool> OnVisibilityChanged;
-        public event Action<TerrainChunk> OnColliderChanged;
+        public event Action<TerrainChunk, bool> OnColliderChanged;
         public Vector2 Coord { get; private set; }
 
         public DataMap DataMap { get; private set; }
@@ -60,14 +60,18 @@ namespace Assets.Scripts.Map_Generation
             }
 
             MeshObject.SetActive(visible);
+
+            meshCollider.sharedMesh = null;
+            HasSetCollider = false;
+            OnColliderChanged?.Invoke(this, false);
         }
 
-        public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, BiomeMapSettings biomeMapSettings, ResourceMapSettings objectMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material terrainMeshMaterial)
+        public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, BiomeMapSettings biomeMapSettings, ResourceMapSettings resourceMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material terrainMeshMaterial)
         {
             this.Coord = coord;
             this.HeightMapSettings = heightMapSettings;
             this.BiomeMapSettings = biomeMapSettings;
-            this.ResourceMapSettings = objectMapSettings;
+            this.ResourceMapSettings = resourceMapSettings;
             this.MeshSettings = meshSettings;
             this.detailLevels = detailLevels;
             this.colliderLODIndex = colliderLODIndex;
@@ -202,7 +206,7 @@ namespace Assets.Scripts.Map_Generation
                 {
                     meshCollider.sharedMesh = lodMeshes[colliderLODIndex].Mesh;
                     HasSetCollider = true;
-                    OnColliderChanged?.Invoke(this);
+                    OnColliderChanged?.Invoke(this, true);
                 }
             }
         }
@@ -237,7 +241,7 @@ namespace Assets.Scripts.Map_Generation
             foreach (var chunkPart in DataMap.ChunkParts)
                 objectPoints.AddRange(chunkPart.Value.ObjectPoints.Values);
 
-            DataMapGenerator.SaveObjectMap(this, objectPoints.ToArray());
+            ObjectMapLoader.SaveObjectMap(this, objectPoints.ToArray());
         }
     }
 
