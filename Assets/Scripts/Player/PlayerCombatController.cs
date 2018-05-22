@@ -68,8 +68,6 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
     [PunRPC]
     private void KillPlayer(string playerName, string killerName)
     {
-        Debug.Log("Die");
-        
         CustomInRoomChat.Instance.AddLine($"{playerName} got killed by {killerName}");
         IsDead = true;
         TogglePlayerModel(false);

@@ -12,10 +12,10 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private bool interruptedPickup = false;
     private float interactionTimeout = 0f;
     private float pathUpdateTimeout = 0f;
+    private bool isMoving = false;
 
     [SerializeField] private LayerMask rotationLayerMask;
     [SerializeField] private LayerMask waterLayerMask;
-    [SerializeField] private float mouseDeadZoneFromPlayer;
 
     private PlayerCameraController cameraController = null;
     private PlayerStatsComponent stats;
@@ -70,8 +70,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (pathUpdateTimeout > 0)
             pathUpdateTimeout -= Time.deltaTime;
 
-        RotatePlayer();
-
+        if (!isMoving)
+            RotatePlayer();
+        
         if (CurrentInteraction == null || interruptedPickup)
             StopInteraction();
         else
@@ -99,9 +100,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (Physics.Raycast(ray, out hit, 1000f, rotationLayerMask.value | waterLayerMask.value))
         {
             Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
-            if (Vector3.Distance(transform.position, lookPos) > mouseDeadZoneFromPlayer)
-                transform.LookAt(lookPos);
+            transform.LookAt(lookPos);
         }
     }
 
@@ -120,11 +119,19 @@ public class PlayerMovementController : Photon.MonoBehaviour
         {
             interruptedPickup = true;
             rigidbodyComponent.AddForce(movementInput.normalized * stats.MovementSpeed);
+            transform.LookAt(transform.position + movementInput.normalized);
 
             animator.SetBool("IsRunning", true);
+            isMoving = true;
         }
         else
-            animator.SetBool("IsRunning", false);
+        {
+            if (CurrentInteraction == null)
+            {
+                animator.SetBool("IsRunning", false);
+                isMoving = false;
+            }
+        }
     }
 
     /// <summary>
@@ -136,7 +143,8 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (!agent.hasPath || pathUpdateTimeout <= 0)
         {
             agent.SetDestination(CurrentInteraction.transform.position);
-            pathUpdateTimeout = 0.01f;
+            pathUpdateTimeout = 0.1f;
+            isMoving = true;
         }
 
         var interactable = CurrentInteraction.GetComponent<IInteractable>();

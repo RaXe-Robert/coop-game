@@ -9,6 +9,7 @@ public class CraftingRecipeSlot : MonoBehaviour
     [SerializeField] private Transform requiredItems;
     [SerializeField] private Image recipeResultImage;
     [SerializeField] private Text recipeResultText;
+    [SerializeField] private CraftingItemTooltip recipeResultTooltip;
     [SerializeField] private Text craftingTimeText;
 
     public CraftingRecipe craftingRecipe;
@@ -34,7 +35,7 @@ public class CraftingRecipeSlot : MonoBehaviour
             recipeResultImage.sprite = craftingRecipe.result.item.Sprite;
             recipeResultText.text = craftingRecipe.result.item.name;
             craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
-
+            recipeResultTooltip.ItemName = craftingRecipe.result.item.name;
             InitializeRequiredItems();
         }
     }
@@ -72,8 +73,12 @@ public class CraftingRecipeSlot : MonoBehaviour
         {
             var go = Instantiate(requiredItemPrefab, requiredItems);
 
-            go.GetComponent<Image>().sprite = craftingRecipe.requiredItems[i].item.Sprite;
-            go.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
+            var item = craftingRecipe.requiredItems[i].item;
+            var amount = craftingRecipe.requiredItems[i].amount;
+            go.GetComponent<CraftingItemTooltip>().ItemName = item.name;
+            go.GetComponent<CraftingItemTooltip>().Amount = amount;
+            go.GetComponent<Image>().sprite = item.Sprite;
+            go.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(item.Id)} / {amount * amountToCraft}";
         }
     }
 

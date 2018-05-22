@@ -8,8 +8,12 @@ https://doc.photonengine.com
 http://forum.photonengine.com
 
 
-*** Version 4.1.1.18 ()
-	Fixed: Exception in QueueOutgoingAcknowledgement() with a lock(). This avoids threading issues between Send- and Receive-thread.
+*** Version 4.1.1.19 (9. April 2018 - rev4590)
+	Fixed: WSS now sends an operation "ping" in SendAcksOnly() (and SendOutgoingCommands()) to avoid getting timed out. This happens right away, while other commands/operations stay in queue.
+
+
+*** Version 4.1.1.18 (19. December 2017 - rev4540)
+	Fixed: Exception in QueueOutgoingAcknowledgement() with a lock(). This avoids threading issues between Send- and Receive-thread. This was an issue mostly seen in Photon Voice, which uses the library multi-threaded.
 	Changed: Network Simulation now only stores the actual data of messages, instead of storing an action/delegate.
 	Note: The delegate IL code for Network Simulation was instantiating a "display class" instance and caused GC garbage, even if no simulation was running.
 LoadBalancing:

@@ -123,9 +123,6 @@ public class EquipmentManager : MonoBehaviour
 
     public void EquipItem(Item item, int inventoryIndex)
     {
-        if (item.GetType() != typeof(Equippable))
-            return;
-
         if (item.GetType() == typeof(Armor))
             EquipArmor(item as Armor, inventoryIndex);
         else if (item.GetType() == typeof(Weapon))

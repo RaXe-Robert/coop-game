@@ -1,3 +1,16 @@
+v1.90 (10. April 2018)
+	Added: PhotonNetwork.LoadLevelAsync() with LoadSceneMode.single mode support only ( LoadSceneMode.additive async loading requires keeping track of all loadings)
+	Fixed: A WebGL build warning about unused code (minimal change).
+	Fixed: Compile conditions for console-related code. Some of the code will not work in the editor.
+	Updated: To Photon3Unity3d.dll v4.1.1.19, which contains a few important fixes. Mainly WSS and console related. See plugins\release_history.txt.
+
+	
+v1.89 (26. February 2018)
+	Changed: Best Region connection routine now takes in consideration the regions whitelist and correctly handle the saved best region pref, ignoring it if not in the whiteList anymore.
+	Updated: Unity 2018 compatibility update to fix errors and obsolete warnings
+    Fixed: KickOut/CloseConnection Call to properly make player leave room without becoming inactive
+    Updated: Removed Substance designer materials for Unity 2018 compatibility
+
 v1.88 (20. December 2017)
     Fixed: In Offline Mode, objects instantiated with PhotonNetwork.Instantiate get removed properly when the client 'disconnects' from Photon.
     Changed: FriendInfo.Name to "UserId", which matches the updated way we use UserId / Nickname.
@@ -15,7 +28,6 @@ v1.88 (20. December 2017)
 	Removed: surplus attribute ExecuteInEditMode in Editor script.
 	Changed: The room option "CheckUserOnJoin" is now always used. This means you have to use UserIDs to be able to rejoin a room. This was enabled before in most cases but now it's mandatory. If you don't set a userID, the server will assign a temp one for the "session".
 	Updated: To Photon3Unity3d.dll v4.1.1.18, which contains a few important fixes. See plugins\release_history.txt.
-
 
 v1.87 (11. October 2017)
     Fixed: Basic Tutorial: remove obsolete warnings in Unity 5 and up versions for override of methods defined in PunBehaviour.
@@ -425,7 +437,7 @@ Updated: PUN+ with a new native socket lib for iOS 32bit and 64bit. Please note:
 Fixed: PhotonAnimatorViewEditor for compatibility with Unity 5. Now Layers and Parameters can be configured as expected.
 Changed: A PhotonView that is created manually (by AddComponent()) will not attempt to register itself with PUN's internal list. Its viewID is 0. When you assign an ID to photonView.viewID, then it will register itself and can be found in PhotonView.Find(id). Make sure your IDs don't clash with IDs used in PhotonViews in the scene (1..999). Best, use PhotonView.AllocateViewID().
 Removed: A debug log in PhotonNetwork.networkingPeer.RegisterPhotonView(view) when you attempt to re-register a PhotonView and it's already in the list. This special case does not need logging.
-Updated: Several links to online docs, as the URLs changed. The basis is: http://doc.exitgames.com/en/pun
+Updated: Several links to online docs, as the URLs changed. The basis is: https://doc.photonengine.com/en-us/pun
 Updated: Doc of PhotonNetwork.RaiseEvent. The EventCallback description here was wrong. In the callback you get the ID of the PhotonPlayer who raised the event. It might be 0 for "done on behalf of the room".
 Fixed: OnPhotonCreateRoomFailed gets the 2 extra parameters (return code and  message) in all cases now.
 Added: Initial implementation of "CAS for Properties". This allows "Check And Swap" for SetCustomProperties. This should be a nice tool when any client can change a value and you want to make sure only one will succeed (can be picking up a item, making a kill, etc).
