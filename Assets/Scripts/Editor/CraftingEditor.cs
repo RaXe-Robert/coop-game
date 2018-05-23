@@ -55,6 +55,7 @@ public class CraftingEditor : EditorWindow
         if (selectedRecipe != null)
         {
             DrawRecipeDataFields();
+            EditorUtility.SetDirty(selectedCraftingList);
         }
         GUILayout.EndArea();
     }

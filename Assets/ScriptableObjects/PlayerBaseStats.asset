@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   movementSpeed: 100
-  minDamage: 2
-  maxDamage: 4
+  minDamage: 10
+  maxDamage: 20
   timeBetweenAttacks: 1
   timeBetweenResourceHits: 1
   defense: 0

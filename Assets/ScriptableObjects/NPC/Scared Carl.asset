@@ -8,12 +8,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79ac6ca6141691f41bd87e748cd6d8e8, type: 3}
-  m_Name: EnemyCarl
+  m_Script: {fileID: 11500000, guid: b754e658a4e4c884ba3eb215361d6d91, type: 3}
+  m_Name: Scared Carl
   m_EditorClassIdentifier: 
   maxHealth: 20
-  movementSpeed: 3
-  minDamage: 2
-  maxDamage: 8
+  movementSpeed: 4
+  minDamage: 1
+  maxDamage: 4
   timeBetweenAttacks: 1
-  defense: 0
+  defense: 1
+  NPCName: Scared Carl

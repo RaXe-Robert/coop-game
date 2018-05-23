@@ -20,7 +20,7 @@ public class Billboard : MonoBehaviour
     {
         if (cameraToFace == null)
         {
-            cameraToFace = PlayerNetwork.PlayerObject?.GetComponent<PlayerCameraController>()?.CameraReference;
+            cameraToFace = PlayerNetwork.LocalPlayer?.GetComponent<PlayerCameraController>()?.CameraReference;
             return;
         }
 

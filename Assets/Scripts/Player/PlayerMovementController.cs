@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
-[RequireComponent(typeof(PlayerCameraController))]
-[RequireComponent(typeof(StatsComponent))]
+[RequireComponent(typeof(PlayerStatsComponent), typeof(PlayerCameraController))]
 public class PlayerMovementController : Photon.MonoBehaviour
 {
     private Rigidbody rigidbodyComponent;
     private Animator animator;
-    private UnityEngine.AI.NavMeshAgent agent;
+    private NavMeshAgent agent;
     private bool interruptedPickup = false;
     private float interactionTimeout = 0f;
     private float pathUpdateTimeout = 0f;
@@ -17,12 +17,13 @@ public class PlayerMovementController : Photon.MonoBehaviour
     [SerializeField] private LayerMask waterLayerMask;
 
     private PlayerCameraController cameraController = null;
-    private StatsComponent stats;
+    private PlayerStatsComponent stats;
+    private PlayerCombatController combatController;
 
     public GameObject CurrentInteraction { get; set; }
 
-    public void StartInteraction(IInteractable interactable) =>
-        CurrentInteraction = interactable.GameObject;
+    public void StartInteraction(GameObject interactable) =>
+        CurrentInteraction = interactable;
 
     /// <summary>
     /// Returns true if the player has no more interaction timeout
@@ -33,16 +34,17 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// Adds delay to the timeout which the player needs to wait before it can interact with certain things
     /// </summary>
     /// <param name="timeout"></param>
-    public void AddInteractionTimeout(float timeout) => 
+    public void AddInteractionTimeout(float timeout) =>
         interactionTimeout += timeout;
-    
+
     private void Awake()
     {
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
-        stats = GetComponent<StatsComponent>();
+        stats = GetComponent<PlayerStatsComponent>();
+        combatController = GetComponent<PlayerCombatController>();
     }
 
     private void Start()
@@ -145,9 +147,16 @@ public class PlayerMovementController : Photon.MonoBehaviour
         }
 
         var interactable = CurrentInteraction.GetComponent<IInteractable>();
-        if (interactable.InRange(transform.position))
+        var enemy = CurrentInteraction.GetComponent<IAttackable>();
+        if (interactable != null && interactable.InRange(transform.position))
         {
             interactable.Interact(gameObject);
+            StopInteraction();
+        }
+        else if(enemy != null && Vector3.Distance(transform.position, enemy.GameObject.transform.position) < 3 && CanInteract)
+        {
+            enemy.TakeHit(combatController);
+            AddInteractionTimeout(combatController.TimeBetweenAttacks);
             StopInteraction();
         }
         else

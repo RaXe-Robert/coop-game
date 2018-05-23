@@ -59,7 +59,7 @@ public class BuildingController : Photon.MonoBehaviour
         {
             buildableData = buildable;
 
-            buildableToBuild = Instantiate(buildableResource, PlayerNetwork.PlayerObject.transform.position, Quaternion.identity);
+            buildableToBuild = Instantiate(buildableResource, PlayerNetwork.LocalPlayer.transform.position, Quaternion.identity);
             buildableToBuild.name = buildable.Name;
 
             buildableToBuildRenderer = buildableToBuild.GetComponent<Renderer>();
@@ -108,8 +108,8 @@ public class BuildingController : Photon.MonoBehaviour
 
     private IEnumerator FollowMouse()
     {
-        PlayerCameraController playerCameraController = PlayerNetwork.PlayerObject.GetComponent<PlayerCameraController>();
-        Transform playerTransform = PlayerNetwork.PlayerObject.transform;
+        PlayerCameraController playerCameraController = PlayerNetwork.LocalPlayer.GetComponent<PlayerCameraController>();
+        Transform playerTransform = PlayerNetwork.LocalPlayer.transform;
         Material buildingGrid = GetComponent<Renderer>().sharedMaterial;
 
         while (buildableToBuild != null)
@@ -172,7 +172,7 @@ public class BuildingController : Photon.MonoBehaviour
     /// <returns></returns>
     private bool ConfirmBuildingConditions()
     {
-        if (buildableToBuild == null || buildingRange < Vector3.Distance(PlayerNetwork.PlayerObject.transform.position, buildableToBuild.transform.position))
+        if (buildableToBuild == null || buildingRange < Vector3.Distance(PlayerNetwork.LocalPlayer.transform.position, buildableToBuild.transform.position))
             return false;
 
         if (buildableToBuildRenderer)

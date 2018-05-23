@@ -273,10 +273,10 @@ public class Inventory : MonoBehaviour
                 if (GetItemAmountById(item.Id) % 64 != 0)
                     FillItemStacksById(itemId, stackSize);
                 else
-                    ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);
+                    ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, item.Id, stackSize);
             }
             else
-                ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);
+                ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, item.Id, stackSize);
         }
         else
         {
@@ -338,5 +338,20 @@ public class Inventory : MonoBehaviour
                 maxCrafts = temp;
         }
         return maxCrafts;
+    }
+
+    public void DropAllItems()
+    {
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            var item = inventoryItems[i];
+            if (item == null)
+                continue;
+
+            var position = transform.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2));
+            ItemFactory.CreateWorldObject(position, item.Id, item.StackSize);
+            inventoryItems[i] = null;
+        }
+        OnItemChangedCallback?.Invoke();
     }
 }

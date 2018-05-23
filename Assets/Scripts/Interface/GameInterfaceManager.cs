@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu, Controls }
+public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu, Controls, DeathScreen }
 
 public class GameInterfaceManager : MonoBehaviour
 {
-
     public static GameInterfaceManager Instance { get; private set; }
 
     [SerializeField] private GameObject escapeMenuUI;
@@ -14,8 +13,10 @@ public class GameInterfaceManager : MonoBehaviour
     [SerializeField] private GameObject craftingUI;
     [SerializeField] private GameObject equipmentUI;
     [SerializeField] private GameObject controlsUI;
+    [SerializeField] private GameObject deathScreen;
 
     private Dictionary<GameInterface, GameObject> interfaceGameObjectDictionary;
+    private PlayerCombatController playerCombatController;
 
     private void Awake()
     {
@@ -25,18 +26,22 @@ public class GameInterfaceManager : MonoBehaviour
 
     private void Start()
     {
+        playerCombatController = PlayerNetwork.LocalPlayer.GetComponent<PlayerCombatController>();
         interfaceGameObjectDictionary = new Dictionary<GameInterface, GameObject>
         {
             {GameInterface.EscapeMenu, escapeMenuUI },
             {GameInterface.Crafting, craftingUI },
             {GameInterface.Equipment, equipmentUI },
             {GameInterface.Inventory, inventoryUI },
-            {GameInterface.Controls, controlsUI }
+            {GameInterface.Controls, controlsUI },
+            {GameInterface.DeathScreen, deathScreen }
         };
     }
 
     public void ToggleGameInterface(GameInterface interfaceToToggle)
     {
+        if (playerCombatController.IsDead) return;
+
         switch (interfaceToToggle)
         {
             case GameInterface.Crafting:
@@ -53,6 +58,9 @@ public class GameInterfaceManager : MonoBehaviour
                     CloseAllInterfaces();
                 else
                     ToggleGivenDisableOthers(GameInterface.EscapeMenu);
+                break;
+            case GameInterface.DeathScreen:
+                ToggleGivenDisableOthers(GameInterface.DeathScreen);
                 break;
         }
 
@@ -74,7 +82,7 @@ public class GameInterfaceManager : MonoBehaviour
         return false;
     }
 
-    private void CloseAllInterfaces()
+    public void CloseAllInterfaces()
     {
         foreach (var panel in interfaceGameObjectDictionary)
         {
@@ -88,13 +96,9 @@ public class GameInterfaceManager : MonoBehaviour
         foreach (var panel in interfaceGameObjectDictionary)
         {
             if (panel.Key != gameInterface)
-            {
                 panel.Value.SetActive(false);
-            }
             else
-            {
                 panel.Value.SetActive(!panel.Value.activeSelf);
-            }
         }
     }
 }
