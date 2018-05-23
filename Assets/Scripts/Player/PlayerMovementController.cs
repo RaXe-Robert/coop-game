@@ -2,8 +2,7 @@
 using System.Collections;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(PlayerCameraController))]
-[RequireComponent(typeof(PlayerStatsComponent))]
+[RequireComponent(typeof(PlayerStatsComponent), typeof(PlayerCameraController))]
 public class PlayerMovementController : Photon.MonoBehaviour
 {
     private Rigidbody rigidbodyComponent;
