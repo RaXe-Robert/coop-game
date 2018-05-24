@@ -43,8 +43,8 @@ namespace Assets.Scripts.Map_Generation
         public readonly ResourceMapSettings ResourceMapSettings;
         public readonly MeshSettings MeshSettings;
 
-        public Transform Viewer { get; private set; }
-        public Vector2 ViewerPosition => new Vector2(Viewer.position.x, Viewer.position.z);
+        public TerrainViewer Viewer { get; set; }
+        public Vector2 ViewerPosition => new Vector2(Viewer.Transform.position.x, Viewer.Transform.position.z);
 
         public bool IsVisible => MeshObject.activeSelf;
         public void SetVisible(bool visible)
@@ -66,7 +66,7 @@ namespace Assets.Scripts.Map_Generation
             OnColliderChanged?.Invoke(this, false);
         }
 
-        public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, BiomeMapSettings biomeMapSettings, ResourceMapSettings resourceMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material terrainMeshMaterial)
+        public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, BiomeMapSettings biomeMapSettings, ResourceMapSettings resourceMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, TerrainViewer viewer, Material terrainMeshMaterial)
         {
             this.Coord = coord;
             this.HeightMapSettings = heightMapSettings;
@@ -125,7 +125,7 @@ namespace Assets.Scripts.Map_Generation
 
         public void UpdateTerrainChunk()
         {
-            if (!DataMapReceived)
+            if (!DataMapReceived || Viewer?.ViewerType == TerrainViewer.ViewerTypes.secondary)
                 return;
 
             float viewerDstFromNearestEdge = Mathf.Sqrt(Bounds.SqrDistance(ViewerPosition));
@@ -136,7 +136,7 @@ namespace Assets.Scripts.Map_Generation
             if (visible)
             {
                 int lodIndex = 0;
-
+                
                 for (int i = 0; i < detailLevels.Length - 1; i++)
                 {
                     if (viewerDstFromNearestEdge > detailLevels[i].VisibleDistanceThreshold)
@@ -170,7 +170,7 @@ namespace Assets.Scripts.Map_Generation
         /// </summary>
         public void UpdateTerrainChunkParts()
         {
-            if (!DataMapReceived)
+            if (!DataMapReceived || (Viewer?.ViewerType == TerrainViewer.ViewerTypes.secondary))
                 return;
 
             Vector2 viewerPosition = ViewerPosition;
@@ -189,7 +189,7 @@ namespace Assets.Scripts.Map_Generation
 
         public void UpdateCollisionMesh()
         {
-            if (HasSetCollider)
+            if (HasSetCollider || (Viewer?.ViewerType == TerrainViewer.ViewerTypes.secondary))
                 return;
 
             float sqrDstFromViewerToEdge = Bounds.SqrDistance(ViewerPosition);
@@ -222,7 +222,6 @@ namespace Assets.Scripts.Map_Generation
                 throw new IndexOutOfRangeException("Index was greater than the DataMap size.");
 
             int chunkPartSize = DataMap.UniformSize / MeshSettings.ChunkPartSizeRoot + 1;
-
             int coordX = Mathf.FloorToInt(x / chunkPartSize) - 1;
             int coordZ = Mathf.FloorToInt(z / chunkPartSize) - 1;
 
@@ -255,7 +254,7 @@ namespace Assets.Scripts.Map_Generation
         public bool HasMesh { get; private set; }
         private readonly int lod;
 
-        public event System.Action UpdateCallback;
+        public event Action UpdateCallback;
 
         public LODMesh(int lod)
         {
@@ -267,7 +266,7 @@ namespace Assets.Scripts.Map_Generation
             Mesh = ((MeshData)meshData).CreateMesh();
             HasMesh = true;
 
-            UpdateCallback();
+            UpdateCallback?.Invoke();
         }
 
         public void RequestMesh(HeightMap heightMap, MeshSettings meshSettings)

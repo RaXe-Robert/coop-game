@@ -17,7 +17,6 @@ namespace Assets.Scripts.Map_Generation
         private const float viewerMoveThresholdForChunkPartUpdate = 5f;
         private const float sqrViewerMoveThresholdForChunkPartUpdate = viewerMoveThresholdForChunkPartUpdate * viewerMoveThresholdForChunkPartUpdate;
 
-        // Testing, refactor required
         public static int Seed { get; private set; }
         public static string WorldDataPath => PlayerSaveDataExchanger.Instance.WorldDataPath;
 
@@ -32,10 +31,10 @@ namespace Assets.Scripts.Map_Generation
 
         public Material TerrainMeshMaterial;
 
-        private Transform viewer;
-        private Vector2 viewerPosition;
-        private Vector2 viewerPositionOld_ChunkUpdate;
-        private Vector2 viewerPositionOld_ChunkPartUpdate;
+
+        private TerrainViewer primaryViewer;
+        [SerializeField]
+        private List<TerrainViewer> secondaryViewers;
 
         private NavMeshSurface navMeshSurface;
 
@@ -49,7 +48,7 @@ namespace Assets.Scripts.Map_Generation
                 return terrainChunkDictionary[coord];
             else
             {
-
+                Debug.LogError("TerrainChunk does not exist");
             }
             return null;
         }
@@ -57,6 +56,8 @@ namespace Assets.Scripts.Map_Generation
         private List<TerrainChunk> visibleTerrainChunks;
 
         private bool setupFinished;
+
+        public bool IsBuildingNavmesh { get; private set; }
 
         private void Awake()
         {
@@ -66,6 +67,7 @@ namespace Assets.Scripts.Map_Generation
             visibleTerrainChunks = new List<TerrainChunk>();
 
             setupFinished = false;
+            IsBuildingNavmesh = false;
         }
 
         private void Start()
@@ -78,26 +80,41 @@ namespace Assets.Scripts.Map_Generation
             if (!setupFinished)
                 return;
 
-            viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+            primaryViewer.Position = new Vector2(primaryViewer.Transform.position.x, primaryViewer.Transform.position.z);
+
+            bool secondaryViewerMoveTresholdReached = false;
+            foreach (var viewer in secondaryViewers)
+            {
+                if (viewer.Transform == null)
+                    continue;
+
+                viewer.Position = new Vector2(viewer.Transform.position.x, viewer.Transform.position.z);
+
+                if ((viewer.PositionOld_ChunkUpdate - viewer.Position).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate)
+                {
+                    viewer.PositionOld_ChunkUpdate = viewer.Position;
+                    secondaryViewerMoveTresholdReached = true;
+                }
+            }
 
             // Update collision meshes for all visibleTerrainChunks if the viewer has moved at all since the previous frame.
-            if (viewerPosition != viewerPositionOld_ChunkUpdate)
+            if (primaryViewer.Position != primaryViewer.PositionOld_ChunkUpdate)
             {
                 foreach (TerrainChunk terrainChunk in visibleTerrainChunks)
                     terrainChunk.UpdateCollisionMesh();
             }
 
             // Update all visible terrain chunks if the viewer has moved by a certain amount
-            if ((viewerPositionOld_ChunkUpdate - viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate)
+            if ((primaryViewer.PositionOld_ChunkUpdate - primaryViewer.Position).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate || secondaryViewerMoveTresholdReached)
             {
-                viewerPositionOld_ChunkUpdate = viewerPosition;
+                primaryViewer.PositionOld_ChunkUpdate = primaryViewer.Position;
                 UpdateVisibleChunks();
             }
 
             // Update chunk parts of all the visible terrain chunks if the viewer has moved by a certain amount
-            if ((viewerPositionOld_ChunkPartUpdate - viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkPartUpdate)
+            if ((primaryViewer.PositionOld_ChunkPartUpdate - primaryViewer.Position).sqrMagnitude > sqrViewerMoveThresholdForChunkPartUpdate)
             {
-                viewerPositionOld_ChunkPartUpdate = viewerPosition;
+                primaryViewer.PositionOld_ChunkPartUpdate = primaryViewer.Position;
 
                 foreach (TerrainChunk terrainChunk in visibleTerrainChunks)
                     terrainChunk.UpdateTerrainChunkParts();
@@ -116,7 +133,8 @@ namespace Assets.Scripts.Map_Generation
             meshWorldSize = MeshSettings.MeshWorldSize;
             chunksVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / meshWorldSize);
 
-            viewer = PlayerNetwork.PlayerObject.transform;
+            primaryViewer = new TerrainViewer(PlayerNetwork.PlayerObject.transform, TerrainViewer.ViewerTypes.primary);
+            secondaryViewers = new List<TerrainViewer>();
 
             UpdateVisibleChunks();
 
@@ -136,22 +154,58 @@ namespace Assets.Scripts.Map_Generation
                 visibleTerrainChunks[i].UpdateTerrainChunk();
             }
 
-            // Find new chunks based on viewer position
-            int currentChunkCoordX = Mathf.RoundToInt(viewerPosition.x / meshWorldSize);
-            int currentChunkCoordY = Mathf.RoundToInt(viewerPosition.y / meshWorldSize);
+            for (int yOffset = -1; yOffset <= 1; yOffset++)
+            {
+                for (int xOffset = -1; xOffset <= 1; xOffset++)
+                {
+                    // Find new chunks based on secondary viewer positions
+                    foreach (var secondaryViewer in secondaryViewers)
+                    {
+                        int secondaryViewerChunkCoordX = Mathf.RoundToInt(secondaryViewer.Position.x / meshWorldSize);
+                        int secondaryViewerChunkCoordY = Mathf.RoundToInt(secondaryViewer.Position.y / meshWorldSize);
+
+                        Vector2 viewedChunkCoord = new Vector2(secondaryViewerChunkCoordX + xOffset, secondaryViewerChunkCoordY + yOffset);
+                        if (!alreadyUpdatedChunkCoords.Contains(viewedChunkCoord))
+                        {
+                            if (terrainChunkDictionary.ContainsKey(viewedChunkCoord))
+                            {
+                                TerrainChunk terrainChunk = terrainChunkDictionary[viewedChunkCoord];
+                                terrainChunk.Viewer = secondaryViewer;
+                            }
+                            else
+                            {
+                                TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, HeightMapSettings, BiomeMapSettings, ResourceMapSettings, MeshSettings, detailLevels, colliderLODIndex, transform, secondaryViewer, TerrainMeshMaterial);
+                                terrainChunkDictionary.Add(viewedChunkCoord, newChunk);
+                                newChunk.OnVisibilityChanged += OnTerrainChunkVisibilityChanged;
+                                newChunk.OnColliderChanged += OnTerrainChunkColliderChanged;
+                                newChunk.Load();
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Find new chunks based on primary viewer position
+            int primaryViewerChunkCoordX = Mathf.RoundToInt(primaryViewer.Position.x / meshWorldSize);
+            int primaryViewerChunkCoordY = Mathf.RoundToInt(primaryViewer.Position.y / meshWorldSize);
 
             for (int yOffset = -chunksVisibleInViewDistance; yOffset <= chunksVisibleInViewDistance; yOffset++)
             {
                 for (int xOffset = -chunksVisibleInViewDistance; xOffset <= chunksVisibleInViewDistance; xOffset++)
                 {
-                    Vector2 viewedChunkCoord = new Vector2(currentChunkCoordX + xOffset, currentChunkCoordY + yOffset);
+                    Vector2 viewedChunkCoord = new Vector2(primaryViewerChunkCoordX + xOffset, primaryViewerChunkCoordY + yOffset);
                     if (!alreadyUpdatedChunkCoords.Contains(viewedChunkCoord))
                     {
                         if (terrainChunkDictionary.ContainsKey(viewedChunkCoord))
-                            terrainChunkDictionary[viewedChunkCoord].UpdateTerrainChunk();
+                        {
+                            TerrainChunk terrainChunk = terrainChunkDictionary[viewedChunkCoord];
+                            terrainChunk.Viewer = primaryViewer;
+
+                            terrainChunk.UpdateTerrainChunk();
+                        }
                         else
                         {
-                            TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, HeightMapSettings, BiomeMapSettings, ResourceMapSettings, MeshSettings, detailLevels, colliderLODIndex, transform, viewer, TerrainMeshMaterial);
+                            TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, HeightMapSettings, BiomeMapSettings, ResourceMapSettings, MeshSettings, detailLevels, colliderLODIndex, transform, primaryViewer, TerrainMeshMaterial);
                             terrainChunkDictionary.Add(viewedChunkCoord, newChunk);
                             newChunk.OnVisibilityChanged += OnTerrainChunkVisibilityChanged;
                             newChunk.OnColliderChanged += OnTerrainChunkColliderChanged;
@@ -182,7 +236,11 @@ namespace Assets.Scripts.Map_Generation
         private void OnTerrainChunkColliderChanged(TerrainChunk chunk, bool hasSetCollider)
         {
             if (hasSetCollider)
+            {
+                if (IsBuildingNavmesh)
+                    StopCoroutine(BuildNavMeshAsync());
                 StartCoroutine(BuildNavMeshAsync());
+            }
         }
 
         /// <summary>
@@ -190,6 +248,9 @@ namespace Assets.Scripts.Map_Generation
         /// </summary>
         private IEnumerator BuildNavMeshAsync()
         {
+            IsBuildingNavmesh = true;
+            Debug.Log("Started building navmesh");
+
             // Get the data for the surface
             NavMeshData data = InitializeBakeData();
 
@@ -208,7 +269,8 @@ namespace Assets.Scripts.Map_Generation
             // Finalize / Apply
             navMeshSurface.AddData();
 
-            Debug.Log("finished");
+            Debug.Log("Finished building navmesh");
+            IsBuildingNavmesh = false;
         }
 
         /// <summary>
@@ -219,21 +281,22 @@ namespace Assets.Scripts.Map_Generation
         private NavMeshData InitializeBakeData()
         {
             List<NavMeshBuildSource> buildSources = new List<NavMeshBuildSource>();
-            Bounds bounds = new Bounds(viewer.position, new Vector3(100f, 50f, 100f));
+            Bounds bounds = new Bounds(primaryViewer.Transform.position, new Vector3(100f, 50f, 100f));
 
             NavMeshBuilder.CollectSources(transform, navMeshSurface.layerMask, NavMeshCollectGeometry.PhysicsColliders, 0, new List<NavMeshBuildMarkup>(), buildSources);
             Debug.Log("Sources found: " + buildSources.Count.ToString());
 
+            /*
             // Reduce the amount by excluding objects that are further than 100 units away. EXPERIMENTAL
             for (int i = buildSources.Count - 1; i >= 0; i--)
             {
                 Vector3 position = buildSources[i].transform.GetColumn(3);
-                if (Vector3.Distance(position, viewer.position) > 100f)
+                if (Vector3.Distance(position, primaryViewer.Transform.position) > 100f)
                 {
                     buildSources.Remove(buildSources[i]);
                 }
             }
-            Debug.Log("Reduced to: " + buildSources.Count.ToString());
+            Debug.Log("Reduced to: " + buildSources.Count.ToString()); */
 
             return NavMeshBuilder.BuildNavMeshData(navMeshSurface.GetBuildSettings(), buildSources, bounds, navMeshSurface.transform.position, navMeshSurface.transform.rotation);
         }
@@ -266,5 +329,23 @@ namespace Assets.Scripts.Map_Generation
         public float VisibleDistanceThreshold;
 
         public float SqrVisibleDistanceThreshold => VisibleDistanceThreshold * VisibleDistanceThreshold;
+    }
+
+    [System.Serializable]
+    public class TerrainViewer
+    {
+        public enum ViewerTypes { primary, secondary }
+        public ViewerTypes ViewerType;
+
+        public Transform Transform;
+        public Vector2 Position;
+        public Vector2 PositionOld_ChunkUpdate;
+        public Vector2 PositionOld_ChunkPartUpdate;
+
+        public TerrainViewer(Transform transform, ViewerTypes viewerType)
+        {
+            this.Transform = transform;
+            this.ViewerType = viewerType;
+        }
     }
 }

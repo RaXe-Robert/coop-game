@@ -50,7 +50,7 @@ public class WorldResourceManager : Photon.MonoBehaviour {
     private void RPC_DecreaseHealth(double id, Vector2 terrainChunkCoord, float amount)
     {
         networkedWorldResources[id].Health -= amount;
-        Debug.Log(networkedWorldResources[id].Health);
+        Debug.Log(id);
 
         if (PhotonNetwork.isMasterClient)
         {

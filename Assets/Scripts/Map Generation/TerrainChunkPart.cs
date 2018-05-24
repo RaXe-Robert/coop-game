@@ -47,7 +47,7 @@ namespace Assets.Scripts.Map_Generation
             float a = objectPoint.position.x + objectPoint.position.y;
             float b = objectPoint.position.z + objectPoint.position.y;
             double id = 0.5 * (a + b) * (a + b + 1) + b;
-
+            
             if (!ObjectPoints.ContainsKey(id))
                 ObjectPoints.Add(id, objectPoint);
             else
