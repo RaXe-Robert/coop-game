@@ -46,6 +46,13 @@ public class WorldNotificationsManager : Photon.MonoBehaviour
             photonView.RPC("CreateNotification", PhotonTargets.Others, worldNotificationArgs.Position, worldNotificationArgs.Text, worldNotificationArgs.Duration, worldNotificationArgs.Color);
     }
 
+    public void ShowLocalNotification(WorldNotificationArgs worldNotificationArgs)
+    {
+        GameObject worldNotificationObj = Instantiate(worldNotificationPrefab);
+        WorldNotification worldNotification = worldNotificationObj.GetComponent<WorldNotification>();
+        worldNotification.InitializeAndStart(worldNotificationArgs);
+    }
+
     [PunRPC]
     private void CreateNotification(Vector3 position, string text, float duration, string color)
     {

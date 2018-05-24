@@ -114,7 +114,7 @@ namespace Assets.Scripts.Map_Generation
 
         private void OnMouseDown()
         {
-            Ray mouseRay = PlayerNetwork.PlayerObject.GetComponent<PlayerCameraController>().CameraReference.ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
+            Ray mouseRay = PlayerNetwork.LocalPlayer.GetComponent<PlayerCameraController>().CameraReference.ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
             RaycastHit raycastHitInfo;
             if (Physics.Raycast(mouseRay, out raycastHitInfo))
             {

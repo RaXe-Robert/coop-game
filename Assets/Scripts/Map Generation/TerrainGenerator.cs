@@ -133,7 +133,7 @@ namespace Assets.Scripts.Map_Generation
             meshWorldSize = MeshSettings.MeshWorldSize;
             chunksVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / meshWorldSize);
 
-            primaryViewer = new TerrainViewer(PlayerNetwork.PlayerObject.transform, TerrainViewer.ViewerTypes.primary);
+            primaryViewer = new TerrainViewer(PlayerNetwork.LocalPlayer.transform, TerrainViewer.ViewerTypes.primary);
             secondaryViewers = new List<TerrainViewer>();
 
             UpdateVisibleChunks();

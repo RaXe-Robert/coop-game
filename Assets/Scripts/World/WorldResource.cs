@@ -9,11 +9,12 @@ using Assets.Scripts.Map_Generation;
 [RequireComponent(typeof(Animator), typeof(ItemsToDropComponent))]
 public class WorldResource : MonoBehaviour, IInteractable
 {
-    [SerializeField] private new string name;
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private ToolType requiredToolToHarvest;
-    [SerializeField] private float interactDistance = 5f;
+    public new string name;
+    public ToolType requiredToolToHarvest;
+    public float interactDistance = 5f;
+
     [SerializeField] private GameObject spawnOnDepleted;
+    [SerializeField] private float maxHealth = 100f;
 
     private Animator animator;
     private ItemsToDropComponent itemsToDrop;
@@ -63,30 +64,27 @@ public class WorldResource : MonoBehaviour, IInteractable
         if (!InRange(invoker.transform.position))
             return;
 
-        var playerMovement = PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>();
+        var playerMovement = PlayerNetwork.LocalPlayer.GetComponent<PlayerMovementController>();
         if (!playerMovement.CanInteract)
         {
-            WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
+            WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1));
             return;
         }
 
-        var stats = PlayerNetwork.PlayerObject.GetComponent<StatsComponent>();
+        var stats = PlayerNetwork.LocalPlayer.GetComponent<PlayerStatsComponent>();
         playerMovement.AddInteractionTimeout(stats.TimeBetweenResourceHits);
 
-        var equipmentManager = PlayerNetwork.PlayerObject.GetComponent<EquipmentManager>();
+        var equipmentManager = PlayerNetwork.LocalPlayer.GetComponent<EquipmentManager>();
         if (!equipmentManager.HasToolEquipped(requiredToolToHarvest))
         {
-            WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
+            WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1));
             return;
         }
 
         WorldResourceManager.Instance.DecreaseHealth(this, TerrainChunk, 50f);
     }
 
-    public string TooltipText()
-    {
-        return $"{name} \nRequires {requiredToolToHarvest}";
-    }
+    public string TooltipText => $"{name} \nRequires {requiredToolToHarvest}";
 
     #endregion //IInteractable Implementation
 

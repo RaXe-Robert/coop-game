@@ -60,7 +60,7 @@ public class BuildableInteractionMenu : MonoBehaviour
         Target = invoker;
 
         if (canvas.worldCamera == null)
-            canvas.worldCamera = PlayerNetwork.PlayerObject?.GetComponent<PlayerCameraController>()?.CameraReference;
+            canvas.worldCamera = PlayerNetwork.LocalPlayer?.GetComponent<PlayerCameraController>()?.CameraReference;
 
         if (actions.Length > interactionButtons.Count)
             Debug.LogWarning("[BuildableInteractionMenu] More actions than interaction buttons.");
