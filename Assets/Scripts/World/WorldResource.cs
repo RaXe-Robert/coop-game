@@ -8,6 +8,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
     public new string name;
     public ToolType requiredToolToHarvest;
     public float interactDistance = 5f;
+    public SoundManager.AttackSound attackSound = SoundManager.AttackSound.WOOD;
     [SerializeField] private GameObject spawnOnDepleted;
     [SerializeField] private HealthComponent healthComponent;
     [SerializeField] private ItemsToDropComponent itemsToDropComponent;
@@ -55,11 +56,7 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
         if (!InRange(invoker.transform.position))
             return;
 
-        //We need to make a way to get the type of material from a world item.
-        if (this.gameObject.name.Contains("Tree"))
-            SoundManager.Instance.PlayAttackSound(SoundManager.AttackSound.WOOD);
-        if (gameObject.name.Contains("rock"))
-            SoundManager.Instance.PlayAttackSound(SoundManager.AttackSound.STONE);
+        SoundManager.Instance.PlayAttackSound(attackSound);
 
         var playerMovement = PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>();
         if (!playerMovement.CanInteract)
