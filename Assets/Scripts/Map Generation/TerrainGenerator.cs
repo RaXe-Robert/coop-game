@@ -31,10 +31,15 @@ namespace Assets.Scripts.Map_Generation
 
         public Material TerrainMeshMaterial;
 
-
         private TerrainViewer primaryViewer;
         [SerializeField]
-        private List<TerrainViewer> secondaryViewers;
+        private Dictionary<int, TerrainViewer> secondaryViewers;
+        private void AddSecondaryViewer(PhotonView photonView)
+        {
+            if (!secondaryViewers.ContainsKey(photonView.viewID))
+                secondaryViewers.Add(photonView.viewID, null);
+            secondaryViewers[photonView.viewID] = new TerrainViewer(photonView.transform, TerrainViewer.ViewerTypes.secondary);
+        }
 
         private NavMeshSurface navMeshSurface;
 
@@ -47,9 +52,7 @@ namespace Assets.Scripts.Map_Generation
             if (terrainChunkDictionary.ContainsKey(coord))
                 return terrainChunkDictionary[coord];
             else
-            {
                 Debug.LogError("TerrainChunk does not exist");
-            }
             return null;
         }
         
@@ -72,29 +75,57 @@ namespace Assets.Scripts.Map_Generation
 
         private void Start()
         {
-            ApplySeed();
+            Seed = (int)PhotonNetwork.room.CustomProperties["seed"];
+            HeightMapSettings.NoiseSettings.seed = Seed;
+            BiomeMapSettings.NoiseSettings.seed = Seed;
+            ResourceMapSettings.NoiseSettings.seed = Seed;
+
+            if (PlayerSaveDataExchanger.Instance.IsWorldDownloaded == false)
+                PlayerSaveDataExchanger.Instance.OnWorldDownloaded += OnWorldLoaded;
+            else
+                OnWorldLoaded(true);
         }
+
+        private void OnEnable() => PlayerNetwork.OtherPlayerSpawned += AddSecondaryViewer;
+        private void OnDisable() => PlayerNetwork.OtherPlayerSpawned -= AddSecondaryViewer;
 
         private void Update()
         {
             if (!setupFinished)
                 return;
 
+            foreach (var terrainChunk in terrainChunkDictionary.Values)
+            {
+                Debug.DrawRay(new Vector3(terrainChunk.Bounds.center.x, 0f, terrainChunk.Bounds.center.y), Vector3.up * 50f);
+            }
+
             primaryViewer.Position = new Vector2(primaryViewer.Transform.position.x, primaryViewer.Transform.position.z);
 
+            List<int> invalidViewers = new List<int>();
+
             bool secondaryViewerMoveTresholdReached = false;
-            foreach (var viewer in secondaryViewers)
+            foreach (var secondaryViewer in secondaryViewers)
             {
-                if (viewer.Transform == null)
-                    continue;
-
-                viewer.Position = new Vector2(viewer.Transform.position.x, viewer.Transform.position.z);
-
-                if ((viewer.PositionOld_ChunkUpdate - viewer.Position).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate)
+                if (secondaryViewer.Value.Transform == null)
                 {
-                    viewer.PositionOld_ChunkUpdate = viewer.Position;
+                    Debug.LogWarning("Viewer has no transform");
+                    invalidViewers.Add(secondaryViewer.Key);
+                    continue;
+                }
+
+                secondaryViewer.Value.Position = new Vector2(secondaryViewer.Value.Transform.position.x, secondaryViewer.Value.Transform.position.z);
+
+                if ((secondaryViewer.Value.PositionOld_ChunkUpdate - secondaryViewer.Value.Position).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate)
+                {
+                    secondaryViewer.Value.PositionOld_ChunkUpdate = secondaryViewer.Value.Position;
                     secondaryViewerMoveTresholdReached = true;
                 }
+            }
+
+            for (int i = invalidViewers.Count - 1; i >= 0; i--)
+            {
+                Debug.Log("removing viewer");
+                secondaryViewers.Remove(invalidViewers[i]);
             }
 
             // Update collision meshes for all visibleTerrainChunks if the viewer has moved at all since the previous frame.
@@ -134,7 +165,7 @@ namespace Assets.Scripts.Map_Generation
             chunksVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / meshWorldSize);
 
             primaryViewer = new TerrainViewer(PlayerNetwork.LocalPlayer.transform, TerrainViewer.ViewerTypes.primary);
-            secondaryViewers = new List<TerrainViewer>();
+            secondaryViewers = new Dictionary<int, TerrainViewer>();
 
             UpdateVisibleChunks();
 
@@ -159,8 +190,14 @@ namespace Assets.Scripts.Map_Generation
                 for (int xOffset = -1; xOffset <= 1; xOffset++)
                 {
                     // Find new chunks based on secondary viewer positions
-                    foreach (var secondaryViewer in secondaryViewers)
+                    foreach (var secondaryViewer in secondaryViewers.Values)
                     {
+                        if (secondaryViewer.Transform == null)
+                        {
+                            Debug.LogWarning("Viewer has no transform");
+                            continue;
+                        }
+
                         int secondaryViewerChunkCoordX = Mathf.RoundToInt(secondaryViewer.Position.x / meshWorldSize);
                         int secondaryViewerChunkCoordY = Mathf.RoundToInt(secondaryViewer.Position.y / meshWorldSize);
 
@@ -305,19 +342,6 @@ namespace Assets.Scripts.Map_Generation
         {
             if (loaded)
                 Setup();
-        }
-        
-        private void ApplySeed()
-        {
-            Seed = (int)PhotonNetwork.room.CustomProperties["seed"];
-            HeightMapSettings.NoiseSettings.seed = Seed;
-            BiomeMapSettings.NoiseSettings.seed = Seed;
-            ResourceMapSettings.NoiseSettings.seed = Seed;
-
-            if (PlayerSaveDataExchanger.Instance.IsWorldDownloaded == false)
-                PlayerSaveDataExchanger.Instance.OnWorldDownloaded += OnWorldLoaded;
-            else
-                OnWorldLoaded(true);
         }
     }
 
