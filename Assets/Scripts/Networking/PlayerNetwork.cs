@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using Photon;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-public class PlayerNetwork : MonoBehaviour
+public class PlayerNetwork : Photon.MonoBehaviour
 {
     public static string PlayerName
     {
@@ -9,7 +12,7 @@ public class PlayerNetwork : MonoBehaviour
         set { PhotonNetwork.player.NickName = value; }
     }
 
-    public static GameObject PlayerObject { get; private set; } = null;
+    public static GameObject LocalPlayer { get; private set; } = null;
 
     private void Awake()
     {  
@@ -21,12 +24,17 @@ public class PlayerNetwork : MonoBehaviour
         //TODO: HARDCODED
         if (scene.name == "Game")
         {
-            Vector3 position = new Vector3(Random.Range(-5f, 5f), 0.2f, Random.Range(0.5f, 5f));
-            PlayerObject = PhotonNetwork.Instantiate("Player", position, Quaternion.identity, 0);
+            SpawnPlayer();
         }
         else if (scene.name == "MainMenu")
         {
             Debug.Log("Returned to main menu");
         }
+    }
+
+    public void SpawnPlayer()
+    {
+        Vector3 position = new Vector3(Random.Range(-5f, 5f), 0.2f, Random.Range(0.5f, 5f));
+        LocalPlayer = PhotonNetwork.Instantiate("Player", position, Quaternion.identity, 0);
     }
 }

@@ -56,16 +56,13 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
             buildableInteractionMenu.Hide();
     }
 
-    public string TooltipText()
-    {
-        return $"{buildable.Name}";
-    }
+    public string TooltipText => $"{buildable.Name}";
 
     #endregion //IInteractable Implementation
 
     public void DestroyWorldObject()
     {
-        PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(buildable.Id, buildable.StackSize);
+        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().AddItemById(buildable.Id, buildable.StackSize);
         photonView.RPC("RPC_DestroyWorldObject", PhotonTargets.AllBuffered);
     }
 

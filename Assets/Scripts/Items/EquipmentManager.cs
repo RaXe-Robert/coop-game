@@ -239,7 +239,7 @@ public class EquipmentManager : MonoBehaviour
             Armor equippedItem;
             if ((equippedItem = equippedArmor.Find(x => x.Id == itemToUnequip.Id)) != null)
             {
-                ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedItem.Id);
+                ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, equippedItem.Id);
                 equippedArmor.Remove(equippedItem);
                 OnArmorUnequippedCallback?.Invoke(equippedItem);
                 OnItemChanged?.Invoke();
@@ -251,7 +251,7 @@ public class EquipmentManager : MonoBehaviour
             Tool equippedItem;
             if ((equippedItem = equippedTools.Find(x => x.Id == itemToUnequip.Id)) != null)
             {
-                ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedItem.Id);
+                ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, equippedItem.Id);
                 equippedTools.Remove(equippedItem);
                 OnToolUnequippedCallback?.Invoke(equippedItem);
                 OnItemChanged?.Invoke();
@@ -260,7 +260,7 @@ public class EquipmentManager : MonoBehaviour
 
         else if (itemToUnequip.GetType() == typeof(Weapon))
         {
-            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedWeapon.Id);
+            ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, equippedWeapon.Id);
             OnWeaponUnequippedCallback?.Invoke(equippedWeapon);
             equippedWeapon = null;
             OnItemChanged?.Invoke();

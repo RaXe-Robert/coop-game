@@ -91,7 +91,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
             if (item == null || !item.IsConsumable || item.OnConsumedEffects == null || item.OnConsumedEffects.Count <= 0)
                 return;
             
-            PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
+            PlayerNetwork.LocalPlayer.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
 
             if (item.StackSize > 1)
             {
@@ -194,7 +194,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (EventSystem.current.IsPointerOverGameObject())
             return;
         
-        ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, currentItem.Id, currentItem.StackSize);
+        ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, currentItem.Id, currentItem.StackSize);
         inventory.RemoveItemAtIndex(index);
     }
 }

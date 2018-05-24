@@ -58,35 +58,27 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
 
         SoundManager.Instance.PlayAttackSound(attackSound);
 
-        var playerMovement = PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>();
+        var playerMovement = PlayerNetwork.LocalPlayer.GetComponent<PlayerMovementController>();
         if (!playerMovement.CanInteract)
         {
-            WorldNotificationsManager.Instance
-                .ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
+            WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1));
             return;
         }
         
-        var stats = PlayerNetwork.PlayerObject.GetComponent<StatsComponent>();
-        playerMovement.AddInteractionTimeout(stats.TimeBetweenResourceHits);
-
-        var equipmentManager = PlayerNetwork.PlayerObject.GetComponent<EquipmentManager>();
+        var equipmentManager = PlayerNetwork.LocalPlayer.GetComponent<EquipmentManager>();
         if (!equipmentManager.HasToolEquipped(requiredToolToHarvest))
         {
-            WorldNotificationsManager.Instance
-                .ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
+            WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1));
             return;
         }
 
-        
-
+        var stats = PlayerNetwork.LocalPlayer.GetComponent<PlayerStatsComponent>();
+        playerMovement.AddInteractionTimeout(stats.TimeBetweenResourceHits);
 
         healthComponent.DecreaseValue(50f);
     }
 
-    public string TooltipText()
-    {
-        return $"{name} \nRequires {requiredToolToHarvest}";
-    }
+    public string TooltipText => $"{name} \nRequires {requiredToolToHarvest}";
 
     #endregion //IInteractable Implementation
 

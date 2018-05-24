@@ -25,7 +25,7 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
         if (!InRange(invoker.transform.position))
             return;
 
-        Inventory inventory = PlayerNetwork.PlayerObject.GetComponent<Inventory>();
+        Inventory inventory = PlayerNetwork.LocalPlayer.GetComponent<Inventory>();
 
         // Check if inventory is not full
         if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
@@ -39,10 +39,7 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
             FeedUI.Instance.AddFeedItem("Inventory full", feedType: FeedItem.Type.Fail);
     }
 
-    public string TooltipText()
-    {
-        return $"{item.Name} ({item.StackSize})";
-    }
+    public string TooltipText => $"{item.Name} ({item.StackSize})";
 
     #endregion //IInteractable Implementation
 }

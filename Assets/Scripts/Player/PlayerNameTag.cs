@@ -25,7 +25,7 @@ public class PlayerNameTag : Photon.MonoBehaviour {
 
         CreateNameTag();
 
-        cameraController = PlayerNetwork.PlayerObject?.GetComponent<PlayerCameraController>();
+        cameraController = PlayerNetwork.LocalPlayer?.GetComponent<PlayerCameraController>();
         objectHeight = gameObject?.GetComponent<Collider>()?.bounds.size.y * 2 ?? 0f;
     }
 
