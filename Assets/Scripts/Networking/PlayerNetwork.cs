@@ -35,7 +35,7 @@ public class PlayerNetwork : PunBehaviour
                 SpawnPlayer();
             }
             else
-                Debug.LogError("Trying to spawn but players is not in room!");
+                Debug.LogError("Trying to spawn but player is not in room!");
         }
         else if (scene.name == "MainMenu")
         {
@@ -46,7 +46,7 @@ public class PlayerNetwork : PunBehaviour
 
     public void SpawnPlayer()
     {
-        Vector3 position = new Vector3(Random.Range(-5f, 5f), 0.2f, Random.Range(0.5f, 5f));
+        Vector3 position = new Vector3(Random.Range(-1000f, 1000f), 0.2f, Random.Range(-1000f, 1000f));
         LocalPlayer = PhotonNetwork.Instantiate("Player", position, Quaternion.identity, 0);
 
         int photonViewID = LocalPlayer.GetComponent<PhotonView>().viewID;

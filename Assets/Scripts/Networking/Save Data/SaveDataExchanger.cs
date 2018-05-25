@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 
 [RequireComponent(typeof(PhotonView))]
-public class PlayerSaveDataExchanger : Photon.PunBehaviour
+public class SaveDataExchanger : Photon.PunBehaviour
 {
-    public static PlayerSaveDataExchanger Instance { get; private set; }
+    public static SaveDataExchanger Instance { get; private set; }
 
     private static List<PhotonPlayer> otherPlayersToLoad = new List<PhotonPlayer>();
 
@@ -62,7 +62,7 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
 
     private void Awake()
     {
-        Instance = FindObjectOfType<PlayerSaveDataExchanger>();
+        Instance = FindObjectOfType<SaveDataExchanger>();
 
         persistentDataPath = Application.persistentDataPath;
     }
@@ -75,26 +75,27 @@ public class PlayerSaveDataExchanger : Photon.PunBehaviour
             Directory.CreateDirectory(PlayerDataPath);
     }
 
-    private void OnEnable()
-    {
-        PhotonNetwork.OnEventCall += this.OnManifestUpdateEvent;
-    }
-
-    private void OnDisable()
-    {
-        PhotonNetwork.OnEventCall -= this.OnManifestUpdateEvent;
-    }
+    private void OnEnable() => PhotonNetwork.OnEventCall += this.OnManifestUpdateEvent;
+    private void OnDisable() => PhotonNetwork.OnEventCall -= this.OnManifestUpdateEvent;
 
     public void UpdateManifest()
     {
+        // Players
+        PlayerSaveInfo[] playerSaveInfos = PhotonNetwork.playerList.Select(x => new PlayerSaveInfo(x.NickName)).ToArray();
+
+        // Chunks
         List<Tuple<string, byte[]>> worldFiles = FileLoader.LoadFiles(WorldDataPath); // TODO: We dont want to do this every time we are saving the manifest
-        ChunkSaveInfo[] chunkSaveInfo = worldFiles.Select(x => new ChunkSaveInfo(x.Item1)).ToArray();
+        ChunkSaveInfo[] chunkSaveInfos = worldFiles.Select(x => new ChunkSaveInfo(x.Item1)).ToArray();
 
         SaveDataManifest saveDataManifest = new SaveDataManifest
         {
             TimeStamp = DaytimeController.Instance.CurrentTime.Ticks,
-            Players = new PlayerSaveInfo[0],
-            Chunks = chunkSaveInfo
+
+            Seed = (int)PhotonNetwork.room.CustomProperties["seed"],
+            Name = "Substitute",
+
+            Players = playerSaveInfos,
+            Chunks = chunkSaveInfos
         };
 
         // Save the manifest locally

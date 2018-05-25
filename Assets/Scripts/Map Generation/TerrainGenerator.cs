@@ -18,7 +18,7 @@ namespace Assets.Scripts.Map_Generation
         private const float sqrViewerMoveThresholdForChunkPartUpdate = viewerMoveThresholdForChunkPartUpdate * viewerMoveThresholdForChunkPartUpdate;
 
         public static int Seed { get; private set; }
-        public static string WorldDataPath => PlayerSaveDataExchanger.Instance.WorldDataPath;
+        public static string WorldDataPath => SaveDataExchanger.Instance.WorldDataPath;
 
         [SerializeField]
         private int colliderLODIndex;
@@ -58,8 +58,7 @@ namespace Assets.Scripts.Map_Generation
         
         private List<TerrainChunk> visibleTerrainChunks;
 
-        private bool setupFinished;
-
+        public bool IsSetupFinished { get; private set; }
         public bool IsBuildingNavmesh { get; private set; }
 
         private void Awake()
@@ -69,7 +68,9 @@ namespace Assets.Scripts.Map_Generation
             terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
             visibleTerrainChunks = new List<TerrainChunk>();
 
-            setupFinished = false;
+            secondaryViewers = new Dictionary<int, TerrainViewer>();
+
+            IsSetupFinished = false;
             IsBuildingNavmesh = false;
         }
 
@@ -80,8 +81,8 @@ namespace Assets.Scripts.Map_Generation
             BiomeMapSettings.NoiseSettings.seed = Seed;
             ResourceMapSettings.NoiseSettings.seed = Seed;
 
-            if (PlayerSaveDataExchanger.Instance.IsWorldDownloaded == false)
-                PlayerSaveDataExchanger.Instance.OnWorldDownloaded += OnWorldLoaded;
+            if (SaveDataExchanger.Instance.IsWorldDownloaded == false)
+                SaveDataExchanger.Instance.OnWorldDownloaded += OnWorldLoaded;
             else
                 OnWorldLoaded(true);
         }
@@ -91,7 +92,7 @@ namespace Assets.Scripts.Map_Generation
 
         private void Update()
         {
-            if (!setupFinished)
+            if (!IsSetupFinished)
                 return;
 
             foreach (var terrainChunk in terrainChunkDictionary.Values)
@@ -165,11 +166,10 @@ namespace Assets.Scripts.Map_Generation
             chunksVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / meshWorldSize);
 
             primaryViewer = new TerrainViewer(PlayerNetwork.LocalPlayer.transform, TerrainViewer.ViewerTypes.primary);
-            secondaryViewers = new Dictionary<int, TerrainViewer>();
 
             UpdateVisibleChunks();
 
-            setupFinished = true;
+            IsSetupFinished = true;
         }
 
         /// <summary>
@@ -321,19 +321,6 @@ namespace Assets.Scripts.Map_Generation
             Bounds bounds = new Bounds(primaryViewer.Transform.position, new Vector3(100f, 50f, 100f));
 
             NavMeshBuilder.CollectSources(transform, navMeshSurface.layerMask, NavMeshCollectGeometry.PhysicsColliders, 0, new List<NavMeshBuildMarkup>(), buildSources);
-            Debug.Log("Sources found: " + buildSources.Count.ToString());
-
-            /*
-            // Reduce the amount by excluding objects that are further than 100 units away. EXPERIMENTAL
-            for (int i = buildSources.Count - 1; i >= 0; i--)
-            {
-                Vector3 position = buildSources[i].transform.GetColumn(3);
-                if (Vector3.Distance(position, primaryViewer.Transform.position) > 100f)
-                {
-                    buildSources.Remove(buildSources[i]);
-                }
-            }
-            Debug.Log("Reduced to: " + buildSources.Count.ToString()); */
 
             return NavMeshBuilder.BuildNavMeshData(navMeshSurface.GetBuildSettings(), buildSources, bounds, navMeshSurface.transform.position, navMeshSurface.transform.rotation);
         }
@@ -361,7 +348,7 @@ namespace Assets.Scripts.Map_Generation
         public enum ViewerTypes { primary, secondary }
         public ViewerTypes ViewerType;
 
-        public Transform Transform;
+        public readonly Transform Transform;
         public Vector2 Position;
         public Vector2 PositionOld_ChunkUpdate;
         public Vector2 PositionOld_ChunkPartUpdate;

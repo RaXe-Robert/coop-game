@@ -7,6 +7,9 @@ public class SaveDataManifest
 {
     public long TimeStamp;
 
+    public int Seed;
+    public string Name;
+
     [SerializeField]
     public PlayerSaveInfo[] Players;
 
