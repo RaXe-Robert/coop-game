@@ -1,15 +1,16 @@
 fileFormatVersion: 2
-guid: 928231d188c47374dbb4568aed9f8626
+guid: ed0fb17ed624f304b96db10a8a24c494
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Material.001
-    2100002: Material
+    2100000: MelonGreen
+    2100002: MelonOuterYellow
+    2100004: MelonRed
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Missing
+    4300000: Melon_Pickup_
   externalObjects: {}
   materials:
     importMaterials: 1

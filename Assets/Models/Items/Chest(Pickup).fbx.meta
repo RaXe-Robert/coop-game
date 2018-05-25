@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: 928231d188c47374dbb4568aed9f8626
+guid: 81bf234de793f3f4b8294d8779cef96e
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Material.001
-    2100002: Material
+    2100000: Wood
+    2100002: Iron
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Missing
+    4300000: Chest_Pickup_
   externalObjects: {}
   materials:
     importMaterials: 1
