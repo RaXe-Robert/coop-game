@@ -1,15 +1,14 @@
 fileFormatVersion: 2
-guid: 928231d188c47374dbb4568aed9f8626
+guid: 58bcb74e627925d4297f07f38bb288d9
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Material.001
-    2100002: Material
+    2100000: Wood
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Missing
+    4300000: Boole_1
   externalObjects: {}
   materials:
     importMaterials: 1

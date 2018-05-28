@@ -1,15 +1,17 @@
 fileFormatVersion: 2
-guid: 928231d188c47374dbb4568aed9f8626
+guid: e3ced3552e19d3140ae851173e79cdf9
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Material.001
-    2100002: Material
+    2100000: Coal
+    2100002: Stone2
+    2100004: Pipe
+    2100006: Stone
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Missing
+    4300000: Furnace
   externalObjects: {}
   materials:
     importMaterials: 1
