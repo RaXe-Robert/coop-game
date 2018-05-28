@@ -196,6 +196,11 @@ public class MainMenu : MonoBehaviour
 
     public void DoneEnterName()
     {
+        if(inputNameText.text.EndsWith(" ") || inputNameText.text.Length < 2)
+        {
+            ShowErrorMessagePanel("Well Well Well.", "Your name has to be more than one character and contain no spaces at the end.");
+            return;
+        }
         ChangePlayerName(inputNameText.text);
         UpdatePlayerName();
         CloseMenu();
