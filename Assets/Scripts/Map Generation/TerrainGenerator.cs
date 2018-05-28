@@ -20,6 +20,8 @@ namespace Assets.Scripts.Map_Generation
         public static int Seed { get; private set; }
         public static string WorldDataPath => SaveDataExchanger.Instance.WorldDataPath;
 
+        public static LayerMask LayerMask = 1 << 7;
+
         [SerializeField]
         private int colliderLODIndex;
         public LODInfo[] detailLevels;
@@ -30,9 +32,8 @@ namespace Assets.Scripts.Map_Generation
         public ResourceMapSettings ResourceMapSettings;
 
         public Material TerrainMeshMaterial;
-
+        
         private TerrainViewer primaryViewer;
-        [SerializeField]
         private Dictionary<int, TerrainViewer> secondaryViewers;
         private void AddSecondaryViewer(PhotonView photonView)
         {
@@ -72,6 +73,8 @@ namespace Assets.Scripts.Map_Generation
 
             IsSetupFinished = false;
             IsBuildingNavmesh = false;
+            
+            LayerMask = 1 << gameObject.layer;
         }
 
         private void Start()

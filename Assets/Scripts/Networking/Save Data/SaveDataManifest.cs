@@ -21,10 +21,12 @@ public class SaveDataManifest
 public class PlayerSaveInfo
 {
     public string Name;
+    public int Id;
 
-    public PlayerSaveInfo(string name)
+    public PlayerSaveInfo(string name, int id)
     {
         this.Name = name;
+        this.Id = id;
     }
 }
 

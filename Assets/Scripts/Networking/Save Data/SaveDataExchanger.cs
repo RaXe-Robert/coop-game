@@ -81,7 +81,7 @@ public class SaveDataExchanger : Photon.PunBehaviour
     public void UpdateManifest()
     {
         // Players
-        PlayerSaveInfo[] playerSaveInfos = PhotonNetwork.playerList.Select(x => new PlayerSaveInfo(x.NickName)).ToArray();
+        PlayerSaveInfo[] playerSaveInfos = PhotonNetwork.playerList.Select(x => new PlayerSaveInfo(x.NickName, (int)(x.CustomProperties["UniqueID"] ?? -1))).ToArray();
 
         // Chunks
         List<Tuple<string, byte[]>> worldFiles = FileLoader.LoadFiles(WorldDataPath); // TODO: We dont want to do this every time we are saving the manifest

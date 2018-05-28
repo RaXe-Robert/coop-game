@@ -40,6 +40,15 @@ public class MainMenu : MonoBehaviour
         networkManager = FindObjectOfType<NetworkManager>();
 
         nameText.text = PlayerPrefs.GetString("PlayerName");
+        
+        // Create a random id for players so that servers can recognize certain players (this will need to be replaced by an account database if we get that far)
+        int playerId = PlayerPrefs.GetInt("UniqueID", -1);
+        if (playerId == -1)
+        {
+            playerId = (new System.Random(System.Guid.NewGuid().GetHashCode())).Next(0, int.MaxValue);
+            PlayerPrefs.SetInt("UniqueID", playerId);
+        }
+        PhotonNetwork.player.CustomProperties["UniqueID"] = playerId;
 
         //When the player returns from the game to the main menu, the photon is still connected
         if (networkManager.Connected)
@@ -61,7 +70,7 @@ public class MainMenu : MonoBehaviour
             MaxPlayers = 1,
             IsVisible = false,
             CleanupCacheOnLeave = true,
-            CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "seed", 123456789 } }
+            CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "seed", 123456789 } } //TODO: int not yet modifiable by user
         };
 
         CreateGame("Singleplayer Game", roomOptions);
@@ -73,7 +82,6 @@ public class MainMenu : MonoBehaviour
             OnPhotonCreateRoomFailed(new object[] { 1, "Not connected to master server!" });
         else if(!PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default))
             OnPhotonCreateRoomFailed(new object[] { 2, "Room with the smae name already exists!" });
-
     }
 
     public void ExitGame()

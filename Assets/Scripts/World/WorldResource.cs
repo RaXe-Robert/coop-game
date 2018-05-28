@@ -16,11 +16,11 @@ public class WorldResource : MonoBehaviour, IInteractable
     [SerializeField] private GameObject spawnOnDepleted;
     [SerializeField] private float maxHealth = 100f;
 
-    private Animator animator;
-    private ItemsToDropComponent itemsToDrop;
+    public Animator Animator { get; private set; }
+    public ItemsToDropComponent ItemsToDrop { get; private set; }
 
     public TerrainChunk TerrainChunk { get; private set; }
-    public double ID { get; private set; }
+    public double Id { get; private set; }
 
     public string Name => name;
     public float MaxHealth => maxHealth;
@@ -29,27 +29,14 @@ public class WorldResource : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
-        itemsToDrop = GetComponent<ItemsToDropComponent>();
+        Animator = GetComponent<Animator>();
+        ItemsToDrop = GetComponent<ItemsToDropComponent>();
     }
 
     public void Setup(TerrainChunk terrainChunk, double id)
     {
         this.TerrainChunk = terrainChunk;
-        this.ID = id;
-    }
-    
-    private IEnumerator PlayDepletedAnimation()
-    {
-        if (animator != null)
-        {
-            //photonView.RPC("CallAnimation", PhotonTargets.All);
-            yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
-        }
-
-        itemsToDrop?.SpawnItemsOnDepleted();
-
-       // photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
+        this.Id = id;
     }
 
     #region IInteractable Implementation
@@ -87,16 +74,4 @@ public class WorldResource : MonoBehaviour, IInteractable
     public string TooltipText => $"{name} \nRequires {requiredToolToHarvest}";
 
     #endregion //IInteractable Implementation
-
-    [PunRPC]
-    void CallAnimation()
-    {
-        animator.SetBool("isDepleted", true);
-    }
-
-    [PunRPC]
-    void DestroyObject()
-    {
-        PhotonNetwork.Destroy(gameObject);
-    }
 }

@@ -55,10 +55,9 @@ namespace Assets.Scripts.Map_Generation
         }
 
         /// <summary>
-        /// Returns if the object was found and removed.
+        /// Returns true if the object was found and removed.
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
         public bool RemoveObjectPoint(double id)
         {
             bool objectPointFound = false;

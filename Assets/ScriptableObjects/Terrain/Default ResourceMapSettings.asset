@@ -27,4 +27,10 @@ MonoBehaviour:
       type: 2}
   - worldResourcePrefab: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
       type: 2}
+  - worldResourcePrefab: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
+      type: 2}
+  - worldResourcePrefab: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
+      type: 2}
+  - worldResourcePrefab: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
+      type: 2}
   densityThreshold: 0.395

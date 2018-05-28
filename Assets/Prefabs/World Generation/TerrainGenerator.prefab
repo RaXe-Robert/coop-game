@@ -131,4 +131,3 @@ MonoBehaviour:
   ResourceMapSettings: {fileID: 11400000, guid: 15be9663026b64042a8b8a97a1b6088e,
     type: 2}
   TerrainMeshMaterial: {fileID: 2100000, guid: 2b9336a43a2f5854b86f2ff219953cba, type: 2}
-  secondaryViewers: []

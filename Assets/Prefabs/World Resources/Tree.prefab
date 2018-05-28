@@ -69,10 +69,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4887057038689390}
   - component: {fileID: 95636999763926618}
-  - component: {fileID: 114121457640070032}
-  - component: {fileID: 114306816015052576}
   - component: {fileID: 114574607019542462}
-  - component: {fileID: 114253825787940496}
   - component: {fileID: 114126515727490142}
   - component: {fileID: 64211466820573644}
   - component: {fileID: 208198158521228998}
@@ -268,6 +265,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100004, guid: 9172200ceecc09548a26a47f97f75dd0, type: 3}
   m_StaticBatchInfo:
@@ -341,32 +339,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114121457640070032
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296203204362048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ownerId: 0
-  group: 0
-  OwnerShipWasTransfered: 0
-  prefixBackup: -1
-  synchronization: 3
-  onSerializeTransformOption: 3
-  onSerializeRigidBodyOption: 2
-  ownershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 114306816015052576}
-  ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
-  currentMasterID: -1
-  isRuntimeInstantiated: 0
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114126515727490142
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -378,46 +351,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EntitiesToSpawn:
-  - {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-  AmounPerEntity: 05000000
-  minRadius: -5
-  maxRadius: 5
---- !u!114 &114253825787940496
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296203204362048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71619f749ec3df04f8dc57baed5cd491, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowNotifications: 1
-  ShowNotificationsIfLocal: 1
-  MaxValue: 150
-  value: 150
---- !u!114 &114306816015052576
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296203204362048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 2
-    Name: isDepleted
-  m_SynchronizeLayers:
-  - SynchronizeType: 2
-    LayerIndex: 0
+  itemsToSpawn:
+  - item: {fileID: 11400000, guid: b77c81d82fd094542b5b3c531494cd0d, type: 2}
+    amount: 2
+  - item: {fileID: 11400000, guid: 5868ce6d1f49ebd4eba066d641252c56, type: 2}
+    amount: 2
+  - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
+    amount: 2
+  spawnRadius: 3
 --- !u!114 &114574607019542462
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -434,8 +375,7 @@ MonoBehaviour:
   interactDistance: 5
   spawnOnDepleted: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
     type: 2}
-  healthComponent: {fileID: 114253825787940496}
-  entitiesToDropComponent: {fileID: 114126515727490142}
+  maxHealth: 100
 --- !u!137 &137618772171973266
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -449,6 +389,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100006, guid: 9172200ceecc09548a26a47f97f75dd0, type: 3}
   m_StaticBatchInfo:
@@ -498,6 +439,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100004, guid: 9172200ceecc09548a26a47f97f75dd0, type: 3}
   m_StaticBatchInfo:

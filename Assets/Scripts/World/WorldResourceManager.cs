@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using Assets.Scripts.Map_Generation;
+using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
-
-using Assets.Scripts.Map_Generation;
 
 [RequireComponent(typeof(PhotonView))]
 public class WorldResourceManager : Photon.MonoBehaviour {
@@ -31,34 +28,46 @@ public class WorldResourceManager : Photon.MonoBehaviour {
 
     public void DecreaseHealth(WorldResource worldResource, TerrainChunk terrainChunk, float amount)
     {
-        if (!networkedWorldResources.ContainsKey(worldResource.ID))
+        if (!networkedWorldResources.ContainsKey(worldResource.Id))
             AddNetworkedWorldResource(worldResource, terrainChunk.Coord);
 
-        photonView.RPC(nameof(RPC_DecreaseHealth), PhotonTargets.All, worldResource.ID, terrainChunk.Coord, amount);
+        if (networkedWorldResources[worldResource.Id].Health > 0)
+        {
+            photonView.RPC(nameof(RPC_DecreaseHealth), PhotonTargets.All, worldResource.Id, amount);
+
+            if (networkedWorldResources[worldResource.Id].Health <= 0)
+            {
+                StartCoroutine(PlayDepletedAnimation(worldResource, terrainChunk.Coord));
+            }
+        }
     }
-    
+
+    private IEnumerator PlayDepletedAnimation(WorldResource worldResource, Vector2 terrainChunkCoord)
+    {
+        if (worldResource.Animator != null)
+        {
+            worldResource.Animator.SetBool("isDepleted", true);
+            yield return new WaitForSeconds(worldResource.Animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
+        }
+        
+        worldResource.ItemsToDrop?.SpawnItemsOnDepleted();
+
+        photonView.RPC(nameof(RPC_RemoveNetworkedWorldResource), PhotonTargets.All, worldResource.Id, terrainChunkCoord);
+    }
+
     private void AddNetworkedWorldResource(WorldResource worldResource, Vector2 terrainChunkCoord)
     {
         if (worldResource == null)
             throw new MissingComponentException("No WorldResource component attached to the given prefab.");
 
-        if (!networkedWorldResources.ContainsKey(worldResource.ID))
-            photonView.RPC(nameof(RPC_AddNetworkedWorldResource), PhotonTargets.All, worldResource.ID, terrainChunkCoord, worldResource.MaxHealth);
+        if (!networkedWorldResources.ContainsKey(worldResource.Id))
+            photonView.RPC(nameof(RPC_AddNetworkedWorldResource), PhotonTargets.All, worldResource.Id, terrainChunkCoord, worldResource.MaxHealth);
     }
 
     [PunRPC]
-    private void RPC_DecreaseHealth(double id, Vector2 terrainChunkCoord, float amount)
+    private void RPC_DecreaseHealth(double id, float amount)
     {
         networkedWorldResources[id].Health -= amount;
-        Debug.Log(id);
-
-        if (PhotonNetwork.isMasterClient)
-        {
-            if (networkedWorldResources[id].Health <= 0)
-            {
-                photonView.RPC(nameof(RPC_RemoveNetworkedWorldResource), PhotonTargets.All, id, terrainChunkCoord);
-            }
-        }
     }
 
     [PunRPC]
