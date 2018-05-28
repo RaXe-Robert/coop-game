@@ -126,7 +126,12 @@ public class CustomInRoomChat : Photon.MonoBehaviour
     public void AddLine(string newLine)
     {
         content.text += newLine + "\n";
+
+        // Make sure the scrollview gets scrolled down to the bottom of the chat.
+        Canvas.ForceUpdateCanvases();
         scrollView.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+        Canvas.ForceUpdateCanvases();
+
         CheckState();
     }
 
