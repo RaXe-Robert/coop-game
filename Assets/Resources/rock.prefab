@@ -60,6 +60,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100002, guid: 6c207fea7c0b12e449fce75b310c0517, type: 3}
   m_StaticBatchInfo:
@@ -128,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EntitiesToSpawn: []
+  ItemsToSpawn: []
   AmountPerItem: 
   minRadius: 0
   maxRadius: 2
@@ -172,9 +173,10 @@ MonoBehaviour:
   name: Rock
   requiredToolToHarvest: 1
   interactDistance: 5
+  attackSound: 1
   spawnOnDepleted: {fileID: 0}
   healthComponent: {fileID: 114056808189935048}
-  entitiesToDropComponent: {fileID: 0}
+  itemsToDropComponent: {fileID: 0}
 --- !u!208 &208407444410447410
 NavMeshObstacle:
   m_ObjectHideFlags: 1

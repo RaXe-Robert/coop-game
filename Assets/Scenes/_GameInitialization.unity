@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 8
+  serializedVersion: 9
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -39,6 +39,7 @@ RenderSettings:
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
   m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -54,11 +55,10 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 9
+    serializedVersion: 10
     m_Resolution: 2
     m_BakeResolution: 40
-    m_TextureWidth: 1024
-    m_TextureHeight: 1024
+    m_AtlasSize: 1024
     m_AO: 0
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
@@ -315,6 +315,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1919447672406306, guid: 781c1ffe59bd88740910a4171c22d1f3, type: 2}
+      propertyPath: m_Name
+      value: SoundManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 781c1ffe59bd88740910a4171c22d1f3, type: 2}
   m_IsPrefabParent: 0
@@ -323,3 +327,37 @@ Transform:
   m_PrefabParentObject: {fileID: 4013632482153748, guid: 781c1ffe59bd88740910a4171c22d1f3,
     type: 2}
   m_PrefabInternal: {fileID: 1597905110}
+--- !u!82 &1597905112 stripped
+AudioSource:
+  m_PrefabParentObject: {fileID: 82773237356544110, guid: 781c1ffe59bd88740910a4171c22d1f3,
+    type: 2}
+  m_PrefabInternal: {fileID: 1597905110}
+--- !u!1 &1597905113 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1919447672406306, guid: 781c1ffe59bd88740910a4171c22d1f3,
+    type: 2}
+  m_PrefabInternal: {fileID: 1597905110}
+--- !u!114 &1597905114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1597905113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2df3b9f194bdeb84cb26e10adac97bd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AudioSource: {fileID: 1597905112}
+  SoundClips:
+  - {fileID: 8300000, guid: 2890dfc8f1a704346920ac69fa59b2b9, type: 3}
+  - {fileID: 8300000, guid: 9df9125efda64e6459c840cbc49c081e, type: 3}
+  AttackSoundClips:
+  - {fileID: 8300000, guid: b25e88cd2548a7148b3a4b47e51ab4d8, type: 3}
+  - {fileID: 8300000, guid: bca98cb325f4bfc4f86e4437007ec2a4, type: 3}
+  DropSoundClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
