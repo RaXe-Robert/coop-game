@@ -13,6 +13,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 150
   itemName: Meat
-  sprite: {fileID: 21300000, guid: fe9e17c7b51bc6a43bf9853dd129cb7c, type: 3}
+  sprite: {fileID: 21300000, guid: bee6668ab22d87b4c910e848be8a58d9, type: 3}
   model: {fileID: 100000, guid: e143afe216cca7c4396116f3dbcc8a01, type: 3}
   description: Meat

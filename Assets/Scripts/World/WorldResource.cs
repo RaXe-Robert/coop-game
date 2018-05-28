@@ -12,6 +12,7 @@ public class WorldResource : MonoBehaviour, IInteractable
     public new string name;
     public ToolType requiredToolToHarvest;
     public float interactDistance = 5f;
+    public SoundManager.AttackSound attackSound = SoundManager.AttackSound.WOOD;
 
     [SerializeField] private GameObject spawnOnDepleted;
     [SerializeField] private float maxHealth = 100f;
@@ -50,6 +51,8 @@ public class WorldResource : MonoBehaviour, IInteractable
     {
         if (!InRange(invoker.transform.position))
             return;
+
+        SoundManager.Instance.PlayAttackSound(attackSound);
 
         var playerMovement = PlayerNetwork.LocalPlayer.GetComponent<PlayerMovementController>();
         if (!playerMovement.CanInteract)

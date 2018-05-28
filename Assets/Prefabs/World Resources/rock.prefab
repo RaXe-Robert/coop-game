@@ -114,7 +114,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemsToSpawn:
   - item: {fileID: 11400000, guid: 9d865b2a65928db4a8fb39bdba88382c, type: 2}
-    amount: 5
+    amount: 3
+  - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+    amount: 2
   spawnRadius: 2
 --- !u!114 &114887078953935060
 MonoBehaviour:
@@ -130,6 +132,7 @@ MonoBehaviour:
   name: Rock
   requiredToolToHarvest: 1
   interactDistance: 5
+  attackSound: 1
   spawnOnDepleted: {fileID: 0}
   maxHealth: 100
 --- !u!208 &208407444410447410
