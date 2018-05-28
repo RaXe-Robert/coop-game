@@ -285,6 +285,8 @@ public class Inventory : MonoBehaviour
             else
                 AddNewItemStackById(itemId, stackSize);
         }
+
+        SoundManager.Instance.PlaySound(SoundManager.Sound.PICKUP);
     }
 
     public void AddItemAtIndex(int itemId, int index, int stackSize = 1)

@@ -31,8 +31,7 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
         if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
         {
             inventory.AddItemById(item.Id, item.StackSize);
-            FeedUI.Instance.AddFeedItem("Picked up " + item.Name, item.Sprite, FeedItem.Type.Succes);
-            SoundManager.Instance.PlaySound(SoundManager.Sound.PICKUP);
+            FeedUI.Instance.AddFeedItem("Picked up " + item.Name, item.Sprite, FeedItem.Type.Succes);            
             photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
         }
         else
