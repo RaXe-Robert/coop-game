@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
   m_Name: Seeds
   m_EditorClassIdentifier: 
-  id: 53
+  id: pickupitem_seeds_small
   itemName: Seeds
   sprite: {fileID: 21300000, guid: e43f4c6adf9c80947a1feff427b4f733, type: 3}
   model: {fileID: 100000, guid: bd0714645bb6a0143a9cacdc81c30c84, type: 3}

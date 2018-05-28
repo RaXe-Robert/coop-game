@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
   m_Name: Cactus
   m_EditorClassIdentifier: 
-  id: 2
+  id: pickupitem_cactus_small
   itemName: Cactus
   sprite: {fileID: 21300000, guid: 8aaafce95f02041448fa483246c606c8, type: 3}
   model: {fileID: 100000, guid: 2f4827590feb3da4da1bb255639adaa2, type: 3}

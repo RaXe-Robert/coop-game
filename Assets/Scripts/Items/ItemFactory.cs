@@ -16,7 +16,7 @@ public class ItemFactory : MonoBehaviour {
         itemLookupTable = Resources.LoadAll<ScriptableItemData>("Items");        
     }
 
-    public static Item CreateNewItem(int itemId, int stackSize = 1)
+    public static Item CreateNewItem(string itemId, int stackSize = 1)
     {
         var itemData = itemLookupTable.First(x => x.Id == itemId);
 
@@ -26,14 +26,14 @@ public class ItemFactory : MonoBehaviour {
         return item;
     }
 
-    public static void CreateWorldObject(Vector3 position, int itemId, int stackSize = 1, Quaternion quaternion = new Quaternion())
+    public static void CreateWorldObject(Vector3 position, string itemId, int stackSize = 1, Quaternion quaternion = new Quaternion())
     {
         var photonId = PhotonNetwork.AllocateViewID();
         photonView.RPC("SpawnItemOnNetwork", PhotonTargets.AllBuffered, position, photonId, itemId, quaternion, stackSize);
     }
 
     [PunRPC]
-    private void SpawnItemOnNetwork(Vector3 position, int photonId, int itemId, Quaternion quaternion = new Quaternion(), int stackSize = 1)
+    private void SpawnItemOnNetwork(Vector3 position, int photonId, string itemId, Quaternion quaternion = new Quaternion(), int stackSize = 1)
     {
         GameObject go = Resources.Load<GameObject>("Item");
 

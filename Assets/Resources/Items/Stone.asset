@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
   m_Name: Stone
   m_EditorClassIdentifier: 
-  id: 54
+  id: pickupitem_stone_small
   itemName: Stone
   sprite: {fileID: 21300000, guid: 07c9f83f9b050824ea533cc65d4bc5cd, type: 3}
   model: {fileID: 100000, guid: 81f5b893278bc4142b19887539e4701a, type: 3}

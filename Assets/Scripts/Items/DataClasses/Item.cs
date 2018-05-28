@@ -18,7 +18,7 @@ public class Item
     public Sprite Sprite { get; }
     public GameObject Model { get; }
     public string Description { get; }
-    public int Id { get; }
+    public string Id { get; }
 
     public int StackSize { get; set; }
 }

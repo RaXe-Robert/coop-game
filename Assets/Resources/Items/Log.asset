@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
   m_Name: Log
   m_EditorClassIdentifier: 
-  id: 0
+  id: pickupitem_log_small
   itemName: Log
   sprite: {fileID: 21300000, guid: 30c825091fafbdb40a9732de51b724d1, type: 3}
   model: {fileID: 100000, guid: a80b675658146274cb4c2dfe20f859ec, type: 3}
