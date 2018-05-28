@@ -5,25 +5,32 @@ using System.Linq;
 
 public class ItemFactory : MonoBehaviour {
 
-    private static ScriptableItemData[] itemLookupTable;
+    private static Dictionary<string, ScriptableItemData> itemLookupTable;
     private static PhotonView photonView;
-    public Item test;
 
     private void Awake()
     {
         photonView = GetComponent<PhotonView>();
 
-        itemLookupTable = Resources.LoadAll<ScriptableItemData>("Items");        
+        itemLookupTable = (Resources.LoadAll<ScriptableItemData>("Items"))?.ToDictionary(x => x.Id, x => x) ?? new Dictionary<string, ScriptableItemData>();        
     }
 
     public static Item CreateNewItem(string itemId, int stackSize = 1)
     {
-        var itemData = itemLookupTable.First(x => x.Id == itemId);
+        if (itemLookupTable.ContainsKey(itemId))
+        {
+            var itemData = itemLookupTable[itemId];
 
-        Item item = itemData.InitializeItem();
-        item.StackSize = stackSize;
-        
-        return item;
+            Item item = itemData.InitializeItem();
+            item.StackSize = stackSize;
+
+            return item;
+        }
+        else
+        {
+            Debug.LogError($"Specificied ItemId '{itemId}' does not exist!");
+            return null;
+        }
     }
 
     public static void CreateWorldObject(Vector3 position, string itemId, int stackSize = 1, Quaternion quaternion = new Quaternion())
