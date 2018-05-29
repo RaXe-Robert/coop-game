@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22580a90e66e2f44ea7c1962e6362f2f, type: 3}
   m_Name: Campfire
   m_EditorClassIdentifier: 
-  id: 200
+  id: buildable_campfire_small
   itemName: Campfire
   sprite: {fileID: 21300000, guid: 5415a2fde3716544d934d8de4c10f84c, type: 3}
   model: {fileID: 100000, guid: 432738de40f61704dac1e2e0e088f8ed, type: 3}

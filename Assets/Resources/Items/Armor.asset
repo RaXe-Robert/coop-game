@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d11520a5ae26ca4f93acf2ea1753e64, type: 3}
   m_Name: Armor
   m_EditorClassIdentifier: 
-  id: 97
+  id: armor_chest_black
   itemName: Armor
   sprite: {fileID: 21300000, guid: 6c6141d0e7b82574785cc692f5ef4557, type: 3}
   model: {fileID: 100000, guid: 928231d188c47374dbb4568aed9f8626, type: 3}

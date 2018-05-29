@@ -735,50 +735,9 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114706195600799206, guid: cdb8c23d422cae34f8faa3f34f8df571,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 700845329}
-    - target: {fileID: 114706195600799206, guid: cdb8c23d422cae34f8faa3f34f8df571,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ShowCreateMultiplayerPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 114916017585397268, guid: cdb8c23d422cae34f8faa3f34f8df571,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1871501013}
-    - target: {fileID: 114916017585397268, guid: cdb8c23d422cae34f8faa3f34f8df571,
-        type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClick_LoadGame
-      objectReference: {fileID: 0}
-    - target: {fileID: 1609361948580384, guid: cdb8c23d422cae34f8faa3f34f8df571, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224698977012069762, guid: cdb8c23d422cae34f8faa3f34f8df571,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 224698977012069762, guid: cdb8c23d422cae34f8faa3f34f8df571,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.000010698919
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114656212507680620, guid: cdb8c23d422cae34f8faa3f34f8df571, type: 2}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cdb8c23d422cae34f8faa3f34f8df571, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &700845329 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114464156610780758, guid: cdb8c23d422cae34f8faa3f34f8df571,
-    type: 2}
-  m_PrefabInternal: {fileID: 700845314}
-  m_Script: {fileID: 11500000, guid: 6e0a9b3d83b2bf3478b94c781e3fa313, type: 3}
 --- !u!1 &730994160
 GameObject:
   m_ObjectHideFlags: 0
@@ -1739,27 +1698,6 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 65be6f8630bf6284c936e634955503b0, type: 3}
   m_PrefabInternal: {fileID: 1860288958}
---- !u!1 &1871501012 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1609361948580384, guid: cdb8c23d422cae34f8faa3f34f8df571,
-    type: 2}
-  m_PrefabInternal: {fileID: 700845314}
---- !u!114 &1871501013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1871501012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61ae25f279b2c5b42956efe91890560b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveNameText: {fileID: 0}
-  seedText: {fileID: 0}
-  roomNameText: {fileID: 0}
-  playerCountDropdown: {fileID: 0}
-  roomVisibilityDropdown: {fileID: 0}
 --- !u!1 &1955654539
 GameObject:
   m_ObjectHideFlags: 0

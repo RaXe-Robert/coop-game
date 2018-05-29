@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80064babb00250949a949aa52544650b, type: 3}
   m_Name: Pickaxe
   m_EditorClassIdentifier: 
-  id: 94
+  id: tool_pickaxe_iron
   itemName: Pickaxe
   sprite: {fileID: 21300000, guid: 5882d46022072ea4b9e607cd63bde06c, type: 3}
   model: {fileID: 100000, guid: 6d90a8ddfab85a1478b17efa8d8740f0, type: 3}

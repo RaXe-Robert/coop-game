@@ -189,7 +189,7 @@ public class BuildingController : Photon.MonoBehaviour
     }
 
     [PunRPC]
-    private void RPC_SpawnBuildable(Vector3 position, int photonId, int itemId, Quaternion quaternion = new Quaternion())
+    private void RPC_SpawnBuildable(Vector3 position, int photonId, string itemId, Quaternion quaternion = new Quaternion())
     {
         BuildableBase buildable = ItemFactory.CreateNewItem(itemId) as BuildableBase;
         var prefab = buildable.PrefabToSpawn;
