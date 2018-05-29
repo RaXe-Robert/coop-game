@@ -52,6 +52,15 @@ public class CustomInRoomChat : Photon.MonoBehaviour
         if (InputManager.GetButtonDown("Open Chat"))
             OpenChat();
 
+        if(input.isFocused == true)
+        {
+            if(state != State.Opened)
+            {
+                state = State.Opening;
+                StartCoroutine(FadeChat());
+            }
+        }
+
         if (EventSystem.current.currentSelectedGameObject == input.gameObject)
         {
             if (InputManager.GetButtonDown("Send Chat"))
@@ -117,7 +126,12 @@ public class CustomInRoomChat : Photon.MonoBehaviour
     public void AddLine(string newLine)
     {
         content.text += newLine + "\n";
+
+        // Make sure the scrollview gets scrolled down to the bottom of the chat.
+        Canvas.ForceUpdateCanvases();
         scrollView.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+        Canvas.ForceUpdateCanvases();
+
         CheckState();
     }
 
