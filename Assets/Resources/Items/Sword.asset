@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3360136a058e1df4e820a7f66dc0db70, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
-  id: 90
+  id: tool_sword_iron
   itemName: Sword
   sprite: {fileID: 21300000, guid: bee6668ab22d87b4c910e848be8a58d9, type: 3}
   model: {fileID: 100000, guid: 928231d188c47374dbb4568aed9f8626, type: 3}

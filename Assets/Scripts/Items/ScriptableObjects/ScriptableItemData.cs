@@ -2,7 +2,7 @@
 
 public abstract class ScriptableItemData : ScriptableObject
 {
-    [SerializeField] private int id;
+    [SerializeField] private string id;
     [SerializeField] private string itemName;
     [SerializeField] private Sprite sprite;
     [SerializeField] private GameObject model;
@@ -15,7 +15,7 @@ public abstract class ScriptableItemData : ScriptableObject
     public GameObject Model { get { return model; } }
     public int StackSize { get { return stackSize; } }
     public string Description { get { return description; } }
-    public int Id { get { return id; } }
+    public string Id { get { return id; } }
 
     public abstract Item InitializeItem();
 }

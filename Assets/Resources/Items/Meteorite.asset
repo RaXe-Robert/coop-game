@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
   m_Name: Meteorite
   m_EditorClassIdentifier: 
-  id: 51
+  id: pickupitem_meteorite_small
   itemName: Meteorite
   sprite: {fileID: 21300000, guid: afc8cf48967e58040892fba8ed8ef97f, type: 3}
   model: {fileID: 100000, guid: d799058ce9f2ac44e93d6a0ba8579d96, type: 3}
