@@ -33,6 +33,13 @@ public class PlayerNetwork : PunBehaviour
                     OtherPlayers.Add(photonPlayer.ID, new PlayerInfo(photonPlayer));
 
                 SpawnPlayer();
+
+                /* This is a fix for the player spawning in before the map is actually loaded in multiplayer, some of the UI stuff that is dependent on the player breaks when using this tho.
+                if (SaveDataManager.Instance.IsWorldDownloaded)
+                    SpawnPlayer();
+                else
+                    SaveDataManager.Instance.OnWorldDownloaded += () => { SpawnPlayer(); };
+                    */
             }
             else
                 Debug.LogError("Trying to spawn but player is not in room!");

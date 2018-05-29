@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 
 [RequireComponent(typeof(PhotonView))]
-public class SaveDataExchanger : Photon.PunBehaviour
+public class SaveDataManager : Photon.PunBehaviour
 {
-    public static SaveDataExchanger Instance { get; private set; }
+    public static SaveDataManager Instance { get; private set; }
 
     private static List<PhotonPlayer> otherPlayersToLoad = new List<PhotonPlayer>();
 
@@ -22,32 +22,39 @@ public class SaveDataExchanger : Photon.PunBehaviour
         private set
         {
             roomFolderName = value;
-            CreateDataPaths();
+            CreateSubFolders();
         }
     }
+    
+    public static string PersistentDataPath { get; private set; }
 
-    private string persistentDataPath;
-    public string PersistentDataPath
+    public static string SaveFileFolder
+    {
+        get
+        {
+#if UNITY_EDITOR
+            return $"{PersistentDataPath}/Editor/Saves/";
+#else
+            return $"{PersistentDataPath}/Saves/";
+#endif
+        }
+    }
+    public string CurrentSaveFileDataPath
     {
         get
         {
             string roomFolder = string.IsNullOrEmpty(RoomFolderName) ? string.Empty : $"{RoomFolderName}/";
-#if UNITY_EDITOR
-            return $"{persistentDataPath}/Editor/Saves/{roomFolder}";
-#else
-            return $"{persistentDataPath}/Saves/{roomFolder}";
-#endif
+            return $"{SaveFileFolder}{roomFolder}";
         }
-        private set { persistentDataPath = value; }
     }
-    public string WorldDataPath => $"{PersistentDataPath}World/";
-    public string PlayerDataPath => $"{PersistentDataPath}Players/";
-
+    
+    public string WorldDataPath => $"{CurrentSaveFileDataPath}World/";
+    public string PlayerDataPath => $"{CurrentSaveFileDataPath}Players/";
 
     /// <summary>
     /// Clears all event handlers after the invoke has taken place.
     /// </summary>
-    public event Action<bool> OnWorldDownloaded;
+    public event Action OnWorldDownloaded;
     public bool IsWorldDownloaded { get; private set; }
     private void SetWorldDownloaded(bool state)
     {
@@ -55,19 +62,22 @@ public class SaveDataExchanger : Photon.PunBehaviour
 
         if (state)
         {
-            OnWorldDownloaded?.Invoke(true);
+            OnWorldDownloaded?.Invoke();
             OnWorldDownloaded = null;
         }
     }
 
     private void Awake()
     {
-        Instance = FindObjectOfType<SaveDataExchanger>();
+        Instance = FindObjectOfType<SaveDataManager>();
 
-        persistentDataPath = Application.persistentDataPath;
+        PersistentDataPath = Application.persistentDataPath;
+
+        if (!Directory.Exists(SaveFileFolder))
+            Directory.CreateDirectory(SaveFileFolder);
     }
 
-    private void CreateDataPaths()
+    private void CreateSubFolders()
     {
         if (!Directory.Exists(WorldDataPath))
             Directory.CreateDirectory(WorldDataPath);
@@ -92,7 +102,7 @@ public class SaveDataExchanger : Photon.PunBehaviour
             TimeStamp = DaytimeController.Instance.CurrentTime.Ticks,
 
             Seed = (int)PhotonNetwork.room.CustomProperties["seed"],
-            Name = "Substitute",
+            Name = (string)PhotonNetwork.room.CustomProperties["saveName"],
 
             Players = playerSaveInfos,
             Chunks = chunkSaveInfos
@@ -105,6 +115,28 @@ public class SaveDataExchanger : Photon.PunBehaviour
         PhotonNetwork.RaiseEvent(0, new byte[0], true, null);
     }
 
+    public SaveDataManifest[] LoadAllManifests()
+    {
+        string[] files = Directory.GetFiles(SaveFileFolder, "*.manifest");
+
+        List<SaveDataManifest> manifests = new List<SaveDataManifest>();
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            Tuple<string, byte[]> fileData = FileLoader.LoadFile(files[i]);
+            if (fileData != null)
+            {
+                string json = System.Text.Encoding.UTF8.GetString(fileData.Item2);
+                Debug.Log(json);
+                SaveDataManifest manifest = (SaveDataManifest)JsonUtility.FromJson(json, typeof(SaveDataManifest));
+                if (manifest != null)
+                    manifests.Add(manifest);
+            }
+        }
+        Debug.Log($"Loaded '{manifests.Count}' manifests.");
+        return manifests.ToArray();
+    }
+
     /// <summary>
     /// Saves the manifest to disk.
     /// </summary>
@@ -113,7 +145,7 @@ public class SaveDataExchanger : Photon.PunBehaviour
     {
         string json = JsonUtility.ToJson(saveDataManifest);
 
-        WriteToFile($"{RoomFolderName}.manifest", PersistentDataPath, System.Text.Encoding.UTF8.GetBytes(json));
+        WriteToFile($"{RoomFolderName}.manifest", SaveFileFolder, System.Text.Encoding.UTF8.GetBytes(json));
 
         Debug.Log(json);
     }
@@ -222,7 +254,7 @@ public class SaveDataExchanger : Photon.PunBehaviour
         else
             SetWorldDownloaded(false);
 
-        RoomFolderName = $"{(int)PhotonNetwork.room.CustomProperties["seed"]}";
+        RoomFolderName = $"{(string)PhotonNetwork.room.CustomProperties["saveName"]}";
     }
 
     public override void OnJoinedLobby()

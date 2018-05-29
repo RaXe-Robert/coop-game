@@ -9,14 +9,21 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject newGameMenuPanel;
-    [SerializeField] private GameObject singlePlayerPanel;
-    [SerializeField] private GameObject hostGamePanel;
+
+    [SerializeField] private GameObject loadSingleplayerPanel;
+    [SerializeField] private GameObject createSingleplayerPanel;
+
+    [SerializeField] private GameObject loadMultiplayerPanel;
+    [SerializeField] private GameObject createMultiplayerPanel;
+
     [SerializeField] private GameObject serverBrowserMenuPanel;
     [SerializeField] private GameObject serverBrowserPanel;
+
     [SerializeField] private GameObject optionsMenuPanel;
     [SerializeField] private GameObject controlsPanel;
     [SerializeField] private GameObject videoSettingsPanel;
     [SerializeField] private GameObject audioSettingsPanel;
+
     [SerializeField] private GameObject exitGamePanel;
 
     [Header("Player name")]
@@ -59,25 +66,10 @@ public class MainMenu : MonoBehaviour
         menuStack.Push(mainMenuPanel);
     }
 
-    public void StartSinglePlayerGame()
+    public void CreateGame(string roomName, RoomOptions roomOptions, bool offlineMode)
     {
-        PhotonNetwork.offlineMode = true;
+        PhotonNetwork.offlineMode = offlineMode;
 
-        //TODO Move all room creation scripts to the NetworkManager
-        RoomOptions roomOptions = new RoomOptions()
-        {
-            IsOpen = false,
-            MaxPlayers = 1,
-            IsVisible = false,
-            CleanupCacheOnLeave = true,
-            CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "seed", 123456789 } } //TODO: int not yet modifiable by user
-        };
-
-        CreateGame("Singleplayer Game", roomOptions);
-    }
-
-    public void CreateGame(string roomName, RoomOptions roomOptions)
-    {
         if (!PhotonNetwork.connected)
             OnPhotonCreateRoomFailed(new object[] { 1, "Not connected to master server!" });
         else if(!PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default))
@@ -131,7 +123,7 @@ public class MainMenu : MonoBehaviour
 
         //First menu shown is singleplayer, so connect in offline mode
         Connect(offlineMode: true);
-        OpenMenu(singlePlayerPanel, disablePrevious: false);
+        OpenMenu(loadSingleplayerPanel, disablePrevious: false);
     }
 
     public void ShowServerBrowserMenuPanel()
@@ -148,18 +140,30 @@ public class MainMenu : MonoBehaviour
         OpenMenu(controlsPanel, disablePrevious: false);
     }
 
-    public void ShowSinglePlayerPanel()
+    public void ShowLoadSingleplayerPanel()
     {
         Connect(offlineMode: true);
         CloseMenu();
-        OpenMenu(singlePlayerPanel, disablePrevious: false);
+        OpenMenu(loadSingleplayerPanel, disablePrevious: false);
     }
 
-    public void ShowHostGamePanel()
+    public void ShowCreateSingleplayerPanel()
+    {
+        CloseMenu();
+        OpenMenu(createSingleplayerPanel, disablePrevious: false);
+    }
+
+    public void ShowLoadMupltiplayerGamePanel()
     {
         Connect();
         CloseMenu();
-        OpenMenu(hostGamePanel, disablePrevious: false);
+        OpenMenu(loadMultiplayerPanel, disablePrevious: false);
+    }
+
+    public void ShowCreateMultiplayerPanel()
+    {
+        CloseMenu();
+        OpenMenu(createMultiplayerPanel, disablePrevious: false);
     }
 
     public void ShowServerBrowserPanel()

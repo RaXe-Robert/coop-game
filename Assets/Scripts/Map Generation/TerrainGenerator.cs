@@ -18,9 +18,9 @@ namespace Assets.Scripts.Map_Generation
         private const float sqrViewerMoveThresholdForChunkPartUpdate = viewerMoveThresholdForChunkPartUpdate * viewerMoveThresholdForChunkPartUpdate;
 
         public static int Seed { get; private set; }
-        public static string WorldDataPath => SaveDataExchanger.Instance.WorldDataPath;
+        public static string WorldDataPath => SaveDataManager.Instance.WorldDataPath;
 
-        public static LayerMask LayerMask = 1 << 7;
+        public static LayerMask LayerMask;
 
         [SerializeField]
         private int colliderLODIndex;
@@ -84,10 +84,10 @@ namespace Assets.Scripts.Map_Generation
             BiomeMapSettings.NoiseSettings.seed = Seed;
             ResourceMapSettings.NoiseSettings.seed = Seed;
 
-            if (SaveDataExchanger.Instance.IsWorldDownloaded == false)
-                SaveDataExchanger.Instance.OnWorldDownloaded += OnWorldLoaded;
+            if (SaveDataManager.Instance.IsWorldDownloaded == false)
+                SaveDataManager.Instance.OnWorldDownloaded += () => Setup();
             else
-                OnWorldLoaded(true);
+                Setup();
         }
 
         private void OnEnable() => PlayerNetwork.OtherPlayerSpawned += AddSecondaryViewer;
@@ -326,12 +326,6 @@ namespace Assets.Scripts.Map_Generation
             NavMeshBuilder.CollectSources(transform, navMeshSurface.layerMask, NavMeshCollectGeometry.PhysicsColliders, 0, new List<NavMeshBuildMarkup>(), buildSources);
 
             return NavMeshBuilder.BuildNavMeshData(navMeshSurface.GetBuildSettings(), buildSources, bounds, navMeshSurface.transform.position, navMeshSurface.transform.rotation);
-        }
-
-        private void OnWorldLoaded(bool loaded)
-        {
-            if (loaded)
-                Setup();
         }
     }
 

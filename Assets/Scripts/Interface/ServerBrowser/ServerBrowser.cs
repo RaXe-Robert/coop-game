@@ -9,17 +9,11 @@ public class ServerBrowser : MonoBehaviour
 
     private List<RoomListing> roomListingButtons = new List<RoomListing>();
     
-    private void OnEnable()
-    {
-        RefreshServerList();
-    }
+    private void OnEnable() => RefreshServerList();
 
     #region Photon Callbacks
 
-    private void OnReceivedRoomListUpdate()
-    {
-        RefreshServerList();
-    }
+    private void OnReceivedRoomListUpdate() => RefreshServerList();
 
     #endregion //Photon Callbacks
 
@@ -30,9 +24,7 @@ public class ServerBrowser : MonoBehaviour
         RoomInfo[] rooms = PhotonNetwork.GetRoomList();
 
         foreach (RoomInfo room in rooms)
-        {
             RoomReceived(room);
-        }
 
         RemoveOldRooms();
     }
@@ -70,13 +62,9 @@ public class ServerBrowser : MonoBehaviour
         foreach (RoomListing roomListing in roomListingButtons)
         {
             if (!roomListing.Updated)
-            {
                 removeRooms.Add(roomListing);
-            }
             else
-            {
                 roomListing.Updated = false;
-            }
         }
 
         foreach (RoomListing roomListing in removeRooms)

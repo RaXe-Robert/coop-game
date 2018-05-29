@@ -26,13 +26,9 @@ public class RoomListing : MonoBehaviour
     private void OnClick()
     {
         if (PhotonNetwork.JoinRoom(RoomName))
-        {
             Debug.Log($"Succesfully joined {RoomName}");
-        }
         else
-        {
             Debug.LogWarning($"Failed to join {RoomName}");
-        }
     }
 
     #endregion //Private Methods
