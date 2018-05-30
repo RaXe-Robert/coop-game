@@ -108,22 +108,6 @@ namespace Assets.Scripts.Map_Generation
 
             return new TerrainInfo(biome, layer, pos);
         }
-
-
-        #region Debugging
-
-        private void OnMouseDown()
-        {
-            Ray mouseRay = PlayerNetwork.LocalPlayer.GetComponent<PlayerCameraController>().CameraReference.ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
-            RaycastHit raycastHitInfo;
-            if (Physics.Raycast(mouseRay, out raycastHitInfo))
-            {
-                TerrainInfo terrainInfo = GetTerrainInfoFromWorldPoint(raycastHitInfo.point.x, raycastHitInfo.point.z);
-
-                Debug.Log($"BiomeValue: {terrainInfo.Biome.Name}, Height: {terrainInfo.WorldPosition.y}, Actual:{raycastHitInfo.point.y}");
-            }
-        }
-        #endregion //Debugging
     }
 
     public struct TerrainInfo

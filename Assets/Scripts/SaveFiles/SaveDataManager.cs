@@ -127,13 +127,12 @@ public class SaveDataManager : Photon.PunBehaviour
             if (fileData != null)
             {
                 string json = System.Text.Encoding.UTF8.GetString(fileData.Item2);
-                Debug.Log(json);
+
                 SaveDataManifest manifest = (SaveDataManifest)JsonUtility.FromJson(json, typeof(SaveDataManifest));
                 if (manifest != null)
                     manifests.Add(manifest);
             }
         }
-        Debug.Log($"Loaded '{manifests.Count}' manifests.");
         return manifests.ToArray();
     }
 
@@ -165,7 +164,7 @@ public class SaveDataManager : Photon.PunBehaviour
 
         WriteToFile($"{RoomFolderName}.manifest", SaveFileFolder, System.Text.Encoding.UTF8.GetBytes(json));
 
-        Debug.Log(json);
+        Debug.Log($"Saving manifest '{saveDataManifest.Name}': {json}");
     }
 
     private void OnManifestUpdateEvent(byte eventcode, object content, int senderid)

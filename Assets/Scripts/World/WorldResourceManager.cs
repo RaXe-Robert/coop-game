@@ -80,7 +80,6 @@ public class WorldResourceManager : Photon.MonoBehaviour {
     [PunRPC]
     private void RPC_RemoveNetworkedWorldResource(double id, Vector2 terrainChunkCoord)
     {
-        Debug.Log("removing");
         networkedWorldResources.Remove(id);
         TerrainChunk terrainChunk = TerrainGenerator.GetTerrainChunk(terrainChunkCoord);
 

@@ -10,7 +10,7 @@ public class GameOptionsMultiplayer : GameOptionsSingleplayer
 {
     [Header("Multiplayer settings")]
     [SerializeField] private Text roomNameText;
-    protected string RoomNameInput => string.IsNullOrEmpty(roomNameText?.text) ? PlayerNetwork.PlayerName : roomNameText.text; // If theere is no roomNameText or if it's empty then the default value is the player name
+    protected string RoomNameInput => !string.IsNullOrWhiteSpace(roomNameText?.text) ? roomNameText.text : string.Empty;
 
     [SerializeField] private Dropdown playerCountDropdown;
     protected byte MaxPlayerCountInput => playerCountDropdown != null ? Convert.ToByte(playerCountDropdown.options[playerCountDropdown.value].text.Substring(0, 1)) : (byte)4; // If there is no dropdown then the default value is 4
@@ -20,7 +20,18 @@ public class GameOptionsMultiplayer : GameOptionsSingleplayer
 
     protected override bool ValidateInput(ValidationType validationType)
     {
-        return base.ValidateInput(validationType);
+        bool validated = true;
+
+        if (validationType == ValidationType.Create)
+        {
+            if (string.IsNullOrWhiteSpace(RoomNameInput))
+            {
+                Debug.LogWarning("Room name is empty");
+                validated = false;
+            }
+        }
+
+        return base.ValidateInput(validationType) && validated;
     }
 
     public override void OnClick_CreateGame()

@@ -286,7 +286,6 @@ namespace Assets.Scripts.Map_Generation
         private IEnumerator BuildNavMeshAsync()
         {
             IsBuildingNavmesh = true;
-            Debug.Log("Started building navmesh");
 
             // Get the data for the surface
             NavMeshData data = InitializeBakeData();
@@ -306,7 +305,6 @@ namespace Assets.Scripts.Map_Generation
             // Finalize / Apply
             navMeshSurface.AddData();
 
-            Debug.Log("Finished building navmesh");
             IsBuildingNavmesh = false;
         }
 
