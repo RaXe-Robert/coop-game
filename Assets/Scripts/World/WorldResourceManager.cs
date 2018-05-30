@@ -83,11 +83,19 @@ public class WorldResourceManager : Photon.MonoBehaviour {
         networkedWorldResources.Remove(id);
         TerrainChunk terrainChunk = TerrainGenerator.GetTerrainChunk(terrainChunkCoord);
 
+        bool isAnyRemoved = false;
+
         foreach (var chunkPart in terrainChunk.DataMap.ChunkParts)
         {
             if (chunkPart.Value.RemoveObjectPoint(id))
+            {
+                isAnyRemoved = true;
                 break;
+            }
         }
+
+        if (!isAnyRemoved)
+            Debug.LogError("Trying to remove for world resource by id but couldn't find a specific resource that had that id!");
 
         TerrainGenerator.GetTerrainChunk(terrainChunkCoord).SaveChanges();
         SaveDataManager.Instance.UpdateManifest();
