@@ -26,7 +26,7 @@ public class WeaponItemSlot : InventoryItemSlot
             if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
             {
                 if (from.CurrentItem.GetType() == typeof(Weapon))
-                    equipmentManager.UnequipItem(from.CurrentItem as Weapon, from.index);
+                    equipmentManager.UnequipArmor(from.CurrentItem as Weapon, from.index);
             }
             else
                 equipmentManager.DropEquippedItem(from.CurrentItem as Item);

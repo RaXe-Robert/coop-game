@@ -12,6 +12,7 @@ public class Item
         Model = itemData.Model;
         Description = itemData.Description;
         Id = itemData.Id;
+        BurningTime = itemData.BurningTime;
     }
     
     public string Name { get; }
@@ -19,6 +20,6 @@ public class Item
     public GameObject Model { get; }
     public string Description { get; }
     public string Id { get; }
-
+    public float BurningTime { get; }
     public int StackSize { get; set; }
 }

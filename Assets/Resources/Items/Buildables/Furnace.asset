@@ -9,14 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22580a90e66e2f44ea7c1962e6362f2f, type: 3}
-  m_Name: Campfire
+  m_Name: Furnace
   m_EditorClassIdentifier: 
-  id: buildable_campfire_small
-  itemName: Campfire
-  sprite: {fileID: 21300000, guid: 5415a2fde3716544d934d8de4c10f84c, type: 3}
-  model: {fileID: 100000, guid: 432738de40f61704dac1e2e0e088f8ed, type: 3}
-  description: A campfire
+  id: buildable_furnace
+  itemName: Furnace
+  sprite: {fileID: 21300000, guid: 2eac94927b7c65d43aa9fb9f97af8dba, type: 3}
+  model: {fileID: 100000, guid: e3ced3552e19d3140ae851173e79cdf9, type: 3}
+  description: A furnace to create advanced tools and armor
   recoverable: 1
   snapToGrid: 1
-  prefabToSpawn: {fileID: 1312758526846642, guid: 6cbe520a2b43c294eae50d3118e1da03,
-    type: 2}
+  prefabToSpawn: {fileID: 0}
