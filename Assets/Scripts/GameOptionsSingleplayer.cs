@@ -11,10 +11,22 @@ public class GameOptionsSingleplayer : MonoBehaviour
 
     [Header("General settings")]
     [SerializeField] private Text saveNameText;
-    protected string SaveNameInput => saveNameText != null ? saveNameText.text : string.Empty;
+    protected string SaveNameInput => 
+        saveNameText != null 
+        ? saveNameText.text 
+        : string.Empty;
 
     [SerializeField] private Text seedText;
-    protected int SeedInput => string.IsNullOrWhiteSpace(seedText?.text) ? UnityEngine.Random.Range(int.MinValue, int.MaxValue) : Convert.ToInt32(seedText.text);
+    protected int SeedInput => 
+        string.IsNullOrWhiteSpace(seedText?.text) 
+        ? UnityEngine.Random.Range(int.MinValue, int.MaxValue) 
+        : Convert.ToInt32(seedText.text);
+
+    [SerializeField] private Dropdown hourSelectionDropdown;
+    protected long GameStartTimeInput =>
+        !string.IsNullOrWhiteSpace(hourSelectionDropdown?.options[hourSelectionDropdown.value].text)
+        ? DaytimeController.VectorToTimeSpan(new Vector3(Convert.ToInt32(hourSelectionDropdown.options[hourSelectionDropdown.value].text), 0, 0)).Ticks
+        : DaytimeController.VectorToTimeSpan(new Vector3(12,0,0)).Ticks;
     
     protected virtual bool ValidateInput(ValidationType validationType)
     {
@@ -46,6 +58,7 @@ public class GameOptionsSingleplayer : MonoBehaviour
             IsOpen = false,
             CustomRoomProperties = new ExitGames.Client.Photon.Hashtable()
             {
+                { "gameTime", GameStartTimeInput },
                 { "seed", SeedInput },
                 { "saveName", SaveNameInput}
             }
@@ -74,6 +87,7 @@ public class GameOptionsSingleplayer : MonoBehaviour
                 CleanupCacheOnLeave = true,
                 CustomRoomProperties = new ExitGames.Client.Photon.Hashtable()
                 {
+                    { "gameTime", saveFileBrowser.SelectedSave.GameTime},
                     { "seed", Convert.ToInt32(saveFileBrowser.SelectedSave.Seed) },
                     { "saveName", saveFileBrowser.SelectedSave.Name }
                 }

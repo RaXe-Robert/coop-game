@@ -73,7 +73,7 @@ public class MainMenu : MonoBehaviour
         if (!PhotonNetwork.connected)
             OnPhotonCreateRoomFailed(new object[] { 1, "Not connected to master server!" });
         else if(!PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default))
-            OnPhotonCreateRoomFailed(new object[] { 2, "Room with the smae name already exists!" });
+            OnPhotonCreateRoomFailed(new object[] { 2, "Room with the same name already exists!" });
     }
 
     public void ExitGame()

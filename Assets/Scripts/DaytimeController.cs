@@ -15,9 +15,6 @@ public class DaytimeController : Photon.MonoBehaviour, IPunObservable
     [SerializeField] int tickRate = 1;
 
     [Header("Time Settings")]
-    [Tooltip("Hours/Minutes/Seconds")]
-    [SerializeField] private Vector3 initialStartTime = new Vector3(12, 0, 0);
-
     [Range(1, 10)] [SerializeField] private int dayStartHour = 7;
     [Range(16, 24)] [SerializeField] private int nightStartHour = 23;
 
@@ -80,24 +77,17 @@ public class DaytimeController : Photon.MonoBehaviour, IPunObservable
     private void Awake()
     {
         Instance = FindObjectOfType<DaytimeController>();
+
+        currentTime = TimeSpan.FromTicks((long)PhotonNetwork.room.CustomProperties["gameTime"]);
     }
 
     private void Start()
     {
-        CurrentTime = VectorToTimeSpan(initialStartTime);
-
         moonLight.transform.eulerAngles = new Vector3(90f, 0f, 0f);
     }
 
-    private void OnEnable()
-    {
-        StartCoroutine(TimeProgression());
-    }
-
-    private void OnDisable()
-    {
-        StopCoroutine(TimeProgression());
-    }
+    private void OnEnable() => StartCoroutine(TimeProgression());
+    private void OnDisable() => StopCoroutine(TimeProgression());
 
     private void FixedUpdate()
     {
@@ -113,6 +103,7 @@ public class DaytimeController : Photon.MonoBehaviour, IPunObservable
             if (PhotonNetwork.isMasterClient)
             {
                 CurrentTime = CurrentTime.Add(TimeSpan.FromMinutes(tickRate));
+                PhotonNetwork.room.CustomProperties["gameTime"] = CurrentTime.Ticks;
             }
             yield return waitForSeconds;
         }
@@ -169,7 +160,7 @@ public class DaytimeController : Photon.MonoBehaviour, IPunObservable
         }
     }
 
-    private TimeSpan VectorToTimeSpan(Vector3 vector)
+    public static TimeSpan VectorToTimeSpan(Vector3 vector)
     {
         return new TimeSpan((int)vector.x, (int)vector.y, (int)vector.z);
     }

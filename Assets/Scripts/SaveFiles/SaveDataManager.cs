@@ -15,18 +15,9 @@ public class SaveDataManager : Photon.PunBehaviour
     /// <summary> Contains the manifests of the other players. </summary>
     private Dictionary<PhotonPlayer, byte[]> playerManifests;
 
-    private string roomFolderName;
-    public string RoomFolderName
-    {
-        get { return roomFolderName; }
-        private set
-        {
-            roomFolderName = value;
-            CreateSubFolders();
-        }
-    }
-    
     public static string PersistentDataPath { get; private set; }
+
+    public string RoomFolderName { get; private set; }
 
     public static string SaveFileFolder
     {
@@ -48,8 +39,31 @@ public class SaveDataManager : Photon.PunBehaviour
         }
     }
     
-    public string WorldDataPath => $"{CurrentSaveFileDataPath}World/";
-    public string PlayerDataPath => $"{CurrentSaveFileDataPath}Players/";
+    public string WorldDataPath
+    {
+        get
+        {
+            string path = $"{CurrentSaveFileDataPath}World/";
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            return path;
+        }
+    }
+
+    public string PlayerDataPath
+    {
+        get
+        {
+            string path = $"{CurrentSaveFileDataPath}Players/";
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            return path;
+        }
+    }
 
     /// <summary>
     /// Clears all event handlers after the invoke has taken place.
@@ -64,6 +78,8 @@ public class SaveDataManager : Photon.PunBehaviour
         {
             OnWorldDownloaded?.Invoke();
             OnWorldDownloaded = null;
+
+            UpdateManifest();
         }
     }
 
@@ -75,14 +91,6 @@ public class SaveDataManager : Photon.PunBehaviour
 
         if (!Directory.Exists(SaveFileFolder))
             Directory.CreateDirectory(SaveFileFolder);
-    }
-
-    private void CreateSubFolders()
-    {
-        if (!Directory.Exists(WorldDataPath))
-            Directory.CreateDirectory(WorldDataPath);
-        if (!Directory.Exists(PlayerDataPath))
-            Directory.CreateDirectory(PlayerDataPath);
     }
 
     private void OnEnable() => PhotonNetwork.OnEventCall += this.OnManifestUpdateEvent;
@@ -99,8 +107,9 @@ public class SaveDataManager : Photon.PunBehaviour
 
         SaveDataManifest saveDataManifest = new SaveDataManifest
         {
-            TimeStamp = DaytimeController.Instance.CurrentTime.Ticks,
+            Save_TimeStamp = DaytimeController.Instance?.CurrentTime.Ticks ?? 0,
 
+            GameTime = (long)PhotonNetwork.room.CustomProperties["gameTime"],
             Seed = (int)PhotonNetwork.room.CustomProperties["seed"],
             Name = (string)PhotonNetwork.room.CustomProperties["saveName"],
 
@@ -266,12 +275,13 @@ public class SaveDataManager : Photon.PunBehaviour
     {
         playerManifests = new Dictionary<PhotonPlayer, byte[]>();
 
+        RoomFolderName = $"{(string)PhotonNetwork.room.CustomProperties["saveName"]}";
+
         if (PhotonNetwork.isMasterClient)
             SetWorldDownloaded(true);
         else
             SetWorldDownloaded(false);
 
-        RoomFolderName = $"{(string)PhotonNetwork.room.CustomProperties["saveName"]}";
     }
 
     public override void OnJoinedLobby()

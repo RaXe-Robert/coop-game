@@ -47,6 +47,7 @@ public class GameOptionsMultiplayer : GameOptionsSingleplayer
             IsOpen = true,
             CustomRoomProperties = new ExitGames.Client.Photon.Hashtable()
             {
+                { "gameTime", GameStartTimeInput },
                 { "seed", SeedInput },
                 { "saveName", SaveNameInput}
             }
@@ -75,6 +76,7 @@ public class GameOptionsMultiplayer : GameOptionsSingleplayer
                 IsOpen = true,
                 CustomRoomProperties = new ExitGames.Client.Photon.Hashtable()
                 {
+                    { "gameTime", saveFileBrowser.SelectedSave.GameTime },
                     { "seed", Convert.ToInt32(saveFileBrowser.SelectedSave.Seed) },
                     { "saveName", saveFileBrowser.SelectedSave.Name }
                 }

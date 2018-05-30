@@ -5,8 +5,9 @@ using UnityEngine;
 [Serializable]
 public class SaveDataManifest
 {
-    public long TimeStamp;
+    public long Save_TimeStamp;
 
+    public long GameTime;
     public int Seed;
     public string Name;
 
