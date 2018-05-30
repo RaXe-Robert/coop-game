@@ -17,7 +17,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     protected CanvasGroup canvasGroup;
     protected Transform initialParentTransform;
-
+    
     private Sprite initalImage;
 
     public Item CurrentItem
@@ -49,12 +49,9 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         this.index = index;
         this.inventory = inventory;
         this.equipmentManager = equipmentManager;
-    }
 
-    public void Start()
-    {
-        canvasGroup = GetComponent<CanvasGroup>();
         initalImage = image.sprite;
+        canvasGroup = GetComponent<CanvasGroup>();
     }
 
     public void Clear()
