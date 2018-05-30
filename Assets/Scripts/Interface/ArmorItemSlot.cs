@@ -29,7 +29,10 @@ public class ArmorItemSlot : InventoryItemSlot
             if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
             {
                 if (from.CurrentItem.GetType() == typeof(Armor))
+                {
                     equipmentManager.UnequipArmor(from.CurrentItem as Armor, from.index);
+                    Tooltip.Instance.Hide();
+                }
             }
             else
                 equipmentManager.DropEquippedItem(from.CurrentItem as Item);

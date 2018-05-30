@@ -29,8 +29,6 @@ public class PlayerStatsComponent : MonoBehaviour
     {
         equipmentManager = GetComponent<EquipmentManager>();
 
-        equipmentManager.OnWeaponEquippedCallback += ApplyWeaponStats;
-        equipmentManager.OnWeaponUnequippedCallback += RemoveWeaponStats;
         equipmentManager.OnArmorEquippedCallback += ApplyArmorStats;
         equipmentManager.OnArmorUnequippedCallback += RemoveArmorStats;
 
@@ -45,20 +43,6 @@ public class PlayerStatsComponent : MonoBehaviour
         timeBetweenAttacks = new Stat(baseStats.timeBetweenAttacks, this);
         timeBetweenResourceHits = new Stat(baseStats.timeBetweenResourceHits, this);
         defense = new Stat(baseStats.defense, this);
-    }
-
-    private void ApplyWeaponStats(Weapon weapon)
-    {
-        minDamage.AddValue(weapon.MinDamage);
-        maxDamage.AddValue(weapon.MaxDamage);
-        timeBetweenAttacks.AddValue(weapon.TimeBetweenAttacks - baseStats.timeBetweenAttacks);
-    }
-
-    private void RemoveWeaponStats(Weapon weapon)
-    {
-        minDamage.RemoveValue(weapon.MinDamage);
-        maxDamage.RemoveValue(weapon.MaxDamage);
-        timeBetweenAttacks.RemoveValue(weapon.TimeBetweenAttacks - baseStats.timeBetweenAttacks);
     }
 
     private void ApplyArmorStats(Armor armor)

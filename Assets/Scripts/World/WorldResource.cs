@@ -65,12 +65,14 @@ public class WorldResource : Photon.MonoBehaviour, IInteractable
             return;
         }
         
-        var equipmentManager = PlayerNetwork.LocalPlayer.GetComponent<EquipmentManager>();
-        if (!equipmentManager.HasToolEquipped(requiredToolToHarvest))
-        {
-            WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1));
-            return;
-        }
+
+        //TODO: refactor this to use hotbar selected item
+        //var equipmentManager = PlayerNetwork.LocalPlayer.GetComponent<EquipmentManager>();
+        //if (!equipmentManager.HasToolEquipped(requiredToolToHarvest))
+        //{
+        //    WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1));
+        //    return;
+        //}
 
         var stats = PlayerNetwork.LocalPlayer.GetComponent<PlayerStatsComponent>();
         playerMovement.AddInteractionTimeout(stats.TimeBetweenResourceHits);

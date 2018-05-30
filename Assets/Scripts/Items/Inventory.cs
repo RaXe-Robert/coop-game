@@ -293,15 +293,12 @@ public class Inventory : MonoBehaviour
     {
         if(index < 0 || inventoryItems[index] != null)
         {
-            Debug.LogError("Inventory -- AddItemAtIndex -- invalid index");
-            AddItemById(itemId, stackSize);
+            index = inventoryItems.FirstNullIndexAt().Value;
         }
-        else
-        {
-            Item item = ItemFactory.CreateNewItem(itemId, stackSize);
-            inventoryItems[index] = item;
-            OnItemChangedCallback?.Invoke();
-        }
+        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
+        inventoryItems[index] = item;
+        OnItemChangedCallback?.Invoke();
+        SoundManager.Instance.PlaySound(SoundManager.Sound.PICKUP);
     }
 
     /// <summary>

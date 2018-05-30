@@ -9,41 +9,23 @@ public class EquipmentManager : MonoBehaviour
     public delegate void OnItemEquipped();
     public OnItemEquipped OnItemChanged;
 
-    public delegate void OnWeaponEquipped(Weapon equippedWeapon);
-    public OnWeaponEquipped OnWeaponEquippedCallback;
-
     public delegate void OnArmorEquipped(Armor equippedArmor);
     public OnArmorEquipped OnArmorEquippedCallback;
-
-    public delegate void OnToolEquipped(Tool equippedTool);
-    public OnToolEquipped OnToolEquippedCallback;
 
     //Unequip
     public delegate void OnItemUnequipped();
     public OnItemUnequipped OnItemUnequippedCallBack;
 
-    public delegate void OnWeaponUnequipped(Weapon equippedWeapon);
-    public OnWeaponUnequipped OnWeaponUnequippedCallback;
-
     public delegate void OnArmorUnEquipped(Armor equippedArmor);
     public OnArmorUnEquipped OnArmorUnequippedCallback;
 
-    public delegate void OnToolUnEquipped(Tool equippedTool);
-    public OnToolUnEquipped OnToolUnequippedCallback;
-
     #endregion callbacks
 
-    private List<Tool> equippedTools;
-    private Weapon equippedWeapon;
     private List<Armor> equippedArmor;
-
     private Inventory inventory;
-
-    public bool HasWeaponEquipped { get { return equippedWeapon != null; } }
 
     private void Start()
     {
-        equippedTools = new List<Tool>(2);
         equippedArmor = new List<Armor>(4);
         inventory = FindObjectOfType<Inventory>();
     }

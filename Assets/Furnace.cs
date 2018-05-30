@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public interface IFuelInput
-{
-    void AddFuel(Item item);
-}
-
 public class Furnace : BuildableWorldObject, IFuelInput {
 
     [SerializeField] private CraftingList availableRecipes;
