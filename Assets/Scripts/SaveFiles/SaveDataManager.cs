@@ -138,6 +138,24 @@ public class SaveDataManager : Photon.PunBehaviour
     }
 
     /// <summary>
+    /// Validates the given save name by comparing it all other save file names.
+    /// </summary>
+    /// <param name="saveName">The new save file name.</param>
+    /// <returns>True if no other save file has been found with the given name.</returns>
+    public bool ValidateNewSaveName(string saveName)
+    {
+        SaveDataManifest[] manifests = LoadAllManifests();
+
+        for (int i = 0; i < manifests.Length; i++)
+        {
+            if (string.Equals(manifests[i].Name, saveName))
+                return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
     /// Saves the manifest to disk.
     /// </summary>
     /// <param name="saveDataManifest"></param>

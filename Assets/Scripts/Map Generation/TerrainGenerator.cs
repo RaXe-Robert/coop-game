@@ -84,6 +84,8 @@ namespace Assets.Scripts.Map_Generation
             BiomeMapSettings.NoiseSettings.seed = Seed;
             ResourceMapSettings.NoiseSettings.seed = Seed;
 
+            Debug.Log($"Generating world with seed: '{Seed}'");
+
             if (SaveDataManager.Instance.IsWorldDownloaded == false)
                 SaveDataManager.Instance.OnWorldDownloaded += () => Setup();
             else
@@ -97,11 +99,6 @@ namespace Assets.Scripts.Map_Generation
         {
             if (!IsSetupFinished)
                 return;
-
-            foreach (var terrainChunk in terrainChunkDictionary.Values)
-            {
-                Debug.DrawRay(new Vector3(terrainChunk.Bounds.center.x, 0f, terrainChunk.Bounds.center.y), Vector3.up * 50f);
-            }
 
             primaryViewer.Position = new Vector2(primaryViewer.Transform.position.x, primaryViewer.Transform.position.z);
 
