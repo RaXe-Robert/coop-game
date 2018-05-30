@@ -18,6 +18,8 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     protected CanvasGroup canvasGroup;
     protected Transform initialParentTransform;
 
+    private Sprite initalImage;
+
     public Item CurrentItem
     {
         get
@@ -52,12 +54,13 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
+        initalImage = image.sprite;
     }
 
     public void Clear()
     {
         currentItem = null;
-        image.sprite = null;
+        image.sprite = initalImage;
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
