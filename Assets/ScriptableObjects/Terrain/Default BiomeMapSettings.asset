@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54e7e944375959441a0b650c250831e7, type: 3}
+  m_Name: Default BiomeMapSettings
+  m_EditorClassIdentifier: 
+  AutoUpdate: 1
+  NoiseSettings:
+    normalizeMode: 1
+    scale: 50
+    octaves: 6
+    persistance: 0.3
+    lacunarity: 2
+    seed: 0
+    offset: {x: 0, y: 0}
+  Biomes:
+  - name: Desert
+    color: {r: 0.99634886, g: 1, b: 0.7352941, a: 1}
+    resourceDensity: 0.2
+  - name: Grassland
+    color: {r: 0.2827586, g: 1, b: 0, a: 1}
+    resourceDensity: 0.3
+  - name: Forest
+    color: {r: 0.12941173, g: 0.64705884, b: 0, a: 1}
+    resourceDensity: 0.5

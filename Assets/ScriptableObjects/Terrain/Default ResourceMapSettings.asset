@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f444e2bec5221684daa3649c9fff4385, type: 3}
+  m_Name: Default ResourceMapSettings
+  m_EditorClassIdentifier: 
+  AutoUpdate: 1
+  noiseSettings:
+    normalizeMode: 0
+    scale: 1.16
+    octaves: 3
+    persistance: 0.8
+    lacunarity: 2
+    seed: 123456789
+    offset: {x: 0, y: 0}
+  worldResourceEntries:
+  - worldResourcePrefab: {fileID: 1695406501947972, guid: 00e52d555c867374690f2256513d9e5a,
+      type: 2}
+  - worldResourcePrefab: {fileID: 1296203204362048, guid: cea2ad25b4540224a86b529aa39547f6,
+      type: 2}
+  - worldResourcePrefab: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
+      type: 2}
+  - worldResourcePrefab: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
+      type: 2}
+  - worldResourcePrefab: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
+      type: 2}
+  - worldResourcePrefab: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
+      type: 2}
+  densityThreshold: 0.395
