@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224276402310189828}
   - component: {fileID: 222999654307005084}
   - component: {fileID: 114357130043630378}
+  - component: {fileID: 114407861753597960}
   m_Layer: 5
   m_Name: MultiplayerPropertiesUI
   m_TagString: Untagged
@@ -136,6 +137,20 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114407861753597960
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1442336803962786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14cb05dff7209e847be359b7645c927f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerItemPrefab: {fileID: 1974906458992382, guid: d85381d179dc4244c825430effc87b1b,
+    type: 2}
+  players: {fileID: 1995728125247126}
 --- !u!222 &222905035422512044
 CanvasRenderer:
   m_ObjectHideFlags: 1
