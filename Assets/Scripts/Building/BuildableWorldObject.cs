@@ -12,7 +12,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
     public float interactDistance = 1f;
     public List<UnityAction> Actions { get; private set; }
 
-    private void Start()
+    protected virtual void Start()
     {
         Actions = new List<UnityAction>();
         

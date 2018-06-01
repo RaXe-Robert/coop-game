@@ -16,6 +16,8 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 2eac94927b7c65d43aa9fb9f97af8dba, type: 3}
   model: {fileID: 100000, guid: e3ced3552e19d3140ae851173e79cdf9, type: 3}
   description: A furnace to create advanced tools and armor
+  burningTime: 0
   recoverable: 1
   snapToGrid: 1
-  prefabToSpawn: {fileID: 0}
+  prefabToSpawn: {fileID: 1456024842149962, guid: 9aa98c3372287464782704c8dc2bfc18,
+    type: 2}

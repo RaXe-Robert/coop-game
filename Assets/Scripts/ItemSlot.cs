@@ -14,31 +14,20 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     protected Transform initialParentTransform;
 
     protected Item currentItem;
-    public Item CurrentItem
+    public virtual Item CurrentItem
     {
         get
         {
             return currentItem;
         }
-
         set
         {
             currentItem = value;
-            image.sprite = currentItem?.Sprite;
-            if (currentItem?.StackSize > 1)
-            {
-                stackSizeText.text = currentItem.StackSize.ToString();
-                textBackground.enabled = true;
-            }
-            else
-            {
-                textBackground.enabled = false;
-                stackSizeText.text = "";
-            }
+            UpdateUI();
         }
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
     }
@@ -106,5 +95,20 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void OnPointerExit(PointerEventData eventData)
     {
         Tooltip.Instance.Hide();
+    }
+
+    protected void UpdateUI()
+    {
+        image.sprite = currentItem?.Sprite;
+        if (currentItem?.StackSize > 1)
+        {
+            stackSizeText.text = currentItem.StackSize.ToString();
+            textBackground.enabled = true;
+        }
+        else
+        {
+            textBackground.enabled = false;
+            stackSizeText.text = "";
+        }
     }
 }

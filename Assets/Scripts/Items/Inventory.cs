@@ -40,6 +40,7 @@ public class Inventory : MonoBehaviour
         {
             AddItemById(stick.Id, 64);
             AddItemById(diamond.Id, 64);
+            AddItemById("resource_ironOre", 64);
         }
 #endif
     }

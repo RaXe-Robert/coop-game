@@ -49,7 +49,7 @@ public class BuildableInteractionMenu : MonoBehaviour
             return;
         }
 
-        transform.position = Target.transform.position + Vector3.up;
+        transform.position = Target.transform.position + Vector3.up * 5;
     }
 
     public void Show(BuildableWorldObject invoker, UnityAction[] actions)

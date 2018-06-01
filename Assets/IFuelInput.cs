@@ -1,4 +1,5 @@
 ﻿public interface IFuelInput
 {
-    void AddFuel(Item item);
+    FuelInput FuelInput { get; set; }
+    float BurningTime { get; set; }
 }

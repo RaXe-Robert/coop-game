@@ -58,7 +58,7 @@ public class InventoryItemSlot : ItemSlot {
         
         InventoryItemSlot from;
         //Check what gets dropped on this.
-        if (!(@from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
+        if (!(@from = eventData.pointerDrag.GetComponent<ItemSlot>() as InventoryItemSlot))
             return;
         
         //We got an item from our equipment.

@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine.EventSystems;
 
-public class FuelInput : ItemSlot {
-
+public class ItemInput : ItemSlot
+{
     public delegate void OnItemUsed();
     public OnItemUsed OnItemUsedCallback;
 
@@ -16,7 +18,7 @@ public class FuelInput : ItemSlot {
 
     public override void OnDrop(PointerEventData eventData)
     {
-        if(eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem.BurningTime > 0)
+        if (eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem.BurningTime > 0)
         {
             if (eventData.pointerDrag.GetComponent<InventoryItemSlot>())
             {
@@ -27,18 +29,19 @@ public class FuelInput : ItemSlot {
         }
     }
 
-    public void TakeFuel()
+    public Item TakeItem()
     {
         if (CurrentItem == null)
-            return;
+            return null;
         else
         {
-            if(CurrentItem.StackSize > 1)
+            if (CurrentItem.StackSize > 1)
                 CurrentItem.StackSize--;
             else
                 CurrentItem = null;
 
             OnItemUsedCallback?.Invoke();
+            return ItemFactory.CreateNewItem(CurrentItem.Id);
         }
     }
 }
