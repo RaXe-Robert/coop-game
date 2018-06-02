@@ -233,6 +233,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactDistance: 4
+  chestUIGo: {fileID: 1010464446997784, guid: 8ecd278be94e33b4899fd5ca04df281b, type: 2}
+  CanControl: 1
 --- !u!114 &114863840952904582
 MonoBehaviour:
   m_ObjectHideFlags: 1
