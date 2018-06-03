@@ -18,12 +18,9 @@ public class FuelInput : ItemSlot {
     {
         if(eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem.BurningTime > 0)
         {
-            if (eventData.pointerDrag.GetComponent<InventoryItemSlot>())
-            {
-                var from = eventData.pointerDrag.GetComponent<InventoryItemSlot>();
-                CurrentItem = eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem;
-                PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemAtIndex(from.index);
-            }
+            var from = eventData.pointerDrag.GetComponent<InventoryItemSlot>();
+            CurrentItem = eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem;
+            PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemAtIndex(from.index);
         }
     }
 

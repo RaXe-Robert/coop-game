@@ -8,6 +8,7 @@ public abstract class ScriptableItemData : ScriptableObject
     [SerializeField] private GameObject model;
     [SerializeField] private string description;
     [SerializeField] private float burningTime;
+    [SerializeField] private ScriptableItemData meltingResult;
     private int stackSize = 1;
 
     //No capital to override the existing Object.name
@@ -18,6 +19,7 @@ public abstract class ScriptableItemData : ScriptableObject
     public string Description { get { return description; } }
     public string Id { get { return id; } }
     public float BurningTime { get { return burningTime; } }
+    public ScriptableItemData MeltingResult { get { return meltingResult; } }
 
     public abstract Item InitializeItem();
 }

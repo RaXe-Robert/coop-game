@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.EventSystems;
 
-public class ItemInput : ItemSlot
+public class ItemOutput : ItemSlot
 {
     public delegate void OnItemUsed();
     public OnItemUsed OnItemUsedCallback;
@@ -18,12 +18,7 @@ public class ItemInput : ItemSlot
 
     public override void OnDrop(PointerEventData eventData)
     {
-        if (eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem.MeltingResult != null)
-        {
-            var from = eventData.pointerDrag.GetComponent<InventoryItemSlot>();
-            CurrentItem = eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem;
-            PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemAtIndex(from.index);
-        }
+        //This shouldn't be allowed;
     }
 
     public Item TakeItem()
@@ -40,5 +35,18 @@ public class ItemInput : ItemSlot
             OnItemUsedCallback?.Invoke();
             return ItemFactory.CreateNewItem(CurrentItem.Id);
         }
+    }
+
+    public void DepositItem(Item itemToDeposit)
+    {
+        if (CurrentItem != null)
+        {
+            if (itemToDeposit.Id != CurrentItem?.Id)
+                return;
+            CurrentItem.StackSize += itemToDeposit.StackSize;
+        }
+        else CurrentItem = itemToDeposit;
+
+        OnItemUsedCallback?.Invoke();
     }
 }

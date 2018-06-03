@@ -16,6 +16,7 @@ public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
     public float BurningTime { get; set; }
     public ItemInput ItemInput { get; set; }
     public Item CurrentItem { get; set; }
+    public ItemOutput ItemOutput { get; set; }
 
     protected override void Start()
     {
@@ -26,6 +27,7 @@ public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
 
         FuelInput = furnaceInterface.GetComponentInChildren<FuelInput>();
         ItemInput = furnaceInterface.GetComponentInChildren<ItemInput>();
+        ItemOutput = furnaceInterface.GetComponentInChildren<ItemOutput>();
     }
 
     protected override UnityAction[] InitializeActions()
@@ -50,6 +52,9 @@ public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
             meltingProgress += BurningTime > 0 ? Time.deltaTime : -Time.deltaTime;
             if(meltingProgress >= 5)
             {
+                ItemOutput.DepositItem(ItemFactory.CreateNewItem(CurrentItem.MeltingResult.Id, 1));
+                CurrentItem = null;
+                meltingProgress = 0;
                 Debug.Log("FinishedMelting");
             }
         }
