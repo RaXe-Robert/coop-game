@@ -67,4 +67,7 @@ MonoBehaviour:
   - ToggleCanControl
   - ChestCloseAnimation
   - ChestOpenAnimation
+  - SetChestItems
+  - SetChestItem
+  - RemoveChestItem
   DisableAutoOpenWizard: 1

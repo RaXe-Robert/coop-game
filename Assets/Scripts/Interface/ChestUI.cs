@@ -11,6 +11,7 @@ public class ChestUI : MonoBehaviour {
     private Chest chest;
     private EquipmentManager equipmentManager;
     private List<ChestItemSlot> chestSlots;
+    private List<GameObject> goChestSlots;
 
     public void Awake()
     {
@@ -19,14 +20,18 @@ public class ChestUI : MonoBehaviour {
     }
 
     private void Start()
-    {
+    {        
         equipmentManager = FindObjectOfType<EquipmentManager>();
-        chestSlots = new List<ChestItemSlot>(Chest.ChestSize);     
+
+        if(chest != null)
+        {
+            chest.OnItemChangedCallback += UpdateUI;
+        }
     }
 
     public void UpdateUI()
     {
-        for (int i = Chest.ChestSize; i < Chest.ChestSize; i++)
+        for (int i = 0; i < Chest.ChestSize; i++)
         {
             if (i < chest.chestItems.Count)
                 chestSlots[i].CurrentItem = chest.chestItems[i];
@@ -36,17 +41,25 @@ public class ChestUI : MonoBehaviour {
 
     private void InitializeChest()
     {
+        chestSlots = new List<ChestItemSlot>(Chest.ChestSize);
+        if (goChestSlots != null)
+        {
+            foreach (GameObject go in goChestSlots)
+            {
+                Destroy(go);
+            }
+        }
+        goChestSlots = new List<GameObject>();
+
         for (int i = 0; i < Chest.ChestSize; i++)
         {
             var go = Instantiate(chestSlotPrefab, chestUI.transform);
+            goChestSlots.Add(go);
             chestSlots.Add(go.GetComponentInChildren<ChestItemSlot>());
             chestSlots[i].Initialize(i, chest, equipmentManager);
         }
-    }
 
-    private void DeInitializeChest()
-    {
-        
+        UpdateUI();
     }
 
     public void OpenChest(Chest c)
@@ -59,7 +72,6 @@ public class ChestUI : MonoBehaviour {
 
     public void CloseChest()
     {
-        DeInitializeChest();
         chestUI.SetActive(false);
     }
 }

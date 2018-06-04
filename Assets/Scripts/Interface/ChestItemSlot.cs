@@ -141,43 +141,20 @@ public class ChestItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         //We only want draggin on left mousebutton
         if (eventData.button != PointerEventData.InputButton.Left)
             return;
-        
+
+
         InventoryItemSlot fromI;
-        //Check what gets dropped on this.
-        if (!(@fromI = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
-            return;
-
-        //We got an item from our equipment.
-        if (@fromI.index == -1 && CurrentItem != null)
+        ChestItemSlot fromC;
+        if ((@fromI = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
-            //We cant equip a non equippable item.
-            if (CurrentItem is Equippable)
-                return;
-
-            //We cant swap the items it they arent the same type
-            if (@fromI.CurrentItem.GetType() != CurrentItem.GetType())
-                return;
-
-            //Check if our item is an Armor and see if it's the same type of armor, if so we can swap the items around.
-            if ((@fromI.CurrentItem.GetType() == typeof(Armor) && ((Armor)@fromI.CurrentItem).ArmorType == ((Armor)CurrentItem).ArmorType))
-                equipmentManager.EquipArmor(CurrentItem as Armor, index);
-
-            //Check if our item is a Tool and see if it's the same type of tool, if so we can swap the items around.
-            else if ((@fromI.CurrentItem.GetType() == typeof(Tool) && ((Tool)@fromI.CurrentItem).ToolType == ((Tool)CurrentItem).ToolType))
-                equipmentManager.EquipTool(CurrentItem as Tool, index);
-
-            //Check if we both have weapons if so we can swap them around.
-            else if ((@fromI.CurrentItem.GetType() == typeof(Weapon) && CurrentItem.GetType() == typeof(Weapon)))
-                equipmentManager.EquipWeapon(CurrentItem as Weapon, index);
+            chest.AddItemAtIndex(@fromI.CurrentItem.Id, index, fromI.CurrentItem.StackSize);
+            Inventory.Instance.RemoveItemAtIndex(@fromI.index);
+            //chest.SwapItems(index, @fromI.index);
         }
-        else if (@fromI.index == -1 && CurrentItem == null)
+        else if ((@fromC = eventData.pointerDrag.GetComponent<ChestItemSlot>()))
         {
-            //We are dragging an equipment piece on an empty inventory slot.
-            equipmentManager.UnequipItem(@fromI.CurrentItem as Item, index);
+            chest.SwapItems(index, @fromC.index);
         }
-
-        else
-            chest.SwapItems(index, @fromI.index);
 
     }
 
@@ -195,7 +172,7 @@ public class ChestItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (EventSystem.current.IsPointerOverGameObject())
             return;
         
-        ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, currentItem.Id, currentItem.StackSize);
+        ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, currentItem.Id, currentItem.StackSize);        
         chest.RemoveItemAtIndex(index);
     }
 }

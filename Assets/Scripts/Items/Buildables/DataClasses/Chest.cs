@@ -7,23 +7,34 @@ using UnityEngine.Events;
 
 public class Chest : BuildableWorldObject
 {
-    public static readonly int ChestSize = 20;
+    public static readonly int ChestSize = 40;   
     public List<Item> chestItems;
     public BuildingController BuildingController { get; private set; }
-    public delegate void OnItemChanged();
-    public OnItemChanged OnItemChangedCallback;
-
-    private EquipmentManager equipmentManager;
+        
     private Animator animator;
     private string chestOccupiedMessage = "Chest is occupied";
     public bool IsOpened { get; private set; } = false;
     public bool CanControl = true;
+    public GameObject owner;
+
+    public delegate void OnItemChanged();
+    public OnItemChanged OnItemChangedCallback;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        chestItems = new List<Item>(new Item[ChestSize]);
         BuildingController = FindObjectOfType<BuildingController>();
+    }
+
+    private void Start()
+    {
+        chestItems = new List<Item>(new Item[ChestSize]);
+        Actions = new List<UnityAction>();
+
+        if (buildable.Recoverable)
+            Actions.Add(new UnityAction(Pickup));
+
+        Actions.AddRange(InitializeActions());
     }
 
     protected override UnityAction[] InitializeActions()
@@ -35,15 +46,45 @@ public class Chest : BuildableWorldObject
         };
     }
 
+    public void Update()
+    {
+        if (owner == null)
+            return;
+
+        if (!InRange(owner.transform.position))
+        {
+            CloseChest();
+            owner = null;
+            BuildableInteractionMenu.Instance.Hide();
+        }
+    }
+
+    public override void Interact(GameObject invoker)
+    {
+        if (!InRange(invoker.transform.position))
+            return;
+        
+        var buildableInteractionMenu = BuildableInteractionMenu.Instance;
+        if (buildableInteractionMenu.TargetInstanceID != GetInstanceID())
+        {
+            buildableInteractionMenu.Show(this, Actions?.ToArray());
+            owner = invoker;
+        }
+        else
+            buildableInteractionMenu.Hide();
+    }
+
     protected override void Pickup()
     {
         if (CanControl)
-        {
+        {            
             // If null the action will be cancelled
             if (BuildableInteractionMenu.Instance?.Target == null)
                 return;
 
+            CloseChest();
             BuildableInteractionMenu.Instance.Target.DestroyWorldObject();
+            DropAllItems();
         }
         else
         {
@@ -57,12 +98,11 @@ public class Chest : BuildableWorldObject
         {
             if (!IsOpened)
             {
-                Debug.Log("Open");
                 IsOpened = true;
                 photonView.RPC("ChestOpenAnimation", PhotonTargets.All);
 
                 ChestUI.Instance.OpenChest(this);
-                //Open inventory ui and chest ui.                
+                
                 //Set chestitems on chest ui
 
                 photonView.RPC("ToggleCanControl", PhotonTargets.Others);
@@ -78,13 +118,21 @@ public class Chest : BuildableWorldObject
         {
             if (IsOpened)
             {
-                Debug.Log("Closed");
                 IsOpened = false;
                 photonView.RPC("ChestCloseAnimation", PhotonTargets.All);
 
                 ChestUI.Instance.CloseChest();
                 //Close chest ui
-
+                if (chestItems != null)
+                {
+                    for (int i = 0; i < chestItems.Count; i++)
+                    {
+                        if (chestItems[i] != null)
+                            photonView.RPC("SetChestItem", PhotonTargets.Others, i, chestItems[i].Id, chestItems[i].StackSize);
+                        else
+                            photonView.RPC("RemoveChestItem", PhotonTargets.Others, i);
+                    }
+                }
                 photonView.RPC("ToggleCanControl", PhotonTargets.Others);
             }
         }
@@ -179,7 +227,7 @@ public class Chest : BuildableWorldObject
 
     public int GetItemAmountById(string itemId)
     {
-        if (IsInventoryEmpty())
+        if (IsChestEmpty())
             return 0;
 
         int temp = 0;
@@ -194,7 +242,7 @@ public class Chest : BuildableWorldObject
         }
         return temp;
     }
-    private bool IsInventoryEmpty()
+    private bool IsChestEmpty()
     {
         return chestItems == null;
     }
@@ -202,58 +250,6 @@ public class Chest : BuildableWorldObject
     public bool CheckAmountById(string itemId, int amountNeeded)
     {
         return (GetItemAmountById(itemId) >= amountNeeded);
-    }
-
-    /// <summary>
-    /// Removes items based on the item id and the amount of items to remove. starting at the back of the inventory
-    /// THE items GET DESTROYED!!
-    /// </summary>
-    /// <param name="itemId">The id of the item to remove</param>
-    /// <param name="amountToRemove">The amount of items to remove</param>
-    public void RemoveItemByIdBackwards(string itemId, int amountToRemove = 1)
-    {
-        if (!CheckAmountById(itemId, amountToRemove))
-        {
-            Debug.LogError($"Inventory -- Trying to remove {amountToRemove} x item {itemId}, but we dont have that many");
-            return;
-        }
-
-        //Remove items from inventory, start at the back of the inventory.
-        //TODO: Only check the items with the required ID have to refactored removeitems and other things aswell
-        for (int i = chestItems.Count - 1; i >= 0; i--)
-        {
-            //If all the items are removed we can stop
-            if (amountToRemove == 0)
-                return;
-
-            if (chestItems[i]?.Id == itemId)
-            {
-                //Check if the item is a resource if so, we can take item of the stacksize.
-                if (chestItems[i].GetType() == typeof(Resource))
-                {
-                    Resource currentStack = (Resource)chestItems[i];
-                    if (amountToRemove >= currentStack.StackSize)
-                    {
-                        amountToRemove -= currentStack.StackSize;
-                        RemoveItemAtIndex(i);
-                    }
-                    else
-                    {
-                        currentStack.StackSize -= amountToRemove;
-                        amountToRemove = 0;
-                        OnItemChangedCallback?.Invoke();
-                        return;
-                    }
-                }
-                //If it aint a resource we just get the single item.
-                else
-                {
-                    amountToRemove--;
-                    RemoveItemAtIndex(i);
-                    OnItemChangedCallback?.Invoke();
-                }
-            }
-        }
     }
 
     /// <summary>
@@ -343,7 +339,7 @@ public class Chest : BuildableWorldObject
     {
         if (index < 0 || chestItems[index] != null)
         {
-            Debug.LogError("Inventory -- AddItemAtIndex -- invalid index");
+            Debug.LogError("Chest -- AddItemAtIndex -- invalid index");
             AddItemById(itemId, stackSize);
         }
         else
@@ -352,45 +348,7 @@ public class Chest : BuildableWorldObject
             chestItems[index] = item;
             OnItemChangedCallback?.Invoke();
         }
-    }
-
-    /// <summary>
-    /// Removes the required items for the craftingRecipe
-    /// </summary>
-    /// <param name="recipe">The recipe to craft</param>
-    /// <returns>Whether there are enough materials to craft this recipe</returns>
-    public bool RemoveItemsForCrafting(CraftingRecipe recipe)
-    {
-        for (int i = 0; i < recipe.requiredItems.Count; i++)
-        {
-            var requiredItem = recipe.requiredItems[i];
-            if (!CheckAmountById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft))
-            {
-                Debug.Log($"Not enough {requiredItem.item.name} to craft {recipe.result.item.name}");
-                return false;
-            }
-        }
-
-        for (int i = 0; i < recipe.requiredItems.Count; i++)
-        {
-            var requiredItem = recipe.requiredItems[i];
-            RemoveItemById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft);
-        }
-
-        return true;
-    }
-
-    public int GetMaxCrafts(CraftingRecipe recipe)
-    {
-        int maxCrafts = int.MaxValue;
-        foreach (var craftingItem in recipe.requiredItems)
-        {
-            int temp = GetItemAmountById(craftingItem.item.Id) / craftingItem.amount;
-            if (temp < maxCrafts)
-                maxCrafts = temp;
-        }
-        return maxCrafts;
-    }
+    } 
 
     public void DropAllItems()
     {
@@ -423,5 +381,17 @@ public class Chest : BuildableWorldObject
     private void ChestCloseAnimation()
     {
         animator.SetBool("IsOpen", false);
+    }
+
+    [PunRPC]
+    private void SetChestItem(int index, string id, int stacksize)
+    {
+        chestItems[index] = ItemFactory.CreateNewItem(id,stacksize);
+    }
+
+    [PunRPC]
+    private void RemoveChestItem(int index)
+    {
+        chestItems[index] = null;
     }
 }
