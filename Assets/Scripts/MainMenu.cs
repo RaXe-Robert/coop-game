@@ -38,12 +38,6 @@ public class MainMenu : MonoBehaviour
     private Stack<GameObject> menuStack = new Stack<GameObject>();
     private NetworkManager networkManager;
 
-    private void Awake()
-    {
-        //Initialize volume to 50% so people don't go deaf.
-        AudioListener.volume = 0.5f;
-    }
-
     private void Start()
     {
         //TODO: There should be a better way to get the network manager

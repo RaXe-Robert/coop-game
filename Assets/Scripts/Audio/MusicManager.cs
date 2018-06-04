@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,27 +12,51 @@ public class MusicManager : MonoBehaviour {
 
     private AudioSource audioSource;
 
+    private bool sceneChanged = false;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
     }
 
-    private void OnEnable() => SceneManager.sceneLoaded += PlayMusic;
-    private void OnDisable() => SceneManager.sceneLoaded -= PlayMusic;
-
-    private void PlayMusic(Scene scene, LoadSceneMode loadSceneMode)
+    private void Start()
     {
-        if (scene.name == "MainMenu")
-        {
-            int randClip = Random.Range(0, mainMenuSceneClips.Length);
-            audioSource.clip = mainMenuSceneClips[randClip];
-        }
-        else if (scene.name == "Game")
-        {
-            int randClip = Random.Range(0, gameSceneClips.Length);
-            audioSource.clip = gameSceneClips[randClip];
-        }
+        StartCoroutine(PlayMusic());
+    }
 
-        audioSource.Play();
+    private void OnEnable() => SceneManager.sceneLoaded += OnSceneChanged;
+    private void OnDisable() => SceneManager.sceneLoaded -= OnSceneChanged;
+
+    private void OnSceneChanged(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        sceneChanged = true;
+    }
+
+    private IEnumerator PlayMusic()
+    {
+        while (true)
+        {
+            string sceneName = SceneManager.GetActiveScene().name;
+
+            int randClip = 0;
+
+            switch (sceneName)
+            {
+                case "MainMenu":
+                    randClip = Random.Range(0, mainMenuSceneClips.Length);
+                    audioSource.clip = mainMenuSceneClips[randClip];
+                    break;
+                case "Game":
+                    randClip = Random.Range(0, gameSceneClips.Length);
+                    audioSource.clip = gameSceneClips[randClip];
+                    break;
+            }
+
+            audioSource.Play();
+
+            yield return new WaitWhile(() => audioSource.isPlaying && !sceneChanged);
+
+            sceneChanged = false;
+        }
     }
 }

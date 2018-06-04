@@ -1,17 +1,30 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
-using System;
 
 public class MenuOptions : MonoBehaviour
 {
     public Dropdown qualityDropDown;
     public Dropdown resolutionDropDown;
     public Toggle fullscreenToggle;
-    public Text volumeAmount;
 
     private Resolution[] resolutions;
+
+    [SerializeField]
+    private Slider masterVolume, musicVolume, ambienceVolume, soundVolume;
+
+    [SerializeField]
+    private AudioMixer masterMixer;
+
+    private void Awake()
+    {
+        // Load settings
+        SetMasterVolume(PlayerPrefs.GetFloat("masterVol", 0));
+        SetMusicVolume(PlayerPrefs.GetFloat("musicVol", 0));
+        SetAmbienceVolume(PlayerPrefs.GetFloat("ambienceVol", 0));
+        SetSoundVolume(PlayerPrefs.GetFloat("soundVol", 0));
+    }
 
     private void Start()
     {
@@ -21,14 +34,47 @@ public class MenuOptions : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets the game volume.
+    /// Sets the master volume.
     /// </summary>
-    /// <param name="volume">The volume for the game (0.0 to 1.0)</param>
-    public void SetVolume(float volume)
+    public void SetMasterVolume(float volume)
     {
-        //TODO: split into music and audio volume sliders using the audio mixer.
-        AudioListener.volume = volume > 1 ? 1 : volume;
-        volumeAmount.text = (volume * 100).ToString("F0") + "%";
+        masterMixer.SetFloat("masterVol", volume);
+        PlayerPrefs.SetFloat("masterVol", volume);
+
+        masterVolume.value = volume > 20 ? 20 : volume; // Safety to prevent it from getting extremely loud
+    }
+
+    /// <summary>
+    /// Sets the music volume.
+    /// </summary>
+    public void SetMusicVolume(float volume)
+    {
+        masterMixer.SetFloat("musicVol", volume);
+        PlayerPrefs.SetFloat("musicVol", volume);
+
+        musicVolume.value = volume > 20 ? 20 : volume; // Safety to prevent it from getting extremely loud
+    }
+
+    /// <summary>
+    /// Sets the ambience volume.
+    /// </summary>
+    public void SetAmbienceVolume(float volume)
+    {
+        masterMixer.SetFloat("ambienceVol", volume);
+        PlayerPrefs.SetFloat("ambienceVol", volume);
+
+        ambienceVolume.value = volume > 20 ? 20 : volume; // Safety to prevent it from getting extremely loud
+    }
+
+    /// <summary>
+    /// Sets the sounds volume.
+    /// </summary>
+    public void SetSoundVolume(float volume)
+    {
+        masterMixer.SetFloat("soundVol", volume);
+        PlayerPrefs.SetFloat("soundVol", volume);
+
+        soundVolume.value = volume > 20 ? 20 : volume; // Safety to prevent it from getting extremely loud
     }
     
     public void SetFullScreen(bool isFullscreen)
