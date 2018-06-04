@@ -30,7 +30,11 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         set
         {
             currentItem = value;
-            image.sprite = currentItem?.Sprite;
+            if (currentItem != null && currentItem.Sprite != null)
+                image.sprite = currentItem.Sprite;
+            else
+                image.sprite = initalImage;
+            
             if (currentItem?.StackSize > 1)
             {
                 stackSizeText.text = currentItem.StackSize.ToString();
