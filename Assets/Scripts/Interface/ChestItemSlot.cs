@@ -141,20 +141,17 @@ public class ChestItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         //We only want draggin on left mousebutton
         if (eventData.button != PointerEventData.InputButton.Left)
             return;
-
-
+        
         InventoryItemSlot fromI;
-        ChestItemSlot fromC;
+        ChestItemSlot fromChest;
         if ((@fromI = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
             chest.AddItemAtIndex(@fromI.CurrentItem.Id, index, fromI.CurrentItem.StackSize);
-            Inventory.Instance.RemoveItemAtIndex(@fromI.index);
-            //chest.SwapItems(index, @fromI.index);
+
+            PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemAtIndex(fromI.index);
         }
-        else if ((@fromC = eventData.pointerDrag.GetComponent<ChestItemSlot>()))
-        {
-            chest.SwapItems(index, @fromC.index);
-        }
+        else if ((fromChest = eventData.pointerDrag.GetComponent<ChestItemSlot>()))
+            chest.SwapItems(index, fromChest.index);
 
     }
 
