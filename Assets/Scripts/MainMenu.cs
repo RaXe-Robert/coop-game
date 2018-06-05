@@ -40,9 +40,6 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        //Initialize volume to 50% so people don't go deaf.
-        AudioListener.volume = 0.5f;
-
         //TODO: There should be a better way to get the network manager
         networkManager = FindObjectOfType<NetworkManager>();
 
