@@ -7,12 +7,11 @@ using UnityEngine.Events;
 
 public class Chest : BuildableWorldObject
 {
-    public static readonly int ChestSize = 40;   
+    public const int ChestSize = 40;   
     public List<Item> chestItems;
     public BuildingController BuildingController { get; private set; }
         
     private Animator animator;
-    private string chestOccupiedMessage = "Chest is occupied";
     public bool IsOpened => animator.GetBool("IsOpen");
 
     private PhotonPlayer user;
@@ -75,13 +74,17 @@ public class Chest : BuildableWorldObject
             DropAllItems();
         }
         else
-            FeedUI.Instance.AddFeedItem(chestOccupiedMessage, feedType: FeedItem.Type.Error);
+            FeedUI.Instance.AddFeedItem($"Chest is occupied by {user.NickName}", feedType: FeedItem.Type.Error);
     }
 
     private void OpenChest()
     {
         if (IsOpened)
+        {
+            if (!IsLocalPlayerUser)
+                FeedUI.Instance.AddFeedItem($"Chest is occupied by {user.NickName}", feedType: FeedItem.Type.Error);
             return;
+        }
 
         if (user == null)
         {       
@@ -90,7 +93,7 @@ public class Chest : BuildableWorldObject
             photonView.RPC(nameof(SetUser), PhotonTargets.AllBuffered, PhotonNetwork.player.ID);
         }
         else
-            FeedUI.Instance.AddFeedItem(chestOccupiedMessage, feedType: FeedItem.Type.Error);
+            FeedUI.Instance.AddFeedItem($"Chest is occupied by {user.NickName}", feedType: FeedItem.Type.Error);
     }
 
     private void CloseChest()
@@ -98,7 +101,6 @@ public class Chest : BuildableWorldObject
         if (!IsOpened)
             return;
             
-
         if (IsLocalPlayerUser)
         {
             photonView.RPC(nameof(ChestCloseAnimation), PhotonTargets.AllBuffered);
@@ -116,7 +118,7 @@ public class Chest : BuildableWorldObject
             photonView.RPC(nameof(SetUser), PhotonTargets.AllBuffered, -1);
         }
         else
-            FeedUI.Instance.AddFeedItem(chestOccupiedMessage, feedType: FeedItem.Type.Error);
+            FeedUI.Instance.AddFeedItem($"Chest is occupied by {user.NickName}", feedType: FeedItem.Type.Error);
     }
 
     private void AddNewItemStackById(string itemId, int stackSize)
