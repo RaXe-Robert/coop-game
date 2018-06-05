@@ -48,6 +48,12 @@ public class Chest : BuildableWorldObject
 
     public void Update()
     {
+        if (BuildableInteractionMenu.Instance.Target != this)
+        {
+            CloseChest();
+            return;
+        }             
+
         if (owner == null)
             return;
 
@@ -56,7 +62,7 @@ public class Chest : BuildableWorldObject
             CloseChest();
             owner = null;
             BuildableInteractionMenu.Instance.Hide();
-        }
+        }        
     }
 
     public override void Interact(GameObject invoker)
@@ -97,7 +103,7 @@ public class Chest : BuildableWorldObject
         if (CanControl)
         {
             if (!IsOpened)
-            {
+            {                
                 IsOpened = true;
                 photonView.RPC("ChestOpenAnimation", PhotonTargets.All);
 
