@@ -87,7 +87,7 @@ public class BuildingController : Photon.MonoBehaviour
         if (ConfirmBuildingConditions() == false)
             return;
 
-        FindObjectOfType<Inventory>().RemoveItemById(buildableData.Id);
+        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemById(buildableData.Id);
         var photonId = PhotonNetwork.AllocateViewID();
         photonView.RPC(nameof(RPC_SpawnBuildable), PhotonTargets.AllBuffered, buildableToBuild.transform.position, photonId, buildableData.Id, buildableToBuild.transform.rotation);
 
@@ -197,7 +197,15 @@ public class BuildingController : Photon.MonoBehaviour
         GameObject gameObj = Instantiate(prefab, position, quaternion);
         gameObj.GetComponent<BuildableWorldObject>().enabled = true;
         gameObj.GetComponent<BuildableWorldObject>().buildable = buildable;
-        gameObj.GetComponent<Collider>().enabled = true;
+        if (gameObj.GetComponent<Collider>())
+            gameObj.GetComponent<Collider>().enabled = true;
+        else if (gameObj.GetComponentsInChildren<Collider>() != null)
+        {
+            foreach (Collider c in gameObj.GetComponentsInChildren<Collider>())
+            {
+                gameObj.GetComponentInChildren<Collider>().enabled = true;
+            }
+        }        
         gameObj.name = buildable.Name;
 
         PhotonView[] nViews = gameObj.GetComponentsInChildren<PhotonView>();

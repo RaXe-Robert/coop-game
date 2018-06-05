@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
+public class ChestItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
     [SerializeField] protected Image image;
     [SerializeField] private Text stackSizeText;
     [SerializeField] private Image textBackground;
 
     protected internal int index;
-    protected Inventory inventory;
+    protected Chest chest;
     protected EquipmentManager equipmentManager;
 
     protected Item currentItem;
@@ -30,11 +30,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         set
         {
             currentItem = value;
-            if (currentItem != null && currentItem.Sprite != null)
-                image.sprite = currentItem.Sprite;
-            else
-                image.sprite = initalImage;
-            
+            image.sprite = currentItem?.Sprite;
             if (currentItem?.StackSize > 1)
             {
                 stackSizeText.text = currentItem.StackSize.ToString();
@@ -48,10 +44,10 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
     }
 
-    public virtual void Initialize(int index, Inventory inventory, EquipmentManager equipmentManager)
+    public virtual void Initialize(int index, Chest chest, EquipmentManager equipmentManager)
     {
         this.index = index;
-        this.inventory = inventory;
+        this.chest = chest;
         this.equipmentManager = equipmentManager;
 
         initalImage = image.sprite;
@@ -82,8 +78,8 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (eventData.button != PointerEventData.InputButton.Right)
             return;
         var @base = currentItem as BuildableBase;
-        if (@base != null && inventory != null)
-            inventory.BuildingController.ActivateBuildMode(@base);
+        if (@base != null && chest != null)
+            chest.BuildingController.ActivateBuildMode(@base);
         else if (CurrentItem is Armor || CurrentItem is Tool || CurrentItem is Weapon)
         {
             equipmentManager.EquipItem(CurrentItem, index);
@@ -100,11 +96,11 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
             if (item.StackSize > 1)
             {
                 item.StackSize--;
-                if (inventory != null)
-                    inventory.OnItemChangedCallback?.Invoke();
+                if (chest != null)
+                    chest.OnItemChangedCallback?.Invoke();
             }
-            else if (inventory != null) 
-                inventory.RemoveItemAtIndex(index);
+            else if (chest != null)
+                chest.RemoveItemAtIndex(index);
 
             Tooltip.Instance.Hide();
         }
@@ -145,53 +141,18 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         //We only want draggin on left mousebutton
         if (eventData.button != PointerEventData.InputButton.Left)
             return;
-
-        ChestItemSlot fromChest;
-        if ((fromChest = eventData.pointerDrag.GetComponent<ChestItemSlot>()) != null)
-        {
-            inventory.AddItemAtIndex(fromChest.CurrentItem.Id, index, fromChest.CurrentItem.StackSize);
-
-            Chest chestReference = BuildableInteractionMenu.Instance.Target as Chest;
-            if (chestReference != null)
-                chestReference.RemoveItemAtIndex(fromChest.index);
-        }
-
-        InventoryItemSlot from;
-        //Check what gets dropped on this.
-        if (!(@from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
-            return;
         
-        //We got an item from our equipment.
-        if(@from.index == -1 && CurrentItem != null)
+        InventoryItemSlot fromI;
+        ChestItemSlot fromChest;
+        if ((@fromI = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
-            //We cant equip a non equippable item.
-            if (CurrentItem is Equippable)
-                return;
+            chest.AddItemAtIndex(@fromI.CurrentItem.Id, index, fromI.CurrentItem.StackSize);
 
-            //We cant swap the items it they arent the same type
-            if (@from.CurrentItem.GetType() != CurrentItem.GetType())
-                return;
-
-            //Check if our item is an Armor and see if it's the same type of armor, if so we can swap the items around.
-            if ((@from.CurrentItem.GetType() == typeof(Armor) && ((Armor)@from.CurrentItem).ArmorType == ((Armor)CurrentItem).ArmorType))
-                equipmentManager.EquipArmor(CurrentItem as Armor, index);
-
-            //Check if our item is a Tool and see if it's the same type of tool, if so we can swap the items around.
-            else if ((@from.CurrentItem.GetType() == typeof(Tool) && ((Tool)@from.CurrentItem).ToolType == ((Tool)CurrentItem).ToolType))
-                equipmentManager.EquipTool(CurrentItem as Tool, index);
-
-            //Check if we both have weapons if so we can swap them around.
-            else if ((@from.CurrentItem.GetType() == typeof(Weapon) && CurrentItem.GetType() == typeof(Weapon)))
-                equipmentManager.EquipWeapon(CurrentItem as Weapon, index);
+            PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemAtIndex(fromI.index);
         }
-        else if(@from.index == -1 && CurrentItem == null)
-        {
-            //We are dragging an equipment piece on an empty inventory slot.
-            equipmentManager.UnequipItem(@from.CurrentItem as Item, index);
-        }
+        else if ((fromChest = eventData.pointerDrag.GetComponent<ChestItemSlot>()))
+            chest.SwapItems(index, fromChest.index);
 
-        else 
-            inventory.SwapItems(index, @from.index);
     }
 
     public virtual void OnEndDrag(PointerEventData eventData)
@@ -208,7 +169,7 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (EventSystem.current.IsPointerOverGameObject())
             return;
         
-        ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, currentItem.Id, currentItem.StackSize);
-        inventory.RemoveItemAtIndex(index);
+        ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, currentItem.Id, currentItem.StackSize);        
+        chest.RemoveItemAtIndex(index);
     }
 }
