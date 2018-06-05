@@ -52,28 +52,19 @@ public class Chest : BuildableWorldObject
         if (user == null)
             return;
 
-        if (IsLocalPlayerUser)
+        if (IsOpened && IsLocalPlayerUser)
         {
-            if (IsOpened)
+            if (BuildableInteractionMenu.Instance.Target != this)
             {
-                if (!InRange(PlayerNetwork.LocalPlayer.transform.position))
-                {
-                    CloseChest();
-                    BuildableInteractionMenu.Instance.Hide();
-                }
-
-                if (BuildableInteractionMenu.Instance.Target != this)
-                {
-                    CloseChest();
-                    return;
-                }
+                CloseChest();
+                return;
             }
         }  
     }
 
     protected override void Pickup()
     {
-        if (IsLocalPlayerUser)
+        if (user == null || IsLocalPlayerUser)
         {            
             // If null the action will be cancelled
             if (BuildableInteractionMenu.Instance?.Target == null)
@@ -89,14 +80,14 @@ public class Chest : BuildableWorldObject
 
     private void OpenChest()
     {
+        if (IsOpened)
+            return;
+
         if (user == null)
-        {
-            if (!IsOpened)
-            {                
-                photonView.RPC(nameof(ChestOpenAnimation), PhotonTargets.AllBuffered);
-                ChestUI.Instance.OpenChest(this);
-                photonView.RPC(nameof(SetUser), PhotonTargets.AllBuffered, PhotonNetwork.player.ID);
-            }
+        {       
+            photonView.RPC(nameof(ChestOpenAnimation), PhotonTargets.AllBuffered);
+            ChestUI.Instance.OpenChest(this);
+            photonView.RPC(nameof(SetUser), PhotonTargets.AllBuffered, PhotonNetwork.player.ID);
         }
         else
             FeedUI.Instance.AddFeedItem(chestOccupiedMessage, feedType: FeedItem.Type.Error);
@@ -104,7 +95,11 @@ public class Chest : BuildableWorldObject
 
     private void CloseChest()
     {
-        if (IsOpened && IsLocalPlayerUser)
+        if (!IsOpened)
+            return;
+            
+
+        if (IsLocalPlayerUser)
         {
             photonView.RPC(nameof(ChestCloseAnimation), PhotonTargets.AllBuffered);
             ChestUI.Instance.CloseChest();
