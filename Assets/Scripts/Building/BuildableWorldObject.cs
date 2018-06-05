@@ -44,7 +44,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
     public bool InRange(Vector3 invokerPosition) =>
         Vector3.Distance(invokerPosition, transform.position) < interactDistance;
 
-    public virtual void Interact(GameObject invoker)
+    public void Interact(GameObject invoker)
     {
         if (!InRange(invoker.transform.position))
             return;

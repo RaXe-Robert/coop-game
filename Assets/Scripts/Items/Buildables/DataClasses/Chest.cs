@@ -13,9 +13,10 @@ public class Chest : BuildableWorldObject
         
     private Animator animator;
     private string chestOccupiedMessage = "Chest is occupied";
-    public bool IsOpened { get; private set; } = false;
-    public bool CanControl = true;
-    public GameObject owner;
+    public bool IsOpened => animator.GetBool("IsOpen");
+
+    private PhotonPlayer user;
+    private bool IsLocalPlayerUser => user == PhotonNetwork.player;
 
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;
@@ -47,46 +48,32 @@ public class Chest : BuildableWorldObject
     }
 
     public void Update()
-    {        
-        if (IsOpened && CanControl)
-        {
-            if (BuildableInteractionMenu.Instance.Target != this)
-            {
-                CloseChest();
-                return;
-            }
-        }
-
-        if (owner == null)
-            return;
-
-        if (!InRange(owner.transform.position))
-        {
-            if(CanControl)
-                CloseChest();
-            owner = null;
-            BuildableInteractionMenu.Instance.Hide();
-        }        
-    }
-
-    public override void Interact(GameObject invoker)
     {
-        if (!InRange(invoker.transform.position))
+        if (user == null)
             return;
-        
-        var buildableInteractionMenu = BuildableInteractionMenu.Instance;
-        if (buildableInteractionMenu.TargetInstanceID != GetInstanceID())
+
+        if (IsLocalPlayerUser)
         {
-            buildableInteractionMenu.Show(this, Actions?.ToArray());
-            owner = invoker;
-        }
-        else
-            buildableInteractionMenu.Hide();
+            if (IsOpened)
+            {
+                if (!InRange(PlayerNetwork.LocalPlayer.transform.position))
+                {
+                    CloseChest();
+                    BuildableInteractionMenu.Instance.Hide();
+                }
+
+                if (BuildableInteractionMenu.Instance.Target != this)
+                {
+                    CloseChest();
+                    return;
+                }
+            }
+        }  
     }
 
     protected override void Pickup()
     {
-        if (CanControl)
+        if (IsLocalPlayerUser)
         {            
             // If null the action will be cancelled
             if (BuildableInteractionMenu.Instance?.Target == null)
@@ -97,21 +84,18 @@ public class Chest : BuildableWorldObject
             DropAllItems();
         }
         else
-        {
             FeedUI.Instance.AddFeedItem(chestOccupiedMessage, feedType: FeedItem.Type.Error);
-        }
     }
 
     private void OpenChest()
     {
-        if (CanControl)
+        if (user == null)
         {
             if (!IsOpened)
             {                
-                IsOpened = true;
-                photonView.RPC("ChestOpenAnimation", PhotonTargets.All);
+                photonView.RPC(nameof(ChestOpenAnimation), PhotonTargets.AllBuffered);
                 ChestUI.Instance.OpenChest(this);
-                photonView.RPC("ToggleCanControl", PhotonTargets.OthersBuffered);
+                photonView.RPC(nameof(SetUser), PhotonTargets.AllBuffered, PhotonNetwork.player.ID);
             }
         }
         else
@@ -120,30 +104,24 @@ public class Chest : BuildableWorldObject
 
     private void CloseChest()
     {
-        if (CanControl)
+        if (IsOpened && IsLocalPlayerUser)
         {
-            if (IsOpened)
+            photonView.RPC(nameof(ChestCloseAnimation), PhotonTargets.AllBuffered);
+            ChestUI.Instance.CloseChest();
+            if (chestItems != null)
             {
-                IsOpened = false;
-                photonView.RPC("ChestCloseAnimation", PhotonTargets.All);
-                ChestUI.Instance.CloseChest();
-                if (chestItems != null)
+                for (int i = 0; i < chestItems.Count; i++)
                 {
-                    for (int i = 0; i < chestItems.Count; i++)
-                    {
-                        if (chestItems[i] != null)
-                            photonView.RPC("SetChestItem", PhotonTargets.OthersBuffered, i, chestItems[i].Id, chestItems[i].StackSize);
-                        else
-                            photonView.RPC("RemoveChestItem", PhotonTargets.OthersBuffered, i);
-                    }
+                    if (chestItems[i] != null)
+                        photonView.RPC(nameof(SetChestItem), PhotonTargets.OthersBuffered, i, chestItems[i].Id, chestItems[i].StackSize);
+                    else
+                        photonView.RPC(nameof(RemoveChestItem), PhotonTargets.OthersBuffered, i);
                 }
-                photonView.RPC("ToggleCanControl", PhotonTargets.OthersBuffered);
             }
+            photonView.RPC(nameof(SetUser), PhotonTargets.AllBuffered, -1);
         }
         else
-        {
             FeedUI.Instance.AddFeedItem(chestOccupiedMessage, feedType: FeedItem.Type.Error);
-        }
     }
 
     private void AddNewItemStackById(string itemId, int stackSize)
@@ -369,22 +347,36 @@ public class Chest : BuildableWorldObject
         OnItemChangedCallback?.Invoke();
     }
 
-    void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
+    private void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
     {
-        if (photonView.isMine)
+        if (IsOpened && PhotonNetwork.isMasterClient)
         {
-            if (owner != PlayerNetwork.LocalPlayer.gameObject)
+            if (user == otherPlayer)
             {
-                CanControl = true;
+                user = PhotonNetwork.player;
                 CloseChest();
             }
         }
     }
 
     [PunRPC]
-    private void ToggleCanControl()
+    private void SetUser(int userID)
     {
-        CanControl = !CanControl;
+        if (userID == -1)
+        {
+            user = null;
+        }
+        else
+        {
+            PhotonPlayer[] players = PhotonNetwork.playerList;
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (userID == players[i].ID)
+                {
+                    user = players[i];
+                }
+            }
+        }
     } 
     
     [PunRPC]

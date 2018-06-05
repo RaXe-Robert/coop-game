@@ -64,10 +64,10 @@ MonoBehaviour:
   - RPC_DecreaseHealth
   - RPC_RemoveNetworkedWorldResource
   - SendWorldData
-  - ToggleCanControl
   - ChestCloseAnimation
   - ChestOpenAnimation
   - SetChestItems
   - SetChestItem
   - RemoveChestItem
+  - SetUser
   DisableAutoOpenWizard: 1
