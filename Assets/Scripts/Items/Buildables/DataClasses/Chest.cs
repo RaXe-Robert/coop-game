@@ -47,19 +47,23 @@ public class Chest : BuildableWorldObject
     }
 
     public void Update()
-    {
-        if (BuildableInteractionMenu.Instance.Target != this)
+    {        
+        if (IsOpened && CanControl)
         {
-            CloseChest();
-            return;
-        }             
+            if (BuildableInteractionMenu.Instance.Target != this)
+            {
+                CloseChest();
+                return;
+            }
+        }
 
         if (owner == null)
             return;
 
         if (!InRange(owner.transform.position))
         {
-            CloseChest();
+            if(CanControl)
+                CloseChest();
             owner = null;
             BuildableInteractionMenu.Instance.Hide();
         }        
@@ -106,12 +110,8 @@ public class Chest : BuildableWorldObject
             {                
                 IsOpened = true;
                 photonView.RPC("ChestOpenAnimation", PhotonTargets.All);
-
                 ChestUI.Instance.OpenChest(this);
-                
-                //Set chestitems on chest ui
-
-                photonView.RPC("ToggleCanControl", PhotonTargets.Others);
+                photonView.RPC("ToggleCanControl", PhotonTargets.OthersBuffered);
             }
         }
         else
@@ -126,20 +126,18 @@ public class Chest : BuildableWorldObject
             {
                 IsOpened = false;
                 photonView.RPC("ChestCloseAnimation", PhotonTargets.All);
-
                 ChestUI.Instance.CloseChest();
-                //Close chest ui
                 if (chestItems != null)
                 {
                     for (int i = 0; i < chestItems.Count; i++)
                     {
                         if (chestItems[i] != null)
-                            photonView.RPC("SetChestItem", PhotonTargets.Others, i, chestItems[i].Id, chestItems[i].StackSize);
+                            photonView.RPC("SetChestItem", PhotonTargets.OthersBuffered, i, chestItems[i].Id, chestItems[i].StackSize);
                         else
-                            photonView.RPC("RemoveChestItem", PhotonTargets.Others, i);
+                            photonView.RPC("RemoveChestItem", PhotonTargets.OthersBuffered, i);
                     }
                 }
-                photonView.RPC("ToggleCanControl", PhotonTargets.Others);
+                photonView.RPC("ToggleCanControl", PhotonTargets.OthersBuffered);
             }
         }
         else
@@ -369,6 +367,18 @@ public class Chest : BuildableWorldObject
             chestItems[i] = null;
         }
         OnItemChangedCallback?.Invoke();
+    }
+
+    void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
+    {
+        if (photonView.isMine)
+        {
+            if (owner != PlayerNetwork.LocalPlayer.gameObject)
+            {
+                CanControl = true;
+                CloseChest();
+            }
+        }
     }
 
     [PunRPC]
