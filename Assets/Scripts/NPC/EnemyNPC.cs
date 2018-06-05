@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class EnemyNPC : NPCBase
 {
-
     /// <summary>
     /// Handle attacking when the enemy reaches this state.
     /// </summary>
     void Attack()
     {
-        if(Vector3.Distance(transform.position, Target.transform.position) < 3)
+        if (Target == null)
         {
-            //TODO: this should be changed
-            Target.gameObject.GetComponent<HealthComponent>().DecreaseValue((Random.Range(stats.minDamage, stats.maxDamage) - Target.gameObject.GetComponent<StatsComponent>().Defense));
+            GetComponent<Animator>().SetBool("hasTarget", false);
+            CancelInvoke("Attack");
+            return;
         }
+
+        if(Vector3.Distance(transform.position, Target.transform.position) < 3)
+            Target.GetComponent<IAttackable>().TakeHit(this);
     }
 
     /// <summary>

@@ -58,4 +58,10 @@ MonoBehaviour:
   - IncreaseHealthValue
   - IncreaseHungerValue
   - RPC_DestroyWorldObject
+  - KillPlayer
+  - RPC_RespawnPlayer
+  - RPC_AddNetworkedWorldResource
+  - RPC_DecreaseHealth
+  - RPC_RemoveNetworkedWorldResource
+  - SendWorldData
   DisableAutoOpenWizard: 1

@@ -44,7 +44,7 @@ public class Inventory : MonoBehaviour
 #endif
     }
 
-    private void AddNewItemStackById(int itemId, int stackSize)
+    private void AddNewItemStackById(string itemId, int stackSize)
     {
         //If inventory is full we drop the items on the floor
         if (!inventoryItems.FirstNullIndexAt().HasValue)
@@ -60,7 +60,7 @@ public class Inventory : MonoBehaviour
         OnItemChangedCallback?.Invoke();
     }
 
-    private void FillItemStacksById(int itemId, int stackSize)
+    private void FillItemStacksById(string itemId, int stackSize)
     {
         Item item = ItemFactory.CreateNewItem(itemId, stackSize);
 
@@ -127,7 +127,7 @@ public class Inventory : MonoBehaviour
         OnItemChangedCallback?.Invoke();
     }
 
-    public int GetItemAmountById(int itemId)
+    public int GetItemAmountById(string itemId)
     {
         if (IsInventoryEmpty())
             return 0;
@@ -149,7 +149,7 @@ public class Inventory : MonoBehaviour
         return inventoryItems == null;
     }
 
-    public bool CheckAmountById(int itemId, int amountNeeded)
+    public bool CheckAmountById(string itemId, int amountNeeded)
     {
         return (GetItemAmountById(itemId) >= amountNeeded);
     }
@@ -160,7 +160,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="itemId">The id of the item to remove</param>
     /// <param name="amountToRemove">The amount of items to remove</param>
-    public void RemoveItemByIdBackwards(int itemId, int amountToRemove = 1)
+    public void RemoveItemByIdBackwards(string itemId, int amountToRemove = 1)
     {
         if (!CheckAmountById(itemId, amountToRemove))
         {
@@ -212,7 +212,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="itemId">The id of the item to remove</param>
     /// <param name="amountToRemove">The amount of items to remove</param>
-    public void RemoveItemById(int itemId, int amountToRemove = 1)
+    public void RemoveItemById(string itemId, int amountToRemove = 1)
     {
         if (!CheckAmountById(itemId, amountToRemove))
         {
@@ -258,7 +258,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddItemById(int itemId, int stackSize = 1)
+    public void AddItemById(string itemId, int stackSize = 1)
     {
         if (!photonView.isMine)
             return;
@@ -273,10 +273,10 @@ public class Inventory : MonoBehaviour
                 if (GetItemAmountById(item.Id) % 64 != 0)
                     FillItemStacksById(itemId, stackSize);
                 else
-                    ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);
+                    ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, item.Id, stackSize);
             }
             else
-                ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, stackSize);
+                ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, item.Id, stackSize);
         }
         else
         {
@@ -285,9 +285,11 @@ public class Inventory : MonoBehaviour
             else
                 AddNewItemStackById(itemId, stackSize);
         }
+
+        SoundManager.Instance.PlaySound(SoundManager.Sound.PICKUP);
     }
 
-    public void AddItemAtIndex(int itemId, int index, int stackSize = 1)
+    public void AddItemAtIndex(string itemId, int index, int stackSize = 1)
     {
         if(index < 0 || inventoryItems[index] != null)
         {
@@ -338,5 +340,20 @@ public class Inventory : MonoBehaviour
                 maxCrafts = temp;
         }
         return maxCrafts;
+    }
+
+    public void DropAllItems()
+    {
+        for (int i = 0; i < inventoryItems.Count; i++)
+        {
+            var item = inventoryItems[i];
+            if (item == null)
+                continue;
+
+            var position = transform.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2));
+            ItemFactory.CreateWorldObject(position, item.Id, item.StackSize);
+            inventoryItems[i] = null;
+        }
+        OnItemChangedCallback?.Invoke();
     }
 }

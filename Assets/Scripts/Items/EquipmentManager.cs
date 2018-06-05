@@ -68,7 +68,7 @@ public class EquipmentManager : MonoBehaviour
             equippedTools.Add(toolToEquip);
             inventory.RemoveItemAtIndex(inventoryIndex);
         }
-
+        SoundManager.Instance.PlaySound(SoundManager.Sound.EQUIP);
         OnItemChanged?.Invoke();
         OnToolEquippedCallback?.Invoke(toolToEquip);
     }
@@ -92,7 +92,7 @@ public class EquipmentManager : MonoBehaviour
             inventory.RemoveItemAtIndex(inventoryIndex);
             equippedWeapon = weaponToEquip;
         }
-
+        SoundManager.Instance.PlaySound(SoundManager.Sound.EQUIP);
         OnItemChanged?.Invoke();
         OnWeaponEquippedCallback?.Invoke(weaponToEquip);
     }
@@ -117,6 +117,7 @@ public class EquipmentManager : MonoBehaviour
             inventory.RemoveItemAtIndex(inventoryIndex);
         }
 
+        SoundManager.Instance.PlaySound(SoundManager.Sound.EQUIP);
         OnItemChanged?.Invoke();
         OnArmorEquippedCallback?.Invoke(armorToEquip);
     }
@@ -124,11 +125,17 @@ public class EquipmentManager : MonoBehaviour
     public void EquipItem(Item item, int inventoryIndex)
     {
         if (item.GetType() == typeof(Armor))
+        {
             EquipArmor(item as Armor, inventoryIndex);
+        }
         else if (item.GetType() == typeof(Weapon))
+        {
             EquipWeapon(item as Weapon, inventoryIndex);
+        }
         else if (item.GetType() == typeof(Tool))
+        {
             EquipTool(item as Tool, inventoryIndex);
+        }
     }
 
     public bool HasToolEquipped(ToolType toolType)
@@ -230,7 +237,7 @@ public class EquipmentManager : MonoBehaviour
             Armor equippedItem;
             if ((equippedItem = equippedArmor.Find(x => x.Id == itemToUnequip.Id)) != null)
             {
-                ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedItem.Id);
+                ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, equippedItem.Id);
                 equippedArmor.Remove(equippedItem);
                 OnArmorUnequippedCallback?.Invoke(equippedItem);
                 OnItemChanged?.Invoke();
@@ -242,7 +249,7 @@ public class EquipmentManager : MonoBehaviour
             Tool equippedItem;
             if ((equippedItem = equippedTools.Find(x => x.Id == itemToUnequip.Id)) != null)
             {
-                ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedItem.Id);
+                ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, equippedItem.Id);
                 equippedTools.Remove(equippedItem);
                 OnToolUnequippedCallback?.Invoke(equippedItem);
                 OnItemChanged?.Invoke();
@@ -251,7 +258,7 @@ public class EquipmentManager : MonoBehaviour
 
         else if (itemToUnequip.GetType() == typeof(Weapon))
         {
-            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, equippedWeapon.Id);
+            ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, equippedWeapon.Id);
             OnWeaponUnequippedCallback?.Invoke(equippedWeapon);
             equippedWeapon = null;
             OnItemChanged?.Invoke();

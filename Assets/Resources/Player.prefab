@@ -414,7 +414,8 @@ GameObject:
   - component: {fileID: 114791167518695588}
   - component: {fileID: 114186301941130006}
   - component: {fileID: 195182915314943150}
-  - component: {fileID: 114418477130141916}
+  - component: {fileID: 114425879572022454}
+  - component: {fileID: 114192542933970142}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -955,6 +956,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bdc60a9321fd044891a3d9d6b07ec0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114192542933970142
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1816867026278206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f587660a8beae64dadc1a0e4bfc07b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseStats: {fileID: 11400000, guid: f4d2400d514febf4bbfa405a7d249738, type: 2}
 --- !u!114 &114218818572688634
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1052,7 +1065,7 @@ MonoBehaviour:
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0
---- !u!114 &114418477130141916
+--- !u!114 &114425879572022454
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1060,10 +1073,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1816867026278206}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f587660a8beae64dadc1a0e4bfc07b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 0dbc8101182350540b9c1280bc162f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseStats: {fileID: 11400000, guid: f4d2400d514febf4bbfa405a7d249738, type: 2}
 --- !u!114 &114443901816051506
 MonoBehaviour:
   m_ObjectHideFlags: 1
