@@ -7,7 +7,7 @@ namespace Assets.Scripts.Map_Generation
     {
         public static BiomeMap GenerateBiomeMap(int size, BiomeMapSettings settings, Vector2 sampleCenter)
         {
-            float[,] values = Noise.GenerateNoiseMap(size, size, settings.NoiseSettings, sampleCenter);
+            float[,] values = Noise.GenerateNoiseMap(size, settings.NoiseSettings, sampleCenter);
 
             float minValue = float.MaxValue;
             float maxValue = float.MinValue;

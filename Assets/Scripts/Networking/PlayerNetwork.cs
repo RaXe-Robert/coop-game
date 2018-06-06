@@ -12,9 +12,10 @@ public class PlayerNetwork : PunBehaviour
     }
 
     public static GameObject LocalPlayer { get; private set; }
+    public static event System.Action<GameObject> OnLocalPlayerSpawned;
 
     public static Dictionary<int, PlayerInfo> OtherPlayers { get; private set; }
-    public static event System.Action<PhotonView> OtherPlayerSpawned;
+    public static event System.Action<PhotonView> OnOtherPlayerSpawned;
 
     private void Awake()
     {  
@@ -74,7 +75,7 @@ public class PlayerNetwork : PunBehaviour
                 else
                     OtherPlayers.Add(playerPhotonView.ownerId, new PlayerInfo(PhotonPlayer.Find(playerPhotonView.ownerId)) { GameObject = playerPhotonView.gameObject });
 
-                OtherPlayerSpawned?.Invoke(playerPhotonView);
+                OnOtherPlayerSpawned?.Invoke(playerPhotonView);
             }
         }
     }

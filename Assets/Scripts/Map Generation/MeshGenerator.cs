@@ -5,7 +5,13 @@ namespace Assets.Scripts.Map_Generation
 {
     public static class MeshGenerator
     {
-        public static MeshData GenerateTerrainMesh(float[,] heightMap, MeshSettings meshSettings, int levelOfDetail)
+        /// <summary>
+        /// Generates a MeshData object that can be used to construct a mesh.
+        /// </summary>
+        /// <param name="map">The map values.</param>
+        /// <param name="meshSettings">The settings for the mesh.</param>
+        /// <param name="levelOfDetail">0 for highest detail.</param>
+        public static MeshData GenerateTerrainMesh(float[,] map, MeshSettings meshSettings, int levelOfDetail)
         {
             int skipIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
             int numVertsPerLine = meshSettings.NumVertsPerLine;
@@ -53,7 +59,7 @@ namespace Assets.Scripts.Map_Generation
                         int vertexIndex = vertexIndicesMap[x, y];
                         Vector2 percent = new Vector2(x - 1, y - 1) / (numVertsPerLine - 3);
                         Vector2 vertexPosition2D = topLeft + new Vector2(percent.x, -percent.y) * meshSettings.MeshWorldSize;
-                        float height = heightMap[x, y];
+                        float height = map[x, y];
 
                         if (isEdgeConnectionVertex)
                         {
@@ -65,8 +71,8 @@ namespace Assets.Scripts.Map_Generation
                             Coord coordA = new Coord((isVertical) ? x : x - dstToMainVertexA, (isVertical) ? y - dstToMainVertexA : y);
                             Coord coordB = new Coord((isVertical) ? x : x + dstToMainVertexB, (isVertical) ? y + dstToMainVertexB : y);
 
-                            float heightMainVertexA = heightMap[coordA.x, coordA.y];
-                            float heightMainVertexB = heightMap[coordB.x, coordB.y];
+                            float heightMainVertexA = map[coordA.x, coordA.y];
+                            float heightMainVertexB = map[coordB.x, coordB.y];
 
                             height = heightMainVertexA * (1 - dstPercentFromAToB) + heightMainVertexB * dstPercentFromAToB;
 

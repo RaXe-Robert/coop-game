@@ -92,8 +92,8 @@ namespace Assets.Scripts.Map_Generation
                 Setup();
         }
 
-        private void OnEnable() => PlayerNetwork.OtherPlayerSpawned += AddSecondaryViewer;
-        private void OnDisable() => PlayerNetwork.OtherPlayerSpawned -= AddSecondaryViewer;
+        private void OnEnable() => PlayerNetwork.OnOtherPlayerSpawned += AddSecondaryViewer;
+        private void OnDisable() => PlayerNetwork.OnOtherPlayerSpawned -= AddSecondaryViewer;
 
         private void Update()
         {
