@@ -24,6 +24,7 @@ public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
         canvas = FindObjectOfType<Canvas>();
 
         furnaceInterface = Instantiate(furnaceInterfaceprefab, canvas.transform);
+        furnaceInterface.SetActive(false);
 
         FuelInput = furnaceInterface.GetComponentInChildren<FuelInput>();
         ItemInput = furnaceInterface.GetComponentInChildren<ItemInput>();
@@ -85,8 +86,8 @@ public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
 
     private void OpenInterface()
     {
-        furnaceInterface.SetActive(true);
-        Debug.Log("Opening");
+        GameInterfaceManager.Instance.AddInterface(furnaceInterface, GameInterface.Furnace);
+        GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Furnace);
     }
 
     private void MeltItem()

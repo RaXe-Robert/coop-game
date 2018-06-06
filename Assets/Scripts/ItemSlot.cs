@@ -76,12 +76,10 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public virtual void OnDrop(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
     }
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
