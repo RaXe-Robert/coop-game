@@ -625,7 +625,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Idle
       takeName: CINEMA_4D_Main
-      firstFrame: 1
+      firstFrame: 2
       lastFrame: 31
       wrapMode: 0
       orientationOffsetY: 0
@@ -765,7 +765,7 @@ ModelImporter:
     - serializedVersion: 16
       name: RunCycle
       takeName: CINEMA_4D_Main
-      firstFrame: 100
+      firstFrame: 97
       lastFrame: 133
       wrapMode: 0
       orientationOffsetY: 0
