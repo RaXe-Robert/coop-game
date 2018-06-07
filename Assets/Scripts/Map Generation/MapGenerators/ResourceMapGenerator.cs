@@ -7,7 +7,7 @@ namespace Assets.Scripts.Map_Generation
     {
         public static ResourceMap GenerateResourceMap(int size, ResourceMapSettings settings, Vector2 sampleCenter)
         {
-            float[,] values = Noise.GenerateNoiseMap(size, size, settings.NoiseSettings, sampleCenter);
+            float[,] values = Noise.GenerateNoiseMap(size, settings.NoiseSettings, sampleCenter);
             List<ResourcePoint> resourcePoints = new List<ResourcePoint>();
 
             float minValue = float.MaxValue;

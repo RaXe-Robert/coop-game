@@ -105,7 +105,7 @@ MonoBehaviour:
   m_OverrideTileSize: 1
   m_TileSize: 128
   m_OverrideVoxelSize: 1
-  m_VoxelSize: 0.25
+  m_VoxelSize: 0.2
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 0}
 --- !u!114 &114352064440319934
