@@ -70,4 +70,5 @@ MonoBehaviour:
   - SetChestItem
   - RemoveChestItem
   - SetUser
+  - DestroyWorldItem
   DisableAutoOpenWizard: 1

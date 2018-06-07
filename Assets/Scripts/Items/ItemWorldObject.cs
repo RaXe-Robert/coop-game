@@ -7,13 +7,7 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
 {
     public Item item;
     public float pickupDistance = 1f;
-
-    [PunRPC]
-    public void DestroyWorldObject()
-    {
-        Destroy(gameObject);
-    }
-
+    
     #region IInteractable Implementation
 
     public bool IsInteractable => true;
@@ -31,8 +25,8 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
         if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
         {
             inventory.AddItemById(item.Id, item.StackSize);
-            FeedUI.Instance.AddFeedItem("Picked up " + item.Name, item.Sprite, FeedItem.Type.Succes);            
-            photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
+            FeedUI.Instance.AddFeedItem("Picked up " + item.Name, item.Sprite, FeedItem.Type.Succes);
+            WorldItemManager.Instance.RemoveItem(photonView.viewID);
         }
         else
             FeedUI.Instance.AddFeedItem("Inventory full", feedType: FeedItem.Type.Fail);
