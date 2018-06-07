@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdd81bc039bea2a4781e214e5c917d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactDistance: 1
+  interactDistance: 3
 --- !u!114 &114913407865786074
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -134,7 +134,7 @@ MonoBehaviour:
   ownershipTransfer: 0
   ObservedComponents: []
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 5
-  instantiationId: 5
+  viewIdField: 0
+  instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0

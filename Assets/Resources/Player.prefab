@@ -8255,8 +8255,8 @@ MonoBehaviour:
   angleRotationSpeed: 2
   zoom: 15
   zoomSpeed: 10
-  zoomMinimum: 5
-  zoomMaximum: 50
+  zoomMinimum: 2
+  zoomMaximum: 30
 --- !u!114 &114751632159981422
 MonoBehaviour:
   m_ObjectHideFlags: 1

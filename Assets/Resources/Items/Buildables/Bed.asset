@@ -11,11 +11,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22580a90e66e2f44ea7c1962e6362f2f, type: 3}
   m_Name: Bed
   m_EditorClassIdentifier: 
-  id: 
-  itemName: 
-  sprite: {fileID: 0}
-  model: {fileID: 0}
-  description: 
-  recoverable: 0
+  id: buildable_bed
+  itemName: Bed
+  sprite: {fileID: 21300000, guid: ba37c790ad0f7034eb2664bed5ed3603, type: 3}
+  model: {fileID: 100000, guid: 4825e56f3df11d04e827133dcee460f3, type: 3}
+  description: Comfort while surviving?
+  recoverable: 1
   snapToGrid: 0
-  prefabToSpawn: {fileID: 0}
+  prefabToSpawn: {fileID: 1018249223798970, guid: 4a110f094c1c34c47bb8c21869e50cd2,
+    type: 2}

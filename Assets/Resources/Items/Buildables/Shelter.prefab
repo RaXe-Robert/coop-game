@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23948805044507782}
   - component: {fileID: 114249116129635920}
   - component: {fileID: 64841234113885022}
-  - component: {fileID: 114903530998889710}
+  - component: {fileID: 114990348473523514}
   m_Layer: 0
   m_Name: Shelter
   m_TagString: Untagged
@@ -123,21 +123,19 @@ MonoBehaviour:
   ownershipTransfer: 0
   ObservedComponents: []
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 5
-  instantiationId: 5
+  viewIdField: 0
+  instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
---- !u!114 &114903530998889710
+--- !u!114 &114990348473523514
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1856907756737126}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: febef48faa00af94fb4f6f89d681ed81, type: 3}
+  m_Script: {fileID: 11500000, guid: fdd81bc039bea2a4781e214e5c917d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactDistance: 3
-  fireParticlesPrefab: {fileID: 1133957135969282, guid: b08c019126dbade48ba96f388c91450c,
-    type: 2}
+  interactDistance: 4
