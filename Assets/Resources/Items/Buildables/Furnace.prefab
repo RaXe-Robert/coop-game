@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a940932443cdc7348a72e3abb831d863, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactDistance: 1
+  interactDistance: 3
   availableRecipes: {fileID: 0}
   furnaceInterfaceprefab: {fileID: 1498033677889854, guid: eb19bd41daaceef44afd71e1152a5629,
     type: 2}

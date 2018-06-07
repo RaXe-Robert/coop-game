@@ -14,7 +14,6 @@ public class InventoryItemSlot : ItemSlot {
         this.index = index;
         this.inventory = inventory;
         this.equipmentManager = equipmentManager;
-    }
 
     public override void OnPointerClick(PointerEventData eventData)
     {
@@ -55,7 +54,17 @@ public class InventoryItemSlot : ItemSlot {
         //We only want draggin on left mousebutton
         if (eventData.button != PointerEventData.InputButton.Left)
             return;
-        
+
+        ChestItemSlot fromChest;
+        if ((fromChest = eventData.pointerDrag.GetComponent<ChestItemSlot>()) != null)
+        {
+            inventory.AddItemAtIndex(fromChest.CurrentItem.Id, index, fromChest.CurrentItem.StackSize);
+
+            Chest chestReference = BuildableInteractionMenu.Instance.Target as Chest;
+            if (chestReference != null)
+                chestReference.RemoveItemAtIndex(fromChest.index);
+        }
+
         InventoryItemSlot from;
         //Check what gets dropped on this.
         if (!(@from = eventData.pointerDrag.GetComponent<ItemSlot>() as InventoryItemSlot))

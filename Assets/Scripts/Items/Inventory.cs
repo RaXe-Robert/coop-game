@@ -7,14 +7,12 @@ public class Inventory : MonoBehaviour
 {
     public static readonly int InventorySize = 20;
     public static readonly int HotbarSize = 10;
-
     public BuildingController BuildingController { get; private set; }
 
     public ScriptableItemData diamond;
     public ScriptableItemData stick;
     public List<Item> inventoryItems;
     private PhotonView photonView;
-    private EquipmentManager equipmentManager;
 
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;

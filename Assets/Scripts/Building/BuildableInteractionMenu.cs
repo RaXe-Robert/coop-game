@@ -43,7 +43,7 @@ public class BuildableInteractionMenu : MonoBehaviour
 
     private void Update()
     {
-        if (Target == null)
+        if (Target == null || !Target.InRange(PlayerNetwork.LocalPlayer.transform.position))
         {
             Hide();
             return;
