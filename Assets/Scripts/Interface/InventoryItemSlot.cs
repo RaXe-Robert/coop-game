@@ -30,7 +30,11 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         set
         {
             currentItem = value;
-            image.sprite = currentItem?.Sprite;
+            if (currentItem != null && currentItem.Sprite != null)
+                image.sprite = currentItem.Sprite;
+            else
+                image.sprite = initalImage;
+            
             if (currentItem?.StackSize > 1)
             {
                 stackSizeText.text = currentItem.StackSize.ToString();
@@ -141,7 +145,17 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         //We only want draggin on left mousebutton
         if (eventData.button != PointerEventData.InputButton.Left)
             return;
-        
+
+        ChestItemSlot fromChest;
+        if ((fromChest = eventData.pointerDrag.GetComponent<ChestItemSlot>()) != null)
+        {
+            inventory.AddItemAtIndex(fromChest.CurrentItem.Id, index, fromChest.CurrentItem.StackSize);
+
+            Chest chestReference = BuildableInteractionMenu.Instance.Target as Chest;
+            if (chestReference != null)
+                chestReference.RemoveItemAtIndex(fromChest.index);
+        }
+
         InventoryItemSlot from;
         //Check what gets dropped on this.
         if (!(@from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))

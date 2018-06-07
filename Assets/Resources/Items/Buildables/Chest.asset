@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22580a90e66e2f44ea7c1962e6362f2f, type: 3}
+  m_Name: Chest
+  m_EditorClassIdentifier: 
+  id: buildable_chest_small
+  itemName: Storage chest
+  sprite: {fileID: 21300000, guid: f57cfc67717d31143966d14a79083dfe, type: 3}
+  model: {fileID: 100000, guid: 81bf234de793f3f4b8294d8779cef96e, type: 3}
+  description: Who needs more space right?
+  recoverable: 1
+  snapToGrid: 0
+  prefabToSpawn: {fileID: 1309259259464640, guid: 9a552ae82c4b1f44e9fe56cc82a3deb2,
+    type: 2}

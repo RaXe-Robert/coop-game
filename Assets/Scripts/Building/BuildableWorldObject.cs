@@ -10,7 +10,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
     public BuildableBase buildable;
 
     public float interactDistance = 1f;
-    public List<UnityAction> Actions { get; private set; }
+    public List<UnityAction> Actions { get; set; }
 
     private void Start()
     {
@@ -22,7 +22,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
         Actions.AddRange(InitializeActions());
     }
 
-    protected void Pickup()
+    protected virtual void Pickup()
     {
         // If null the action will be cancelled
         if (BuildableInteractionMenu.Instance?.Target == null)
