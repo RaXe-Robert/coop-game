@@ -1,16 +1,12 @@
 ﻿using System.IO;
-using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
-
 using UnityEngine;
 
-using Assets.Scripts.Map_Generation;
-
-public static class ObjectMapLoader
+public static class PlayerDataLoader
 {
-    public static void SaveObjectMap(TerrainChunk terrainChunk, ObjectPoint[] objectPoints, string path)
+    public static void SavePlayerData(PhotonPlayer player, SerializableVector3 position, string path)
     {
-        string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
+        string fileName = $"player{(int)player.CustomProperties["UniqueID"]}.dat";
 
         Debug.Log($"Saving: {path + fileName}");
 
@@ -20,9 +16,10 @@ public static class ObjectMapLoader
             {
                 BinaryFormatter bf = new BinaryFormatter();
 
-                ObjectMapData data = new ObjectMapData
+                PlayerData data = new PlayerData
                 {
-                    ObjectPoints = objectPoints
+                    Id = (int)player.CustomProperties["UniqueID"],
+                    Position = position
                 };
 
                 bf.Serialize(file, data);
@@ -34,9 +31,9 @@ public static class ObjectMapLoader
         }
     }
 
-    public static ObjectMapData LoadObjectMap(TerrainChunk terrainChunk, string path)
+    public static PlayerData LoadPlayerData(PhotonPlayer player, string path)
     {
-        string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
+        string fileName = $"player{player.CustomProperties["UniqueID"]}.dat";
 
         Debug.Log($"Loading: {path + fileName}");
 
@@ -46,19 +43,24 @@ public static class ObjectMapLoader
             {
                 BinaryFormatter bf = new BinaryFormatter();
 
-                return (ObjectMapData)bf.Deserialize(file);
+                return (PlayerData)bf.Deserialize(file);
             }
         }
         catch (IOException e)
         {
             Debug.LogError(e);
-            return new ObjectMapData() { ObjectPoints = new ObjectPoint[0] };
+            return new PlayerData()
+            {
+                Id = (int)player.CustomProperties["UniqueID"],
+                Position = Vector3.zero
+            };
         }
     }
 
     [System.Serializable]
-    public class ObjectMapData
+    public class PlayerData
     {
-        public ObjectPoint[] ObjectPoints;
+        public int Id;
+        public SerializableVector3 Position;
     }
 }

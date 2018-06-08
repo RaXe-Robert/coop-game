@@ -70,4 +70,5 @@ MonoBehaviour:
   - SetChestItem
   - RemoveChestItem
   - SetUser
+  - SendPlayerData
   DisableAutoOpenWizard: 1

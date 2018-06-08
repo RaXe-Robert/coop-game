@@ -11,7 +11,6 @@ namespace Assets.Scripts.Map_Generation
         public TerrainChunk TerrainChunk { get; set; }
         public bool Loaded => TerrainChunk?.DataMapReceived ?? false;
 
-
         public void AddObjectPoint(ObjectPoint objectPoint)
         {
             Debug.Log("Not implemented");
