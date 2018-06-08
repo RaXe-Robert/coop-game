@@ -147,6 +147,8 @@ public class SaveDataManager : Photon.PunBehaviour
 
                     PlayerDataLoader.SavePlayerData(otherPlayer.Value.PhotonPlayer, pos, PlayerDataPath);
                 }
+
+                UpdateManifest();
             }
 
         }
