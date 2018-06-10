@@ -1716,10 +1716,6 @@ MonoBehaviour:
   - {fileID: 1753525993}
   - {fileID: 1753525992}
   - {fileID: 1753525991}
-  weaponSlot: {fileID: 1753525990}
-  toolSlots:
-  - {fileID: 1753525989}
-  - {fileID: 1753525987}
 --- !u!114 &1307443149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2086,37 +2082,37 @@ Prefab:
     - target: {fileID: 224257929312946490, guid: 2f0ad95e21418674b961a21627c7a1d4,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000061035156
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224257929312946490, guid: 2f0ad95e21418674b961a21627c7a1d4,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 0.000061035
+      value: 330
       objectReference: {fileID: 0}
     - target: {fileID: 224257929312946490, guid: 2f0ad95e21418674b961a21627c7a1d4,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0.000091553
+      value: 275
       objectReference: {fileID: 0}
     - target: {fileID: 224257929312946490, guid: 2f0ad95e21418674b961a21627c7a1d4,
         type: 2}
       propertyPath: m_AnchorMin.x
-      value: 0.35249272
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 224257929312946490, guid: 2f0ad95e21418674b961a21627c7a1d4,
         type: 2}
       propertyPath: m_AnchorMin.y
-      value: 0.19800001
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 224257929312946490, guid: 2f0ad95e21418674b961a21627c7a1d4,
         type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0.64917713
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 224257929312946490, guid: 2f0ad95e21418674b961a21627c7a1d4,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0.90000004
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 224257929312946490, guid: 2f0ad95e21418674b961a21627c7a1d4,
         type: 2}
@@ -3099,29 +3095,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 882d7df7bb0e07e47ad7bffe80aaacb1, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &1753525987 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114863939832790434, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
-    type: 2}
-  m_PrefabInternal: {fileID: 1753525986}
-  m_Script: {fileID: 11500000, guid: 356c80c5e9354fa4d9c4046181296516, type: 3}
 --- !u!1 &1753525988 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1580314959662808, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
     type: 2}
   m_PrefabInternal: {fileID: 1753525986}
---- !u!114 &1753525989 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114091892299549480, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
-    type: 2}
-  m_PrefabInternal: {fileID: 1753525986}
-  m_Script: {fileID: 11500000, guid: 356c80c5e9354fa4d9c4046181296516, type: 3}
---- !u!114 &1753525990 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114144152607734506, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,
-    type: 2}
-  m_PrefabInternal: {fileID: 1753525986}
-  m_Script: {fileID: 11500000, guid: aa1ffc8bf084889479be36a9b50904f7, type: 3}
 --- !u!114 &1753525991 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114338929397509348, guid: 882d7df7bb0e07e47ad7bffe80aaacb1,

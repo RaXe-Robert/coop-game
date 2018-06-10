@@ -98,6 +98,11 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     protected void UpdateUI()
     {
         image.sprite = currentItem?.Sprite;
+
+        if (currentItem == null)
+            image.color = new Color(255, 255, 255, 0);
+        else image.color = new Color(255, 255, 255, 1);
+
         if (currentItem?.StackSize > 1)
         {
             stackSizeText.text = currentItem.StackSize.ToString();

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu, Controls, DeathScreen, Furnace }
 
@@ -57,6 +58,7 @@ public class GameInterfaceManager : MonoBehaviour
                 ToggleGivenDisableOthers(GameInterface.Equipment);
                 break;
             case GameInterface.Inventory:
+                inventoryUI.transform.position = new Vector3(0, 0, 0);
                 ToggleGivenDisableOthers(GameInterface.Inventory);
                 break;
             case GameInterface.EscapeMenu:
@@ -129,10 +131,13 @@ public class GameInterfaceManager : MonoBehaviour
             if (panel.Key == GameInterface.Inventory)
             {
                 panel.Value.SetActive(true);
-                panel.Value.transform.localScale = new Vector3(5, 5);
+                panel.Value.transform.localPosition = new Vector3(-175, 0, 0);
             }
             else if (panel.Key == gameInterface)
+            {
                 panel.Value.SetActive(true);
+                panel.Value.transform.localPosition = new Vector3(175, 0, 0);
+            }
             else
                 panel.Value.SetActive(false);
         }

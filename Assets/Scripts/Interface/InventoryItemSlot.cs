@@ -14,6 +14,7 @@ public class InventoryItemSlot : ItemSlot {
         this.index = index;
         this.inventory = inventory;
         this.equipmentManager = equipmentManager;
+    }
 
     public override void OnPointerClick(PointerEventData eventData)
     {
