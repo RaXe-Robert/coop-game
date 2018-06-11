@@ -21,10 +21,10 @@ public class FollowLocalPlayer : MonoBehaviour
         if (PlayerNetwork.LocalPlayer != null)
             playerTransform = PlayerNetwork.LocalPlayer.transform;
 
-        PlayerNetwork.OnLocalPlayerSpawned += LocalPlayerSpawned;
+        PlayerNetwork.OnLocalPlayerCreated += LocalPlayerSpawned;
     }
 
-    private void OnDisable() => PlayerNetwork.OnLocalPlayerSpawned -= LocalPlayerSpawned;
+    private void OnDisable() => PlayerNetwork.OnLocalPlayerCreated -= LocalPlayerSpawned;
 
     // Update is called once per frame
     private void LateUpdate()

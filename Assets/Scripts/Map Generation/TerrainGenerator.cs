@@ -18,7 +18,6 @@ namespace Assets.Scripts.Map_Generation
         private const float sqrViewerMoveThresholdForChunkPartUpdate = viewerMoveThresholdForChunkPartUpdate * viewerMoveThresholdForChunkPartUpdate;
 
         public static int Seed { get; private set; }
-        public static string WorldDataPath => SaveDataManager.Instance.WorldDataPath;
 
         public static LayerMask LayerMask;
 
@@ -61,7 +60,7 @@ namespace Assets.Scripts.Map_Generation
 
         public bool IsSetupFinished { get; private set; }
         public bool IsBuildingNavmesh { get; private set; }
-
+        
         private void Awake()
         {
             navMeshSurface = GetComponent<NavMeshSurface>();
@@ -86,14 +85,14 @@ namespace Assets.Scripts.Map_Generation
 
             Debug.Log($"Generating world with seed: '{Seed}'");
 
-            if (SaveDataManager.Instance.IsWorldDownloaded == false)
-                SaveDataManager.Instance.OnWorldDownloaded += () => Setup();
+            if (SaveDataManager.Instance.SaveFilesDownloaded == false)
+                SaveDataManager.Instance.OnSaveFilesDownloaded += () => Setup();
             else
                 Setup();
         }
 
-        private void OnEnable() => PlayerNetwork.OnOtherPlayerSpawned += AddSecondaryViewer;
-        private void OnDisable() => PlayerNetwork.OnOtherPlayerSpawned -= AddSecondaryViewer;
+        private void OnEnable() => PlayerNetwork.OnOtherPlayerCreated += AddSecondaryViewer;
+        private void OnDisable() => PlayerNetwork.OnOtherPlayerCreated -= AddSecondaryViewer;
 
         private void Update()
         {
