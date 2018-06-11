@@ -19,7 +19,7 @@ public class PlayerNetwork : PunBehaviour
     public static Dictionary<int, PlayerInfo> OtherPlayers { get; private set; }
     public static event System.Action<PhotonView> OnOtherPlayerCreated;
 
-    private List<int> availableColors = new List<int> { 0,1,2,3,4,5,6 };
+    private List<int> availableColors = new List<int>{ 0,1,2,3,4,5,6 };
 
     private void Awake()
     {  
@@ -39,11 +39,12 @@ public class PlayerNetwork : PunBehaviour
                     availableColors.Remove((int)photonPlayer.CustomProperties["Color"]);
                     OtherPlayers.Add(photonPlayer.ID, new PlayerInfo(photonPlayer));
                 }
-                int color = availableColors[Random.Range(0, availableColors.Count)];
-                Hashtable colorHashtable = new Hashtable() { { "Color", color } };
+
+                int colorIndex = availableColors[Random.Range(0, availableColors.Count)];
+                Hashtable colorHashtable = new Hashtable() { { "Color", colorIndex } };
                 PhotonNetwork.SetPlayerCustomProperties(colorHashtable);
 
-                CreateLocalPlayer(color);
+                CreateLocalPlayer(colorIndex);
 
                 if (SaveDataManager.Instance.SaveFilesDownloaded)
                     LoadPlayerPosition();
@@ -72,9 +73,9 @@ public class PlayerNetwork : PunBehaviour
         PhotonNetwork.RaiseEvent(1, photonViewID, true, null); // Trigger a spawn event so that other players know of our existence.
     }
 
-    public void SetPlayerColor(GameObject gameObject,int color)
+    private void SetPlayerColor(GameObject gameObject,int colorIndex)
     {
-        switch (color)
+        switch (colorIndex)
         {
             case 0://red
                 gameObject.GetComponentInChildren<SkinnedMeshRenderer>().materials[3].color = new Color32(255, 0, 0, 100);
@@ -124,7 +125,6 @@ public class PlayerNetwork : PunBehaviour
                 if (OtherPlayers.ContainsKey(playerPhotonView.ownerId))
                 {
                     OtherPlayers[playerPhotonView.ownerId].GameObject = playerPhotonView.gameObject;
-                    Debug.Log(OtherPlayers[playerPhotonView.ownerId].PlayerColor);
                     SetPlayerColor(OtherPlayers[playerPhotonView.ownerId].GameObject, OtherPlayers[playerPhotonView.ownerId].PlayerColor);
                 }
                 else
