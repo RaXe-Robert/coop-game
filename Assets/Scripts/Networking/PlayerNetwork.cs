@@ -1,12 +1,14 @@
-﻿using Photon;
+﻿using ExitGames.Client.Photon;
+using Photon;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerNetwork : PunBehaviour
 {
-    [SerializeField] private GameObject playerPrefab;
+    public enum PlayerColor { red, orange, yellow, green, blue, indigo, purple };
 
+    [SerializeField] private GameObject playerPrefab;
     public static string PlayerName
     {
         get { return PhotonNetwork.player.NickName; }
@@ -18,6 +20,8 @@ public class PlayerNetwork : PunBehaviour
 
     public static Dictionary<int, PlayerInfo> OtherPlayers { get; private set; }
     public static event System.Action<PhotonView> OnOtherPlayerCreated;
+
+    private List<int> availableColors = new List<int> { 0,1,2,3,4,5,6 };
 
     private void Awake()
     {  
@@ -33,9 +37,12 @@ public class PlayerNetwork : PunBehaviour
             if (PhotonNetwork.inRoom)
             {
                 foreach (var photonPlayer in PhotonNetwork.otherPlayers)
+                {
+                    availableColors.Remove((int)photonPlayer.CustomProperties["Color"]);
                     OtherPlayers.Add(photonPlayer.ID, new PlayerInfo(photonPlayer));
+                }
 
-                CreateLocalPlayer();
+                CreateLocalPlayer(availableColors[Random.Range(0, availableColors.Count)]);
 
                 if (SaveDataManager.Instance.SaveFilesDownloaded)
                     LoadPlayerPosition();
@@ -55,13 +62,43 @@ public class PlayerNetwork : PunBehaviour
     /// <summary>
     /// Creates the local player object. This only happens once.
     /// </summary>
-    private void CreateLocalPlayer()
+    private void CreateLocalPlayer(int color)
     {
         Vector3 position = new Vector3(Random.Range(-10f , 10f), 20f, Random.Range(-10f, 10f));
         LocalPlayer = PhotonNetwork.Instantiate(playerPrefab.name, position, Quaternion.identity, 0);
-
+        SetPlayerColor(color);
         int photonViewID = LocalPlayer.GetComponent<PhotonView>().viewID;
         PhotonNetwork.RaiseEvent(1, photonViewID, true, null); // Trigger a spawn event so that other players know of our existence.
+    }
+
+    public void SetPlayerColor(int color)
+    {
+        switch (color)
+        {
+            case (int)PlayerColor.red:
+                LocalPlayer.GetComponentInChildren<SkinnedMeshRenderer>().materials[3].color = new Color32(255, 0, 0, 100);
+                break;
+            case (int)PlayerColor.orange:
+                LocalPlayer.GetComponentInChildren<SkinnedMeshRenderer>().materials[3].color = new Color32(255, 127, 0, 100);
+                break;
+            case (int)PlayerColor.yellow:
+                LocalPlayer.GetComponentInChildren<SkinnedMeshRenderer>().materials[3].color = new Color32(255, 255, 0, 100);
+                break;
+            case (int)PlayerColor.green:
+                LocalPlayer.GetComponentInChildren<SkinnedMeshRenderer>().materials[3].color = new Color32(0, 255, 0, 100);
+                break;
+            case (int)PlayerColor.blue:
+                LocalPlayer.GetComponentInChildren<SkinnedMeshRenderer>().materials[3].color = new Color32(0, 0, 255, 100);
+                break;
+            case (int)PlayerColor.indigo:
+                LocalPlayer.GetComponentInChildren<SkinnedMeshRenderer>().materials[3].color = new Color32(75, 0, 130, 100);
+                break;
+            case (int)PlayerColor.purple:
+                LocalPlayer.GetComponentInChildren<SkinnedMeshRenderer>().materials[3].color = new Color32(143, 0, 255, 100);
+                break;
+        }
+        Hashtable colorHashtable = new Hashtable() { { "Color", color } };
+        PhotonNetwork.SetPlayerCustomProperties(colorHashtable);
     }
 
     /// <summary>
