@@ -68,8 +68,8 @@ namespace Assets.Scripts.Map_Generation
             string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
             
             // Try to load a save file
-            if (File.Exists(TerrainGenerator.WorldDataPath + fileName))
-                return ObjectMapLoader.LoadObjectMap(terrainChunk);
+            if (File.Exists(SaveDataManager.WorldDataPath + fileName))
+                return ObjectMapLoader.LoadObjectMap(terrainChunk, SaveDataManager.WorldDataPath).ObjectPoints;
             else
             {
                 ResourceMap resourceMap = ResourceMapGenerator.GenerateResourceMap(uniformSize, resourceMapSettings, terrainChunk.SampleCenter);

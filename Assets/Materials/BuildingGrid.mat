@@ -81,7 +81,7 @@ Material:
     - _ColorFar: {r: 0.3, g: 0.3, b: 0.3, a: 0}
     - _ColorNear: {r: 0, g: 1, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GridColor: {r: 1, g: 0, b: 0, a: 1}
+    - _GridColor: {r: 0.11724138, g: 1, b: 0, a: 1}
     - _GridColour: {r: 0.5, g: 1, b: 1, a: 1}
     - _OutsideColor: {r: 0, g: 0, b: 0, a: 0}
-    - _Point: {r: 14.967649, g: 0.0034765638, b: 12.428661, a: 0}
+    - _Point: {r: 10.605593, g: 6.932401, b: 1.8188596, a: 0}
