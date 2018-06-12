@@ -11,7 +11,7 @@ namespace Assets.Scripts.Map_Generation
     /// </summary>
     public class MapPreview : MonoBehaviour
     {
-        public enum DrawMode { NoiseMap, Mesh, FalloffMap, BiomeMap, ResourceMap }
+        public enum DrawMode { NoiseMap, Mesh, FalloffMap, BiomeMap }
         public DrawMode drawMode;
 
         public MeshSettings MeshSettings;
@@ -58,10 +58,6 @@ namespace Assets.Scripts.Map_Generation
                 case DrawMode.BiomeMap:
                     DrawTexture(TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.Values.GetLength(0) - 3, BiomeMapSettings, Vector2.zero)));
                     break;
-                case DrawMode.ResourceMap:
-                    DrawTexture(TextureGenerator.TextureFromObjectMap(ResourceMapGenerator.GenerateResourceMap(heightMap.Values.GetLength(0) - 3, ResourceMapSettings, Vector2.zero)));
-                    break;
-
             }
         }
 

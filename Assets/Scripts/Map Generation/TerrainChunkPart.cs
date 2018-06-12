@@ -86,7 +86,7 @@ namespace Assets.Scripts.Map_Generation
         {
             foreach (var objectPoint in ObjectPoints)
             {
-                GameObject go = Object.Instantiate(terrainChunk.ResourceMapSettings.WorldResourceEntries[objectPoint.Value.WorldResourcePrefabID].WorldResourcePrefab, objectPoint.Value.position, objectPoint.Value.rotation, terrainChunk.MeshObject.transform);
+                GameObject go = Object.Instantiate(TerrainGenerator.BiomeResources[objectPoint.Value.biomeId].worldResourceEntries[objectPoint.Value.worldResourcePrefabId].WorldResourcePrefab, objectPoint.Value.position, objectPoint.Value.rotation, terrainChunk.MeshObject.transform);
                 go.GetComponent<WorldResource>().Setup(terrainChunk, objectPoint.Key);
                 spawnedInstances.Add(objectPoint.Key, go);
             }
