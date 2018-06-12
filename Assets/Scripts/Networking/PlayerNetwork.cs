@@ -32,8 +32,23 @@ public class PlayerNetwork : PunBehaviour
         {
             if (PhotonNetwork.inRoom)
             {
+                // Collect all player objects
+                PlayerInputController[] playerInputControllers = FindObjectsOfType<PlayerInputController>();
+
                 foreach (var photonPlayer in PhotonNetwork.otherPlayers)
-                    OtherPlayers.Add(photonPlayer.ID, new PlayerInfo(photonPlayer));
+                {
+                    GameObject playerObject = null;
+                    foreach (var playerInputController in playerInputControllers)
+                    {
+                        if (photonPlayer.ID == playerInputController.gameObject.GetComponent<PhotonView>().ownerId)
+                        {
+                            playerObject = playerInputController.gameObject;
+                            break;
+                        }
+                    }
+
+                    OtherPlayers.Add(photonPlayer.ID, new PlayerInfo(photonPlayer) { GameObject = playerObject });
+                }
 
                 CreateLocalPlayer();
 
