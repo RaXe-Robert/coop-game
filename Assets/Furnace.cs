@@ -26,6 +26,7 @@ public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
         furnaceInterface = Instantiate(furnaceInterfaceprefab, canvas.transform);
         furnaceInterface.SetActive(false);
 
+        //TODO: Maybe find a better way than this.
         FuelInput = furnaceInterface.GetComponentInChildren<FuelInput>();
         ItemInput = furnaceInterface.GetComponentInChildren<ItemInput>();
         ItemOutput = furnaceInterface.GetComponentInChildren<ItemOutput>();
@@ -48,40 +49,35 @@ public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
 
     private void HandleMeltingProgress()
     {
-        if(CurrentItem != null)
+        if (BurningTime <= 0 || CurrentItem == null)
+            return;
+
+        meltingProgress += BurningTime > 0 ? Time.deltaTime : -Time.deltaTime;
+        if(meltingProgress >= 5)
         {
-            meltingProgress += BurningTime > 0 ? Time.deltaTime : -Time.deltaTime;
-            if(meltingProgress >= 5)
-            {
-                ItemOutput.DepositItem(ItemFactory.CreateNewItem(CurrentItem.MeltingResult.Id, 1));
-                CurrentItem = null;
-                meltingProgress = 0;
-                Debug.Log("FinishedMelting");
-            }
+            ItemOutput.DepositItem(ItemFactory.CreateNewItem(CurrentItem.MeltingResult.Id, 1));
+            meltingProgress = 0;
+            CurrentItem = null;
         }
     }
 
     private void HandleItems()
     {
-        if(CurrentItem == null)
-        {
-            if(ItemInput?.CurrentItem?.Name == "Iron Ore")
+        if(CurrentItem == null && BurningTime > 0)
+            if(ItemInput?.CurrentItem?.MeltingResult != null)
                 CurrentItem = ItemInput.TakeItem();
-        }
     }
 
     private void HandleFuel()
     {
-        if (BurningTime <= 0 && FuelInput.CurrentItem != null && CurrentItem != null)
+        //If we have no remaining fuel but there is some left in the furnace and there is a meltable item we can start consuming fuel.
+        if (BurningTime <= 0 && FuelInput.CurrentItem != null && ItemInput?.CurrentItem?.MeltingResult != null)
         {
-            FuelInput.TakeFuel();
             BurningTime += FuelInput.CurrentItem.BurningTime;
+            FuelInput.TakeFuel();
         }
-        else if (BurningTime > 0)
-        {
+        else if(BurningTime > 0)
             BurningTime -= Time.deltaTime;
-            Debug.Log(BurningTime);
-        }
     }
 
     private void OpenInterface()
@@ -90,11 +86,13 @@ public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
         GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Furnace);
     }
 
-    private void MeltItem()
+    protected override void Pickup()
     {
-        if(ItemInput.CurrentItem.Name == "Iron ore")
-        {
-            ItemInput.TakeItem();
-        }
+        // If null the action will be cancelled
+        if (BuildableInteractionMenu.Instance?.Target == null)
+            return;
+
+        BuildableInteractionMenu.Instance.Target.DestroyWorldObject();
+        GameInterfaceManager.Instance.CloseAllInterfaces();
     }
 }
