@@ -76,14 +76,14 @@ GameObject:
   - component: {fileID: 224529026532050802}
   - component: {fileID: 222191221438391780}
   - component: {fileID: 114658428144244282}
-  - component: {fileID: 114137366178361474}
+  - component: {fileID: 114569664573549994}
   m_Layer: 5
   m_Name: SettingsUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1434071626769664
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,25 +313,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114137366178361474
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1258822119125602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0b79aa97e5abbf4eabda45ae4061414, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  qualityDropDown: {fileID: 0}
-  resolutionDropDown: {fileID: 0}
-  fullscreenToggle: {fileID: 0}
-  masterVolume: {fileID: 0}
-  musicVolume: {fileID: 0}
-  ambienceVolume: {fileID: 0}
-  soundVolume: {fileID: 0}
-  masterMixer: {fileID: 24100000, guid: bce9a539e21df864cad40ef9a34d4507, type: 2}
 --- !u!114 &114167080442083134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -548,6 +529,25 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Audio Settings
+--- !u!114 &114569664573549994
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1258822119125602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0b79aa97e5abbf4eabda45ae4061414, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  qualityDropDown: {fileID: 0}
+  resolutionDropDown: {fileID: 0}
+  fullscreenToggle: {fileID: 0}
+  masterVolume: {fileID: 0}
+  musicVolume: {fileID: 0}
+  ambienceVolume: {fileID: 0}
+  soundVolume: {fileID: 0}
+  masterMixer: {fileID: 24100000, guid: bce9a539e21df864cad40ef9a34d4507, type: 2}
 --- !u!114 &114578275904447150
 MonoBehaviour:
   m_ObjectHideFlags: 1
