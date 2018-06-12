@@ -41,19 +41,7 @@ public class PlayerColors : MonoBehaviour
 
         if (playerColors == null || playerColors.Length == 0)
             return;
-
-        Color32 playerColor = Color.red;
-        switch (playerId % playerColors.Length + PhotonNetwork.room.PlayerCount)
-        {
-            case 1: playerColor = new Color32(255, 0, 0, 100); break;//red
-            case 2: playerColor = new Color32(255, 127, 0, 100); break;//orange
-            case 3: playerColor = new Color32(255, 255, 0, 100); break; //yellow
-            case 4: playerColor = new Color32(0, 255, 0, 100); break;//green
-            case 5: playerColor = new Color32(0, 0, 255, 100); break;//blue
-            case 6: playerColor = new Color32(75, 0, 130, 100); break;//indigo
-            case 7: playerColor = new Color32(143, 0, 255, 100); break;//purple
-
-        }
-        playerObject.GetComponentInChildren<SkinnedMeshRenderer>().materials[3].color = playerColor;
+        
+        playerObject.GetComponentInChildren<SkinnedMeshRenderer>().materials[3].color = playerColors[playerId % (playerColors.Length - 1)];
     }
 }
