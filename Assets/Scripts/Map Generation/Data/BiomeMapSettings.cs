@@ -22,12 +22,10 @@ namespace Assets.Scripts.Map_Generation
         protected override void OnValidate()
         {
             NoiseSettings.ValidateValues();
-
             base.OnValidate();
         }
 
 #endif
-
     }
 
     [System.Serializable]
