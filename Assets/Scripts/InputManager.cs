@@ -23,7 +23,8 @@ public static class InputManager {
         ["Equipment"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("EquipmentKey", KeyCode.F.ToString())),
         ["Left camera rotation"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("LeftCameraRotationKey", KeyCode.Q.ToString())),
         ["Right camera rotation"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("RightCameraRotationKey", KeyCode.E.ToString())),
-        ["Open Chat"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("ChatKey", KeyCode.Y.ToString()))
+        ["Open Chat"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("ChatKey", KeyCode.Y.ToString())),
+        ["Show Player Indicators"] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("ShowPlayerIndicators", KeyCode.Tab.ToString()))
     };
 
     private static Dictionary<string, KeyCode> staticButtonKeys = new Dictionary<string, KeyCode>

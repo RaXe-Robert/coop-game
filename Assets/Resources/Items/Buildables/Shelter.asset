@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22580a90e66e2f44ea7c1962e6362f2f, type: 3}
+  m_Name: Shelter
+  m_EditorClassIdentifier: 
+  id: buildable_shelter
+  itemName: Shelter
+  sprite: {fileID: 21300000, guid: 85256b54e65675f4a944fcaf48cab861, type: 3}
+  model: {fileID: 100000, guid: 938a6701d221c4f4192878a7ec72b1c8, type: 3}
+  description: A neat house for protection maybe?
+  recoverable: 1
+  snapToGrid: 1
+  prefabToSpawn: {fileID: 1856907756737126, guid: 00855bcf2454df943916e0fdca3fff27,
+    type: 2}

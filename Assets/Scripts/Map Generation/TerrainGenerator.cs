@@ -82,10 +82,12 @@ namespace Assets.Scripts.Map_Generation
         {
             Seed = (int)PhotonNetwork.room.CustomProperties["seed"];
             HeightMapSettings.NoiseSettings.seed = Seed;
-            BiomeMapSettings.NoiseSettings.seed = Seed;
-            ResourceMapSettings.NoiseSettings.seed = Seed;
 
-            Debug.Log($"Generating world with seed: '{Seed}'");
+            System.Random random = new System.Random(Seed);
+            BiomeMapSettings.NoiseSettings.seed = random.Next(int.MinValue, int.MaxValue); // Generate a different seed with our worldseed
+            ResourceMapSettings.NoiseSettings.seed = random.Next(int.MinValue, int.MaxValue); // Generate a different seed with our worldseed
+
+            Debug.Log($"Generating world with the following seeds: HeightMap '{Seed}', BiomeMap '{BiomeMapSettings.NoiseSettings.seed}', ResourceMap '{ResourceMapSettings.NoiseSettings.seed}'.");
 
             if (SaveDataManager.Instance.SaveFilesDownloaded == false)
                 SaveDataManager.Instance.OnSaveFilesDownloaded += () => Setup();

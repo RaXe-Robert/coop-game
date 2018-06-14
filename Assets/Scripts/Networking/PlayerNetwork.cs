@@ -1,4 +1,5 @@
-﻿using Photon;
+﻿using ExitGames.Client.Photon;
+using Photon;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class PlayerNetwork : PunBehaviour
 {
     [SerializeField] private GameObject playerPrefab;
-
     public static string PlayerName
     {
         get { return PhotonNetwork.player.NickName; }
@@ -32,11 +32,28 @@ public class PlayerNetwork : PunBehaviour
         {
             if (PhotonNetwork.inRoom)
             {
-                foreach (var photonPlayer in PhotonNetwork.otherPlayers)
-                    OtherPlayers.Add(photonPlayer.ID, new PlayerInfo(photonPlayer));
+                // Collect all player objects
+                PlayerInputController[] playerInputControllers = FindObjectsOfType<PlayerInputController>();
 
+                foreach (var photonPlayer in PhotonNetwork.otherPlayers)
+                {
+                    GameObject playerObject = null;
+                    foreach (var playerInputController in playerInputControllers)
+                    {
+                        if (photonPlayer.ID == playerInputController.gameObject.GetComponent<PhotonView>().ownerId)
+                        {
+                            playerObject = playerInputController.gameObject;
+                            break;
+                        }
+                    }
+
+                    OtherPlayers.Add(photonPlayer.ID, new PlayerInfo(photonPlayer) { GameObject = playerObject });
+                }
+
+                // Create the player object
                 CreateLocalPlayer();
 
+                // Try to load the saved player position
                 if (SaveDataManager.Instance.SaveFilesDownloaded)
                     LoadPlayerPosition();
                 else
@@ -59,6 +76,8 @@ public class PlayerNetwork : PunBehaviour
     {
         Vector3 position = new Vector3(Random.Range(-10f , 10f), 20f, Random.Range(-10f, 10f));
         LocalPlayer = PhotonNetwork.Instantiate(playerPrefab.name, position, Quaternion.identity, 0);
+
+        OnLocalPlayerCreated?.Invoke(LocalPlayer);
 
         int photonViewID = LocalPlayer.GetComponent<PhotonView>().viewID;
         PhotonNetwork.RaiseEvent(1, photonViewID, true, null); // Trigger a spawn event so that other players know of our existence.
