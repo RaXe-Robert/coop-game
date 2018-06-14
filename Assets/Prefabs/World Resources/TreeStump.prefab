@@ -115,6 +115,7 @@ MonoBehaviour:
   name: Tree stump
   requiredToolToHarvest: 0
   interactDistance: 5
+  attackSound: 0
   spawnOnDepleted: {fileID: 0}
   maxHealth: 100
 --- !u!114 &114108696994553980
@@ -141,9 +142,9 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.938, y: 0.316, z: 1.19}
+  m_Extents: {x: 0.05, y: 0.5, z: 0.00001}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: -0.068, y: 0.27, z: -0.057000004}
+  m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5

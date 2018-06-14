@@ -373,6 +373,7 @@ MonoBehaviour:
   name: Tree
   requiredToolToHarvest: 0
   interactDistance: 5
+  attackSound: 0
   spawnOnDepleted: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
     type: 2}
   maxHealth: 100
@@ -485,7 +486,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 0.05, y: 0.5, z: 0.05}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
