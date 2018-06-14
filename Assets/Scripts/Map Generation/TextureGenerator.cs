@@ -9,8 +9,8 @@ namespace Assets.Scripts.Map_Generation
         {
             Texture2D texture = new Texture2D(width, height)
             {
-                filterMode = FilterMode.Point,
-                wrapMode = TextureWrapMode.Clamp
+                filterMode = FilterMode.Trilinear,
+                wrapMode = TextureWrapMode.MirrorOnce
             };
             texture.SetPixels(colorMap);
             texture.Apply();

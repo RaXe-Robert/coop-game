@@ -30,11 +30,8 @@ namespace Assets.Scripts.Map_Generation
                 for (int z = 0; z < size; z++)
                 {
                     TerrainInfo terrainInfo = GetTerrainInfoFromIndex(x, z);
-
-                    if (terrainInfo.Layer.IsWater)
-                        Debug.DrawRay(terrainInfo.WorldPosition, Vector3.up * 5f, Color.blue);
-                    else
-                        Debug.DrawRay(terrainInfo.WorldPosition, Vector3.up * 5f, Color.white);
+                    
+                    Debug.DrawRay(terrainInfo.WorldPosition, Vector3.up * 5f, terrainInfo.Biome.Color);
                 }
             }
         }
