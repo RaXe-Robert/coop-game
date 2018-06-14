@@ -1962,7 +1962,6 @@ GameObject:
   - component: {fileID: 224407655081608036}
   - component: {fileID: 222133139946137180}
   - component: {fileID: 225582140692055450}
-  - component: {fileID: 114237810627566236}
   m_Layer: 5
   m_Name: OptionsMenuPanel
   m_TagString: Untagged
@@ -2235,6 +2234,7 @@ GameObject:
   - component: {fileID: 114017204454061682}
   - component: {fileID: 114464156610780758}
   - component: {fileID: 222345360471379406}
+  - component: {fileID: 114834437619283508}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -4097,7 +4097,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114237810627566236}
+      - m_Target: {fileID: 114834437619283508}
         m_MethodName: SetQuality
         m_Mode: 0
         m_Arguments:
@@ -5692,11 +5692,11 @@ MonoBehaviour:
   m_MinValue: -80
   m_MaxValue: 20
   m_WholeNumbers: 1
-  m_Value: 0
+  m_Value: -30
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114237810627566236}
+      - m_Target: {fileID: 114834437619283508}
         m_MethodName: SetSoundVolume
         m_Mode: 0
         m_Arguments:
@@ -5954,25 +5954,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114237810627566236
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1517126930420734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0b79aa97e5abbf4eabda45ae4061414, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  qualityDropDown: {fileID: 114027159866530418}
-  resolutionDropDown: {fileID: 114977302044754050}
-  fullscreenToggle: {fileID: 114505179250312684}
-  masterVolume: {fileID: 114246446130264726}
-  musicVolume: {fileID: 114243536264106306}
-  ambienceVolume: {fileID: 114641214991899262}
-  soundVolume: {fileID: 114184592621091210}
-  masterMixer: {fileID: 24100000, guid: bce9a539e21df864cad40ef9a34d4507, type: 2}
 --- !u!114 &114243536264106306
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6015,11 +5996,11 @@ MonoBehaviour:
   m_MinValue: -80
   m_MaxValue: 20
   m_WholeNumbers: 1
-  m_Value: 0
+  m_Value: -30
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114237810627566236}
+      - m_Target: {fileID: 114834437619283508}
         m_MethodName: SetMusicVolume
         m_Mode: 0
         m_Arguments:
@@ -6107,11 +6088,11 @@ MonoBehaviour:
   m_MinValue: -80
   m_MaxValue: 20
   m_WholeNumbers: 1
-  m_Value: 0
+  m_Value: -30
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114237810627566236}
+      - m_Target: {fileID: 114834437619283508}
         m_MethodName: SetMasterVolume
         m_Mode: 0
         m_Arguments:
@@ -8554,7 +8535,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114237810627566236}
+      - m_Target: {fileID: 114834437619283508}
         m_MethodName: SetFullScreen
         m_Mode: 0
         m_Arguments:
@@ -9698,11 +9679,11 @@ MonoBehaviour:
   m_MinValue: -80
   m_MaxValue: 20
   m_WholeNumbers: 1
-  m_Value: 0
+  m_Value: -30
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114237810627566236}
+      - m_Target: {fileID: 114834437619283508}
         m_MethodName: SetAmbienceVolume
         m_Mode: 0
         m_Arguments:
@@ -11262,6 +11243,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c264360529765a84b9638e6888521003, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114834437619283508
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1587558859406712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0b79aa97e5abbf4eabda45ae4061414, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  qualityDropDown: {fileID: 114027159866530418}
+  resolutionDropDown: {fileID: 114977302044754050}
+  fullscreenToggle: {fileID: 114505179250312684}
+  masterVolume: {fileID: 114246446130264726}
+  musicVolume: {fileID: 114243536264106306}
+  ambienceVolume: {fileID: 114641214991899262}
+  soundVolume: {fileID: 114184592621091210}
+  masterMixer: {fileID: 24100000, guid: bce9a539e21df864cad40ef9a34d4507, type: 2}
 --- !u!114 &114852886872812602
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -12178,7 +12178,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114237810627566236}
+      - m_Target: {fileID: 114834437619283508}
         m_MethodName: SetResolution
         m_Mode: 0
         m_Arguments:
