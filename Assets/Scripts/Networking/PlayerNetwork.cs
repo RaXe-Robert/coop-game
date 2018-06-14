@@ -74,7 +74,7 @@ public class PlayerNetwork : PunBehaviour
     /// </summary>
     private void CreateLocalPlayer()
     {
-        Vector3 position = new Vector3(Random.Range(-10f , 10f), 20f, Random.Range(-10f, 10f));
+        Vector3 position = new Vector3(Random.Range(-10f , 10f), 30f, Random.Range(-10f, 10f));
         LocalPlayer = PhotonNetwork.Instantiate(playerPrefab.name, position, Quaternion.identity, 0);
 
         OnLocalPlayerCreated?.Invoke(LocalPlayer);
