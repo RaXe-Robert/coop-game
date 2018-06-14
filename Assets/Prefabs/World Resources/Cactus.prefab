@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4900138965511406}
   - component: {fileID: 33270897870923986}
   - component: {fileID: 23727934497154238}
-  - component: {fileID: 64311597192321834}
+  - component: {fileID: 136632256836406612}
   - component: {fileID: 114094595974584758}
   - component: {fileID: 114108696994553980}
   - component: {fileID: 208085045006791390}
@@ -39,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1496601752169784}
   m_LocalRotation: {x: 6.4262822e-12, y: 1, z: -0.0000018318508, w: 0.0000035952676}
-  m_LocalPosition: {x: -0, y: -0.00000001513399, z: -0.00000000745058}
+  m_LocalPosition: {x: -0, y: 3.19, z: -0.00000000745058}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -87,20 +87,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1496601752169784}
   m_Mesh: {fileID: 4300000, guid: 86d04f7988c5c3546b8ee20f19978cd5, type: 3}
---- !u!64 &64311597192321834
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 4300000, guid: 86d04f7988c5c3546b8ee20f19978cd5, type: 3}
 --- !u!114 &114094595974584758
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -135,6 +121,19 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 2378eba34364556469c51af31e4a0371, type: 2}
     amount: 2
   spawnRadius: 2
+--- !u!136 &136632256836406612
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1496601752169784}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.6387396
+  m_Height: 4.00045
+  m_Direction: 1
+  m_Center: {x: 0.0713754, y: 2.000225, z: 0.11278722}
 --- !u!208 &208085045006791390
 NavMeshObstacle:
   m_ObjectHideFlags: 1
@@ -143,10 +142,10 @@ NavMeshObstacle:
   m_GameObject: {fileID: 1496601752169784}
   m_Enabled: 1
   serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.938, y: 0.316, z: 1.19}
+  m_Shape: 0
+  m_Extents: {x: 0.1, y: 0.5, z: 0.1}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: -0.068, y: 0.27, z: -0.057000004}
+  m_Center: {x: 0, y: 0, z: 0.03}
   m_TimeToStationary: 0.5
