@@ -11,7 +11,7 @@ namespace Assets.Scripts.Map_Generation
     /// </summary>
     public class MapPreview : MonoBehaviour
     {
-        public enum DrawMode { NoiseMap, Mesh, FalloffMap, BiomeMap, ResourceMap }
+        public enum DrawMode { NoiseMap, Mesh, FalloffMap, BiomeMap }
         public DrawMode drawMode;
 
         public MeshSettings MeshSettings;
@@ -58,10 +58,6 @@ namespace Assets.Scripts.Map_Generation
                 case DrawMode.BiomeMap:
                     DrawTexture(TextureGenerator.TextureFromBiomeMap(BiomeMapGenerator.GenerateBiomeMap(heightMap.Values.GetLength(0) - 3, BiomeMapSettings, Vector2.zero)));
                     break;
-                case DrawMode.ResourceMap:
-                    DrawTexture(TextureGenerator.TextureFromObjectMap(ResourceMapGenerator.GenerateResourceMap(heightMap.Values.GetLength(0) - 3, ResourceMapSettings, Vector2.zero)));
-                    break;
-
             }
         }
 
@@ -71,6 +67,12 @@ namespace Assets.Scripts.Map_Generation
         /// <param name="noiseMap"></param>
         public void DrawTexture(Texture2D texture)
         {
+            if (textureRenderer == null || meshFilter == null)
+            {
+                Debug.LogError("Could not draw");
+                return;
+            }
+
             textureRenderer.gameObject.SetActive(true);
             meshFilter.gameObject.SetActive(false);
 
@@ -80,6 +82,12 @@ namespace Assets.Scripts.Map_Generation
 
         public void DrawMesh(MeshData meshData, Texture2D texture)
         {
+            if (textureRenderer == null || meshFilter == null || meshRenderer == null)
+            {
+                Debug.LogError("Could not draw");
+                return;
+            }
+
             textureRenderer.gameObject.SetActive(false);
             meshFilter.gameObject.SetActive(true);
 

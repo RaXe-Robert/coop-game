@@ -18,15 +18,15 @@ MonoBehaviour:
     octaves: 6
     persistance: 0.3
     lacunarity: 2
-    seed: 0
+    seed: 1234
     offset: {x: 0, y: 0}
   Biomes:
-  - name: Desert
+  - biomeType: 2
     color: {r: 0.99634886, g: 1, b: 0.7352941, a: 1}
     resourceDensity: 0.2
-  - name: Grassland
+  - biomeType: 1
     color: {r: 0.2827586, g: 1, b: 0, a: 1}
     resourceDensity: 0.3
-  - name: Forest
+  - biomeType: 0
     color: {r: 0.12941173, g: 0.64705884, b: 0, a: 1}
     resourceDensity: 0.5

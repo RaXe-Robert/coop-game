@@ -9,8 +9,8 @@ namespace Assets.Scripts.Map_Generation
         {
             Texture2D texture = new Texture2D(width, height)
             {
-                filterMode = FilterMode.Point,
-                wrapMode = TextureWrapMode.Clamp
+                filterMode = FilterMode.Trilinear,
+                wrapMode = TextureWrapMode.MirrorOnce
             };
             texture.SetPixels(colorMap);
             texture.Apply();
@@ -43,26 +43,6 @@ namespace Assets.Scripts.Map_Generation
             {
                 for (int x = 0; x < width; x++)
                     colorMap[y * width + x] = biomeMap.GetBiome(x, y).Color;
-            }
-
-            return TextureFromColorMap(colorMap, width, height);
-        }
-
-        public static Texture2D TextureFromObjectMap(ResourceMap resourceMap)
-        {
-            int width = resourceMap.Values.GetLength(0);
-            int height = resourceMap.Values.GetLength(1);
-
-            Color[] colorMap = new Color[width * height];
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    if (resourceMap.Values[y, x] >= resourceMap.Settings.DensityThreshold)
-                        colorMap[y * width + x] = Color.white;
-                    else
-                        colorMap[y * width + x] = Color.red;
-                }
             }
 
             return TextureFromColorMap(colorMap, width, height);

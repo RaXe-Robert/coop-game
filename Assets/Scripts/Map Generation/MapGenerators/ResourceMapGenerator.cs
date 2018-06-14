@@ -5,54 +5,72 @@ namespace Assets.Scripts.Map_Generation
 {
     public class ResourceMapGenerator
     {
-        public static ResourceMap GenerateResourceMap(int size, ResourceMapSettings settings, Vector2 sampleCenter)
+        public static ResourceMap GenerateResourceMap(int size, ResourceMapSettings settings, Vector2 sampleCenter, BiomeMap biomeMap, HeightMap heightMap)
         {
-            float[,] values = Noise.GenerateNoiseMap(size, settings.NoiseSettings, sampleCenter);
-            List<ResourcePoint> resourcePoints = new List<ResourcePoint>();
+            size -= 1; // To avoid overlap with other chunks on edges
 
-            float minValue = float.MaxValue;
-            float maxValue = float.MinValue;
+            float[,] values = new float[size,size];
+            
+            // Create a unique seed for this chunk
+            System.Random randomNum = new System.Random((int)(0.5 * (sampleCenter.x + sampleCenter.y) * (sampleCenter.x + sampleCenter.y + 1) + sampleCenter.y + settings.NoiseSettings.seed));
+
+            List<ResourcePoint> resourcePoints = new List<ResourcePoint>();
 
             for (int x = 0; x < size; x++)
             {
                 for (int z = 0; z < size; z++)
                 {
-                    if (values[x, z] >= settings.DensityThreshold)
+                    float random = randomNum.Next(0, 100) / 100f;
+
+                    Biome biome = biomeMap.GetBiome(x, z);
+
+                    if (random > biome.ResourceDensity)
                     {
-                        // Get a random world resource with a seed that is created from the data at this x,z position.
-                        int resourceSeed = System.Convert.ToInt32(x + z + values[x, z] * 100f);
-                        int resourceIndex = (new System.Random(resourceSeed)).Next(0, settings.WorldResourceEntries.Length);
+                        int biomeId = (int)biome.BiomeType;
 
-                        resourcePoints.Add(new ResourcePoint(x, z, resourceIndex));
+                        if (TerrainGenerator.BiomeResources.ContainsKey(biomeId) && TerrainGenerator.BiomeResources[biomeId].worldResourceEntries.Count > 0)
+                        {
+                            int resourceIndex = randomNum.Next(0, TerrainGenerator.BiomeResources[biomeId].worldResourceEntries.Count);
+
+                            resourcePoints.Add(new ResourcePoint(x, z, biomeId, resourceIndex));
+                        }
                     }
-
-                    if (values[x, z] > maxValue)
-                        maxValue = values[x, z];
-                    if (values[x, z] < minValue)
-                        minValue = values[x, z];
                 }
             }
-            return new ResourceMap(values, minValue, maxValue, resourcePoints.ToArray(), settings);
+
+            return new ResourceMap(values, resourcePoints.ToArray(), settings);
+        }
+    }
+
+    public class BiomeResources
+    {
+        public readonly string biomeName;
+        public readonly int biomeIndex;
+
+        public List<WorldResourceEntry> worldResourceEntries;
+
+        public BiomeResources(string biomeName, int biomeIndex)
+        {
+            this.biomeName = biomeName;
+            this.biomeIndex = biomeIndex;
+
+            worldResourceEntries = new List<WorldResourceEntry>();
         }
     }
 
     public struct ResourceMap
     {
-        public readonly float[,] Values;
-        public readonly float MinValue;
-        public readonly float MaxValue;
+        public readonly float[,] values;
 
-        public readonly ResourcePoint[] ResourcePoints;
+        public readonly ResourcePoint[] resourcePoints;
 
-        public readonly ResourceMapSettings Settings;
+        public readonly ResourceMapSettings settings;
 
-        public ResourceMap(float[,] values, float minValue, float maxValue, ResourcePoint[] resourcePoints, ResourceMapSettings settings)
+        public ResourceMap(float[,] values, ResourcePoint[] resourcePoints, ResourceMapSettings settings)
         {
-            this.Values = values;
-            this.MinValue = minValue;
-            this.MaxValue = maxValue;
-            this.ResourcePoints = resourcePoints;
-            this.Settings = settings;
+            this.values = values;
+            this.resourcePoints = resourcePoints;
+            this.settings = settings;
         }
     }
 
@@ -60,13 +78,15 @@ namespace Assets.Scripts.Map_Generation
     {
         public readonly int x;
         public readonly int z;
-        public readonly int WorldResourcePrefabID;
+        public readonly int biomeId;
+        public readonly int worldResourcePrefabId;
 
-        public ResourcePoint(int x, int z, int worldResourcePrefabID)
+        public ResourcePoint(int x, int z, int biomeId, int worldResourcePrefabId)
         {
             this.x = x;
             this.z = z;
-            this.WorldResourcePrefabID = worldResourcePrefabID;
+            this.biomeId = biomeId;
+            this.worldResourcePrefabId = worldResourcePrefabId;
         }
     }
 }

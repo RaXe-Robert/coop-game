@@ -55,6 +55,8 @@ namespace Assets.Scripts.Map_Generation
                 Debug.LogError("TerrainChunk does not exist");
             return null;
         }
+
+        public static Dictionary<int, BiomeResources> BiomeResources;
         
         private List<TerrainChunk> visibleTerrainChunks;
 
@@ -80,10 +82,12 @@ namespace Assets.Scripts.Map_Generation
         {
             Seed = (int)PhotonNetwork.room.CustomProperties["seed"];
             HeightMapSettings.NoiseSettings.seed = Seed;
-            BiomeMapSettings.NoiseSettings.seed = Seed;
-            ResourceMapSettings.NoiseSettings.seed = Seed;
 
-            Debug.Log($"Generating world with seed: '{Seed}'");
+            System.Random random = new System.Random(Seed);
+            BiomeMapSettings.NoiseSettings.seed = random.Next(int.MinValue, int.MaxValue); // Generate a different seed with our worldseed
+            ResourceMapSettings.NoiseSettings.seed = random.Next(int.MinValue, int.MaxValue); // Generate a different seed with our worldseed
+
+            Debug.Log($"Generating world with the following seeds: HeightMap '{Seed}', BiomeMap '{BiomeMapSettings.NoiseSettings.seed}', ResourceMap '{ResourceMapSettings.NoiseSettings.seed}'.");
 
             if (SaveDataManager.Instance.SaveFilesDownloaded == false)
                 SaveDataManager.Instance.OnSaveFilesDownloaded += () => Setup();
@@ -157,6 +161,31 @@ namespace Assets.Scripts.Map_Generation
         /// </summary>
         private void Setup()
         {
+            // Collect and fill the biomes
+            Biome[] biomes = BiomeMapSettings.Biomes;
+
+            BiomeResources = new Dictionary<int, BiomeResources>();
+            for (int i = 0; i < biomes.Length; i++)
+            {
+                int biomeIndex = (int)biomes[i].BiomeType;
+
+                if (!BiomeResources.ContainsKey(biomeIndex))
+                    BiomeResources.Add(biomeIndex, new BiomeResources(biomes[i].Name, biomeIndex));
+            }
+
+            foreach (var worldResourceEntry in ResourceMapSettings.WorldResourceEntries)
+            {
+                List<int> selectedBiomes = worldResourceEntry.GetBiomes();
+
+                foreach (var selectedBiome in selectedBiomes)
+                {
+                    if (BiomeResources.ContainsKey(selectedBiome))
+                        BiomeResources[selectedBiome].worldResourceEntries.Add(worldResourceEntry);
+                    else
+                        Debug.LogError("Given biomeId does not exist!");
+                }
+            }
+
             HeightMapSettings.UpdateMeshHeights(TerrainMeshMaterial, HeightMapSettings.MinHeight, HeightMapSettings.MaxHeight);
             HeightMapSettings.ApplyToMaterial(TerrainMeshMaterial);
 

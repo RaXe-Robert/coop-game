@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Map_Generation
 {
@@ -11,21 +12,14 @@ namespace Assets.Scripts.Map_Generation
         [SerializeField]
         private WorldResourceEntry[] worldResourceEntries;
 
-        [SerializeField]
-        [Range(0, 1)]
-        private float densityThreshold;
-
         public NoiseSettings NoiseSettings => noiseSettings;
         public WorldResourceEntry[] WorldResourceEntries => worldResourceEntries;
-        public float DensityThreshold => 1f - densityThreshold;
 
 #if UNITY_EDITOR
 
         protected override void OnValidate()
         {
             NoiseSettings.ValidateValues();
-
-            densityThreshold = Mathf.Clamp(densityThreshold, 0f, 1f);
 
             base.OnValidate();
         }
@@ -38,7 +32,25 @@ namespace Assets.Scripts.Map_Generation
     {
         [SerializeField]
         private GameObject worldResourcePrefab;
-
         public GameObject WorldResourcePrefab => worldResourcePrefab;
+        
+        [SerializeField]
+        [EnumFlags]
+        private BiomeTypes biomes;
+
+        public List<int> GetBiomes()
+        {
+            List<int> selectedElements = new List<int>();
+            for (int i = 0; i < System.Enum.GetValues(typeof(BiomeTypes)).Length; i++)
+            {
+                int layer = 1 << i;
+                if (((int) biomes & layer) != 0)
+                {
+                    selectedElements.Add(i);
+                }
+            }
+
+            return selectedElements;
+        }
     }
 }
