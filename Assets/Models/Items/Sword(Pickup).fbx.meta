@@ -1,19 +1,15 @@
 fileFormatVersion: 2
-guid: 6d90a8ddfab85a1478b17efa8d8740f0
-timeCreated: 1522708067
-licenseType: Free
+guid: bb51b371a9619ac44b101237a9db4e36
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Head
-    2100002: Handle
+    2100000: Wood
+    2100002: Metal
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Head
-    7400000: Default Take
-    9500000: //RootNode
+    4300000: Sword
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -33,6 +29,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -88,7 +85,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
