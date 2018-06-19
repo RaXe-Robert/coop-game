@@ -21,9 +21,9 @@ GameObject:
   - component: {fileID: 4256760807410460}
   - component: {fileID: 33975800882331484}
   - component: {fileID: 23891957061804372}
+  - component: {fileID: 136077752498786878}
   - component: {fileID: 114887078953935060}
   - component: {fileID: 114400987669569362}
-  - component: {fileID: 64629248837855744}
   - component: {fileID: 208407444410447410}
   m_Layer: 0
   m_Name: rock
@@ -39,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1695406501947972}
   m_LocalRotation: {x: 6.4262822e-12, y: 1, z: -0.0000018318508, w: 0.0000035952676}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: 3.788, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -87,20 +87,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1695406501947972}
   m_Mesh: {fileID: 4300002, guid: 6c207fea7c0b12e449fce75b310c0517, type: 3}
---- !u!64 &64629248837855744
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1695406501947972}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 4300002, guid: 6c207fea7c0b12e449fce75b310c0517, type: 3}
 --- !u!114 &114400987669569362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -135,6 +121,19 @@ MonoBehaviour:
   attackSound: 1
   spawnOnDepleted: {fileID: 0}
   maxHealth: 100
+--- !u!136 &136077752498786878
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1695406501947972}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.97104096
+  m_Height: 1.228169
+  m_Direction: 1
+  m_Center: {x: -0.035438, y: 0.1756145, z: 0.028959006}
 --- !u!208 &208407444410447410
 NavMeshObstacle:
   m_ObjectHideFlags: 1
@@ -143,10 +142,10 @@ NavMeshObstacle:
   m_GameObject: {fileID: 1695406501947972}
   m_Enabled: 1
   serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.83500004, y: 0.614, z: 0.9710001}
+  m_Shape: 0
+  m_Extents: {x: 0.47, y: 0.5, z: 0.47}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: -0.035, y: 0.17600001, z: 0.029000001}
+  m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5

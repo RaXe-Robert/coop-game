@@ -1,10 +1,12 @@
-﻿using Photon;
+﻿using ExitGames.Client.Photon;
+using Photon;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerNetwork : PunBehaviour
 {
+    [SerializeField] private GameObject playerPrefab;
     public static string PlayerName
     {
         get { return PhotonNetwork.player.NickName; }
@@ -12,9 +14,10 @@ public class PlayerNetwork : PunBehaviour
     }
 
     public static GameObject LocalPlayer { get; private set; }
+    public static event System.Action<GameObject> OnLocalPlayerCreated;
 
     public static Dictionary<int, PlayerInfo> OtherPlayers { get; private set; }
-    public static event System.Action<PhotonView> OtherPlayerSpawned;
+    public static event System.Action<PhotonView> OnOtherPlayerCreated;
 
     private void Awake()
     {  
@@ -29,17 +32,32 @@ public class PlayerNetwork : PunBehaviour
         {
             if (PhotonNetwork.inRoom)
             {
+                // Collect all player objects
+                PlayerInputController[] playerInputControllers = FindObjectsOfType<PlayerInputController>();
+
                 foreach (var photonPlayer in PhotonNetwork.otherPlayers)
-                    OtherPlayers.Add(photonPlayer.ID, new PlayerInfo(photonPlayer));
+                {
+                    GameObject playerObject = null;
+                    foreach (var playerInputController in playerInputControllers)
+                    {
+                        if (photonPlayer.ID == playerInputController.gameObject.GetComponent<PhotonView>().ownerId)
+                        {
+                            playerObject = playerInputController.gameObject;
+                            break;
+                        }
+                    }
 
-                SpawnPlayer();
+                    OtherPlayers.Add(photonPlayer.ID, new PlayerInfo(photonPlayer) { GameObject = playerObject });
+                }
 
-                /* This is a fix for the player spawning in before the map is actually loaded in multiplayer, some of the UI stuff that is dependent on the player breaks when using this tho.
-                if (SaveDataManager.Instance.IsWorldDownloaded)
-                    SpawnPlayer();
+                // Create the player object
+                CreateLocalPlayer();
+
+                // Try to load the saved player position
+                if (SaveDataManager.Instance.SaveFilesDownloaded)
+                    LoadPlayerPosition();
                 else
-                    SaveDataManager.Instance.OnWorldDownloaded += () => { SpawnPlayer(); };
-                    */
+                    SaveDataManager.Instance.OnSaveFilesDownloaded += LoadPlayerPosition;
             }
             else
                 Debug.LogError("Trying to spawn but player is not in room!");
@@ -51,14 +69,31 @@ public class PlayerNetwork : PunBehaviour
         }
     }
 
-    public void SpawnPlayer()
+    /// <summary>
+    /// Creates the local player object. This only happens once.
+    /// </summary>
+    private void CreateLocalPlayer()
     {
-        Vector3 position = new Vector3(Random.Range(-10f , 10f), 0.2f, Random.Range(-10f, 10f));
-        LocalPlayer = PhotonNetwork.Instantiate("Player", position, Quaternion.identity, 0);
+        Vector3 position = new Vector3(Random.Range(-10f , 10f), 30f, Random.Range(-10f, 10f));
+        LocalPlayer = PhotonNetwork.Instantiate(playerPrefab.name, position, Quaternion.identity, 0);
+
+        OnLocalPlayerCreated?.Invoke(LocalPlayer);
 
         int photonViewID = LocalPlayer.GetComponent<PhotonView>().viewID;
-        PhotonNetwork.RaiseEvent(1, photonViewID, true, null);
+        PhotonNetwork.RaiseEvent(1, photonViewID, true, null); // Trigger a spawn event so that other players know of our existence.
     }
+
+    /// <summary>
+    /// Loads the saved player position and applies it to the LocalPlayer.
+    /// </summary>
+    private void LoadPlayerPosition()
+    {
+        PlayerDataLoader.PlayerData playerData = PlayerDataLoader.LoadPlayerData(PhotonNetwork.player, SaveDataManager.PlayerDataPath);
+        if ((int)PhotonNetwork.player.CustomProperties["UniqueID"] == playerData.Id)
+            LocalPlayer.transform.position = playerData.Position;
+    }
+
+    #region Photon
 
     private void PlayerSpawnEvent(byte eventcode, object content, int senderid)
     {
@@ -74,7 +109,7 @@ public class PlayerNetwork : PunBehaviour
                 else
                     OtherPlayers.Add(playerPhotonView.ownerId, new PlayerInfo(PhotonPlayer.Find(playerPhotonView.ownerId)) { GameObject = playerPhotonView.gameObject });
 
-                OtherPlayerSpawned?.Invoke(playerPhotonView);
+                OnOtherPlayerCreated?.Invoke(playerPhotonView);
             }
         }
     }
@@ -93,6 +128,8 @@ public class PlayerNetwork : PunBehaviour
         if (OtherPlayers.ContainsKey(otherPlayer.ID))
             OtherPlayers.Remove(otherPlayer.ID);
     }
+
+    #endregion //Photon
 }
 
 public class PlayerInfo

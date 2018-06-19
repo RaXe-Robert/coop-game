@@ -13,11 +13,13 @@ public class InventoryUI : MonoBehaviour {
     private EquipmentManager equipmentManager;
 
     private List<InventoryItemSlot> inventorySlots;
+    private List<GameObject> hotbarSelectionSlots;
 
     private void Start () {
         inventory = FindObjectOfType<Inventory>();
         equipmentManager = FindObjectOfType<EquipmentManager>();
         inventorySlots = new List<InventoryItemSlot>(Inventory.InventorySize + Inventory.HotbarSize);
+        hotbarSelectionSlots = new List<GameObject>();
 
         InitializeHotbar();
         InitializeInventory();
@@ -50,6 +52,7 @@ public class InventoryUI : MonoBehaviour {
             var go = Instantiate(inventorySlotPrefab, hotbarUIGo.transform);
             inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
             inventorySlots[i].Initialize(i, inventory, equipmentManager);
+            hotbarSelectionSlots.Add(inventorySlots[i].transform.parent.gameObject);
         }
     }
 
@@ -68,9 +71,9 @@ public class InventoryUI : MonoBehaviour {
         for (int i = 0; i < 10; i++)
         {
             if (num == i)
-                inventorySlots[i].transform.parent.GetComponent<Outline>().enabled = true;
+                hotbarSelectionSlots[i].GetComponent<Outline>().enabled = true;
             else
-                inventorySlots[i].transform.parent.GetComponent<Outline>().enabled = false;
+                hotbarSelectionSlots[i].GetComponent<Outline>().enabled = false;
         }
     }
 }

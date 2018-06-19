@@ -9,14 +9,13 @@ namespace Assets.Scripts.Map_Generation
         /// <summary>
         /// Generates a Perlin Noise Map
         /// </summary>
-        /// <param name="mapWidth">The width of the map.</param>
-        /// <param name="mapHeight">The height of the map.</param>
+        /// <param name="size">The width and height of the map.</param>
         /// <param name="noiseSettings">Noise Settings</param>
         /// <param name="sampleCenter">The noise offset.</param>
         /// <returns>Float[,] that contains values ranging from -1 to 1.</returns>
-        public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, NoiseSettings noiseSettings, Vector2 sampleCenter)
+        public static float[,] GenerateNoiseMap(int size, NoiseSettings noiseSettings, Vector2 sampleCenter)
         {
-            float[,] noiseMap = new float[mapWidth, mapHeight];
+            float[,] noiseMap = new float[size, size];
 
             System.Random randomNum = new System.Random(noiseSettings.seed);
             Vector2[] octaveOffsets = new Vector2[noiseSettings.octaves];
@@ -38,12 +37,12 @@ namespace Assets.Scripts.Map_Generation
             float maxLocalNoiseHeight = float.MinValue;
             float minLocalNoiseHeight = float.MaxValue;
 
-            float halfWidth = mapWidth / 2f;
-            float halfHeight = mapHeight / 2f;
+            float halfWidth = size / 2f;
+            float halfHeight = size / 2f;
 
-            for (int y = 0; y < mapWidth; y++)
+            for (int y = 0; y < size; y++)
             {
-                for (int x = 0; x < mapHeight; x++)
+                for (int x = 0; x < size; x++)
                 {
                     amplitude = 1;
                     frequency = 1;
@@ -80,9 +79,9 @@ namespace Assets.Scripts.Map_Generation
 
             if (noiseSettings.normalizeMode == NormalizeMode.Local)
             {
-                for (int y = 0; y < mapWidth; y++)
+                for (int y = 0; y < size; y++)
                 {
-                    for (int x = 0; x < mapHeight; x++)
+                    for (int x = 0; x < size; x++)
                         noiseMap[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y]);
                 }
             }

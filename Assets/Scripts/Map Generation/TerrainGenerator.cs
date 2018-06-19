@@ -18,7 +18,6 @@ namespace Assets.Scripts.Map_Generation
         private const float sqrViewerMoveThresholdForChunkPartUpdate = viewerMoveThresholdForChunkPartUpdate * viewerMoveThresholdForChunkPartUpdate;
 
         public static int Seed { get; private set; }
-        public static string WorldDataPath => SaveDataManager.Instance.WorldDataPath;
 
         public static LayerMask LayerMask;
 
@@ -56,12 +55,14 @@ namespace Assets.Scripts.Map_Generation
                 Debug.LogError("TerrainChunk does not exist");
             return null;
         }
+
+        public static Dictionary<int, BiomeResources> BiomeResources;
         
         private List<TerrainChunk> visibleTerrainChunks;
 
         public bool IsSetupFinished { get; private set; }
         public bool IsBuildingNavmesh { get; private set; }
-
+        
         private void Awake()
         {
             navMeshSurface = GetComponent<NavMeshSurface>();
@@ -81,19 +82,21 @@ namespace Assets.Scripts.Map_Generation
         {
             Seed = (int)PhotonNetwork.room.CustomProperties["seed"];
             HeightMapSettings.NoiseSettings.seed = Seed;
-            BiomeMapSettings.NoiseSettings.seed = Seed;
-            ResourceMapSettings.NoiseSettings.seed = Seed;
 
-            Debug.Log($"Generating world with seed: '{Seed}'");
+            System.Random random = new System.Random(Seed);
+            BiomeMapSettings.NoiseSettings.seed = random.Next(int.MinValue, int.MaxValue); // Generate a different seed with our worldseed
+            ResourceMapSettings.NoiseSettings.seed = random.Next(int.MinValue, int.MaxValue); // Generate a different seed with our worldseed
 
-            if (SaveDataManager.Instance.IsWorldDownloaded == false)
-                SaveDataManager.Instance.OnWorldDownloaded += () => Setup();
+            Debug.Log($"Generating world with the following seeds: HeightMap '{Seed}', BiomeMap '{BiomeMapSettings.NoiseSettings.seed}', ResourceMap '{ResourceMapSettings.NoiseSettings.seed}'.");
+
+            if (SaveDataManager.Instance.SaveFilesDownloaded == false)
+                SaveDataManager.Instance.OnSaveFilesDownloaded += () => Setup();
             else
                 Setup();
         }
 
-        private void OnEnable() => PlayerNetwork.OtherPlayerSpawned += AddSecondaryViewer;
-        private void OnDisable() => PlayerNetwork.OtherPlayerSpawned -= AddSecondaryViewer;
+        private void OnEnable() => PlayerNetwork.OnOtherPlayerCreated += AddSecondaryViewer;
+        private void OnDisable() => PlayerNetwork.OnOtherPlayerCreated -= AddSecondaryViewer;
 
         private void Update()
         {
@@ -158,6 +161,31 @@ namespace Assets.Scripts.Map_Generation
         /// </summary>
         private void Setup()
         {
+            // Collect and fill the biomes
+            Biome[] biomes = BiomeMapSettings.Biomes;
+
+            BiomeResources = new Dictionary<int, BiomeResources>();
+            for (int i = 0; i < biomes.Length; i++)
+            {
+                int biomeIndex = (int)biomes[i].BiomeType;
+
+                if (!BiomeResources.ContainsKey(biomeIndex))
+                    BiomeResources.Add(biomeIndex, new BiomeResources(biomes[i].Name, biomeIndex));
+            }
+
+            foreach (var worldResourceEntry in ResourceMapSettings.WorldResourceEntries)
+            {
+                List<int> selectedBiomes = worldResourceEntry.GetBiomes();
+
+                foreach (var selectedBiome in selectedBiomes)
+                {
+                    if (BiomeResources.ContainsKey(selectedBiome))
+                        BiomeResources[selectedBiome].worldResourceEntries.Add(worldResourceEntry);
+                    else
+                        Debug.LogError("Given biomeId does not exist!");
+                }
+            }
+
             HeightMapSettings.UpdateMeshHeights(TerrainMeshMaterial, HeightMapSettings.MinHeight, HeightMapSettings.MaxHeight);
             HeightMapSettings.ApplyToMaterial(TerrainMeshMaterial);
 

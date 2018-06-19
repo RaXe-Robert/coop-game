@@ -2,6 +2,14 @@
 
 namespace Assets.Scripts.Map_Generation
 {
+    [System.Flags]
+    public enum BiomeTypes
+    {
+        Forest = 0,
+        Grassland = 1,
+        Desert = 2,
+    }
+
     [CreateAssetMenu()]
     public class BiomeMapSettings : UpdatableData
     {
@@ -14,19 +22,17 @@ namespace Assets.Scripts.Map_Generation
         protected override void OnValidate()
         {
             NoiseSettings.ValidateValues();
-
             base.OnValidate();
         }
 
 #endif
-
     }
 
     [System.Serializable]
     public class Biome
     {
         [SerializeField]
-        private string name;
+        private BiomeTypes biomeType;
 
         [SerializeField]
         private Color color;
@@ -35,7 +41,8 @@ namespace Assets.Scripts.Map_Generation
         [Range(0, 1)]
         private float resourceDensity;
 
-        public string Name => name;
+        public BiomeTypes BiomeType => biomeType;
+        public string Name => biomeType.ToString();
         public Color Color => color;
         public float ResourceDensity => 1f - resourceDensity;
     }

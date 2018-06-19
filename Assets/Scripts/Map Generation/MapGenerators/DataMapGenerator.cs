@@ -24,7 +24,7 @@ namespace Assets.Scripts.Map_Generation
 
             // Create chunk parts 
             Dictionary<Vector2, TerrainChunkPart> chunkParts = CreateChunkParts(uniformSize, meshSettings, terrainChunk);
-            FillChunkParts(uniformSize, ref chunkParts, meshSettings, resourceMapSettings, heightMap, terrainChunk);
+            FillChunkParts(uniformSize, ref chunkParts, meshSettings, resourceMapSettings, biomeMap, heightMap, terrainChunk);
 
             return new DataMap(uniformSize, heightMap, biomeMap, chunkParts);
         }
@@ -49,9 +49,9 @@ namespace Assets.Scripts.Map_Generation
             return chunkParts;
         }
 
-        private static void FillChunkParts(int uniformSize, ref Dictionary<Vector2, TerrainChunkPart> chunkParts, MeshSettings meshSettings, ResourceMapSettings resourceMapSettings, HeightMap heightMap, TerrainChunk terrainChunk)
+        private static void FillChunkParts(int uniformSize, ref Dictionary<Vector2, TerrainChunkPart> chunkParts, MeshSettings meshSettings, ResourceMapSettings resourceMapSettings, BiomeMap biomeMap, HeightMap heightMap, TerrainChunk terrainChunk)
         {
-            ObjectPoint[] objectPoints = CreateObjectPoints(uniformSize, meshSettings, resourceMapSettings, heightMap, terrainChunk);
+            ObjectPoint[] objectPoints = CreateObjectPoints(uniformSize, meshSettings, resourceMapSettings, biomeMap, heightMap, terrainChunk);
 
             // Fill chunk parts
             for (int i = 0; i < objectPoints.Length; i++)
@@ -63,21 +63,23 @@ namespace Assets.Scripts.Map_Generation
             }
         }
 
-        public static ObjectPoint[] CreateObjectPoints(int uniformSize, MeshSettings meshSettings, ResourceMapSettings resourceMapSettings, HeightMap heightMap, TerrainChunk terrainChunk)
+        public static ObjectPoint[] CreateObjectPoints(int uniformSize, MeshSettings meshSettings, ResourceMapSettings resourceMapSettings, BiomeMap biomeMap, HeightMap heightMap, TerrainChunk terrainChunk)
         {
             string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
             
             // Try to load a save file
-            if (File.Exists(TerrainGenerator.WorldDataPath + fileName))
-                return ObjectMapLoader.LoadObjectMap(terrainChunk);
+            if (File.Exists(SaveDataManager.WorldDataPath + fileName))
+                return ObjectMapLoader.LoadObjectMap(terrainChunk, SaveDataManager.WorldDataPath).ObjectPoints;
             else
             {
-                ResourceMap resourceMap = ResourceMapGenerator.GenerateResourceMap(uniformSize, resourceMapSettings, terrainChunk.SampleCenter);
+                //ResourceMap resourceMap = ResourceMapGenerator.GenerateResourceMap(uniformSize, resourceMapSettings, terrainChunk.SampleCenter);
+
+                ResourceMap resourceMap = ResourceMapGenerator.GenerateResourceMap(uniformSize, resourceMapSettings, terrainChunk.SampleCenter, biomeMap, heightMap);
 
                 List<ObjectPoint> tempObjectPoints = new List<ObjectPoint>();
 
                 // Resource points to object points
-                foreach (var resourcePoint in resourceMap.ResourcePoints)
+                foreach (var resourcePoint in resourceMap.resourcePoints)
                 {
                     int x = resourcePoint.x;
                     int z = resourcePoint.z;
@@ -104,7 +106,7 @@ namespace Assets.Scripts.Map_Generation
 
                     Vector2 chunkPartCoords = terrainChunk.Coord * meshSettings.ChunkPartSizeRoot + new Vector2(coordX, -coordZ);
 
-                    tempObjectPoints.Add(new ObjectPoint(position, rotation, resourcePoint.WorldResourcePrefabID, chunkPartCoords.x, chunkPartCoords.y));
+                    tempObjectPoints.Add(new ObjectPoint(position, rotation, resourcePoint.biomeId, resourcePoint.worldResourcePrefabId, chunkPartCoords.x, chunkPartCoords.y));
                 }
 
                 return tempObjectPoints.ToArray();
@@ -153,16 +155,18 @@ namespace Assets.Scripts.Map_Generation
     {
         public readonly SerializableVector3 position;
         public readonly SerializableQuaternion rotation;
-        public readonly int WorldResourcePrefabID;
+        public readonly int biomeId;
+        public readonly int worldResourcePrefabId;
 
         public readonly float chunkPartCoordX;
         public readonly float chunkPartCoordZ;
 
-        public ObjectPoint(Vector3 position, Quaternion rotation, int worldResourcePrefabID, float chunkPartCoordX, float chunkPartCoordZ)
+        public ObjectPoint(Vector3 position, Quaternion rotation, int biomeId, int worldResourcePrefabId, float chunkPartCoordX, float chunkPartCoordZ)
         {
             this.position = position;
             this.rotation = rotation;
-            this.WorldResourcePrefabID = worldResourcePrefabID;
+            this.biomeId = biomeId;
+            this.worldResourcePrefabId = worldResourcePrefabId;
 
             this.chunkPartCoordX = chunkPartCoordX;
             this.chunkPartCoordZ = chunkPartCoordZ;

@@ -8,21 +8,21 @@ using Assets.Scripts.Map_Generation;
 
 public static class ObjectMapLoader
 {
-    public static void SaveObjectMap(TerrainChunk terrainChunk, ObjectPoint[] objectPoints)
+    public static void SaveObjectMap(TerrainChunk terrainChunk, ObjectPoint[] objectPoints, string path)
     {
         string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
-        Debug.Log($"Saving: {TerrainGenerator.WorldDataPath + fileName}");
+        Debug.Log($"Saving: {path + fileName}");
 
         try
         {
-            using (FileStream file = File.Create(TerrainGenerator.WorldDataPath + fileName))
+            using (FileStream file = File.Create(path + fileName))
             {
                 BinaryFormatter bf = new BinaryFormatter();
 
-                MapObjectData data = new MapObjectData
+                ObjectMapData data = new ObjectMapData
                 {
-                    objectPoints = objectPoints
+                    ObjectPoints = objectPoints
                 };
 
                 bf.Serialize(file, data);
@@ -34,33 +34,31 @@ public static class ObjectMapLoader
         }
     }
 
-    public static ObjectPoint[] LoadObjectMap(TerrainChunk terrainChunk)
+    public static ObjectMapData LoadObjectMap(TerrainChunk terrainChunk, string path)
     {
         string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
-        Debug.Log($"Loading: {TerrainGenerator.WorldDataPath + fileName}");
+        Debug.Log($"Loading: {path + fileName}");
 
         try
         {
-            using (FileStream file = File.Open(TerrainGenerator.WorldDataPath + fileName, FileMode.Open))
+            using (FileStream file = File.Open(path + fileName, FileMode.Open))
             {
                 BinaryFormatter bf = new BinaryFormatter();
 
-                MapObjectData data = (MapObjectData)bf.Deserialize(file);
-
-                return data.objectPoints;
+                return (ObjectMapData)bf.Deserialize(file);
             }
         }
         catch (IOException e)
         {
             Debug.LogError(e);
-            return new ObjectPoint[0];
+            return new ObjectMapData() { ObjectPoints = new ObjectPoint[0] };
         }
     }
 
     [System.Serializable]
-    public class MapObjectData
+    public class ObjectMapData
     {
-        public ObjectPoint[] objectPoints;
+        public ObjectPoint[] ObjectPoints;
     }
 }

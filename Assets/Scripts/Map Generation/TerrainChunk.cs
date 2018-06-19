@@ -240,7 +240,7 @@ namespace Assets.Scripts.Map_Generation
             foreach (var chunkPart in DataMap.ChunkParts)
                 objectPoints.AddRange(chunkPart.Value.ObjectPoints.Values);
 
-            ObjectMapLoader.SaveObjectMap(this, objectPoints.ToArray());
+            ObjectMapLoader.SaveObjectMap(this, objectPoints.ToArray(), SaveDataManager.WorldDataPath);
         }
     }
 

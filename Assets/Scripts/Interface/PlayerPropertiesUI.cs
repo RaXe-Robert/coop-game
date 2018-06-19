@@ -8,8 +8,8 @@ using ExitGames.Client.Photon;
 /// </summary>
 public class PlayerPropertiesUI : MonoBehaviour
 {
-    [SerializeField] private Slider healthSlider = null;
-    [SerializeField] private Slider hungerSlider = null;
+    [SerializeField] private StatusBarProgress healthSlider = null;
+    [SerializeField] private StatusBarProgress hungerSlider = null;
     
     public void Start()
     {
@@ -27,14 +27,14 @@ public class PlayerPropertiesUI : MonoBehaviour
     
     public void UpdateHealthSlider(float value)
     {
-        healthSlider.value = value;
+        healthSlider.setValue(value / 100);
         ExitGames.Client.Photon.Hashtable playerHealth = new ExitGames.Client.Photon.Hashtable() { { "Health", value }};
         PhotonNetwork.SetPlayerCustomProperties(playerHealth);
     }
 
     public void UpdateHungerSlider(float value)
     {
-        hungerSlider.value = value;
+        hungerSlider.setValue(value / 100);
         ExitGames.Client.Photon.Hashtable playerHunger = new ExitGames.Client.Photon.Hashtable() { { "Hunger", value } };
         PhotonNetwork.SetPlayerCustomProperties(playerHunger);        
     }

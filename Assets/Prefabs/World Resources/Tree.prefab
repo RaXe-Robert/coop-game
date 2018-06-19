@@ -69,9 +69,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4887057038689390}
   - component: {fileID: 95636999763926618}
+  - component: {fileID: 136967776692674998}
   - component: {fileID: 114574607019542462}
   - component: {fileID: 114126515727490142}
-  - component: {fileID: 64211466820573644}
   - component: {fileID: 208198158521228998}
   m_Layer: 0
   m_Name: Tree
@@ -242,7 +242,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1296203204362048}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 3.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4034073738903886}
@@ -294,20 +294,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1130088320862714}
   m_Mesh: {fileID: 4300004, guid: 9172200ceecc09548a26a47f97f75dd0, type: 3}
---- !u!64 &64211466820573644
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296203204362048}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 4300000, guid: 9172200ceecc09548a26a47f97f75dd0, type: 3}
 --- !u!64 &64891577423023660
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -373,9 +359,23 @@ MonoBehaviour:
   name: Tree
   requiredToolToHarvest: 0
   interactDistance: 5
+  attackSound: 0
   spawnOnDepleted: {fileID: 1496601752169784, guid: adeeea6bba3b1ed4aadd9152b0ed16db,
     type: 2}
   maxHealth: 100
+--- !u!136 &136967776692674998
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1296203204362048}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 4.956829
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.9784145, z: 0}
 --- !u!137 &137618772171973266
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -485,7 +485,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_Extents: {x: 0.05, y: 0.5, z: 0.05}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1

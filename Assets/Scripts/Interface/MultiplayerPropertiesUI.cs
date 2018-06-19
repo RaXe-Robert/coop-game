@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -54,21 +53,22 @@ public class MultiplayerPropertiesUI : Photon.MonoBehaviour {
 
     private void UpdateHealthAndHunger()
     {
-        foreach (KeyValuePair<PhotonPlayer, GameObject> kvp in currentPlayersWithObject)
+        foreach (var kvp in currentPlayersWithObject)
         {
-            Slider[] HealthAndHungerSliders = kvp.Value.GetComponentsInChildren<Slider>();
-            foreach(Slider s in HealthAndHungerSliders)
+            var bars = kvp.Value.GetComponentsInChildren<StatusBarProgress>();
+            foreach (var bar in bars)
             {
-                if (s.name == "HealthSlider")
+                if (bar.name == "Healthbar")
                 {
                     if(kvp.Key.CustomProperties["Health"] != null)
-                        s.value = (float)kvp.Key.CustomProperties["Health"];                    
-                }
-                else if(s.name == "HungerSlider")
+                        bar.setValue((float)kvp.Key.CustomProperties["Health"] / 100f);
+                } else if (bar.name == "Foodbar")
                 {
                     if (kvp.Key.CustomProperties["Hunger"] != null)
-                        s.value = (float)kvp.Key.CustomProperties["Hunger"];
+                        bar.setValue((float)kvp.Key.CustomProperties["Hunger"] / 100f);
                 }
+                else
+                    Debug.LogError("Found status bar without update.");
             }
         }
     }

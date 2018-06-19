@@ -17,7 +17,7 @@ public class SaveDataManager : Photon.PunBehaviour
 
     public static string PersistentDataPath { get; private set; }
 
-    public string RoomFolderName { get; private set; }
+    public static string RoomFolderName { get; private set; }
 
     public static string SaveFileFolder
     {
@@ -30,7 +30,7 @@ public class SaveDataManager : Photon.PunBehaviour
 #endif
         }
     }
-    public string CurrentSaveFileDataPath
+    public static string CurrentSaveFileDataPath
     {
         get
         {
@@ -38,8 +38,8 @@ public class SaveDataManager : Photon.PunBehaviour
             return $"{SaveFileFolder}{roomFolder}";
         }
     }
-    
-    public string WorldDataPath
+
+    public static string WorldDataPath
     {
         get
         {
@@ -47,12 +47,12 @@ public class SaveDataManager : Photon.PunBehaviour
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-
+            
             return path;
         }
     }
 
-    public string PlayerDataPath
+    public static string PlayerDataPath
     {
         get
         {
@@ -68,16 +68,18 @@ public class SaveDataManager : Photon.PunBehaviour
     /// <summary>
     /// Clears all event handlers after the invoke has taken place.
     /// </summary>
-    public event Action OnWorldDownloaded;
-    public bool IsWorldDownloaded { get; private set; }
-    private void SetWorldDownloaded(bool state)
+    public event Action OnSaveFilesDownloaded;
+    public bool SaveFilesDownloaded { get; private set; }
+    private void SetSaveFilesDownloaded(bool state)
     {
-        IsWorldDownloaded = state;
+        SaveFilesDownloaded = state;
 
         if (state)
         {
-            OnWorldDownloaded?.Invoke();
-            OnWorldDownloaded = null;
+            OnSaveFilesDownloaded?.Invoke();
+            OnSaveFilesDownloaded = null;
+
+            StartCoroutine(AutoSave());
 
             UpdateManifest();
         }
@@ -121,7 +123,35 @@ public class SaveDataManager : Photon.PunBehaviour
         SaveManifest(saveDataManifest);
 
         // Send the manifest to the other players
-        PhotonNetwork.RaiseEvent(0, new byte[0], true, null);
+        PhotonNetwork.RaiseEvent(0, new byte[0], true, null); // TODO: SENDING EMPTY MANIFEST (DO WE EVEN NEED TO SEND THIS?)
+    }
+
+    private IEnumerator AutoSave()
+    {
+        WaitForSeconds waitForSeconds = new WaitForSeconds(10f);
+
+        while(PhotonNetwork.inRoom)
+        {
+            yield return waitForSeconds;
+            
+            if (PhotonNetwork.inRoom)
+            {
+                Debug.Log("AUTO SAVING (CURRENTLY ONLY INCLUDES PLAYER POSITIONS)");
+
+                PlayerDataLoader.SavePlayerData(PhotonNetwork.player, PlayerNetwork.LocalPlayer.transform.position, PlayerDataPath);
+
+                var otherPlayers = PlayerNetwork.OtherPlayers;
+                foreach (var otherPlayer in otherPlayers)
+                {
+                    Vector3 pos = otherPlayer.Value.GameObject?.transform.position ?? Vector3.zero;
+
+                    PlayerDataLoader.SavePlayerData(otherPlayer.Value.PhotonPlayer, pos, PlayerDataPath);
+                }
+
+                UpdateManifest();
+            }
+
+        }
     }
 
     public SaveDataManifest[] LoadAllManifests()
@@ -184,7 +214,7 @@ public class SaveDataManager : Photon.PunBehaviour
 
             if (sender == null)
             {
-                Debug.LogWarning("Received manifest from sender but sender could not be find in scene.");
+                Debug.LogWarning("Received manifest from sender but sender could not be found in scene.");
                 return;
             }
 
@@ -204,17 +234,40 @@ public class SaveDataManager : Photon.PunBehaviour
     {
         for (int i = otherPlayersToLoad.Count - 1; i >= 0; i--)
         {
-            // Send world files
-            List<Tuple<string, byte[]>> files = FileLoader.LoadFiles(WorldDataPath);
+            // Collect world files
+            List<Tuple<string, byte[]>> worldFiles = FileLoader.LoadFiles(WorldDataPath);
 
-            if (files.Count == 0)
+            // Collect player files
+            List<Tuple<string, byte[]>> playerFiles = FileLoader.LoadFiles(PlayerDataPath);
+
+            if (worldFiles.Count == 0 && playerFiles.Count == 0)
                 photonView.RPC(nameof(SendWorldData), otherPlayersToLoad[i], "empty", null, 0);
             else
             {
-                for (int y = 0; y < files.Count; y++)
+                int filesRemaining = worldFiles.Count + playerFiles.Count;
+
+                Debug.Log($"Sending {filesRemaining} files to new player");
+
+                foreach (var file in worldFiles)
                 {
-                    photonView.RPC(nameof(SendWorldData), otherPlayersToLoad[i], files[y].Item1, files[y].Item2, files.Count - y - 1);
-                    yield return new WaitForSecondsRealtime(0.02f);
+                    if (otherPlayersToLoad[i] == null)
+                        break;
+
+                    filesRemaining--;
+
+                    photonView.RPC(nameof(SendWorldData), otherPlayersToLoad[i], file.Item1, file.Item2, filesRemaining);
+                    yield return new WaitForSecondsRealtime(0.02f); // Delay to prevent the players from lagging out
+                }
+
+                foreach (var file in playerFiles)
+                {
+                    if (otherPlayersToLoad[i] == null)
+                        break;
+
+                    filesRemaining--;
+
+                    photonView.RPC(nameof(SendPlayerData), otherPlayersToLoad[i], file.Item1, file.Item2, filesRemaining);
+                    yield return new WaitForSecondsRealtime(0.02f); // Delay to prevent the players from lagging out
                 }
             }
 
@@ -225,7 +278,7 @@ public class SaveDataManager : Photon.PunBehaviour
     [PunRPC]
     private void SendWorldData(string fileName, byte[] data, int filesRemaining)
     {
-        if (IsWorldDownloaded)
+        if (SaveFilesDownloaded)
             return;
 
         if (data != null && data.Length > 0)
@@ -236,7 +289,24 @@ public class SaveDataManager : Photon.PunBehaviour
         }
 
         if (filesRemaining == 0)
-            SetWorldDownloaded(true);
+            SetSaveFilesDownloaded(true);
+    }
+
+    [PunRPC]
+    private void SendPlayerData(string fileName, byte[] data, int filesRemaining)
+    {
+        if (SaveFilesDownloaded)
+            return;
+
+        if (data != null && data.Length > 0)
+        {
+            Debug.Log($"Saving: {PlayerDataPath + fileName}");
+
+            WriteToFile(fileName, PlayerDataPath, data);
+        }
+
+        if (filesRemaining == 0)
+            SetSaveFilesDownloaded(true);
     }
 
     private void WriteToFile(string fileName, string path, byte[] content)
@@ -278,9 +348,9 @@ public class SaveDataManager : Photon.PunBehaviour
         RoomFolderName = $"{(string)PhotonNetwork.room.CustomProperties["saveName"]}";
 
         if (PhotonNetwork.isMasterClient)
-            SetWorldDownloaded(true);
+            SetSaveFilesDownloaded(true);
         else
-            SetWorldDownloaded(false);
+            SetSaveFilesDownloaded(false);
 
     }
 
@@ -288,7 +358,7 @@ public class SaveDataManager : Photon.PunBehaviour
     {
         playerManifests = null;
 
-        SetWorldDownloaded(false);
+        SetSaveFilesDownloaded(false);
     }
 
     #endregion //Photon Callbacks

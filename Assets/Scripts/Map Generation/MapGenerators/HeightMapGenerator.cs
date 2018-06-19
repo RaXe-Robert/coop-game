@@ -7,7 +7,7 @@ namespace Assets.Scripts.Map_Generation
     {
         public static HeightMap GenerateHeightMap(int size, HeightMapSettings settings, Vector2 sampleCenter)
         {
-            float[,] values = Noise.GenerateNoiseMap(size, size, settings.NoiseSettings, sampleCenter);
+            float[,] values = Noise.GenerateNoiseMap(size, settings.NoiseSettings, sampleCenter);
 
             AnimationCurve heightCurve_threadSafe = new AnimationCurve(settings.HeightCurve.keys);
 

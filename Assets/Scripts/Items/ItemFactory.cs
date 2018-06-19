@@ -36,7 +36,7 @@ public class ItemFactory : MonoBehaviour {
     public static void CreateWorldObject(Vector3 position, string itemId, int stackSize = 1, Quaternion quaternion = new Quaternion())
     {
         var photonId = PhotonNetwork.AllocateViewID();
-        photonView.RPC("SpawnItemOnNetwork", PhotonTargets.AllBuffered, position, photonId, itemId, quaternion, stackSize);
+        photonView.RPC(nameof(SpawnItemOnNetwork), PhotonTargets.AllBuffered, position, photonId, itemId, quaternion, stackSize);
     }
 
     [PunRPC]
@@ -50,8 +50,11 @@ public class ItemFactory : MonoBehaviour {
         var itemMesh = item.Model.GetComponent<MeshFilter>().sharedMesh;
 
         var gameObj = Instantiate(go, position, quaternion);
-        gameObj.GetComponent<ItemWorldObject>().Item = item;
         gameObj.name = item.Name;
+        gameObj.transform.SetParent(WorldItemManager.Instance.transform);
+        
+        ItemWorldObject itemWorldObject = gameObj.GetComponent<ItemWorldObject>();
+        itemWorldObject.Item = item;
 
         //Assign the mesh and materials to the new gameObject.
         gameObj.GetComponent<MeshRenderer>().sharedMaterials = item.Model.GetComponent<MeshRenderer>().sharedMaterials;
@@ -64,5 +67,7 @@ public class ItemFactory : MonoBehaviour {
 
         PhotonView[] nViews = gameObj.GetComponentsInChildren<PhotonView>();
         nViews[0].viewID = photonId;
+
+        WorldItemManager.Instance.AddItem(photonId);
     }
 }

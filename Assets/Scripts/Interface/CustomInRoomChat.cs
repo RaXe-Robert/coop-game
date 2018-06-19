@@ -27,8 +27,6 @@ public class CustomInRoomChat : Photon.MonoBehaviour
     private float resetWaitTime;
     private float fadeScale = 0.1F;
     private CanvasGroup canvasGroup;
-    
-    public static readonly string ChatRPC = "Chat";
 
     public void Awake()
     {
