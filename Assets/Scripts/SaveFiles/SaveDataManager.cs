@@ -82,12 +82,13 @@ public class SaveDataManager : Photon.PunBehaviour
             UpdateManifest();
 
             if (IsAutoSaveActive)
-                StopCoroutine(AutoSave());
-            StartCoroutine(AutoSave());
+                StopCoroutine(autoSaveCoroutine);
+            autoSaveCoroutine = StartCoroutine(AutoSave());
         }
     }
 
-    public bool IsAutoSaveActive { get; private set; }
+    private Coroutine autoSaveCoroutine;
+    public bool IsAutoSaveActive => autoSaveCoroutine != null;
 
     private void Awake()
     {
@@ -136,8 +137,6 @@ public class SaveDataManager : Photon.PunBehaviour
 
         while(PhotonNetwork.inRoom)
         {
-            IsAutoSaveActive = true;
-
             yield return waitForSeconds;
             
             if (PhotonNetwork.inRoom)

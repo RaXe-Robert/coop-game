@@ -76,7 +76,7 @@ public class PlayerNetwork : PunBehaviour
     /// </summary>
     private void CreateLocalPlayer()
     {
-        Vector3 position = new Vector3(Random.Range(-10f , 10f), 0f, Random.Range(-10f, 10f));
+        Vector3 position = new Vector3(Random.Range(-100f , 100f), 0f, Random.Range(-100f, 100f));
         LocalPlayer = PhotonNetwork.Instantiate(playerPrefab.name, position, Quaternion.identity, 0);
 
         OnLocalPlayerCreated?.Invoke(LocalPlayer);
@@ -104,22 +104,37 @@ public class PlayerNetwork : PunBehaviour
 
     private IEnumerator PlacePlayerOnTerrain()
     {
+        WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
+
+        Vector3 spawnPos = LocalPlayer.transform.position;
+
         // This loop is necessary because we don't know when the terrain is actually created.
         while (true)
         {
-            yield return new WaitForSeconds(0.1f);
-
-            Vector3 rayStartPos = LocalPlayer.transform.position;
-            rayStartPos.y = 10000;
+            yield return waitForSeconds;
+            
+            spawnPos.y = 1000;
 
             RaycastHit raycastHitInfo;
-            if (Physics.Raycast(new Ray(rayStartPos, Vector3.down), out raycastHitInfo, Mathf.Infinity, TerrainGenerator.LayerMask))
+            if (Physics.Raycast(new Ray(spawnPos, Vector3.down), out raycastHitInfo, Mathf.Infinity, TerrainGenerator.LayerMask))
             {
-                LocalPlayer.transform.position = raycastHitInfo.point;
-                break;
+                TerrainChunkInteraction terrainChunkInteraction = raycastHitInfo.collider.gameObject.GetComponent<TerrainChunkInteraction>();
+                if (terrainChunkInteraction != null)
+                {
+                    TerrainInfo terrainInfo = terrainChunkInteraction.GetTerrainInfoFromWorldPoint(raycastHitInfo.point.x, raycastHitInfo.point.z);
+                    if (terrainInfo.Layer.IsWater)
+                    {
+                        waitForSeconds = new WaitForSeconds(0f); // Reduce waiting time since terrain is loaded.
+                        spawnPos = new Vector3(Random.Range(-100f, 100f), 0f, Random.Range(-100f, 100f));
+                    }
+                    else
+                    {
+                        LocalPlayer.transform.position = raycastHitInfo.point;
+                        break;
+                    }
+                }
             }
         }
-
     }
 
     #region Photon
