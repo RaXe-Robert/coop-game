@@ -50,7 +50,7 @@ public class ItemFactory : MonoBehaviour {
         var itemMesh = item.Model.GetComponent<MeshFilter>().sharedMesh;
 
         var gameObj = Instantiate(go, position, quaternion);
-        gameObj.GetComponent<ItemWorldObject>().item = item;
+        gameObj.GetComponent<ItemWorldObject>().Item = item;
         gameObj.name = item.Name;
 
         //Assign the mesh and materials to the new gameObject.
