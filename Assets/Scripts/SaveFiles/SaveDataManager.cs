@@ -79,11 +79,15 @@ public class SaveDataManager : Photon.PunBehaviour
             OnSaveFilesDownloaded?.Invoke();
             OnSaveFilesDownloaded = null;
 
-            StartCoroutine(AutoSave());
-
             UpdateManifest();
+
+            if (IsAutoSaveActive)
+                StopCoroutine(AutoSave());
+            StartCoroutine(AutoSave());
         }
     }
+
+    public bool IsAutoSaveActive { get; private set; }
 
     private void Awake()
     {
@@ -132,6 +136,8 @@ public class SaveDataManager : Photon.PunBehaviour
 
         while(PhotonNetwork.inRoom)
         {
+            IsAutoSaveActive = true;
+
             yield return waitForSeconds;
             
             if (PhotonNetwork.inRoom)
@@ -202,8 +208,6 @@ public class SaveDataManager : Photon.PunBehaviour
         string json = JsonUtility.ToJson(saveDataManifest);
 
         WriteToFile($"{RoomFolderName}.manifest", SaveFileFolder, System.Text.Encoding.UTF8.GetBytes(json));
-
-        Debug.Log($"Saving manifest '{saveDataManifest.Name}': {json}");
     }
 
     private void OnManifestUpdateEvent(byte eventcode, object content, int senderid)

@@ -3,6 +3,8 @@ using Photon;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Assets.Scripts.Map_Generation;
+using System.Collections;
 
 public class PlayerNetwork : PunBehaviour
 {
@@ -74,7 +76,7 @@ public class PlayerNetwork : PunBehaviour
     /// </summary>
     private void CreateLocalPlayer()
     {
-        Vector3 position = new Vector3(Random.Range(-10f , 10f), 30f, Random.Range(-10f, 10f));
+        Vector3 position = new Vector3(Random.Range(-10f , 10f), 0f, Random.Range(-10f, 10f));
         LocalPlayer = PhotonNetwork.Instantiate(playerPrefab.name, position, Quaternion.identity, 0);
 
         OnLocalPlayerCreated?.Invoke(LocalPlayer);
@@ -84,13 +86,40 @@ public class PlayerNetwork : PunBehaviour
     }
 
     /// <summary>
-    /// Loads the saved player position and applies it to the LocalPlayer.
+    /// Loads the saved player position and applies it to the LocalPlayer, if no position was loaded then the players Y position will be set to the terrain height.
     /// </summary>
     private void LoadPlayerPosition()
     {
         PlayerDataLoader.PlayerData playerData = PlayerDataLoader.LoadPlayerData(PhotonNetwork.player, SaveDataManager.PlayerDataPath);
         if ((int)PhotonNetwork.player.CustomProperties["UniqueID"] == playerData.Id)
             LocalPlayer.transform.position = playerData.Position;
+        else
+        {
+            if (TerrainGenerator.IsSetupFinished)
+                StartCoroutine(PlacePlayerOnTerrain());
+            else
+                TerrainGenerator.OnSetupFinished += () => { StartCoroutine(PlacePlayerOnTerrain()); };
+        }
+    }
+
+    private IEnumerator PlacePlayerOnTerrain()
+    {
+        // This loop is necessary because we don't know when the terrain is actually created.
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            Vector3 rayStartPos = LocalPlayer.transform.position;
+            rayStartPos.y = 10000;
+
+            RaycastHit raycastHitInfo;
+            if (Physics.Raycast(new Ray(rayStartPos, Vector3.down), out raycastHitInfo, Mathf.Infinity, TerrainGenerator.LayerMask))
+            {
+                LocalPlayer.transform.position = raycastHitInfo.point;
+                break;
+            }
+        }
+
     }
 
     #region Photon

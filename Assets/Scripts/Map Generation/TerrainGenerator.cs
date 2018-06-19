@@ -60,7 +60,9 @@ namespace Assets.Scripts.Map_Generation
         
         private List<TerrainChunk> visibleTerrainChunks;
 
-        public bool IsSetupFinished { get; private set; }
+        public static bool IsSetupFinished { get; private set; }
+        public static event System.Action OnSetupFinished;
+
         public bool IsBuildingNavmesh { get; private set; }
         
         private void Awake()
@@ -198,6 +200,7 @@ namespace Assets.Scripts.Map_Generation
             UpdateVisibleChunks();
 
             IsSetupFinished = true;
+            OnSetupFinished?.Invoke();
         }
 
         /// <summary>
