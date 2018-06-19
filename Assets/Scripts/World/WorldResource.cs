@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
-
 using Assets.Scripts.Map_Generation;
 
 [RequireComponent(typeof(Animator), typeof(ItemsToDropComponent))]
@@ -47,7 +45,7 @@ public class WorldResource : MonoBehaviour, IInteractable
 
     public bool InRange(Vector3 invokerPosition) => Vector3.Distance(invokerPosition, transform.position) < interactDistance;
 
-    public void Interact(GameObject invoker)
+    public void Interact(GameObject invoker, Item item)
     {
         if (!InRange(invoker.transform.position))
             return;
@@ -61,16 +59,16 @@ public class WorldResource : MonoBehaviour, IInteractable
             return;
         }
         
-
-        //TODO: refactor this to use hotbar selected item
-        //var equipmentManager = PlayerNetwork.LocalPlayer.GetComponent<EquipmentManager>();
-        //if (!equipmentManager.HasToolEquipped(requiredToolToHarvest))
-        //{
-        //    WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1));
-        //    return;
-        //}
-
-        WorldResourceManager.Instance.DecreaseHealth(this, TerrainChunk, 50f);
+        if(item?.GetType() == typeof(Tool))
+        {
+            Tool tool = item as Tool;
+            if(tool.ToolType == RequiredToolToHarvest)
+                WorldResourceManager.Instance.DecreaseHealth(this, TerrainChunk, 50f);
+            else
+                WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, $"Requires a {RequiredToolToHarvest} to harvest", 1));
+        }        
+        else
+            WorldNotificationsManager.Instance.ShowLocalNotification(new WorldNotificationArgs(transform.position, $"Requires a {RequiredToolToHarvest} to harvest", 1));
     }
 
     public string TooltipText => $"{name} \nRequires {requiredToolToHarvest}";

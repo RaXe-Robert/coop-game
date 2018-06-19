@@ -18,7 +18,8 @@ public class ItemOutput : ItemSlot
 
     public override void OnDrop(PointerEventData eventData)
     {
-        //This shouldn't be allowed;
+        //This shouldn't be allowed this slot is only used for output
+        return;
     }
 
     public Item TakeItem()

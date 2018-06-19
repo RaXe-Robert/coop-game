@@ -23,6 +23,7 @@ public class InventoryUI : MonoBehaviour {
         InitializeInventory();
 
         inventory.OnItemChangedCallback += UpdateUI;
+        inventory.OnHotbarChangedCallback += UpdateHotbarSelection;
 	}
 
     public void UpdateUI()
@@ -59,6 +60,17 @@ public class InventoryUI : MonoBehaviour {
             var go = Instantiate(inventorySlotPrefab, inventoryUIGo.transform);
             inventorySlots.Add(go.GetComponentInChildren<InventoryItemSlot>());
             inventorySlots[i].Initialize(i, inventory, equipmentManager);
+        }
+    }
+
+    private void UpdateHotbarSelection(int num)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            if (num == i)
+                inventorySlots[i].transform.parent.GetComponent<Outline>().enabled = true;
+            else
+                inventorySlots[i].transform.parent.GetComponent<Outline>().enabled = false;
         }
     }
 }

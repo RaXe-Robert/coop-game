@@ -52,10 +52,6 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public virtual void OnDrag(PointerEventData eventData)
     {
-        //We only want draggin on left mousebutton
-        if (eventData.button != PointerEventData.InputButton.Left)
-            return;
-
         if (currentItem == null)
             return;
 
@@ -64,10 +60,6 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public virtual void OnEndDrag(PointerEventData eventData)
     {
-        //We only want draggin on left mousebutton
-        if (eventData.button != PointerEventData.InputButton.Left)
-            return;
-
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
         transform.SetParent(initialParentTransform);

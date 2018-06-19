@@ -20,7 +20,7 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
     public GameObject GameObject => gameObject;
     public bool InRange(Vector3 invokerPosition) => Vector3.Distance(invokerPosition, transform.position) < pickupDistance;
 
-    public void Interact(GameObject invoker)
+    public void Interact(GameObject invoker, Item item)
     {
         if (!InRange(invoker.transform.position))
             return;

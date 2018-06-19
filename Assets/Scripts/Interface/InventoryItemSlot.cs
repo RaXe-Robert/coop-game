@@ -66,6 +66,13 @@ public class InventoryItemSlot : ItemSlot {
                 chestReference.RemoveItemAtIndex(fromChest.index);
         }
 
+        ItemOutput fromOutput;
+        if((fromOutput = eventData.pointerDrag.GetComponent<ItemOutput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromOutput.CurrentItem.Id, index, fromOutput.CurrentItem.StackSize);
+            fromOutput.CurrentItem = null;
+        }
+
         InventoryItemSlot from;
         //Check what gets dropped on this.
         if (!(@from = eventData.pointerDrag.GetComponent<ItemSlot>() as InventoryItemSlot))

@@ -19,6 +19,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private PlayerCameraController cameraController = null;
     private PlayerStatsComponent stats;
     private PlayerCombatController combatController;
+    private Inventory inventory;
 
     public GameObject CurrentInteraction { get; set; }
 
@@ -45,6 +46,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         cameraController = GetComponent<PlayerCameraController>();
         stats = GetComponent<PlayerStatsComponent>();
         combatController = GetComponent<PlayerCombatController>();
+        inventory = GetComponent<Inventory>();
     }
 
     private void Start()
@@ -150,7 +152,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         var enemy = CurrentInteraction.GetComponent<IAttackable>();
         if (interactable != null && interactable.InRange(transform.position))
         {
-            interactable.Interact(gameObject);
+            interactable.Interact(gameObject, inventory.inventoryItems[inventory.hotBarSelection] ?? null);
             StopInteraction();
         }
         else if(enemy != null && Vector3.Distance(transform.position, enemy.GameObject.transform.position) < 3 && CanInteract)
