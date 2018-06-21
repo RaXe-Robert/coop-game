@@ -24,6 +24,7 @@ public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
         canvas = FindObjectOfType<Canvas>();
 
         furnaceInterface = Instantiate(furnaceInterfaceprefab, canvas.transform);
+        furnaceInterface.transform.SetSiblingIndex(0);
         furnaceInterface.SetActive(false);
 
         //TODO: Maybe find a better way than this.

@@ -58,7 +58,7 @@ public class GameInterfaceManager : MonoBehaviour
                 ToggleGivenDisableOthers(GameInterface.Equipment);
                 break;
             case GameInterface.Inventory:
-                inventoryUI.transform.position = new Vector3(0, 0, 0);
+                inventoryUI.transform.localPosition = new Vector3(0, 0, 0);
                 ToggleGivenDisableOthers(GameInterface.Inventory);
                 break;
             case GameInterface.EscapeMenu:
