@@ -12,7 +12,7 @@ public static class ObjectMapLoader
     {
         string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
-        Debug.Log($"Saving: {path + fileName}");
+        // Debug.Log($"Saving: {path + fileName}");
 
         try
         {
@@ -38,7 +38,7 @@ public static class ObjectMapLoader
     {
         string fileName = $"chunkInfo{terrainChunk.Coord.x}{terrainChunk.Coord.y}.dat";
 
-        Debug.Log($"Loading: {path + fileName}");
+        // Debug.Log($"Loading: {path + fileName}");
 
         try
         {

@@ -8,7 +8,7 @@ public static class PlayerDataLoader
     {
         string fileName = $"player{(int)player.CustomProperties["UniqueID"]}.dat";
 
-        Debug.Log($"Saving: {path + fileName}");
+        // Debug.Log($"Saving: {path + fileName}");
 
         try
         {
@@ -35,7 +35,7 @@ public static class PlayerDataLoader
     {
         string fileName = $"player{player.CustomProperties["UniqueID"]}.dat";
 
-        Debug.Log($"Loading: {path + fileName}");
+        // Debug.Log($"Loading: {path + fileName}");
 
         try
         {
@@ -51,7 +51,7 @@ public static class PlayerDataLoader
             Debug.LogError(e);
             return new PlayerData()
             {
-                Id = (int)player.CustomProperties["UniqueID"],
+                Id = -1,
                 Position = Vector3.zero
             };
         }
