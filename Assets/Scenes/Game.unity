@@ -1096,6 +1096,16 @@ Prefab:
       propertyPath: instantiationId
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114352064440319934, guid: 5532080ea1fd73441974a8cfdc8eb424,
+        type: 2}
+      propertyPath: detailLevels.Array.data[0].VisibleDistanceThreshold
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114352064440319934, guid: 5532080ea1fd73441974a8cfdc8eb424,
+        type: 2}
+      propertyPath: detailLevels.Array.data[1].VisibleDistanceThreshold
+      value: 200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5532080ea1fd73441974a8cfdc8eb424, type: 2}
   m_IsPrefabParent: 0
