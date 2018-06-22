@@ -7,6 +7,7 @@ public class ItemFactory : MonoBehaviour {
 
     private static Dictionary<string, ScriptableItemData> itemLookupTable;
     private static PhotonView photonView;
+    [SerializeField]private GameObject itemEffect;
 
     private void Awake()
     {
@@ -52,7 +53,10 @@ public class ItemFactory : MonoBehaviour {
         var gameObj = Instantiate(go, position, quaternion);
         gameObj.name = item.Name;
         gameObj.transform.SetParent(WorldItemManager.Instance.transform);
-        
+
+        var itemEffectObj = Instantiate(itemEffect, position, quaternion);
+        itemEffectObj.transform.SetParent(gameObj.transform);
+
         ItemWorldObject itemWorldObject = gameObj.GetComponent<ItemWorldObject>();
         itemWorldObject.item = item;
 

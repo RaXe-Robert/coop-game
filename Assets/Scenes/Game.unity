@@ -1234,7 +1234,7 @@ Prefab:
     - target: {fileID: 224057074025410616, guid: 9e68aabeaeb36b44992d8654f3295e13,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000062958443
+      value: -0.0000033089711
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9e68aabeaeb36b44992d8654f3295e13, type: 2}
@@ -2227,6 +2227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb120a6069d466d4f813e6e0bb20c715, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemEffect: {fileID: 1282028427108786, guid: 4c873c9e60231c049be32cafc6d7e1b4, type: 2}
 --- !u!4 &1488939788
 Transform:
   m_ObjectHideFlags: 0
