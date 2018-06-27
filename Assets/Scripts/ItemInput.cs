@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class ItemInput : ItemSlot
 {
+    protected Furnace furnace;
+
     public delegate void OnItemUsed();
     public OnItemUsed OnItemUsedCallback;
+
+    public virtual void Initialize(Furnace furnace)
+    {
+        this.furnace = furnace;
+    }
 
     protected override void Start()
     {

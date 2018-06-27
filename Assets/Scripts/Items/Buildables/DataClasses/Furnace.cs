@@ -4,41 +4,64 @@ using Photon;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
+public class Furnace : BuildableWorldObject {
     [SerializeField] private CraftingList availableRecipes;
-    [SerializeField] private GameObject furnaceInterfaceprefab;
-
-    private Canvas canvas;
-    private GameObject furnaceInterface;
+    
     private float meltingProgress;
 
-    public FuelInput FuelInput { get; set; }
     public float BurningTime { get; set; }
+
+    public FuelInput FuelInput { get; set; }
     public ItemInput ItemInput { get; set; }
-    public Item CurrentItem { get; set; }
     public ItemOutput ItemOutput { get; set; }
+    public Item CurrentItem { get; set; }
+
+    public delegate void OnItemChanged();
+    public OnItemChanged OnItemChangedCallback;
 
     protected override void Start()
     {
         base.Start();
-        canvas = FindObjectOfType<Canvas>();
+        SetFields();
+    }
 
-        furnaceInterface = Instantiate(furnaceInterfaceprefab, canvas.transform);
-        furnaceInterface.transform.SetSiblingIndex(0);
-        furnaceInterface.SetActive(false);
-
-        //TODO: Maybe find a better way than this.
-        FuelInput = furnaceInterface.GetComponentInChildren<FuelInput>();
-        ItemInput = furnaceInterface.GetComponentInChildren<ItemInput>();
-        ItemOutput = furnaceInterface.GetComponentInChildren<ItemOutput>();
+    public void SetFields()
+    {
+        FuelInput = new FuelInput();
+        ItemInput = new ItemInput();
+        ItemOutput = new ItemOutput();
     }
 
     protected override UnityAction[] InitializeActions()
     {
         return new UnityAction[]
         {
-            new UnityAction(OpenInterface)
+            new UnityAction(OpenFurnace),
+            new UnityAction(CloseFurnace)
         };
+    }
+
+    protected override void Pickup()
+    {
+        // If null the action will be cancelled
+        if (BuildableInteractionMenu.Instance?.Target == null)
+            return;
+
+        CloseFurnace();
+        BuildableInteractionMenu.Instance.Target.DestroyWorldObject();
+
+        //Should drop the stuff in the furnace when it gets picked up.
+        //DropAllItems();
+    }
+
+    private void OpenFurnace()
+    {
+        FurnaceUI.Instance.OpenFurnace(this);
+    }
+
+    private void CloseFurnace()
+    {
+        FurnaceUI.Instance.CloseChest();
     }
 
     private void Update()
@@ -54,19 +77,23 @@ public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
             return;
 
         meltingProgress += BurningTime > 0 ? Time.deltaTime : -Time.deltaTime;
-        if(meltingProgress >= 5)
+        if (meltingProgress >= 5)
         {
             ItemOutput.DepositItem(ItemFactory.CreateNewItem(CurrentItem.MeltingResult.Id, 1));
             meltingProgress = 0;
             CurrentItem = null;
+            OnItemChangedCallback?.Invoke();
         }
     }
 
     private void HandleItems()
     {
-        if(CurrentItem == null && BurningTime > 0)
-            if(ItemInput?.CurrentItem?.MeltingResult != null)
+        if (CurrentItem == null && BurningTime > 0)
+            if (ItemInput?.CurrentItem?.MeltingResult != null)
+            {
                 CurrentItem = ItemInput.TakeItem();
+                OnItemChangedCallback?.Invoke();
+            }
     }
 
     private void HandleFuel()
@@ -76,24 +103,14 @@ public class Furnace : BuildableWorldObject, IFuelInput, IItemInput {
         {
             BurningTime += FuelInput.CurrentItem.BurningTime;
             FuelInput.TakeFuel();
+            OnItemChangedCallback?.Invoke();
         }
-        else if(BurningTime > 0)
+        else if (BurningTime > 0)
             BurningTime -= Time.deltaTime;
     }
 
     private void OpenInterface()
     {
-        GameInterfaceManager.Instance.AddInterface(furnaceInterface, GameInterface.Furnace);
         GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Furnace);
-    }
-
-    protected override void Pickup()
-    {
-        // If null the action will be cancelled
-        if (BuildableInteractionMenu.Instance?.Target == null)
-            return;
-
-        BuildableInteractionMenu.Instance.Target.DestroyWorldObject();
-        GameInterfaceManager.Instance.CloseAllInterfaces();
     }
 }

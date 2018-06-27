@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu, Controls, DeathScreen, Furnace }
+public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu, Controls, DeathScreen, Furnace, Chest }
 
 public class GameInterfaceManager : MonoBehaviour
 {
@@ -72,6 +72,9 @@ public class GameInterfaceManager : MonoBehaviour
                 break;
             case GameInterface.Furnace:
                 ToggleGivenAndInventory(GameInterface.Furnace);
+                break;
+            case GameInterface.Chest:
+                ToggleGivenAndInventory(GameInterface.Chest);
                 break;
         }
 

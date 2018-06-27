@@ -67,7 +67,7 @@ public class InventoryItemSlot : ItemSlot {
         }
 
         ItemSlot fromOutput;
-        if((fromOutput = eventData.pointerDrag.GetComponent<ItemSlot>()) != null)
+        if((fromOutput = eventData.pointerDrag.GetComponent<ItemOutput>()) != null)
         {
             inventory.AddItemAtIndex(fromOutput.CurrentItem.Id, index, fromOutput.CurrentItem.StackSize);
             fromOutput.CurrentItem = null;

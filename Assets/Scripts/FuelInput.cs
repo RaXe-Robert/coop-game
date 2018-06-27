@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class FuelInput : ItemSlot {
+public class FuelInput : ItemSlot
+{
+    protected Furnace furnace;
 
     public delegate void OnItemUsed();
     public OnItemUsed OnItemUsedCallback;
+
+    public virtual void Initialize(Furnace furnace)
+    {
+        this.furnace = furnace;
+    }
 
     protected override void Start()
     {

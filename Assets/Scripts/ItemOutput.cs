@@ -7,8 +7,15 @@ using UnityEngine.EventSystems;
 
 public class ItemOutput : ItemSlot
 {
+    protected Furnace furnace;
+
     public delegate void OnItemUsed();
     public OnItemUsed OnItemUsedCallback;
+
+    public virtual void Initialize(Furnace furnace)
+    {
+        this.furnace = furnace;
+    }
 
     protected override void Start()
     {
@@ -16,10 +23,40 @@ public class ItemOutput : ItemSlot
         OnItemUsedCallback += UpdateUI;
     }
 
+    public override void OnBeginDrag(PointerEventData eventData)
+    {
+        base.OnBeginDrag(eventData);
+    }
+
+    public override void OnDrag(PointerEventData eventData)
+    {
+        base.OnDrag(eventData);
+    }
+
+    public override void OnEndDrag(PointerEventData eventData)
+    {
+        base.OnEndDrag(eventData);
+    }
+
     public override void OnDrop(PointerEventData eventData)
     {
         //This shouldn't be allowed this slot is only used for output
         return;
+    }
+
+    public override void OnPointerClick(PointerEventData eventData)
+    {
+        base.OnPointerClick(eventData);
+    }
+
+    public override void OnPointerEnter(PointerEventData eventData)
+    {
+        base.OnPointerEnter(eventData);
+    }
+
+    public override void OnPointerExit(PointerEventData eventData)
+    {
+        base.OnPointerExit(eventData);
     }
 
     public Item TakeItem()

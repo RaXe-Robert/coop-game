@@ -71,10 +71,10 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
 
     public virtual void OnPointerClick(PointerEventData eventData)
-    {
+    {       
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         if (currentItem == null)
             return;
@@ -82,7 +82,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         Tooltip.Instance.Show(currentItem.Name, currentItem.Description);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         Tooltip.Instance.Hide();
     }
