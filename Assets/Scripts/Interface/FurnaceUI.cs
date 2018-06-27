@@ -13,12 +13,14 @@ public class FurnaceUI : MonoBehaviour {
     [SerializeField] private GameObject itemInputSlotPrefab;
     [SerializeField] private GameObject itemOutputSlotPrefab;
 
+    [SerializeField] private StatusBarProgress progressBar = null;
+
     public static FurnaceUI Instance { get; private set; }
 
     private Furnace furnace;
-    public FuelInput fuelInput;
-    public ItemInput itemInput;
-    public ItemOutput itemOutput;
+    public FuelInput FuelInput;
+    public ItemInput ItemInput;
+    public ItemOutput ItemOutput;
 
     private GameObject goFuelInputSlot;
     private GameObject goItemInputSlot;
@@ -41,26 +43,27 @@ public class FurnaceUI : MonoBehaviour {
 
     public void UpdateUI()
     {
-        if (fuelInput != null)
-            fuelInput.CurrentItem = furnace.FuelInput.CurrentItem;
-        if (itemInput != null)
-            itemInput.CurrentItem = furnace.ItemInput.CurrentItem;
-        if (itemOutput != null)
-            itemOutput.CurrentItem = furnace.ItemOutput.CurrentItem;
+        if (furnace.FuelItem != null)
+            FuelInput.CurrentItem = furnace.FuelItem;
         else
-        {
-            fuelInput.Clear();
-            itemInput.Clear();
-            itemOutput.Clear();
-        }
+            FuelInput.Clear();
+        if (furnace.InputItem != null)
+            ItemInput.CurrentItem = furnace.InputItem;
+        else
+            ItemInput.Clear();
+        if (furnace.OutputItem != null)
+            ItemOutput.CurrentItem = furnace.OutputItem;
+        else
+            ItemOutput.Clear();
+    }
+
+    public void UpdateProgressBar()
+    {
+        progressBar.SetValue(furnace.MeltingProgress / 5F);
     }
 
     private void InitializeFurnace()
     {
-        fuelInput = new FuelInput();
-        itemInput = new ItemInput();
-        itemOutput = new ItemOutput();
-
         if(goFuelInputSlot != null)
         {
             Destroy(goFuelInputSlot);
@@ -75,17 +78,17 @@ public class FurnaceUI : MonoBehaviour {
         }
 
         goFuelInputSlot = Instantiate(fuelInputSlotPrefab, fuelInputPrefab.transform);
-        fuelInput = goFuelInputSlot.GetComponentInChildren<FuelInput>();
+        FuelInput = goFuelInputSlot.GetComponentInChildren<FuelInput>();
 
         goItemInputSlot = Instantiate(itemInputSlotPrefab, itemInputPrefab.transform);
-        itemInput = goItemInputSlot.GetComponentInChildren<ItemInput>();
+        ItemInput = goItemInputSlot.GetComponentInChildren<ItemInput>();
 
         goItemOutputSlot = Instantiate(itemOutputSlotPrefab, itemOutputPrefab.transform);
-        itemOutput = goItemOutputSlot.GetComponentInChildren<ItemOutput>();
+        ItemOutput = goItemOutputSlot.GetComponentInChildren<ItemOutput>();
 
-        fuelInput.Initialize(furnace);
-        itemInput.Initialize(furnace);
-        itemOutput.Initialize(furnace);
+        FuelInput.Initialize(furnace);
+        ItemInput.Initialize(furnace);
+        ItemOutput.Initialize(furnace);
 
         UpdateUI();
     }
@@ -95,11 +98,14 @@ public class FurnaceUI : MonoBehaviour {
         furnace = f;
         InitializeFurnace();
         furnace.OnItemChangedCallback += UpdateUI;
+        furnace.OnMeltingCallback += UpdateProgressBar;
         GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Furnace);
     }
 
     public void CloseChest()
     {
+        furnace.OnItemChangedCallback -= UpdateUI;
+        furnace.OnMeltingCallback -= UpdateProgressBar;
         GameInterfaceManager.Instance.CloseAllInterfaces();
     }
 }

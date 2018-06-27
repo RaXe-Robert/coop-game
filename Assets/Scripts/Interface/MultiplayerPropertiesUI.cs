@@ -61,11 +61,11 @@ public class MultiplayerPropertiesUI : Photon.MonoBehaviour {
                 if (bar.name == "Healthbar")
                 {
                     if(kvp.Key.CustomProperties["Health"] != null)
-                        bar.setValue((float)kvp.Key.CustomProperties["Health"] / 100f);
+                        bar.SetValue((float)kvp.Key.CustomProperties["Health"] / 100f);
                 } else if (bar.name == "Foodbar")
                 {
                     if (kvp.Key.CustomProperties["Hunger"] != null)
-                        bar.setValue((float)kvp.Key.CustomProperties["Hunger"] / 100f);
+                        bar.SetValue((float)kvp.Key.CustomProperties["Hunger"] / 100f);
                 }
                 else
                     Debug.LogError("Found status bar without update.");

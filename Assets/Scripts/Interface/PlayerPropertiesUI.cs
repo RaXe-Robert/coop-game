@@ -27,14 +27,14 @@ public class PlayerPropertiesUI : MonoBehaviour
     
     public void UpdateHealthSlider(float value)
     {
-        healthSlider.setValue(value / 100);
+        healthSlider.SetValue(value / 100);
         ExitGames.Client.Photon.Hashtable playerHealth = new ExitGames.Client.Photon.Hashtable() { { "Health", value }};
         PhotonNetwork.SetPlayerCustomProperties(playerHealth);
     }
 
     public void UpdateHungerSlider(float value)
     {
-        hungerSlider.setValue(value / 100);
+        hungerSlider.SetValue(value / 100);
         ExitGames.Client.Photon.Hashtable playerHunger = new ExitGames.Client.Photon.Hashtable() { { "Hunger", value } };
         PhotonNetwork.SetPlayerCustomProperties(playerHunger);        
     }

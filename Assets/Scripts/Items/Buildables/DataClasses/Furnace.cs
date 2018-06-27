@@ -7,30 +7,20 @@ using UnityEngine.Events;
 public class Furnace : BuildableWorldObject {
     [SerializeField] private CraftingList availableRecipes;
     
-    private float meltingProgress;
-
+    public float MeltingProgress;
     public float BurningTime { get; set; }
+    
+    public Item FuelItem;
+    public Item InputItem;
+    public Item OutputItem;
 
-    public FuelInput FuelInput { get; set; }
-    public ItemInput ItemInput { get; set; }
-    public ItemOutput ItemOutput { get; set; }
     public Item CurrentItem { get; set; }
 
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;
 
-    protected override void Start()
-    {
-        base.Start();
-        SetFields();
-    }
-
-    public void SetFields()
-    {
-        FuelInput = new FuelInput();
-        ItemInput = new ItemInput();
-        ItemOutput = new ItemOutput();
-    }
+    public delegate void OnMelting();
+    public OnMelting OnMeltingCallback;
 
     protected override UnityAction[] InitializeActions()
     {
@@ -65,7 +55,7 @@ public class Furnace : BuildableWorldObject {
     }
 
     private void Update()
-    {
+    {    
         HandleItems();
         HandleFuel();
         HandleMeltingProgress();
@@ -76,34 +66,35 @@ public class Furnace : BuildableWorldObject {
         if (BurningTime <= 0 || CurrentItem == null)
             return;
 
-        meltingProgress += BurningTime > 0 ? Time.deltaTime : -Time.deltaTime;
-        if (meltingProgress >= 5)
+        MeltingProgress += BurningTime > 0 ? Time.deltaTime : -Time.deltaTime;
+        if (MeltingProgress >= 5)
         {
-            ItemOutput.DepositItem(ItemFactory.CreateNewItem(CurrentItem.MeltingResult.Id, 1));
-            meltingProgress = 0;
+            MeltingProgress = 0;
+            DepositItem(ItemFactory.CreateNewItem(CurrentItem.MeltingResult.Id, 1));            
             CurrentItem = null;
-            OnItemChangedCallback?.Invoke();
         }
+        
+        OnMeltingCallback?.Invoke();
     }
 
     private void HandleItems()
     {
         if (CurrentItem == null && BurningTime > 0)
-            if (ItemInput?.CurrentItem?.MeltingResult != null)
+        {
+            if (InputItem?.MeltingResult != null)
             {
-                CurrentItem = ItemInput.TakeItem();
-                OnItemChangedCallback?.Invoke();
+                CurrentItem = TakeItem();
             }
+        }
     }
 
     private void HandleFuel()
     {
         //If we have no remaining fuel but there is some left in the furnace and there is a meltable item we can start consuming fuel.
-        if (BurningTime <= 0 && FuelInput.CurrentItem != null && ItemInput?.CurrentItem?.MeltingResult != null)
+        if (BurningTime <= 0 && FuelItem != null && InputItem?.MeltingResult != null)
         {
-            BurningTime += FuelInput.CurrentItem.BurningTime;
-            FuelInput.TakeFuel();
-            OnItemChangedCallback?.Invoke();
+            BurningTime += FuelItem.BurningTime;
+            TakeFuel();
         }
         else if (BurningTime > 0)
             BurningTime -= Time.deltaTime;
@@ -112,5 +103,49 @@ public class Furnace : BuildableWorldObject {
     private void OpenInterface()
     {
         GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Furnace);
+    }
+
+    public Item TakeItem()
+    {
+        if (InputItem == null)
+            return null;
+        else
+        {
+            if (InputItem.StackSize > 1)
+                InputItem.StackSize--;
+            else
+                InputItem = null;
+
+            OnItemChangedCallback?.Invoke();
+            return ItemFactory.CreateNewItem(InputItem.Id);
+        }
+    }
+
+    public void TakeFuel()
+    {
+        if (FuelItem == null)
+            return;
+        else
+        {
+            if (FuelItem.StackSize > 1)
+                FuelItem.StackSize--;
+            else
+                FuelItem = null;
+
+            OnItemChangedCallback?.Invoke();
+        }
+    }
+
+    public void DepositItem(Item itemToDeposit)
+    {
+        if (OutputItem != null)
+        {
+            if (itemToDeposit.Id != OutputItem?.Id)
+                return;
+            OutputItem.StackSize += itemToDeposit.StackSize;
+        }
+        else OutputItem = itemToDeposit;
+
+        OnItemChangedCallback?.Invoke();
     }
 }

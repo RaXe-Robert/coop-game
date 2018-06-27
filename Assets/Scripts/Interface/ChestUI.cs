@@ -73,6 +73,7 @@ public class ChestUI : MonoBehaviour {
 
     public void CloseChest()
     {
+        chest.OnItemChangedCallback -= UpdateUI;
         GameInterfaceManager.Instance.CloseAllInterfaces();
     }
 }

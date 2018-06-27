@@ -9,19 +9,12 @@ using UnityEngine.EventSystems;
 public class ItemInput : ItemSlot
 {
     protected Furnace furnace;
-
-    public delegate void OnItemUsed();
-    public OnItemUsed OnItemUsedCallback;
+    private Sprite initialImage;
 
     public virtual void Initialize(Furnace furnace)
     {
         this.furnace = furnace;
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-        OnItemUsedCallback += UpdateUI;
+        initialImage = image.sprite;
     }
 
     public override void OnDrop(PointerEventData eventData)
@@ -31,22 +24,16 @@ public class ItemInput : ItemSlot
             var from = eventData.pointerDrag.GetComponent<InventoryItemSlot>();
             CurrentItem = eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem;
             PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemAtIndex(from.index);
+            furnace.InputItem = currentItem;
         }
     }
 
-    public Item TakeItem()
+    public override void OnEndDrag(PointerEventData eventData)
     {
-        if (CurrentItem == null)
-            return null;
-        else
-        {
-            if (CurrentItem.StackSize > 1)
-                CurrentItem.StackSize--;
-            else
-                CurrentItem = null;
-
-            OnItemUsedCallback?.Invoke();
-            return ItemFactory.CreateNewItem(CurrentItem.Id);
-        }
+        canvasGroup.blocksRaycasts = true;
+        canvasGroup.interactable = true;
+        transform.SetParent(initialParentTransform);
+        transform.localPosition = Vector3.zero;
+        furnace.InputItem = currentItem;
     }
 }

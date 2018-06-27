@@ -66,11 +66,25 @@ public class InventoryItemSlot : ItemSlot {
                 chestReference.RemoveItemAtIndex(fromChest.index);
         }
 
-        ItemSlot fromOutput;
+        ItemOutput fromOutput;
         if((fromOutput = eventData.pointerDrag.GetComponent<ItemOutput>()) != null)
         {
             inventory.AddItemAtIndex(fromOutput.CurrentItem.Id, index, fromOutput.CurrentItem.StackSize);
             fromOutput.CurrentItem = null;
+        }
+
+        ItemInput fromInput;
+        if ((fromInput = eventData.pointerDrag.GetComponent<ItemInput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromInput.CurrentItem.Id, index, fromInput.CurrentItem.StackSize);
+            fromInput.CurrentItem = null;
+        }
+
+        FuelInput fromFuel;
+        if ((fromFuel = eventData.pointerDrag.GetComponent<FuelInput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromFuel.CurrentItem.Id, index, fromFuel.CurrentItem.StackSize);
+            fromFuel.CurrentItem = null;
         }
 
         InventoryItemSlot from;

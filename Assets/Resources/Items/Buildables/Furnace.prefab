@@ -141,6 +141,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactDistance: 3
-  availableRecipes: {fileID: 0}
-  furnaceInterfaceprefab: {fileID: 1498033677889854, guid: eb19bd41daaceef44afd71e1152a5629,
-    type: 2}
+  availableRecipes: {fileID: 11400000, guid: f6e6f11ee42c65045b0ad429c0983faa, type: 2}
