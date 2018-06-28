@@ -27,6 +27,7 @@ public class CraftingUI : MonoBehaviour, IPointerEnterHandler
         craftingManager = FindObjectOfType<CraftingManager>();
 
         currentCrafts = new List<CraftingTooltip>();
+        ShowCraftingQueue(false);
 
         craftingManager.OnCraftAddedCallback += AddToVisualCraftingQueue;
         craftingManager.OnCraftCompletedCallback += RemoveFromVisualCraftingQueue;
@@ -40,6 +41,7 @@ public class CraftingUI : MonoBehaviour, IPointerEnterHandler
 
     private void AddToVisualCraftingQueue(CraftingRecipe recipe)
     {
+        ShowCraftingQueue(true);
         CraftingTooltip craftingTooltip = Instantiate(craftingQueueItemPrefab, craftingQueue.transform).GetComponent<CraftingTooltip>();
         craftingTooltip.Initialize(recipe);
         currentCrafts.Add(craftingTooltip);
@@ -53,11 +55,19 @@ public class CraftingUI : MonoBehaviour, IPointerEnterHandler
 
         Destroy(currentCrafts[0].gameObject);
         currentCrafts.RemoveAt(0);
+
+        if (currentCrafts.Count == 0)
+            ShowCraftingQueue(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         Tooltip.Instance.Hide();
+    }
+
+    private void ShowCraftingQueue(bool shouldShow)
+    {
+        craftingQueue.SetActive(shouldShow);
     }
 }
 

@@ -20,7 +20,8 @@ public class ChestUI : MonoBehaviour {
     }
 
     private void Start()
-    {        
+    {
+        GameInterfaceManager.Instance.AddInterface(chestUI, GameInterface.Chest);
         equipmentManager = FindObjectOfType<EquipmentManager>();
 
         if(chest != null)
@@ -67,11 +68,12 @@ public class ChestUI : MonoBehaviour {
         chest = c;
         InitializeChest();
         chest.OnItemChangedCallback += UpdateUI;
-        chestUI.SetActive(true);
+        GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Chest);
     }
 
     public void CloseChest()
     {
-        chestUI.SetActive(false);
+        chest.OnItemChangedCallback -= UpdateUI;
+        GameInterfaceManager.Instance.CloseAllInterfaces();
     }
 }

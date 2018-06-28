@@ -13,6 +13,11 @@ public class Inventory : MonoBehaviour
     public ScriptableItemData stick;
     public List<Item> inventoryItems;
     private PhotonView photonView;
+    private KeyCode[] alphaKeys;
+    public int hotBarSelection;
+
+    public delegate void OnHotbarChanged(int num);
+    public OnHotbarChanged OnHotbarChangedCallback;
 
     public delegate void OnItemChanged();
     public OnItemChanged OnItemChangedCallback;
@@ -26,6 +31,8 @@ public class Inventory : MonoBehaviour
     {
         inventoryItems = new List<Item>(new Item[InventorySize + HotbarSize]);
         photonView = GetComponent<PhotonView>();
+        alphaKeys = new KeyCode[10] { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5, KeyCode.Alpha6, KeyCode.Alpha7, KeyCode.Alpha8, KeyCode.Alpha9, KeyCode.Alpha0 };
+        SelectHotBar(0);
     }
 
     private void Update()
@@ -33,13 +40,34 @@ public class Inventory : MonoBehaviour
         if (!photonView.isMine)
             return;
 
+        HandleHotBarSelection();
+
+
 #if UNITY_EDITOR
         if (InputManager.GetButtonDown("Spawn item"))
         {
             AddItemById(stick.Id, 64);
             AddItemById(diamond.Id, 64);
+            AddItemById("resource_ironOre", 64);
         }
 #endif
+    }
+
+    private void HandleHotBarSelection()
+    {
+        for (int i = 0; i < alphaKeys.Length; i++)
+        {
+            if (Input.GetKeyDown(alphaKeys[i]))
+            {
+                SelectHotBar(i);
+            }
+        }
+    }
+
+    private void SelectHotBar(int number)
+    {
+        hotBarSelection = number;
+        OnHotbarChangedCallback?.Invoke(number);
     }
 
     private void AddNewItemStackById(string itemId, int stackSize)
@@ -291,15 +319,12 @@ public class Inventory : MonoBehaviour
     {
         if(index < 0 || inventoryItems[index] != null)
         {
-            Debug.LogError("Inventory -- AddItemAtIndex -- invalid index");
-            AddItemById(itemId, stackSize);
+            index = inventoryItems.FirstNullIndexAt().Value;
         }
-        else
-        {
-            Item item = ItemFactory.CreateNewItem(itemId, stackSize);
-            inventoryItems[index] = item;
-            OnItemChangedCallback?.Invoke();
-        }
+        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
+        inventoryItems[index] = item;
+        OnItemChangedCallback?.Invoke();
+        SoundManager.Instance.PlaySound(SoundManager.Sound.PICKUP);
     }
 
     /// <summary>

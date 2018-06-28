@@ -16,3 +16,4 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 077c6d87b07260c4eafb9aaad562317c, type: 3}
   model: {fileID: 100000, guid: ae17df6390ac2664d951dde1d052f187, type: 3}
   description: Like those chopsticks?
+  burningTime: 5

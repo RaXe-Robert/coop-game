@@ -85,6 +85,7 @@ public class Tooltip : MonoBehaviour
 
         if (description == string.Empty)
             this.description.gameObject.SetActive(false);
+        else this.description.gameObject.SetActive(true);
     }
 
     /// <summary>

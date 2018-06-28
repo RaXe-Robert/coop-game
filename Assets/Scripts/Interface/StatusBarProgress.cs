@@ -6,7 +6,7 @@ public class StatusBarProgress : MonoBehaviour
 {
 	public GameObject innerMask;
 	
-	public void setValue(float value)
+	public void SetValue(float value)
 	{
 		var yScale = innerMask.transform.localScale.y;
 		var zScale = innerMask.transform.localScale.z;

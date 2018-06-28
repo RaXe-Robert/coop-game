@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu, Controls, DeathScreen }
+public enum GameInterface { Inventory, Crafting, Equipment, EscapeMenu, Controls, DeathScreen, Furnace, Chest }
 
 public class GameInterfaceManager : MonoBehaviour
 {
@@ -42,6 +43,12 @@ public class GameInterfaceManager : MonoBehaviour
     {
         if (playerCombatController.IsDead) return;
 
+        if (!interfaceGameObjectDictionary.ContainsKey(interfaceToToggle))
+        {
+            Debug.LogError($"Tried to open interface {interfaceToToggle} but it couldn't be found");
+            return;
+        }
+
         switch (interfaceToToggle)
         {
             case GameInterface.Crafting:
@@ -51,6 +58,7 @@ public class GameInterfaceManager : MonoBehaviour
                 ToggleGivenDisableOthers(GameInterface.Equipment);
                 break;
             case GameInterface.Inventory:
+                inventoryUI.transform.localPosition = new Vector3(0, 0, 0);
                 ToggleGivenDisableOthers(GameInterface.Inventory);
                 break;
             case GameInterface.EscapeMenu:
@@ -61,6 +69,12 @@ public class GameInterfaceManager : MonoBehaviour
                 break;
             case GameInterface.DeathScreen:
                 ToggleGivenDisableOthers(GameInterface.DeathScreen);
+                break;
+            case GameInterface.Furnace:
+                ToggleGivenAndInventory(GameInterface.Furnace);
+                break;
+            case GameInterface.Chest:
+                ToggleGivenAndInventory(GameInterface.Chest);
                 break;
         }
 
@@ -99,6 +113,36 @@ public class GameInterfaceManager : MonoBehaviour
                 panel.Value.SetActive(false);
             else
                 panel.Value.SetActive(!panel.Value.activeSelf);
+        }
+    }
+
+    public void AddInterface(GameObject interfaceGO, GameInterface gameInterface)
+    {
+        if (!interfaceGameObjectDictionary.ContainsKey(gameInterface))
+        {
+            interfaceGameObjectDictionary.Add(gameInterface, interfaceGO);
+        }        
+    }
+
+    private void ToggleGivenAndInventory(GameInterface gameInterface)
+    {
+        if (IsAnyInterfaceOpen())
+            CloseAllInterfaces();
+
+        foreach (var panel in interfaceGameObjectDictionary)
+        {
+            if (panel.Key == GameInterface.Inventory)
+            {
+                panel.Value.SetActive(true);
+                panel.Value.transform.localPosition = new Vector3(-175, 0, 0);
+            }
+            else if (panel.Key == gameInterface)
+            {
+                panel.Value.SetActive(true);
+                panel.Value.transform.localPosition = new Vector3(175, 0, 0);
+            }
+            else
+                panel.Value.SetActive(false);
         }
     }
 }

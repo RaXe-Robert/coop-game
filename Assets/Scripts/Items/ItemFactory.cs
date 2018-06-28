@@ -58,7 +58,7 @@ public class ItemFactory : MonoBehaviour {
         itemEffectObj.transform.SetParent(gameObj.transform);
 
         ItemWorldObject itemWorldObject = gameObj.GetComponent<ItemWorldObject>();
-        itemWorldObject.item = item;
+        itemWorldObject.Item = item;
 
         //Assign the mesh and materials to the new gameObject.
         gameObj.GetComponent<MeshRenderer>().sharedMaterials = item.Model.GetComponent<MeshRenderer>().sharedMaterials;
