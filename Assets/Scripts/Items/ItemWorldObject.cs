@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
 {
-    public Item item;
+    public Item Item;
     public float pickupDistance = 1f;
     
     #region IInteractable Implementation
@@ -14,7 +14,7 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
     public GameObject GameObject => gameObject;
     public bool InRange(Vector3 invokerPosition) => Vector3.Distance(invokerPosition, transform.position) < pickupDistance;
 
-    public void Interact(GameObject invoker)
+    public void Interact(GameObject invoker, Item interactionItem)
     {
         if (!InRange(invoker.transform.position))
             return;
@@ -24,15 +24,15 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
         // Check if inventory is not full
         if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
         {
-            inventory.AddItemById(item.Id, item.StackSize);
-            FeedUI.Instance.AddFeedItem("Picked up " + item.Name, item.Sprite, FeedItem.Type.Succes);
+            inventory.AddItemById(Item.Id, Item.StackSize);
+            FeedUI.Instance.AddFeedItem("Picked up " + Item.Name, Item.Sprite, FeedItem.Type.Succes);
             WorldItemManager.Instance.RemoveItem(photonView.viewID);
         }
         else
             FeedUI.Instance.AddFeedItem("Inventory full", feedType: FeedItem.Type.Fail);
     }
 
-    public string TooltipText => $"{item.Name} ({item.StackSize})";
+    public string TooltipText => $"{Item.Name} ({Item.StackSize})";
 
     #endregion //IInteractable Implementation
 }

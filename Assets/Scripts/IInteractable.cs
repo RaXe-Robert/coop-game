@@ -6,6 +6,6 @@ public interface IInteractable : ITooltip
     GameObject GameObject { get; }
 
     bool InRange(Vector3 invokerLocation);
-    void Interact(GameObject invoker);
+    void Interact(GameObject invoker, Item item);
 }
 

@@ -26,7 +26,7 @@ public class Chest : BuildableWorldObject
         BuildingController = FindObjectOfType<BuildingController>();
     }
 
-    private void Start()
+    protected override void Start()
     {
         chestItems = new List<Item>(new Item[ChestSize]);
         Actions = new List<UnityAction>();

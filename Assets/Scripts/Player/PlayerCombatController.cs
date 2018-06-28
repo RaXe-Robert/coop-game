@@ -32,7 +32,7 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
             GetComponent<Inventory>().DropAllItems();
             GetComponent<PlayerMovementController>().enabled = false;
         }
-        photonView.RPC(nameof(KillPlayer), PhotonTargets.All, Name, lastAttacker.Name);
+        photonView.RPC(nameof(KillPlayer), PhotonTargets.All, Name, lastAttacker == null ? "hunger" : lastAttacker.Name);
     }
 
     public void TakeHit(IAttacker attacker)

@@ -17,6 +17,6 @@ MonoBehaviour:
   model: {fileID: 100000, guid: 432738de40f61704dac1e2e0e088f8ed, type: 3}
   description: A campfire
   recoverable: 1
-  snapToGrid: 0
+  snapToGrid: 1
   prefabToSpawn: {fileID: 1312758526846642, guid: 6cbe520a2b43c294eae50d3118e1da03,
     type: 2}
