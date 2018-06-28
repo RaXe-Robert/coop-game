@@ -84,4 +84,4 @@ Material:
     - _GridColor: {r: 0, g: 0.95862055, b: 1, a: 1}
     - _GridColour: {r: 0.5, g: 1, b: 1, a: 1}
     - _OutsideColor: {r: 0, g: 0, b: 0, a: 0}
-    - _Point: {r: -217.5, g: 6.6740193, b: -162.5, a: 0}
+    - _Point: {r: -220, g: 6.8351965, b: -167.5, a: 0}
