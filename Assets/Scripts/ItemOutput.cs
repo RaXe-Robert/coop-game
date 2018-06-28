@@ -27,10 +27,21 @@ public class ItemOutput : ItemSlot
 
     public override void OnEndDrag(PointerEventData eventData)
     {
+        //We only want draggin on left mousebutton
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
         transform.SetParent(initialParentTransform);
         transform.localPosition = Vector3.zero;
         furnace.OutputItem = currentItem;
+
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, currentItem.Id, currentItem.StackSize);
+        furnace.OutputItem = null;
+        CurrentItem = null;
     }
 }

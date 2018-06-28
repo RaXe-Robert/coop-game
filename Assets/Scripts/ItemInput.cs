@@ -17,9 +17,22 @@ public class ItemInput : ItemSlot
         initialImage = image.sprite;
     }
 
+    public override void OnBeginDrag(PointerEventData eventData)
+    {
+        //We only want draggin on left mousebutton
+        if (eventData.button != PointerEventData.InputButton.Left || currentItem == null)
+            return;
+
+        initialParentTransform = transform.parent;
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
+        transform.SetParent(transform.parent.parent.parent);
+        furnace.InputItem = null;
+    }
+
     public override void OnDrop(PointerEventData eventData)
     {
-        if (eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem.MeltingResult != null)
+        if (eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem.MeltingResult != null && furnace.InputItem == null)
         {
             var from = eventData.pointerDrag.GetComponent<InventoryItemSlot>();
             CurrentItem = eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem;
@@ -30,10 +43,21 @@ public class ItemInput : ItemSlot
 
     public override void OnEndDrag(PointerEventData eventData)
     {
+        //We only want draggin on left mousebutton
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
         transform.SetParent(initialParentTransform);
         transform.localPosition = Vector3.zero;
         furnace.InputItem = currentItem;
+
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, currentItem.Id, currentItem.StackSize);
+        furnace.InputItem = null;
+        CurrentItem = null;
     }
 }

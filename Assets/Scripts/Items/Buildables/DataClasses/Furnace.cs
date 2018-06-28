@@ -63,7 +63,7 @@ public class Furnace : BuildableWorldObject {
 
     private void HandleMeltingProgress()
     {
-        if (BurningTime <= 0 || CurrentItem == null)
+        if (BurningTime <= 0 || CurrentItem == null || InputItem == null)
             return;
 
         MeltingProgress += BurningTime > 0 ? Time.deltaTime : -Time.deltaTime;

@@ -91,6 +91,7 @@ public class FurnaceUI : MonoBehaviour {
         ItemOutput.Initialize(furnace);
 
         UpdateUI();
+        UpdateProgressBar();
     }
 
     public void OpenFurnace(Furnace f)
