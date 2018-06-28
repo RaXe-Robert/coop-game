@@ -41,7 +41,7 @@ public class Furnace : BuildableWorldObject {
         BuildableInteractionMenu.Instance.Target.DestroyWorldObject();
 
         //Should drop the stuff in the furnace when it gets picked up.
-        //DropAllItems();
+        DropAllItems();
     }
 
     private void OpenFurnace()
@@ -145,6 +145,27 @@ public class Furnace : BuildableWorldObject {
             OutputItem.StackSize += itemToDeposit.StackSize;
         }
         else OutputItem = itemToDeposit;
+
+        OnItemChangedCallback?.Invoke();
+    }
+
+    public void DropAllItems()
+    {
+        if (FuelItem != null)
+        {
+            ItemFactory.CreateWorldObject(transform.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2)), FuelItem.Id, FuelItem.StackSize);
+            FuelItem = null;
+        }
+        if (InputItem != null)
+        {
+            ItemFactory.CreateWorldObject(transform.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2)), InputItem.Id, InputItem.StackSize);
+            InputItem = null;
+        }
+        if (OutputItem != null)
+        {
+            ItemFactory.CreateWorldObject(transform.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2)), OutputItem.Id, OutputItem.StackSize);
+            OutputItem = null;
+        }
 
         OnItemChangedCallback?.Invoke();
     }
