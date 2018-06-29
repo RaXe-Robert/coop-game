@@ -1,7 +1,9 @@
-﻿using Assets.Scripts.Utilities;
+﻿using System;
+using Assets.Scripts.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Inventory : MonoBehaviour
 {
@@ -41,6 +43,7 @@ public class Inventory : MonoBehaviour
             return;
 
         HandleHotBarSelection();
+        HandleHotBarScroll();
 
 
 #if UNITY_EDITOR
@@ -53,6 +56,25 @@ public class Inventory : MonoBehaviour
 #endif
     }
 
+    private void HandleHotBarScroll()
+    {
+        if(InputManager.GetButton("Zoom Modifier"))
+            return;
+
+        var scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (-0.01 < scroll && scroll < 0.01)
+            return;
+
+        var slots = alphaKeys.Length;
+        var nextSlot = scroll > 0 ? hotBarSelection+1 : hotBarSelection-1;
+        if (nextSlot < 0)
+            nextSlot = 0;
+        else if (nextSlot > slots - 1)
+            nextSlot = slots - 1;
+        
+        SelectHotBar(nextSlot);
+    }
+    
     private void HandleHotBarSelection()
     {
         for (int i = 0; i < alphaKeys.Length; i++)
