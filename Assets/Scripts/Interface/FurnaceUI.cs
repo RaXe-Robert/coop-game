@@ -103,7 +103,7 @@ public class FurnaceUI : MonoBehaviour {
         GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.Furnace);
     }
 
-    public void CloseChest()
+    public void CloseFurnace()
     {
         furnace.OnItemChangedCallback -= UpdateUI;
         furnace.OnMeltingCallback -= UpdateProgressBar;

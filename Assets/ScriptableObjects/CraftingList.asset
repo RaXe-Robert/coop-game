@@ -13,50 +13,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recipes:
   - requiredItems:
-    - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      amount: 2
-    result:
-      item: {fileID: 11400000, guid: 20ef82f7e4cfdbc45951d094469b28ba, type: 2}
-      amount: 1
-    craftingTime: 2
-    amountToCraft: 1
-  - requiredItems:
-    - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      amount: 1
-    result:
-      item: {fileID: 11400000, guid: c71e0df1fa7c69f4ead96b523c899cd3, type: 2}
-      amount: 1
-    craftingTime: 2
-    amountToCraft: 1
-  - requiredItems:
-    - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-      amount: 1
-    result:
-      item: {fileID: 11400000, guid: d77d6ef02105b1949b526e4b31bf77c0, type: 2}
-      amount: 1
-    craftingTime: 1
-    amountToCraft: 1
-  - requiredItems:
     - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
       amount: 1
     result:
-      item: {fileID: 11400000, guid: dbc72aac1fe670e4294582287f895cd4, type: 2}
-      amount: 1
-    craftingTime: 1
-    amountToCraft: 1
-  - requiredItems:
-    - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 1
-    result:
-      item: {fileID: 11400000, guid: 14aa087df25a4334e8edf8a330d402ed, type: 2}
-      amount: 1
-    craftingTime: 1
-    amountToCraft: 1
-  - requiredItems:
-    - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 1
-    result:
-      item: {fileID: 11400000, guid: 7340dc85277f461488fe292c8b28c24f, type: 2}
+      item: {fileID: 11400000, guid: f2fadac984907db4999b62d1b5f682f8, type: 2}
       amount: 1
     craftingTime: 1
     amountToCraft: 1
@@ -64,15 +24,7 @@ MonoBehaviour:
     - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
       amount: 1
     result:
-      item: {fileID: 11400000, guid: bb5ff79e0ec4b5849ba20d75b8464028, type: 2}
-      amount: 1
-    craftingTime: 1
-    amountToCraft: 1
-  - requiredItems:
-    - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-      amount: 1
-    result:
-      item: {fileID: 11400000, guid: 749dc97ca91ef574b9848c4beae9f418, type: 2}
+      item: {fileID: 11400000, guid: d77d6ef02105b1949b526e4b31bf77c0, type: 2}
       amount: 1
     craftingTime: 1
     amountToCraft: 1
@@ -93,10 +45,66 @@ MonoBehaviour:
     craftingTime: 1
     amountToCraft: 1
   - requiredItems:
+    - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+      amount: 2
+    result:
+      item: {fileID: 11400000, guid: 20ef82f7e4cfdbc45951d094469b28ba, type: 2}
+      amount: 1
+    craftingTime: 2
+    amountToCraft: 1
+  - requiredItems:
     - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
       amount: 2
     result:
       item: {fileID: 11400000, guid: 2489c8ba533146847bb05f050cc216ad, type: 2}
       amount: 1
     craftingTime: 2
-    amountToCraft: 0
+    amountToCraft: 1
+  - requiredItems:
+    - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+      amount: 1
+    result:
+      item: {fileID: 11400000, guid: c71e0df1fa7c69f4ead96b523c899cd3, type: 2}
+      amount: 1
+    craftingTime: 2
+    amountToCraft: 1
+  - requiredItems:
+    - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
+      amount: 1
+    result:
+      item: {fileID: 11400000, guid: dbc72aac1fe670e4294582287f895cd4, type: 2}
+      amount: 1
+    craftingTime: 1
+    amountToCraft: 1
+  - requiredItems:
+    - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
+      amount: 1
+    result:
+      item: {fileID: 11400000, guid: 14aa087df25a4334e8edf8a330d402ed, type: 2}
+      amount: 1
+    craftingTime: 1
+    amountToCraft: 1
+  - requiredItems:
+    - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
+      amount: 1
+    result:
+      item: {fileID: 11400000, guid: bb5ff79e0ec4b5849ba20d75b8464028, type: 2}
+      amount: 1
+    craftingTime: 1
+    amountToCraft: 1
+  - requiredItems:
+    - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
+      amount: 1
+    result:
+      item: {fileID: 11400000, guid: 749dc97ca91ef574b9848c4beae9f418, type: 2}
+      amount: 1
+    craftingTime: 1
+    amountToCraft: 1
+  - requiredItems:
+    - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
+      amount: 1
+    result:
+      item: {fileID: 11400000, guid: 7340dc85277f461488fe292c8b28c24f, type: 2}
+      amount: 1
+    craftingTime: 1
+    amountToCraft: 1

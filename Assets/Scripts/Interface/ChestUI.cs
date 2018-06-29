@@ -8,7 +8,7 @@ public class ChestUI : MonoBehaviour {
 
     public static ChestUI Instance { get; private set; }
 
-    private Chest chest;
+    public Chest chest;
     private EquipmentManager equipmentManager;
     private List<ChestItemSlot> chestSlots;
     private List<GameObject> goChestSlots;

@@ -61,7 +61,7 @@ public class InventoryItemSlot : ItemSlot {
         {
             inventory.AddItemAtIndex(fromChest.CurrentItem.Id, index, fromChest.CurrentItem.StackSize);
 
-            Chest chestReference = BuildableInteractionMenu.Instance.Target as Chest;
+            Chest chestReference = ChestUI.Instance.chest;            
             if (chestReference != null)
                 chestReference.RemoveItemAtIndex(fromChest.index);
         }

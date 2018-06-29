@@ -53,24 +53,20 @@ public class Chest : BuildableWorldObject
 
         if (IsOpened && IsLocalPlayerUser)
         {
-            if (BuildableInteractionMenu.Instance.Target != this)
+            if(!InRange(PlayerNetwork.LocalPlayer.gameObject.transform.position))
             {
                 CloseChest();
                 return;
             }
-        }  
+        }
     }
 
     protected override void Pickup()
     {
         if (user == null || IsLocalPlayerUser)
         {            
-            // If null the action will be cancelled
-            if (BuildableInteractionMenu.Instance?.Target == null)
-                return;
-
             CloseChest();
-            BuildableInteractionMenu.Instance.Target.DestroyWorldObject();
+            DestroyWorldObject();
             DropAllItems();
         }
         else
