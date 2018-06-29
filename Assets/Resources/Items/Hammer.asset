@@ -16,4 +16,6 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 74974f1ffcdb2374ca36d4c082d13ff8, type: 3}
   model: {fileID: 100000, guid: e498afe9584ea5043bf1ea8fd779ddfb, type: 3}
   description: Used to remove buildables
-  toolType: 0
+  burningTime: 0
+  meltingResult: {fileID: 0}
+  toolType: 2
