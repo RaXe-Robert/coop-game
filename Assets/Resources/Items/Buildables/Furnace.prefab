@@ -142,3 +142,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactDistance: 3
   availableRecipes: {fileID: 11400000, guid: f6e6f11ee42c65045b0ad429c0983faa, type: 2}
+  fireParticlesPrefab: {fileID: 1133957135969282, guid: b08c019126dbade48ba96f388c91450c,
+    type: 2}
+  MeltingProgress: 0
