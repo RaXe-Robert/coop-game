@@ -55,7 +55,6 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
             if (tool.ToolType == ToolType.Hammer)
             {
                 Actions[0].Invoke();
-                Debug.Log("pickup action");
             }
         }
         else if (Actions.Count > 1)
@@ -80,6 +79,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
     public void DestroyWorldObject()
     {
         ItemFactory.CreateWorldObject(transform.position, buildable.Id, buildable.StackSize);
+        FeedUI.Instance.AddFeedItem(buildable.Name + " demolished", buildable.Sprite, FeedItem.Type.World);
         photonView.RPC("RPC_DestroyWorldObject", PhotonTargets.AllBuffered);
     }
 
