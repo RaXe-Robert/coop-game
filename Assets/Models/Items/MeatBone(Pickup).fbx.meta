@@ -1,20 +1,15 @@
 fileFormatVersion: 2
-guid: 6c207fea7c0b12e449fce75b310c0517
-timeCreated: 1520851006
-licenseType: Free
+guid: 0698bd23e92dcc640a5c54136a3c4400
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Stone
-    2100002: Rock
+    2100000: Meat
+    2100002: Bone
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Icosphere
-    4300002: Rock
-    7400000: Default Take
-    9500000: //RootNode
+    4300000: MeatBone
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -34,6 +29,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -89,7 +85,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

@@ -1,15 +1,14 @@
 fileFormatVersion: 2
-guid: 04fa5c21e627dbd4f80a5d67abbf4a93
+guid: b77105aaa5d8d1047af6d52b4366469c
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Mat
+    2100000: Rock
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Bush
-    4300002: Polygon_Reduction_1
+    4300000: Rock
   externalObjects: {}
   materials:
     importMaterials: 1

@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: 5a200ea74edec3c4ba85f446ec09333b
-timeCreated: 1526069299
-licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
@@ -12,6 +10,7 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Ore
+    4300002: DiamondOre
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -31,6 +30,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
