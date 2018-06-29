@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public enum ToolType { Axe, Pickaxe }
+public enum ToolType { Axe, Pickaxe, Hammer }
 
 [CreateAssetMenu(fileName = "New Tool", menuName = "Items/Tool")]
 public class ToolData : ScriptableItemData

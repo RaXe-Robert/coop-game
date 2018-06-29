@@ -6,10 +6,13 @@ using UnityEngine.Events;
 
 public class Furnace : BuildableWorldObject {
     [SerializeField] private CraftingList availableRecipes;
-    
+    [SerializeField] private GameObject fireParticlesPrefab;
+    private GameObject activeFireParticles = null;
+
     public float MeltingProgress;
     public float BurningTime { get; set; }
-    
+    public bool IsMelting { get; private set; } = false;
+
     public Item FuelItem;
     public Item InputItem;
     public Item OutputItem;
@@ -33,14 +36,8 @@ public class Furnace : BuildableWorldObject {
 
     protected override void Pickup()
     {
-        // If null the action will be cancelled
-        if (BuildableInteractionMenu.Instance?.Target == null)
-            return;
-
         CloseFurnace();
-        BuildableInteractionMenu.Instance.Target.DestroyWorldObject();
-
-        //Should drop the stuff in the furnace when it gets picked up.
+        DestroyWorldObject();
         DropAllItems();
     }
 
@@ -51,7 +48,7 @@ public class Furnace : BuildableWorldObject {
 
     private void CloseFurnace()
     {
-        FurnaceUI.Instance.CloseChest();
+        FurnaceUI.Instance.CloseFurnace();
     }
 
     private void Update()
@@ -59,14 +56,33 @@ public class Furnace : BuildableWorldObject {
         HandleItems();
         HandleFuel();
         HandleMeltingProgress();
+        ToggleFire();
+    }
+
+    private void ToggleFire()
+    {
+        if (!IsMelting && activeFireParticles != null)
+            Destroy(activeFireParticles);
+
+        else if (IsMelting && activeFireParticles == null)
+        {
+            if (fireParticlesPrefab)
+            {
+                activeFireParticles = Instantiate(fireParticlesPrefab, transform);
+            }
+        }
     }
 
     private void HandleMeltingProgress()
     {
         if (BurningTime <= 0 || CurrentItem == null || InputItem == null)
+        {
+            IsMelting = false;
             return;
+        }
 
         MeltingProgress += BurningTime > 0 ? Time.deltaTime : -Time.deltaTime;
+        IsMelting = true;
         if (MeltingProgress >= 5)
         {
             MeltingProgress = 0;

@@ -9,11 +9,15 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
 {
     public BuildableBase buildable;
 
+    private Inventory inventory;
+    private bool inUse = false;
+
     public float interactDistance = 1f;
     public List<UnityAction> Actions { get; set; }
 
     protected virtual void Start()
     {
+
         Actions = new List<UnityAction>();
         
         if (buildable.Recoverable)
@@ -24,11 +28,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
 
     protected virtual void Pickup()
     {
-        // If null the action will be cancelled
-        if (BuildableInteractionMenu.Instance?.Target == null)
-            return;
-
-        BuildableInteractionMenu.Instance.Target.DestroyWorldObject();
+        DestroyWorldObject();
     }
 
     protected virtual UnityAction[] InitializeActions()
@@ -48,12 +48,29 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
     {
         if (!InRange(invoker.transform.position))
             return;
-
-        var buildableInteractionMenu = BuildableInteractionMenu.Instance;
-        if (buildableInteractionMenu.TargetInstanceID != GetInstanceID())
-            buildableInteractionMenu.Show(this, Actions?.ToArray());
-        else
-            buildableInteractionMenu.Hide();
+        
+        if (item?.GetType() == typeof(Tool))
+        {
+            Tool tool = item as Tool;
+            if (tool.ToolType == ToolType.Hammer)
+            {
+                Actions[0].Invoke();
+                Debug.Log("pickup action");
+            }
+        }
+        else if (Actions.Count > 1)
+        {
+            if (inUse == false)
+            {
+                Actions[1].Invoke();
+                inUse = true;
+            }
+            else if (Actions.Count > 2)
+            {
+                Actions[2].Invoke();
+                inUse = false;
+            }
+        }
     }
 
     public string TooltipText => $"{buildable.Name}";
@@ -62,7 +79,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
 
     public void DestroyWorldObject()
     {
-        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().AddItemById(buildable.Id, buildable.StackSize);
+        ItemFactory.CreateWorldObject(transform.position, buildable.Id, buildable.StackSize);
         photonView.RPC("RPC_DestroyWorldObject", PhotonTargets.AllBuffered);
     }
 

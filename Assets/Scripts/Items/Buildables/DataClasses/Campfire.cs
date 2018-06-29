@@ -12,32 +12,36 @@ public class Campfire : BuildableWorldObject
     protected override UnityAction[] InitializeActions()
     {
         return new UnityAction[]
-        {
-            new UnityAction(ToggleFire),
-            new UnityAction(OpenCookingMenu)
+        {            
+            new UnityAction(OpenCampfire),
+            new UnityAction(CloseCampfire)
         };
     }
 
     private void ToggleFire()
     {
-        // If null the action will be cancelled
-        if (BuildableInteractionMenu.Instance?.Target == null)
-            return;
-
         IsBurning = !IsBurning;
 
         if (fireParticlesPrefab)
         {
             if (IsBurning)
             {
-                activeFireParticles = Instantiate(fireParticlesPrefab, BuildableInteractionMenu.Instance.Target.transform);
+                activeFireParticles = Instantiate(fireParticlesPrefab, transform);
             }
             else
                 Destroy(activeFireParticles);
         }
     }
 
-    private void OpenCookingMenu()
+    private void OpenCampfire()
+    {
+        Debug.Log("Opening");
+
+        //The toggle fire should be implemented when something is cooking.
+        ToggleFire();
+    }
+
+    private void CloseCampfire()
     {
         Debug.Log("Opening");
     }
