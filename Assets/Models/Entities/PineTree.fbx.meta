@@ -1,15 +1,17 @@
 fileFormatVersion: 2
-guid: 04fa5c21e627dbd4f80a5d67abbf4a93
+guid: fe68da17ef84784489b3ab5d308e7878
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Mat
+    2100000: Leaf
+    2100002: Wood
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Bush
-    4300002: Polygon_Reduction_1
+    4300000: PineTree
+    7400000: CINEMA_4D_Main
+    9500000: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -85,7 +87,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: 04fa5c21e627dbd4f80a5d67abbf4a93
+guid: 0698bd23e92dcc640a5c54136a3c4400
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Mat
+    2100000: Meat
+    2100002: Bone
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Bush
-    4300002: Polygon_Reduction_1
+    4300000: MeatBone
   externalObjects: {}
   materials:
     importMaterials: 1
