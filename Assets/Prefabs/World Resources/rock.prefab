@@ -130,10 +130,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.97104096
+  m_Radius: 2.12
   m_Height: 1.228169
   m_Direction: 1
-  m_Center: {x: -0.035438, y: 0.1756145, z: 0.028959006}
+  m_Center: {x: -0.035438, y: 1.15, z: 0.028959006}
 --- !u!208 &208407444410447410
 NavMeshObstacle:
   m_ObjectHideFlags: 1
@@ -143,7 +143,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 0
-  m_Extents: {x: 0.47, y: 0.5, z: 0.47}
+  m_Extents: {x: 1.36, y: 0.5, z: 1.36}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
