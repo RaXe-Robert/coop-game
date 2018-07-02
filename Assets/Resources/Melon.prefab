@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 33980025592615854}
   - component: {fileID: 23501654111485680}
   - component: {fileID: 95726757738957580}
-  - component: {fileID: 114958180401221486}
   - component: {fileID: 64231951297816666}
   - component: {fileID: 114664536833138664}
+  - component: {fileID: 114958180401221486}
   m_Layer: 0
   m_Name: Melon
   m_TagString: Untagged

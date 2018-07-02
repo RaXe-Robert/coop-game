@@ -6,14 +6,18 @@ public class ResourceOnFarm : Photon.MonoBehaviour, IInteractable {
 
     Farm farm;
     public float InteractDistance => farm.interactDistance;
-
-    public void Initialize(Farm f)
+    
+    private void Start()
     {
-        farm = f;
+        //This works locally but not in multiplayer, need a way to fix.
+        object[] data = gameObject.GetPhotonView().instantiationData;
+        farm = (Farm)data[0];
+        Debug.Log(farm);
+        farm.itemOnFarm = gameObject;
     }
 
     public bool IsInteractable => true;
-    public GameObject GameObject => farm.itemOnFarm;
+    public GameObject GameObject => gameObject;
 
     public string TooltipText => $"Some juicy melons for you and your companions";
 
@@ -33,13 +37,9 @@ public class ResourceOnFarm : Photon.MonoBehaviour, IInteractable {
     public void FarmResource()
     {
         PlayerNetwork.LocalPlayer.GetComponent<Inventory>().AddItemById("pickupitem_melon", PlayerNetwork.OtherPlayers.Count + 1);      
-        FeedUI.Instance.AddFeedItem("Melon farmed", feedType: FeedItem.Type.World);
-        photonView.RPC(nameof(RPC_DestroyFarmObject), PhotonTargets.AllBuffered);
-    }
+        FeedUI.Instance.AddFeedItem("Farm emptied", feedType: FeedItem.Type.World);
+        farm.itemOnFarm = null;
+        PhotonNetwork.Destroy(GameObject);
 
-    [PunRPC]
-    protected void RPC_DestroyFarmObject()
-    {
-        Destroy(farm.itemOnFarm);        
     }
 }

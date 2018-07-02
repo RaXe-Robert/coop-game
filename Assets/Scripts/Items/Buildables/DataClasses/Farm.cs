@@ -59,23 +59,30 @@ public class Farm : BuildableWorldObject
             FeedUI.Instance.AddFeedItem("Something is already growing!", feedType: FeedItem.Type.Fail);
             return;
         }
-
-        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemById("pickupitem_seeds_small", 1);
-        photonView.RPC(nameof(RPC_StartFarm), PhotonTargets.AllBuffered);
+                
+        Initialize();
     }
 
-    public void StartProcess()
+    public void Initialize()
     {
         timeLeft = timeToGrow;
         isGrowing = true;
-        itemOnFarm = Instantiate(melonPrefab, transform);
-        itemOnFarm.transform.SetPositionAndRotation(new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z - 0.5f), transform.rotation);
-        //itemOnFarm = PhotonNetwork.Instantiate("Melon", new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z - 0.5f), transform.rotation, 0);
-        itemOnFarm.GetComponent<ResourceOnFarm>().Initialize(this);
-        StartCoroutine(Grow());
 
-        //photonView.RPC(nameof(RPC_SetItemOnFarmByViewID), PhotonTargets.AllBuffered, itemOnFarm.GetComponent<PhotonView>().viewID);
-        //photonView.RPC(nameof(RPC_Grow), PhotonTargets.AllBuffered);
+        TakeSeed();
+        SpawnMelon();
+    }
+
+    public void TakeSeed()
+    {
+        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemById("pickupitem_seeds_small", 1);
+    }
+
+    public void SpawnMelon()
+    {
+        //the object data array works locally but not in multiplayer, need a way to fix this.
+        itemOnFarm = PhotonNetwork.Instantiate("Melon", new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z - 0.5f), transform.rotation, 0, new object[] { this });
+        
+        StartCoroutine(Grow());
     }
 
     IEnumerator Grow()
@@ -91,11 +98,4 @@ public class Farm : BuildableWorldObject
             }
         }
     }
-
-    [PunRPC]
-    protected void RPC_StartFarm()
-    {
-        StartProcess();
-    }
-    
 }
