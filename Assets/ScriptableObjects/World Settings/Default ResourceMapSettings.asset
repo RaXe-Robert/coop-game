@@ -48,3 +48,18 @@ MonoBehaviour:
   - worldResourcePrefab: {fileID: 1190874884995350, guid: b5ff99d128ef65e43b77aaafd409780f,
       type: 2}
     biomes: 3
+  - worldResourcePrefab: {fileID: 1462823091655430, guid: 7e2dab27e8301bb4ebc7740b8c4eff47,
+      type: 2}
+    biomes: 1
+  - worldResourcePrefab: {fileID: 1190874884995350, guid: b5ff99d128ef65e43b77aaafd409780f,
+      type: 2}
+    biomes: 3
+  - worldResourcePrefab: {fileID: 1444371951750910, guid: ca739cd6e99d51246a72693d2b16d35c,
+      type: 2}
+    biomes: 4
+  - worldResourcePrefab: {fileID: 1779254851240584, guid: d15fcd704ec6fd747a90bd85e8b31afa,
+      type: 2}
+    biomes: 4
+  - worldResourcePrefab: {fileID: 1538922997084462, guid: 57829f3552a367046bf1d59acfaa4f7a,
+      type: 2}
+    biomes: 4
