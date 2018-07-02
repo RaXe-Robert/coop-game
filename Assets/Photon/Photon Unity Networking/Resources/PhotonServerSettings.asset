@@ -72,4 +72,6 @@ MonoBehaviour:
   - SetUser
   - SendPlayerData
   - DestroyWorldItem
+  - RPC_DestroyFarmObject
+  - RPC_StartFarm
   DisableAutoOpenWizard: 1
