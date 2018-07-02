@@ -9,48 +9,47 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1496601752169784}
+  m_RootGameObject: {fileID: 1190874884995350}
   m_IsPrefabParent: 1
---- !u!1 &1496601752169784
+--- !u!1 &1190874884995350
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4900138965511406}
-  - component: {fileID: 33270897870923986}
-  - component: {fileID: 23727934497154238}
-  - component: {fileID: 136816286614663526}
-  - component: {fileID: 114094595974584758}
-  - component: {fileID: 114108696994553980}
-  - component: {fileID: 208085045006791390}
+  - component: {fileID: 4387423859310646}
+  - component: {fileID: 33664136835280682}
+  - component: {fileID: 23519473263770896}
+  - component: {fileID: 136270940270732760}
+  - component: {fileID: 114281266127927310}
+  - component: {fileID: 114311563624991290}
   m_Layer: 0
-  m_Name: Stone
+  m_Name: Grass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4900138965511406
+--- !u!4 &4387423859310646
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 1190874884995350}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23727934497154238
+--- !u!23 &23519473263770896
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
+  m_GameObject: {fileID: 1190874884995350}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -60,7 +59,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: ce0df7af6695e344f96bcf4a5dd39150, type: 3}
+  - {fileID: 2100000, guid: 65be6f8630bf6284c936e634955503b0, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,72 +79,55 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33270897870923986
+--- !u!33 &33664136835280682
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
-  m_Mesh: {fileID: 4300000, guid: ce0df7af6695e344f96bcf4a5dd39150, type: 3}
---- !u!114 &114094595974584758
+  m_GameObject: {fileID: 1190874884995350}
+  m_Mesh: {fileID: 4300000, guid: 65be6f8630bf6284c936e634955503b0, type: 3}
+--- !u!114 &114281266127927310
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
+  m_GameObject: {fileID: 1190874884995350}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ee515faafad84b45bd0cdd95da334be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Stone
-  requiredToolToHarvest: 1
+  name: Grass
+  requiredToolToHarvest: 0
   interactDistance: 5
-  attackSound: 1
+  attackSound: 0
   spawnOnDepleted: {fileID: 0}
-  maxHealth: 100
---- !u!114 &114108696994553980
+  maxHealth: 1
+--- !u!114 &114311563624991290
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
+  m_GameObject: {fileID: 1190874884995350}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemsToSpawn:
-  - item: {fileID: 11400000, guid: 9d865b2a65928db4a8fb39bdba88382c, type: 2}
+  - item: {fileID: 11400000, guid: 5868ce6d1f49ebd4eba066d641252c56, type: 2}
     amount: 2
-  - item: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
-    amount: 4
   spawnRadius: 2
---- !u!136 &136816286614663526
+--- !u!136 &136270940270732760
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
+  m_GameObject: {fileID: 1190874884995350}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.7166592
-  m_Height: 1.0240891
+  m_Radius: 0.13968977
+  m_Height: 0.75031716
   m_Direction: 1
-  m_Center: {x: 0.036640137, y: 0.3872849, z: 0.004632324}
---- !u!208 &208085045006791390
-NavMeshObstacle:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.2, y: 0.5, z: 0.2}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0.03}
-  m_TimeToStationary: 0.5
+  m_Center: {x: 0.012103736, y: 0.37515858, z: -0.05880563}

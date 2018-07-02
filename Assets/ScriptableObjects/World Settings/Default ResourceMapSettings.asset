@@ -11,14 +11,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f444e2bec5221684daa3649c9fff4385, type: 3}
   m_Name: Default ResourceMapSettings
   m_EditorClassIdentifier: 
-  AutoUpdate: 1
+  AutoUpdate: 0
   noiseSettings:
     normalizeMode: 0
     scale: 1.16
     octaves: 3
     persistance: 0.8
     lacunarity: 2
-    seed: 1234
+    seed: 807134997
     offset: {x: 0, y: 0}
   worldResourceEntries:
   - worldResourcePrefab: {fileID: 1695406501947972, guid: 00e52d555c867374690f2256513d9e5a,
@@ -33,3 +33,18 @@ MonoBehaviour:
   - worldResourcePrefab: {fileID: 1496601752169784, guid: 5841bf5e17022f843bb1ccd028bab17c,
       type: 2}
     biomes: 4
+  - worldResourcePrefab: {fileID: 1568529112028982, guid: 8d417e11616f0394199c809ca9206b47,
+      type: 2}
+    biomes: 1
+  - worldResourcePrefab: {fileID: 1102380574337022, guid: 7de6454e0dfb4734e9b9664481d48189,
+      type: 2}
+    biomes: 1
+  - worldResourcePrefab: {fileID: 1852999205486778, guid: 57e7b08684b2f54479693487db8e6111,
+      type: 2}
+    biomes: 4
+  - worldResourcePrefab: {fileID: 1107303801538278, guid: 3e4e2d42277a62c4d90a7d41d1622a00,
+      type: 2}
+    biomes: 4
+  - worldResourcePrefab: {fileID: 1190874884995350, guid: b5ff99d128ef65e43b77aaafd409780f,
+      type: 2}
+    biomes: 3

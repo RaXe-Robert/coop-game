@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Map_Generation;
 
-[RequireComponent(typeof(Animator), typeof(ItemsToDropComponent))]
+[RequireComponent(typeof(CapsuleCollider), typeof(ItemsToDropComponent))]
 public class WorldResource : MonoBehaviour, IInteractable
 {
     public new string name;
