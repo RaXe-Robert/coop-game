@@ -44,7 +44,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
     public bool InRange(Vector3 invokerPosition) =>
         Vector3.Distance(invokerPosition, transform.position) < interactDistance;
 
-    public void Interact(GameObject invoker, Item item)
+    public virtual void Interact(GameObject invoker, Item item)
     {
         if (!InRange(invoker.transform.position))
             return;
@@ -53,9 +53,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
         {
             Tool tool = item as Tool;
             if (tool.ToolType == ToolType.Hammer)
-            {
                 Actions[0].Invoke();
-            }
         }
         else if (Actions.Count > 1)
         {
