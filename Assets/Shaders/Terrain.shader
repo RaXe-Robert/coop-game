@@ -1,7 +1,6 @@
 ﻿Shader "Custom/Terrain" {
 	Properties{
 		_MainTex("Albedo (RGB)", 2D) = "white" {}
-		_MainTex2("Albedo 2 (RGB)", 2D) = "white" {}
 	}
 		SubShader{
 			Tags{ "RenderType" = "Opaque" }
@@ -23,9 +22,12 @@
 		float baseStartHeights[maxLayerCount];
 		float baseBlends[maxLayerCount];
 		float baseColorStrength[maxLayerCount];
+		float baseTextureScales[maxLayerCount];
 
 		float minHeight;
 		float maxHeight;
+
+		UNITY_DECLARE_TEX2DARRAY(baseTextures);
 
 		struct Input {
 			float3 worldPos;
@@ -35,14 +37,27 @@
 		};
 
 		sampler2D _MainTex;
-		sampler2D _MainTex2;
 
 		float inverseLerp(float a, float b, float value) {
 			return saturate((value - a) / (b - a));
 		}
 
+		float3 triplanar(float3 worldPos, float scale, float3 blendAxes, int textureIndex)
+		{
+			float3 scaledWorldPos = worldPos / scale;
+
+			float3 xProjection = UNITY_SAMPLE_TEX2DARRAY(baseTextures, float3(scaledWorldPos.y, scaledWorldPos.z, textureIndex)) * blendAxes.x;
+			float3 yProjection = UNITY_SAMPLE_TEX2DARRAY(baseTextures, float3(scaledWorldPos.x, scaledWorldPos.z, textureIndex)) * blendAxes.y;
+			float3 zProjection = UNITY_SAMPLE_TEX2DARRAY(baseTextures, float3(scaledWorldPos.x, scaledWorldPos.y, textureIndex)) * blendAxes.z;
+
+			return xProjection + yProjection + zProjection;
+		}
+
 		void surf(Input IN, inout SurfaceOutput o) {
 			float heightPercent = inverseLerp(minHeight, maxHeight, IN.worldPos.y);
+
+			float3 blendAxes = abs(IN.worldNormal);
+			blendAxes /= blendAxes.x + blendAxes.y + blendAxes.z;
 
 			for (int i = 0; i < layerCount; i++) {
 				float drawStrength = inverseLerp(-baseBlends[i] / 2 - epsilon, baseBlends[i] / 2, heightPercent - baseStartHeights[i]);
@@ -56,10 +71,11 @@
 				else
 				{
 					baseColor = tex2D(_MainTex, IN.uv_MainTex).rgb;
-					//baseColor = lerp(tex2D(_MainTex, IN.uv_MainTex).rgb, tex2D(_MainTex2, IN.uv_MainTex2).rgb, 0.5);
 				}
 
-				o.Albedo = o.Albedo * (1 - drawStrength) + (baseColor) * drawStrength;
+				float3 textureColor = triplanar(IN.worldPos, baseTextureScales[i], blendAxes, i) * (1 - baseColorStrength[i]);
+
+				o.Albedo = o.Albedo * (1 - drawStrength) + (baseColor + textureColor) * drawStrength;
 			}
 		}
 

@@ -18,47 +18,62 @@ MonoBehaviour:
     octaves: 6
     persistance: 0.6
     lacunarity: 2
-    seed: 1151506182
+    seed: 1517172632
     offset: {x: 0, y: 0}
   UseFalloff: 0
   HeightMultiplier: 30
   HeightCurve:
     serializedVersion: 2
     m_Curve:
-    - serializedVersion: 2
+    - serializedVersion: 3
       time: 0
       value: 0
       inSlope: 1
       outSlope: 1
       tangentMode: 0
-    - serializedVersion: 2
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 0.17891145
       value: 0.9717593
       inSlope: -1.9472985
       outSlope: -1.9472985
       tangentMode: 0
-    - serializedVersion: 2
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 0.96929556
       value: 0.21641728
       inSlope: -0.1289456
       outSlope: -0.1289456
       tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
   layers:
   - IsWater: 1
     Tint: {r: 0, g: 0.3803922, b: 1, a: 1}
+    Texture: {fileID: 2800000, guid: 3bd96dc7bfb949c4d8f75847f4d3df76, type: 3}
+    TextureScale: 5
     TintStrength: 0.35
     StartHeight: 0
     BlendStrength: 0.3
   - IsWater: 1
     Tint: {r: 0, g: 0.79215693, b: 1, a: 1}
+    Texture: {fileID: 2800000, guid: 3fd8a85140552e44182aac9fe5c0352e, type: 3}
+    TextureScale: 5
     TintStrength: 0.35
     StartHeight: 0.33
     BlendStrength: 0.39
   - IsWater: 0
-    Tint: {r: 0.15686275, g: 1, b: 0, a: 1}
-    TintStrength: 1
+    Tint: {r: 0.019830594, g: 0.764151, b: 0, a: 1}
+    Texture: {fileID: 2800000, guid: 40600af35aeb1bc4e8bf65cb9e57e187, type: 3}
+    TextureScale: 20
+    TintStrength: 0.65
     StartHeight: 0.4
     BlendStrength: 0
