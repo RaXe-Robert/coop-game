@@ -34,7 +34,7 @@ public class CraftingRecipeSlot : MonoBehaviour
             inventory.OnItemChangedCallback += UpdateRequiredItems;
             recipeResultImage.sprite = craftingRecipe.result.item.Sprite;
             recipeResultText.text = craftingRecipe.result.item.name;
-            craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
+            craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}";
             recipeResultTooltip.ItemName = craftingRecipe.result.item.name;
             InitializeRequiredItems();
         }
