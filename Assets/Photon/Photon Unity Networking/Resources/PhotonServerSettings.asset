@@ -74,4 +74,6 @@ MonoBehaviour:
   - DestroyWorldItem
   - RPC_DestroyFarmObject
   - RPC_StartFarm
+  - RPC_FarmResource
+  - RPC_SpawnResource
   DisableAutoOpenWizard: 1

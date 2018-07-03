@@ -21,10 +21,7 @@ GameObject:
   - component: {fileID: 4933440929942186}
   - component: {fileID: 33980025592615854}
   - component: {fileID: 23501654111485680}
-  - component: {fileID: 95726757738957580}
   - component: {fileID: 64231951297816666}
-  - component: {fileID: 114664536833138664}
-  - component: {fileID: 114958180401221486}
   m_Layer: 0
   m_Name: Melon
   m_TagString: Untagged
@@ -102,58 +99,3 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 9f8b165f4b3774f418a5e6827fb6d377, type: 3}
---- !u!95 &95726757738957580
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000676746963092}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 9f8b165f4b3774f418a5e6827fb6d377, type: 3}
-  m_Controller: {fileID: 9100000, guid: 513ab205302659245ae651df5ca7c71d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114664536833138664
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000676746963092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ownerId: 0
-  group: 0
-  OwnerShipWasTransfered: 0
-  prefixBackup: -1
-  synchronization: 0
-  onSerializeTransformOption: 3
-  onSerializeRigidBodyOption: 2
-  ownershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
-  ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
-  currentMasterID: -1
-  isRuntimeInstantiated: 0
---- !u!114 &114958180401221486
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000676746963092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35c7198de142f6d4887b11ee92ebc750, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

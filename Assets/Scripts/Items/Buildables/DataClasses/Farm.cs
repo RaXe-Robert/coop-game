@@ -6,12 +6,13 @@ using UnityEngine.Events;
 public class Farm : BuildableWorldObject
 {
     [SerializeField] private GameObject melonPrefab;
-    public bool isGrowing = false;
 
-    private float timeToGrow = 1F; //should be 600 , 10 min. //set to 1 for testing.
-    public float timeLeft;
+    private float timeToGrow = 1; //should be 600 , 10 min. //set to 1 for testing.
 
-    public GameObject itemOnFarm = null;
+    public bool isGrowing { get; private set; } = false;
+    public float TimeLeft { get; private set; }
+
+    private GameObject resourceOnFarm = null;
 
     protected override void Start()
     {
@@ -33,56 +34,68 @@ public class Farm : BuildableWorldObject
         if (!InRange(invoker.transform.position))
             return;
 
-        if (item?.GetType() == typeof(Tool))
+        if (resourceOnFarm != null)
         {
-            Tool tool = item as Tool;
-            if (tool.ToolType == ToolType.Hammer)
-                Actions[0].Invoke();
+            if (!isGrowing)
+                photonView.RPC(nameof(RPC_FarmResource), PhotonTargets.AllBuffered);
+            else
+                FeedUI.Instance.AddFeedItem("Take your time:" + TimeLeft + " s", feedType: FeedItem.Type.Fail);
         }
-        else if (item?.Id == "pickupitem_seeds_small")
-            Actions[1].Invoke();
-        else if (item != null)
-            FeedUI.Instance.AddFeedItem("You can't farm " + item.Name + ", you silly.", feedType: FeedItem.Type.Fail);
         else
-            FeedUI.Instance.AddFeedItem("Try to find some seeds", feedType: FeedItem.Type.World);
+        {
+            if (item?.GetType() == typeof(Tool))
+            {
+                Tool tool = item as Tool;
+                if (tool.ToolType == ToolType.Hammer)
+                    Actions[0].Invoke();
+            }
+            else if (item?.Id == "pickupitem_seeds_small")
+                Actions[1].Invoke();
+            else if (item != null)
+                FeedUI.Instance.AddFeedItem("You can't farm " + item.Name + ", you silly.", feedType: FeedItem.Type.Fail);
+            else
+                FeedUI.Instance.AddFeedItem("Try to find some seeds", feedType: FeedItem.Type.World);
+        }
     }
 
     private void DestroyFarm()
     {
-        Debug.Log(itemOnFarm);
+        Debug.Log(resourceOnFarm);
     }
 
     private void PlaceSeed()
     {
-        if (itemOnFarm)
+        if (resourceOnFarm)
         {
             FeedUI.Instance.AddFeedItem("Something is already growing!", feedType: FeedItem.Type.Fail);
             return;
         }
-                
-        Initialize();
-    }
 
-    public void Initialize()
-    {
-        timeLeft = timeToGrow;
+        TimeLeft = timeToGrow;
         isGrowing = true;
 
-        TakeSeed();
-        SpawnMelon();
+        photonView.RPC(nameof(RPC_SpawnResource), PhotonTargets.AllBuffered);
     }
 
-    public void TakeSeed()
+    [PunRPC]
+    public void RPC_SpawnResource()
     {
         PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemById("pickupitem_seeds_small", 1);
-    }
-
-    public void SpawnMelon()
-    {
-        //the object data array works locally but not in multiplayer, need a way to fix this.
-        itemOnFarm = PhotonNetwork.Instantiate("Melon", new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z - 0.5f), transform.rotation, 0, new object[] { this });
+        
+        resourceOnFarm = Instantiate(melonPrefab, new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z - 0.5f), transform.rotation);
         
         StartCoroutine(Grow());
+    }
+
+    [PunRPC]
+    public void RPC_FarmResource()
+    {
+        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().AddItemById("pickupitem_melon", 1);
+
+        FeedUI.Instance.AddFeedItem("Farm harvested", feedType: FeedItem.Type.World);
+        
+        Destroy(resourceOnFarm);
+        resourceOnFarm = null;
     }
 
     IEnumerator Grow()
@@ -90,9 +103,9 @@ public class Farm : BuildableWorldObject
         while (isGrowing)
         {
             yield return new WaitForSeconds(timeToGrow / timeToGrow);
-            timeLeft -= timeToGrow / timeToGrow;
+            TimeLeft -= timeToGrow / timeToGrow;
             
-            if(timeLeft < 1)
+            if(TimeLeft < 1)
             {
                 isGrowing = false;
             }
