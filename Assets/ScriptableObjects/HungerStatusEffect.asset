@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c481603295268cc4db737b621024556a, type: 3}
   m_Name: HungerStatusEffect
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: fe9e17c7b51bc6a43bf9853dd129cb7c, type: 3}
+  icon: {fileID: 21300000, guid: f0c9be7a0a3c3354aa89feaee14a4d15, type: 3}
   Duration: 3
   hungerModification: 20
