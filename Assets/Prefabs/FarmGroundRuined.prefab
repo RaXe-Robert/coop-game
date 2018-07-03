@@ -9,34 +9,33 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1938593813587604}
+  m_RootGameObject: {fileID: 1509372267358314}
   m_IsPrefabParent: 1
---- !u!1 &1938593813587604
+--- !u!1 &1509372267358314
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4024662506032370}
-  - component: {fileID: 33487555147604740}
-  - component: {fileID: 23007935058057336}
-  - component: {fileID: 114446760292604946}
-  - component: {fileID: 64859190556941764}
-  - component: {fileID: 114236649653483090}
+  - component: {fileID: 4081029377161470}
+  - component: {fileID: 33644988391685032}
+  - component: {fileID: 23630127464080368}
+  - component: {fileID: 95336522070411998}
+  - component: {fileID: 114163891751865074}
   m_Layer: 0
-  m_Name: FarmGround
+  m_Name: FarmGroundRuined
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4024662506032370
+--- !u!4 &4081029377161470
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1938593813587604}
+  m_GameObject: {fileID: 1509372267358314}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -44,12 +43,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23007935058057336
+--- !u!23 &23630127464080368
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1938593813587604}
+  m_GameObject: {fileID: 1509372267358314}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -59,7 +58,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 55ed57830d32dbc4bb506a809bba0713, type: 3}
+  - {fileID: 2100000, guid: 7ac6a2be698027c4793f71b3454fda9b, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,69 +78,39 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33487555147604740
+--- !u!33 &33644988391685032
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1938593813587604}
-  m_Mesh: {fileID: 4300000, guid: 55ed57830d32dbc4bb506a809bba0713, type: 3}
---- !u!64 &64859190556941764
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1938593813587604}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
+  m_GameObject: {fileID: 1509372267358314}
+  m_Mesh: {fileID: 4300000, guid: 7ac6a2be698027c4793f71b3454fda9b, type: 3}
+--- !u!95 &95336522070411998
+Animator:
   serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 4300000, guid: 55ed57830d32dbc4bb506a809bba0713, type: 3}
---- !u!114 &114236649653483090
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1509372267358314}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 7ac6a2be698027c4793f71b3454fda9b, type: 3}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114163891751865074
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1938593813587604}
+  m_GameObject: {fileID: 1509372267358314}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1385b2338c1732d41aade4156d1e813d, type: 3}
+  m_Script: {fileID: 11500000, guid: 262a9582b325cf6488709d02b0148a45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactDistance: 3
-  melonPrefab: {fileID: 1000676746963092, guid: a2429bab4c5bc724aaedb3577dd5c55b,
-    type: 2}
-  ruinedFarmPrefab: {fileID: 1509372267358314, guid: bfa66a77190fb3447886bd1939cf5811,
-    type: 2}
-  isGrowing: 0
-  timeLeft: 0
-  resourceOnFarm: {fileID: 0}
---- !u!114 &114446760292604946
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1938593813587604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ownerId: 0
-  group: 0
-  OwnerShipWasTransfered: 0
-  prefixBackup: -1
-  synchronization: 0
-  onSerializeTransformOption: 3
-  onSerializeRigidBodyOption: 2
-  ownershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
-  ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
-  currentMasterID: -1
-  isRuntimeInstantiated: 0

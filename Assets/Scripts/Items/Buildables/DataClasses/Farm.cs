@@ -6,12 +6,13 @@ using UnityEngine.Events;
 public class Farm : BuildableWorldObject
 {
     [SerializeField] private GameObject melonPrefab;
+    [SerializeField] private GameObject ruinedFarmPrefab;
     public bool isGrowing = false;
 
-    private float timeToGrow = 1F; //should be 600 , 10 min. //set to 1 for testing.
+    private float timeToGrow = 600F;
     public float timeLeft;
 
-    public GameObject itemOnFarm = null;
+    public GameObject resourceOnFarm = null;
 
     protected override void Start()
     {
@@ -49,12 +50,12 @@ public class Farm : BuildableWorldObject
 
     private void DestroyFarm()
     {
-        Debug.Log(itemOnFarm);
+        photonView.RPC(nameof(RPC_DestroyFarm), PhotonTargets.AllBuffered);
     }
 
     private void PlaceSeed()
     {
-        if (itemOnFarm)
+        if (resourceOnFarm)
         {
             FeedUI.Instance.AddFeedItem("Something is already growing!", feedType: FeedItem.Type.Fail);
             return;
@@ -69,7 +70,8 @@ public class Farm : BuildableWorldObject
         isGrowing = true;
 
         TakeSeed();
-        SpawnMelon();
+
+        photonView.RPC(nameof(RPC_SpawnResource), PhotonTargets.AllBuffered);
     }
 
     public void TakeSeed()
@@ -77,12 +79,16 @@ public class Farm : BuildableWorldObject
         PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemById("pickupitem_seeds_small", 1);
     }
 
-    public void SpawnMelon()
+    public void GiveMelon()
     {
-        //the object data array works locally but not in multiplayer, need a way to fix this.
-        itemOnFarm = PhotonNetwork.Instantiate("Melon", new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z - 0.5f), transform.rotation, 0, new object[] { this });
-        
-        StartCoroutine(Grow());
+        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().AddItemById("pickupitem_melon", PlayerNetwork.OtherPlayers.Count + 1);
+    }
+
+    public void Harvest()
+    {
+        photonView.RPC(nameof(RPC_FarmResource), PhotonTargets.AllBuffered);
+        GiveMelon();
+        FeedUI.Instance.AddFeedItem("Farm emptied", feedType: FeedItem.Type.World);
     }
 
     IEnumerator Grow()
@@ -97,5 +103,28 @@ public class Farm : BuildableWorldObject
                 isGrowing = false;
             }
         }
+    }
+
+    [PunRPC]
+    protected void RPC_SpawnResource()
+    {
+        resourceOnFarm = Instantiate(melonPrefab, new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z - 0.5f), transform.rotation);
+        resourceOnFarm.GetComponent<ResourceOnFarm>().Initialize(this);
+        StartCoroutine(Grow());
+    }
+
+    [PunRPC]
+    protected void RPC_FarmResource()
+    {
+        Destroy(resourceOnFarm);
+        resourceOnFarm = null;
+    }
+
+    [PunRPC]
+    protected void RPC_DestroyFarm()
+    {
+        Instantiate(ruinedFarmPrefab, transform.position, transform.rotation);
+        Destroy(resourceOnFarm);
+        Destroy(gameObject);
     }
 }
