@@ -38,7 +38,7 @@ public class DaytimeController : Photon.MonoBehaviour, IPunObservable
     public TimeSpan CurrentTime
     {
         get { return currentTime; }
-        private set
+        set
         {
             currentTime = value;
             TargetAngle = CalculateNextSunAngle();
