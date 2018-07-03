@@ -62,6 +62,7 @@ public class Farm : BuildableWorldObject
         }
                 
         Initialize();
+        FeedUI.Instance.AddFeedItem("Seed planted!", feedType: FeedItem.Type.World);
     }
 
     public void Initialize()
