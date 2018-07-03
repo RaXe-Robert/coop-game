@@ -114,11 +114,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Cactus
-  requiredToolToHarvest: 0
+  requiredToolToHarvest: 1
   interactDistance: 5
   attackSound: 0
   spawnOnDepleted: {fileID: 0}
-  maxHealth: 100
+  maxHealth: 150
 --- !u!136 &136507248072776322
 CapsuleCollider:
   m_ObjectHideFlags: 1

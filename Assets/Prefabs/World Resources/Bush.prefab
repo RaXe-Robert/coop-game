@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemsToSpawn:
-  - item: {fileID: 0}
-    amount: 0
+  - item: {fileID: 11400000, guid: 0a5ef4509335b27418001a14ff42a932, type: 2}
+    amount: 1
   spawnRadius: 2
 --- !u!114 &114739293621436936
 MonoBehaviour:
@@ -118,7 +118,7 @@ MonoBehaviour:
   interactDistance: 5
   attackSound: 0
   spawnOnDepleted: {fileID: 0}
-  maxHealth: 100
+  maxHealth: 150
 --- !u!136 &136892451867641228
 CapsuleCollider:
   m_ObjectHideFlags: 1

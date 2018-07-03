@@ -116,11 +116,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Rock
-  requiredToolToHarvest: 1
+  requiredToolToHarvest: 2
   interactDistance: 5
   attackSound: 1
   spawnOnDepleted: {fileID: 0}
-  maxHealth: 100
+  maxHealth: 300
 --- !u!136 &136077752498786878
 CapsuleCollider:
   m_ObjectHideFlags: 1
