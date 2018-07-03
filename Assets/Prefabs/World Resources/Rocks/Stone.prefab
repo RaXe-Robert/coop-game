@@ -99,11 +99,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Stone
-  requiredToolToHarvest: 1
+  requiredToolToHarvest: 0
   interactDistance: 5
   attackSound: 1
   spawnOnDepleted: {fileID: 0}
-  maxHealth: 100
+  maxHealth: 150
 --- !u!114 &114108696994553980
 MonoBehaviour:
   m_ObjectHideFlags: 1

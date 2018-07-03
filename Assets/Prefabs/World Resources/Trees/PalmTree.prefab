@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Palm Tree
-  requiredToolToHarvest: 0
+  requiredToolToHarvest: 1
   interactDistance: 5
   attackSound: 0
   spawnOnDepleted: {fileID: 0}

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "New Consumable", menuName = "Items/Consumable")]
 public class ConsumableItemData : ScriptableItemData
 {
     [SerializeField] private bool isConsumable;
