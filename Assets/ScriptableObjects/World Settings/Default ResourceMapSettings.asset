@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f444e2bec5221684daa3649c9fff4385, type: 3}
+  m_Name: Default ResourceMapSettings
+  m_EditorClassIdentifier: 
+  AutoUpdate: 0
+  noiseSettings:
+    normalizeMode: 0
+    scale: 1.16
+    octaves: 3
+    persistance: 0.8
+    lacunarity: 2
+    seed: 807134997
+    offset: {x: 0, y: 0}
+  worldResourceEntries:
+  - worldResourcePrefab: {fileID: 1695406501947972, guid: 00e52d555c867374690f2256513d9e5a,
+      type: 2}
+    biomes: 3
+  - worldResourcePrefab: {fileID: 1296203204362048, guid: cea2ad25b4540224a86b529aa39547f6,
+      type: 2}
+    biomes: 1
+  - worldResourcePrefab: {fileID: 1496601752169784, guid: c74075760153dfb468d360ef8f2e9dd1,
+      type: 2}
+    biomes: 4
+  - worldResourcePrefab: {fileID: 1496601752169784, guid: 5841bf5e17022f843bb1ccd028bab17c,
+      type: 2}
+    biomes: 4
+  - worldResourcePrefab: {fileID: 1568529112028982, guid: 8d417e11616f0394199c809ca9206b47,
+      type: 2}
+    biomes: 1
+  - worldResourcePrefab: {fileID: 1102380574337022, guid: 7de6454e0dfb4734e9b9664481d48189,
+      type: 2}
+    biomes: 1
+  - worldResourcePrefab: {fileID: 1852999205486778, guid: 57e7b08684b2f54479693487db8e6111,
+      type: 2}
+    biomes: 4
+  - worldResourcePrefab: {fileID: 1107303801538278, guid: 3e4e2d42277a62c4d90a7d41d1622a00,
+      type: 2}
+    biomes: 4
+  - worldResourcePrefab: {fileID: 1190874884995350, guid: b5ff99d128ef65e43b77aaafd409780f,
+      type: 2}
+    biomes: 3
+  - worldResourcePrefab: {fileID: 1462823091655430, guid: 7e2dab27e8301bb4ebc7740b8c4eff47,
+      type: 2}
+    biomes: 1
+  - worldResourcePrefab: {fileID: 1190874884995350, guid: b5ff99d128ef65e43b77aaafd409780f,
+      type: 2}
+    biomes: 3
+  - worldResourcePrefab: {fileID: 1444371951750910, guid: ca739cd6e99d51246a72693d2b16d35c,
+      type: 2}
+    biomes: 4
+  - worldResourcePrefab: {fileID: 1779254851240584, guid: d15fcd704ec6fd747a90bd85e8b31afa,
+      type: 2}
+    biomes: 4
+  - worldResourcePrefab: {fileID: 1538922997084462, guid: 57829f3552a367046bf1d59acfaa4f7a,
+      type: 2}
+    biomes: 4
