@@ -362,6 +362,7 @@ public class Inventory : MonoBehaviour
             if (!CheckAmountById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft))
             {
                 Debug.Log($"Not enough {requiredItem.item.name} to craft {recipe.result.item.name}");
+                FeedUI.Instance.AddFeedItem($"Not enough { requiredItem.item.name} to craft!", recipe.result.item.Sprite, FeedItem.Type.Fail);
                 return false;
             }
         }
