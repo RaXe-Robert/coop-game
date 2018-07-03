@@ -9,12 +9,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
-  m_Name: Meat
+  m_Name: Berries
   m_EditorClassIdentifier: 
-  id: pickupitem_meat_small
-  itemName: Meat
-  sprite: {fileID: 21300000, guid: bee6668ab22d87b4c910e848be8a58d9, type: 3}
-  model: {fileID: 100000, guid: e143afe216cca7c4396116f3dbcc8a01, type: 3}
-  description: I should cook this.
+  id: pickupitem_berries_small
+  itemName: Berries
+  sprite: {fileID: 21300000, guid: 84e2bb8ed06ad6a468027abfa2a08c14, type: 3}
+  model: {fileID: 100000, guid: be8feb0ad2d954442a31565546971366, type: 3}
+  description: Some red berries
   burningTime: 0
   meltingResult: {fileID: 0}

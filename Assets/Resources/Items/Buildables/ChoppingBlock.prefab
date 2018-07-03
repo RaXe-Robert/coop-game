@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23050310993785236}
   - component: {fileID: 114913407865786074}
   - component: {fileID: 64086148624890788}
-  - component: {fileID: 114155821025026042}
+  - component: {fileID: 114389992113700902}
   m_Layer: 0
   m_Name: ChoppingBlock
   m_TagString: Untagged
@@ -101,7 +101,7 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 09e55d8495bf46448b4289351786ae79, type: 3}
---- !u!114 &114155821025026042
+--- !u!114 &114389992113700902
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1596055485957556}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdd81bc039bea2a4781e214e5c917d88, type: 3}
+  m_Script: {fileID: 11500000, guid: b2590c9d0aeae91438f9ad4a035a3f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interactDistance: 3

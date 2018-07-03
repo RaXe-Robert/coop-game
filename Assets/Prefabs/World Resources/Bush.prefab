@@ -9,48 +9,48 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1496601752169784}
+  m_RootGameObject: {fileID: 1568529112028982}
   m_IsPrefabParent: 1
---- !u!1 &1496601752169784
+--- !u!1 &1568529112028982
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4900138965511406}
-  - component: {fileID: 33270897870923986}
-  - component: {fileID: 23727934497154238}
-  - component: {fileID: 136632256836406612}
-  - component: {fileID: 114094595974584758}
-  - component: {fileID: 114108696994553980}
-  - component: {fileID: 208085045006791390}
+  - component: {fileID: 4608371061032820}
+  - component: {fileID: 33663353686263580}
+  - component: {fileID: 23644694844662628}
+  - component: {fileID: 136892451867641228}
+  - component: {fileID: 114739293621436936}
+  - component: {fileID: 114513386200139958}
+  - component: {fileID: 208974417095981062}
   m_Layer: 0
-  m_Name: Cactus
+  m_Name: Bush
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4900138965511406
+--- !u!4 &4608371061032820
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
-  m_LocalRotation: {x: 6.4262822e-12, y: 1, z: -0.0000018318508, w: 0.0000035952676}
-  m_LocalPosition: {x: -0, y: 3.19, z: -0.00000000745058}
+  m_GameObject: {fileID: 1568529112028982}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23727934497154238
+--- !u!23 &23644694844662628
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
+  m_GameObject: {fileID: 1568529112028982}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -60,7 +60,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 86d04f7988c5c3546b8ee20f19978cd5, type: 3}
+  - {fileID: 2100000, guid: 04fa5c21e627dbd4f80a5d67abbf4a93, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,70 +80,70 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33270897870923986
+--- !u!33 &33663353686263580
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
-  m_Mesh: {fileID: 4300000, guid: 86d04f7988c5c3546b8ee20f19978cd5, type: 3}
---- !u!114 &114094595974584758
+  m_GameObject: {fileID: 1568529112028982}
+  m_Mesh: {fileID: 4300002, guid: 04fa5c21e627dbd4f80a5d67abbf4a93, type: 3}
+--- !u!114 &114513386200139958
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ee515faafad84b45bd0cdd95da334be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  name: Cactus
-  requiredToolToHarvest: 0
-  interactDistance: 5
-  attackSound: 0
-  spawnOnDepleted: {fileID: 0}
-  maxHealth: 100
---- !u!114 &114108696994553980
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
+  m_GameObject: {fileID: 1568529112028982}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemsToSpawn:
-  - item: {fileID: 11400000, guid: 2378eba34364556469c51af31e4a0371, type: 2}
-    amount: 2
+  - item: {fileID: 0}
+    amount: 0
   spawnRadius: 2
---- !u!136 &136632256836406612
+--- !u!114 &114739293621436936
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1568529112028982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee515faafad84b45bd0cdd95da334be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Bush
+  requiredToolToHarvest: 0
+  interactDistance: 5
+  attackSound: 0
+  spawnOnDepleted: {fileID: 0}
+  maxHealth: 100
+--- !u!136 &136892451867641228
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
+  m_GameObject: {fileID: 1568529112028982}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.6387396
-  m_Height: 4.00045
+  m_Radius: 0.90541303
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0.0713754, y: 2.000225, z: 0.11278722}
---- !u!208 &208085045006791390
+  m_Center: {x: -0.0229851, y: 0.5, z: 0}
+--- !u!208 &208974417095981062
 NavMeshObstacle:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1496601752169784}
+  m_GameObject: {fileID: 1568529112028982}
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.0005, y: 0.25, z: 0.0005}
+  m_Extents: {x: 0.05, y: 0.5, z: 0.05}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0.072000004, y: 2, z: 0.11100001}
+  m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5

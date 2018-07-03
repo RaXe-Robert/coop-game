@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: PlayerBaseStats
   m_EditorClassIdentifier: 
   maxHealth: 100
-  movementSpeed: 100
+  movementSpeed: 50
   minDamage: 10
   maxDamage: 20
   timeBetweenAttacks: 1

@@ -36,6 +36,8 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         currentItem = null;
         image.sprite = null;
+        if (currentItem == null)
+            image.color = new Color(255, 255, 255, 0);
     }
 
     public virtual void OnBeginDrag(PointerEventData eventData)

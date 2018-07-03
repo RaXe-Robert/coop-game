@@ -339,12 +339,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemsToSpawn:
   - item: {fileID: 11400000, guid: b77c81d82fd094542b5b3c531494cd0d, type: 2}
-    amount: 2
-  - item: {fileID: 11400000, guid: 5868ce6d1f49ebd4eba066d641252c56, type: 2}
-    amount: 2
-  - item: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
-    amount: 2
-  spawnRadius: 3
+    amount: 4
+  spawnRadius: 2
 --- !u!114 &114574607019542462
 MonoBehaviour:
   m_ObjectHideFlags: 1

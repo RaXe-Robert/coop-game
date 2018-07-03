@@ -15,7 +15,7 @@ public class NetworkManager : MonoBehaviour
         if (!PhotonNetwork.connected)
         {
             print("Connecting to server...");
-            PhotonNetwork.ConnectUsingSettings("v0.2");
+            PhotonNetwork.ConnectUsingSettings("v0.3");
         }
     }
 
