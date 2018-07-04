@@ -4,6 +4,9 @@ using Photon;
 
 public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 {
+    [SerializeField] private GameObject rightHandBone;
+    private GameObject spawnedHoldingObject;
+    
     public string Name => photonView.owner.NickName;
     public string TooltipText => Name;
     public GameObject GameObject => gameObject;
@@ -16,6 +19,12 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 
     public float TimeBetweenAttacks => stats.TimeBetweenAttacks;
 
+    public void TriggerHitAnimation()
+    {
+        DoHitAnimation();
+        photonView.RPC("RPC_HitAnimation", PhotonTargets.All);
+    }
+    
     private void Awake()
     {
         stats = GetComponent<PlayerStatsComponent>();
@@ -43,10 +52,7 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 
     public void TogglePlayerModel(bool showModel)
     {
-        foreach (var rend in GetComponentsInChildren<Renderer>())
-        {
-            rend.enabled = showModel;
-        }
+        photonView.RPC(nameof(RPC_TogglePlayerModel), PhotonTargets.AllBuffered, showModel);
     }
 
     public void RespawnPlayer()
@@ -56,6 +62,55 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
         GetComponent<HealthComponent>().SetValue(100);
         GetComponent<HungerComponent>().SetValue(100);
         GetComponent<PhotonView>().RPC(nameof(RPC_RespawnPlayer), PhotonTargets.All);
+    }
+
+    public void SwitchHoldingItem(string itemId)
+    {
+        if (spawnedHoldingObject != null)
+            Destroy(spawnedHoldingObject);
+
+        if (itemId == null)
+            return;
+        
+        var model = ItemFactory.GetModel(itemId);
+        if (model == null) return;
+
+        spawnedHoldingObject = Instantiate(model, rightHandBone.transform);
+        
+        if(photonView.isMine)
+            photonView.RPC("RPC_SwitchItem", PhotonTargets.All, itemId);
+    }
+
+    private void DoHitAnimation()
+    {
+        var animator = GetComponent<Animator>();
+        if (animator == null)
+            return;
+        
+        animator.SetTrigger("Swing");
+    }
+
+    [PunRPC]
+    private void RPC_HitAnimation()
+    {
+        if(!photonView.isMine)
+            DoHitAnimation();
+    }
+    
+    [PunRPC]
+    private void RPC_SwitchItem(string itemId)
+    {
+        if (!photonView.isMine)
+            SwitchHoldingItem(itemId);
+    }
+    
+    [PunRPC]
+    protected void RPC_TogglePlayerModel(bool showModel)
+    {
+        foreach(var rend in GetComponentsInChildren<Renderer>())
+        {
+            rend.enabled = showModel;
+        }
     }
 
     [PunRPC]

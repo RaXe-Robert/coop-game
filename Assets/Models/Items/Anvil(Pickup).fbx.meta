@@ -1,17 +1,14 @@
 fileFormatVersion: 2
-guid: f6a35e19d1fbf3d47adfe16d38874a5f
+guid: cb1ca76d2bc9f0c4b8b5dc4cccac6a06
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
-    2100000: Mat
-    2100002: Ghost
+    2100000: Anvil
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Ghost
-    7400000: CINEMA_4D_Main
-    9500000: //RootNode
+    4300000: Anvil
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -87,7 +84,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

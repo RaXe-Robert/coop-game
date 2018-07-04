@@ -42,10 +42,15 @@ public class Farm : BuildableWorldObject
         }
         else if (item?.Id == "pickupitem_seeds_small")
             Actions[1].Invoke();
-        else if (item != null)
-            FeedUI.Instance.AddFeedItem("You can't farm " + item.Name + ", you silly.", feedType: FeedItem.Type.Fail);
+        else if (resourceOnFarm)
+            FeedUI.Instance.AddFeedItem("Something is already growing!", feedType: FeedItem.Type.Fail);
         else
-            FeedUI.Instance.AddFeedItem("Try to find some seeds", feedType: FeedItem.Type.World);
+        {
+            if (item != null)
+                FeedUI.Instance.AddFeedItem("You can't farm " + item.Name + ", you silly.", feedType: FeedItem.Type.Fail);
+            else
+                FeedUI.Instance.AddFeedItem("Try to find some seeds", feedType: FeedItem.Type.World);
+        }
     }
 
     private void DestroyFarm()

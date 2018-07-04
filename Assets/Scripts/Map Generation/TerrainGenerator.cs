@@ -64,7 +64,8 @@ namespace Assets.Scripts.Map_Generation
         public static event System.Action OnSetupFinished;
 
         public bool IsBuildingNavmesh { get; private set; }
-        
+        private int currentNavmeshBuilderId = 0;
+
         private void Awake()
         {
             navMeshSurface = GetComponent<NavMeshSurface>();
@@ -316,6 +317,13 @@ namespace Assets.Scripts.Map_Generation
         /// </summary>
         private IEnumerator BuildNavMeshAsync()
         {
+            if (currentNavmeshBuilderId != int.MaxValue)
+                currentNavmeshBuilderId++;
+            else
+                currentNavmeshBuilderId = 0;
+
+            int navMeshBuilderId = currentNavmeshBuilderId;
+            
             IsBuildingNavmesh = true;
 
             // Get the data for the surface
@@ -326,17 +334,20 @@ namespace Assets.Scripts.Map_Generation
 
             // Wait until the navmesh has finished baking
             yield return async;
+            
+            if (currentNavmeshBuilderId == navMeshBuilderId)
+            {
+                // Remove current data
+                navMeshSurface.RemoveData();
 
-            // Remove current data
-            navMeshSurface.RemoveData();
+                // Save the new data into the surface
+                navMeshSurface.navMeshData = data;
 
-            // Save the new data into the surface
-            navMeshSurface.navMeshData = data;
+                // Finalize / Apply
+                navMeshSurface.AddData();
 
-            // Finalize / Apply
-            navMeshSurface.AddData();
-
-            IsBuildingNavmesh = false;
+                IsBuildingNavmesh = false;
+            }
         }
 
         /// <summary>
