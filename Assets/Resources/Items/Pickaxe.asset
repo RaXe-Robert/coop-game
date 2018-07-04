@@ -16,4 +16,6 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 5c0e736f7db3da5499f41271e57929b2, type: 3}
   model: {fileID: 100000, guid: cc704f570d4b85e42b78bff7064278e7, type: 3}
   description: A pickaxe
-  toolType: 1
+  burningTime: 0
+  meltingResult: {fileID: 0}
+  toolType: 2

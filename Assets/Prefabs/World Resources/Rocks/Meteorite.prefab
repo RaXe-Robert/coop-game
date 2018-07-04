@@ -100,11 +100,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Meteorite Ore
-  requiredToolToHarvest: 1
+  requiredToolToHarvest: 2
   interactDistance: 5
   attackSound: 1
   spawnOnDepleted: {fileID: 0}
-  maxHealth: 100
+  maxHealth: 400
 --- !u!114 &114887055607450000
 MonoBehaviour:
   m_ObjectHideFlags: 1

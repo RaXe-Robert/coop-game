@@ -18,4 +18,4 @@ MonoBehaviour:
   description: Used to remove buildables
   burningTime: 0
   meltingResult: {fileID: 0}
-  toolType: 2
+  toolType: 3

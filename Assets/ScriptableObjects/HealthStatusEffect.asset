@@ -11,6 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebd4a31ecca61e42b51fe8b12f200b3, type: 3}
   m_Name: HealthStatusEffect
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0da0d8dd5d6097c4f8337cd5b7f1d11c, type: 3}
   Duration: 10
   healthModification: 10

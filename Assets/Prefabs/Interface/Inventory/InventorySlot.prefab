@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 224194948126558234}
   - component: {fileID: 222246079547206356}
   - component: {fileID: 114379746742115548}
+  - component: {fileID: 114464094574117946}
   m_Layer: 5
   m_Name: BackgroundForText
   m_TagString: Untagged
@@ -135,14 +136,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: f38b27de49839364d873e52c2e3ad069, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -164,6 +165,20 @@ MonoBehaviour:
   image: {fileID: 114661235224871454}
   stackSizeText: {fileID: 114991583598319362}
   textBackground: {fileID: 114379746742115548}
+--- !u!114 &114464094574117946
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1585203768135116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114661235224871454
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -212,7 +227,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 17
+    m_FontSize: 13
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 1

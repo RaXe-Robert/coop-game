@@ -9,35 +9,35 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1538922997084462}
+  m_RootGameObject: {fileID: 1237483450305922}
   m_IsPrefabParent: 1
---- !u!1 &1538922997084462
+--- !u!1 &1237483450305922
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4096896887505194}
-  - component: {fileID: 33255773562498388}
-  - component: {fileID: 23267973273786470}
-  - component: {fileID: 136963411949721802}
-  - component: {fileID: 114724628951301664}
-  - component: {fileID: 114983207949513210}
-  - component: {fileID: 208058872122503406}
+  - component: {fileID: 4286548694224004}
+  - component: {fileID: 33981789980175306}
+  - component: {fileID: 23286678620362826}
+  - component: {fileID: 136737426929928120}
+  - component: {fileID: 114420906314931404}
+  - component: {fileID: 114958151946027766}
+  - component: {fileID: 208623144909279082}
   m_Layer: 0
-  m_Name: Cactus4
+  m_Name: TreeTrunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4096896887505194
+--- !u!4 &4286548694224004
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1538922997084462}
+  m_GameObject: {fileID: 1237483450305922}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -45,12 +45,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23267973273786470
+--- !u!23 &23286678620362826
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1538922997084462}
+  m_GameObject: {fileID: 1237483450305922}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -60,8 +60,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: b295986e68d2591468ed09f138e9394a, type: 3}
-  - {fileID: 2100002, guid: b295986e68d2591468ed09f138e9394a, type: 3}
+  - {fileID: 2100000, guid: 43f7ed53f8aac6a4499a77f7b97bd7b0, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -81,70 +80,70 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33255773562498388
+--- !u!33 &33981789980175306
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1538922997084462}
-  m_Mesh: {fileID: 4300000, guid: b295986e68d2591468ed09f138e9394a, type: 3}
---- !u!114 &114724628951301664
+  m_GameObject: {fileID: 1237483450305922}
+  m_Mesh: {fileID: 4300000, guid: 43f7ed53f8aac6a4499a77f7b97bd7b0, type: 3}
+--- !u!114 &114420906314931404
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1538922997084462}
+  m_GameObject: {fileID: 1237483450305922}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemsToSpawn:
-  - item: {fileID: 11400000, guid: 2378eba34364556469c51af31e4a0371, type: 2}
-    amount: 1
+  - item: {fileID: 11400000, guid: b77c81d82fd094542b5b3c531494cd0d, type: 2}
+    amount: 2
   spawnRadius: 2
---- !u!114 &114983207949513210
+--- !u!114 &114958151946027766
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1538922997084462}
+  m_GameObject: {fileID: 1237483450305922}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ee515faafad84b45bd0cdd95da334be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Cactus
-  requiredToolToHarvest: 1
+  name: Tree Trunk
+  requiredToolToHarvest: 0
   interactDistance: 5
   attackSound: 0
   spawnOnDepleted: {fileID: 0}
-  maxHealth: 150
---- !u!136 &136963411949721802
+  maxHealth: 100
+--- !u!136 &136737426929928120
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1538922997084462}
+  m_GameObject: {fileID: 1237483450305922}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.29116827
-  m_Height: 0.54884446
+  m_Radius: 0.9375
+  m_Height: 0.7937373
   m_Direction: 1
-  m_Center: {x: 0, y: 0.27442223, z: 0}
---- !u!208 &208058872122503406
+  m_Center: {x: 0.011701405, y: 0.4006856, z: 0}
+--- !u!208 &208623144909279082
 NavMeshObstacle:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1538922997084462}
+  m_GameObject: {fileID: 1237483450305922}
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.0005, y: 0.25, z: 0.0005}
+  m_Extents: {x: 0.41200003, y: 0.397, z: 0.93700004}
   m_MoveThreshold: 0.1
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0.27400002, z: 0}
+  m_Center: {x: 0.012, y: 0.40100002, z: 0}
   m_TimeToStationary: 0.5
