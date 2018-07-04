@@ -44,7 +44,7 @@ public class Farm : BuildableWorldObject
             Actions[1].Invoke();
         else if (item != null)
             FeedUI.Instance.AddFeedItem("You can't farm " + item.Name + ", you silly.", feedType: FeedItem.Type.Fail);
-        else
+        else if(!resourceOnFarm)
             FeedUI.Instance.AddFeedItem("Try to find some seeds", feedType: FeedItem.Type.World);
     }
 

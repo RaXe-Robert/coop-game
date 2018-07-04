@@ -35,7 +35,7 @@ public class Bed : BuildableWorldObject
         else if (playerInBed != null)
             if (playerInBed == PlayerNetwork.LocalPlayer)
                 Actions[2].Invoke();
-        else if (occupied == true)
+        else if (occupied)
             FeedUI.Instance.AddFeedItem("Leave this person alone!", feedType: FeedItem.Type.Fail);            
     }
 
