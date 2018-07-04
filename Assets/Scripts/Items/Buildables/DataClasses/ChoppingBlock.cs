@@ -29,7 +29,10 @@ public class ChoppingBlock : BuildableWorldObject
             return;
 
         if (item == null)
+        {
+            FeedUI.Instance.AddFeedItem("You can't chop nothing", feedType: FeedItem.Type.Fail);
             return;
+        }
 
         if (item?.GetType() == typeof(Tool))
         {
@@ -39,6 +42,8 @@ public class ChoppingBlock : BuildableWorldObject
         }
         else if (item.Id == "pickupitem_log_small")
             Actions[1].Invoke();
+        else
+            FeedUI.Instance.AddFeedItem("You can't chop "+ item.Name, item.Sprite, FeedItem.Type.Fail);
     }
 
     private void ChopLog()
