@@ -5,8 +5,10 @@ using UnityEngine.Events;
 
 public class Bed : BuildableWorldObject
 {
+    [SerializeField] GameObject sleepingCharacterPrefab;
     private bool occupied = false;
     private GameObject playerInBed;
+    private GameObject objectInBed;
 
     protected override UnityAction[] InitializeActions()
     {
@@ -48,6 +50,8 @@ public class Bed : BuildableWorldObject
         if (!DaytimeController.Instance.IsDaytime)
         {
             playerInBed = PlayerNetwork.LocalPlayer;
+            playerInBed.GetComponent<PlayerMovementController>().IsFrozen = true;
+            playerInBed.GetComponent<PlayerCombatController>().TogglePlayerModel(false);            
             photonView.RPC(nameof(RPC_EnterBed), PhotonTargets.AllBuffered, PhotonNetwork.player.NickName);
 
             ExitGames.Client.Photon.Hashtable inBed = new ExitGames.Client.Photon.Hashtable() { { "inBed", true } };
@@ -82,6 +86,8 @@ public class Bed : BuildableWorldObject
 
     private void LeaveBed()
     {
+        playerInBed.GetComponent<PlayerMovementController>().IsFrozen = false;
+        playerInBed.GetComponent<PlayerCombatController>().TogglePlayerModel(true);
         playerInBed = null;
         photonView.RPC(nameof(RPC_LeaveBed), PhotonTargets.AllBuffered);
 
@@ -92,6 +98,7 @@ public class Bed : BuildableWorldObject
     [PunRPC]
     protected void RPC_EnterBed(string name)
     {
+        objectInBed = Instantiate(sleepingCharacterPrefab, transform);
         FeedUI.Instance.AddFeedItem(name + " has gone to bed!", feedType: FeedItem.Type.World);
         occupied = true;
     }
@@ -99,6 +106,7 @@ public class Bed : BuildableWorldObject
     [PunRPC]
     protected void RPC_LeaveBed()
     {
+        Destroy(objectInBed);
         occupied = false;
     }
 }

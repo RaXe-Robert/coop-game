@@ -141,3 +141,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactDistance: 2
+  sleepingCharacterPrefab: {fileID: 1044496173133808, guid: 2cb5326c6a0c34c46a19657ff16c18cf,
+    type: 2}

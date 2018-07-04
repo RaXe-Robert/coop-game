@@ -12,6 +12,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private float interactionTimeout = 0f;
     private float pathUpdateTimeout = 0f;
     private bool isMoving = false;
+    public bool IsFrozen = false;
 
     [SerializeField] private LayerMask rotationLayerMask;
     [SerializeField] private LayerMask waterLayerMask;
@@ -65,6 +66,21 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (!photonView.isMine)
             return;
 
+        if (IsFrozen)
+        {
+            if (!isMoving && CurrentInteraction != null)
+            {
+                Debug.Log("111");
+                Interact();
+            }
+            else if (isMoving)
+            {
+                StopInteraction();
+                Debug.Log("222");
+            }
+            return;
+        }
+
         if (interactionTimeout > 0)
             interactionTimeout -= Time.deltaTime;
 
@@ -83,6 +99,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
     private void FixedUpdate()
     {
         if (!photonView.isMine)
+            return;
+
+        if (IsFrozen)
             return;
 
         MovePlayer();
@@ -148,6 +167,11 @@ public class PlayerMovementController : Photon.MonoBehaviour
             isMoving = true;
         }
 
+        Interact();
+    }
+
+    public void Interact()
+    {
         var interactable = CurrentInteraction.GetComponent<IInteractable>();
         var enemy = CurrentInteraction.GetComponent<IAttackable>();
         if (interactable != null && interactable.InRange(transform.position))
@@ -155,7 +179,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
             interactable.Interact(gameObject, inventory.inventoryItems[inventory.hotBarSelection] ?? null);
             StopInteraction();
         }
-        else if(enemy != null && Vector3.Distance(transform.position, enemy.GameObject.transform.position) < 3 && CanInteract)
+        else if (enemy != null && Vector3.Distance(transform.position, enemy.GameObject.transform.position) < 3 && CanInteract)
         {
             enemy.TakeHit(combatController);
             AddInteractionTimeout(combatController.TimeBetweenAttacks);
@@ -174,6 +198,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
         interruptedPickup = false;
 
         if (agent.hasPath)
+        {
+            isMoving = false;
             agent.ResetPath();
+        }
     }
 }
