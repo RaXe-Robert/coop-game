@@ -28,6 +28,9 @@ public class ChoppingBlock : BuildableWorldObject
         if (!InRange(invoker.transform.position))
             return;
 
+        if (item == null)
+            return;
+
         if (item?.GetType() == typeof(Tool))
         {
             Tool tool = item as Tool;
