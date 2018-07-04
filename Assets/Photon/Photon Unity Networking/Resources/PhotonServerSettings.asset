@@ -77,4 +77,8 @@ MonoBehaviour:
   - RPC_FarmResource
   - RPC_SpawnResource
   - RPC_DestroyFarm
+  - RPC_EnterBed
+  - RPC_LeaveBed
+  - RPC_TogglePlayerModel
+  - RPC_BedFeed
   DisableAutoOpenWizard: 1
