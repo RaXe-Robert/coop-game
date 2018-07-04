@@ -19,6 +19,15 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 
     public float TimeBetweenAttacks => stats.TimeBetweenAttacks;
 
+    public void TriggerHitAnimation()
+    {
+        var animator = GetComponent<Animator>();
+        if (animator == null)
+            return;
+        
+        animator.SetTrigger("Swing");
+    }
+    
     private void Awake()
     {
         stats = GetComponent<PlayerStatsComponent>();
