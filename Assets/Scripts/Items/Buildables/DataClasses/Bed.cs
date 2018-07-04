@@ -30,12 +30,12 @@ public class Bed : BuildableWorldObject
             if (tool.ToolType == ToolType.Hammer)
                 Actions[0].Invoke();
         }
-        else if (occupied == false)
+        else if (!occupied)
             Actions[1].Invoke();
         else if (playerInBed != null)
             if (playerInBed == PlayerNetwork.LocalPlayer)
                 Actions[2].Invoke();
-        else if (occupied)
+        if (occupied)
             FeedUI.Instance.AddFeedItem("Leave this person alone!", feedType: FeedItem.Type.Fail);            
     }
 
@@ -53,8 +53,9 @@ public class Bed : BuildableWorldObject
         {
             playerInBed = PlayerNetwork.LocalPlayer;
             playerInBed.GetComponent<PlayerMovementController>().IsFrozen = true;
-            playerInBed.GetComponent<PlayerCombatController>().TogglePlayerModel(false);          
-            photonView.RPC(nameof(RPC_EnterBed), PhotonTargets.AllBuffered, PhotonNetwork.player.NickName);
+            playerInBed.GetComponent<PlayerCombatController>().TogglePlayerModel(false);
+            photonView.RPC(nameof(RPC_BedFeed), PhotonTargets.All, PhotonNetwork.player.NickName);
+            photonView.RPC(nameof(RPC_EnterBed), PhotonTargets.AllBuffered);
 
             ExitGames.Client.Photon.Hashtable inBed = new ExitGames.Client.Photon.Hashtable() { { "inBed", true } };
             PhotonNetwork.SetPlayerCustomProperties(inBed);
@@ -97,10 +98,15 @@ public class Bed : BuildableWorldObject
     }
 
     [PunRPC]
-    protected void RPC_EnterBed(string name)
+    protected void RPC_BedFeed(string name)
+    {
+        FeedUI.Instance.AddFeedItem(name + " has gone to bed!", feedType: FeedItem.Type.World);
+    }
+
+    [PunRPC]
+    protected void RPC_EnterBed()
     {
         objectInBed = Instantiate(sleepingCharacterPrefab, transform);
-        FeedUI.Instance.AddFeedItem(name + " has gone to bed!", feedType: FeedItem.Type.World);
         occupied = true;
     }
 

@@ -80,4 +80,5 @@ MonoBehaviour:
   - RPC_EnterBed
   - RPC_LeaveBed
   - RPC_TogglePlayerModel
+  - RPC_BedFeed
   DisableAutoOpenWizard: 1
