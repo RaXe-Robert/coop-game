@@ -59,9 +59,7 @@ public class Bed : BuildableWorldObject
 
             if (AllPlayersInBed())
             {
-                //TimeToNextDay is not the right timespan atm.
-                System.TimeSpan TimeToNextDay = System.TimeSpan.FromTicks(DaytimeController.Instance.CurrentTime.Ticks % new System.TimeSpan(9, 0, 0).Ticks);
-                DaytimeController.Instance.CurrentTime = DaytimeController.Instance.CurrentTime + TimeToNextDay;
+                DaytimeController.Instance.CurrentTime = DaytimeController.Instance.CurrentTime + new System.TimeSpan(DaytimeController.Instance.NightDuration, 0, 0);
             }
         }
         else
