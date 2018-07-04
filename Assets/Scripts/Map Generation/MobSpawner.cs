@@ -9,17 +9,22 @@ namespace Assets.Scripts.Map_Generation
     {
         public GameObject parent;
         public float spawnRate = 60f;
-        public int maxMobs = 7;
+        public int maxMobs = 4;
         public List<GameObject> mobs;
 
         private int currentMobs;
-        private float tileExtent;
+        public float spawnRadius;
+
+        private void Start()
+        {
+            parent = gameObject;
+            StartSpawner();
+        }
 
         public void StartSpawner()
         {
             if (PhotonNetwork.isMasterClient && mobs.Count > 0)
             {
-                tileExtent = parent.GetComponent<Renderer>().bounds.extents.x;
                 StartCoroutine(Spawner());
             }
         }
@@ -37,7 +42,7 @@ namespace Assets.Scripts.Map_Generation
                 var instantiatedObjects = new List<int>();
                 var mob = mobs.PickRandom();
 
-                var localPosition = new Vector3(Random.Range(-tileExtent, tileExtent), 0, Random.Range(-tileExtent, tileExtent));
+                var localPosition = new Vector3(Random.Range(-spawnRadius, spawnRadius), 0, Random.Range(-spawnRadius, spawnRadius));
                 var rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
 
                 var instantiated = PhotonNetwork.Instantiate(mob.name,

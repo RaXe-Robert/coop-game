@@ -1211,6 +1211,7 @@ GameObject:
   - component: {fileID: 195950959439048400}
   - component: {fileID: 114533432281872854}
   - component: {fileID: 114761127182944380}
+  - component: {fileID: 114232163908799192}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -8114,6 +8115,25 @@ MonoBehaviour:
     InterpolateOption: 0
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 0
+--- !u!114 &114232163908799192
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1246103586113638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d420ab1ccae112c4698c1188624cc193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 1246103586113638}
+  spawnRate: 1
+  maxMobs: 5
+  mobs:
+  - {fileID: 1386452222050776, guid: 6ec3b42c643222f43a50d22a8629f246, type: 2}
+  - {fileID: 1559031737579132, guid: 263ef742dba3c944abdc9eb1917e0da7, type: 2}
+  - {fileID: 1731566292436872, guid: 30ba0189b1de9094b85526fb1ce512e1, type: 2}
+  spawnRadius: 50
 --- !u!114 &114311978425432840
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8214,6 +8234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   diamond: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
   stick: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
+  hotBarSelection: 0
 --- !u!114 &114654721778694238
 MonoBehaviour:
   m_ObjectHideFlags: 1
