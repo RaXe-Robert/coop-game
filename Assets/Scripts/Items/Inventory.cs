@@ -3,6 +3,7 @@ using Assets.Scripts.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
 public class Inventory : MonoBehaviour
@@ -93,6 +94,9 @@ public class Inventory : MonoBehaviour
     {
         hotBarSelection = number;
         OnHotbarChangedCallback?.Invoke(number);
+        
+        var itemId = inventoryItems.At(number)?.Id;
+        PlayerNetwork.LocalPlayer.GetComponent<PlayerCombatController>().SwitchHoldingItem(itemId);
     }
 
     private void AddNewItemStackById(string itemId, int stackSize)
@@ -109,6 +113,7 @@ public class Inventory : MonoBehaviour
 
         inventoryItems[emptyIndex.Value] = item;
         OnItemChangedCallback?.Invoke();
+        
     }
 
     private void FillItemStacksById(string itemId, int stackSize)

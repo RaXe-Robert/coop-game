@@ -4,6 +4,9 @@ using Photon;
 
 public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 {
+    [SerializeField] private GameObject rightHandBone;
+    private GameObject spawnedHoldingObject;
+    
     public string Name => photonView.owner.NickName;
     public string TooltipText => Name;
     public GameObject GameObject => gameObject;
@@ -55,6 +58,27 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
         GetComponent<PhotonView>().RPC(nameof(RPC_RespawnPlayer), PhotonTargets.All);
     }
 
+    public void SwitchHoldingItem(string itemId)
+    {
+        if (spawnedHoldingObject != null)
+            Destroy(spawnedHoldingObject);
+        
+        var model = ItemFactory.GetModel(itemId);
+        if (model == null) return;
+
+        spawnedHoldingObject = Instantiate(model, rightHandBone.transform);
+        
+        if(photonView.isMine)
+            photonView.RPC("RPC_SwitchItem", PhotonTargets.All, itemId);
+    }
+
+    [PunRPC]
+    private void RPC_SwitchItem(string itemId)
+    {
+        if (!photonView.isMine)
+            SwitchHoldingItem(itemId);
+    }
+    
     [PunRPC]
     protected void RPC_TogglePlayerModel(bool showModel)
     {
