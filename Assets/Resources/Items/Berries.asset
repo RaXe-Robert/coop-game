@@ -15,10 +15,10 @@ MonoBehaviour:
   itemName: Berries
   sprite: {fileID: 21300000, guid: 84e2bb8ed06ad6a468027abfa2a08c14, type: 3}
   model: {fileID: 100000, guid: be8feb0ad2d954442a31565546971366, type: 3}
-  description: Looks edible.
+  description: Looks edible
   burningTime: 0
   meltingResult: {fileID: 0}
   isConsumable: 1
   onConsumedEffects:
-  - {fileID: 11400000, guid: ff3eb3dc58ddffb4991422bd58b0731a, type: 2}
   - {fileID: 11400000, guid: 341c87eb0d861a84d9b199ffd612cbae, type: 2}
+  - {fileID: 11400000, guid: ff3eb3dc58ddffb4991422bd58b0731a, type: 2}
