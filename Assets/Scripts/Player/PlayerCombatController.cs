@@ -21,11 +21,8 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 
     public void TriggerHitAnimation()
     {
-        var animator = GetComponent<Animator>();
-        if (animator == null)
-            return;
-        
-        animator.SetTrigger("Swing");
+        DoHitAnimation();
+        photonView.RPC("RPC_HitAnimation", PhotonTargets.All);
     }
     
     private void Awake()
@@ -71,6 +68,9 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
     {
         if (spawnedHoldingObject != null)
             Destroy(spawnedHoldingObject);
+
+        if (itemId == null)
+            return;
         
         var model = ItemFactory.GetModel(itemId);
         if (model == null) return;
@@ -81,6 +81,22 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
             photonView.RPC("RPC_SwitchItem", PhotonTargets.All, itemId);
     }
 
+    private void DoHitAnimation()
+    {
+        var animator = GetComponent<Animator>();
+        if (animator == null)
+            return;
+        
+        animator.SetTrigger("Swing");
+    }
+
+    [PunRPC]
+    private void RPC_HitAnimation()
+    {
+        if(!photonView.isMine)
+            DoHitAnimation();
+    }
+    
     [PunRPC]
     private void RPC_SwitchItem(string itemId)
     {
