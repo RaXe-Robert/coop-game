@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemsToSpawn:
-  - item: {fileID: 11400000, guid: 0a5ef4509335b27418001a14ff42a932, type: 2}
+  - item: {fileID: 11400000, guid: 0cb1f48592747c441bdedc30c00161c2, type: 2}
     amount: 1
   spawnRadius: 2
 --- !u!114 &114739293621436936

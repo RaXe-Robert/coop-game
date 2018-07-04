@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Consumable", menuName = "Items/Consumable")]
-public class ConsumableItemData : ScriptableItemData
+public class ConsumableData : ScriptableItemData
 {
     [SerializeField] private bool isConsumable;
     [SerializeField] private List<ScriptableStatusEffectData> onConsumedEffects;

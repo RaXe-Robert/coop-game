@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 public class Consumable : Item
 {
-    public Consumable(ConsumableItemData itemData) : base(itemData)
+    public Consumable(ConsumableData itemData) : base(itemData)
     {
         IsConsumable = itemData.IsConsumable;
         OnConsumedEffects = itemData.OnConsumedEffects;
