@@ -51,7 +51,7 @@ public class Bed : BuildableWorldObject
         {
             playerInBed = PlayerNetwork.LocalPlayer;
             playerInBed.GetComponent<PlayerMovementController>().IsFrozen = true;
-            playerInBed.GetComponent<PlayerCombatController>().TogglePlayerModel(false);            
+            playerInBed.GetComponent<PlayerCombatController>().TogglePlayerModel(false);          
             photonView.RPC(nameof(RPC_EnterBed), PhotonTargets.AllBuffered, PhotonNetwork.player.NickName);
 
             ExitGames.Client.Photon.Hashtable inBed = new ExitGames.Client.Photon.Hashtable() { { "inBed", true } };
@@ -90,6 +90,7 @@ public class Bed : BuildableWorldObject
         playerInBed.GetComponent<PlayerCombatController>().TogglePlayerModel(true);
         playerInBed = null;
         photonView.RPC(nameof(RPC_LeaveBed), PhotonTargets.AllBuffered);
+        
 
         ExitGames.Client.Photon.Hashtable inBed = new ExitGames.Client.Photon.Hashtable() { { "inBed", false } };
         PhotonNetwork.SetPlayerCustomProperties(inBed);

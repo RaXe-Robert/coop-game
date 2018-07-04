@@ -69,15 +69,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (IsFrozen)
         {
             if (!isMoving && CurrentInteraction != null)
-            {
-                Debug.Log("111");
                 Interact();
-            }
             else if (isMoving)
-            {
                 StopInteraction();
-                Debug.Log("222");
-            }
             return;
         }
 

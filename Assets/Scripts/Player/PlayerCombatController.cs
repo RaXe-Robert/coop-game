@@ -43,10 +43,7 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 
     public void TogglePlayerModel(bool showModel)
     {
-        foreach (var rend in GetComponentsInChildren<Renderer>())
-        {
-            rend.enabled = showModel;
-        }
+        photonView.RPC(nameof(RPC_TogglePlayerModel), PhotonTargets.AllBuffered, showModel);
     }
 
     public void RespawnPlayer()
@@ -56,6 +53,15 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
         GetComponent<HealthComponent>().SetValue(100);
         GetComponent<HungerComponent>().SetValue(100);
         GetComponent<PhotonView>().RPC(nameof(RPC_RespawnPlayer), PhotonTargets.All);
+    }
+
+    [PunRPC]
+    protected void RPC_TogglePlayerModel(bool showModel)
+    {
+        foreach(var rend in GetComponentsInChildren<Renderer>())
+        {
+            rend.enabled = showModel;
+        }
     }
 
     [PunRPC]
