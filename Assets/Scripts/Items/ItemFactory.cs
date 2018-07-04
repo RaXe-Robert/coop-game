@@ -40,6 +40,8 @@ public class ItemFactory : MonoBehaviour {
         photonView.RPC(nameof(SpawnItemOnNetwork), PhotonTargets.AllBuffered, position, photonId, itemId, quaternion, stackSize);
     }
 
+    public static GameObject GetModel(string itemId) => itemLookupTable[itemId]?.Model;
+
     [PunRPC]
     private void SpawnItemOnNetwork(Vector3 position, int photonId, string itemId, Quaternion quaternion = new Quaternion(), int stackSize = 1)
     {

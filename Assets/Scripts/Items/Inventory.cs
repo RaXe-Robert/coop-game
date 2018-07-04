@@ -3,6 +3,7 @@ using Assets.Scripts.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
 public class Inventory : MonoBehaviour
@@ -93,7 +94,16 @@ public class Inventory : MonoBehaviour
     {
         hotBarSelection = number;
         OnHotbarChangedCallback?.Invoke(number);
+
+        PlayerUpdateSelectedItem();
     }
+
+    private void PlayerUpdateSelectedItem()
+    {
+        var itemId = inventoryItems[hotBarSelection]?.Id;
+        PlayerNetwork.LocalPlayer.GetComponent<PlayerCombatController>().SwitchHoldingItem(itemId);
+    }
+        
 
     private void AddNewItemStackById(string itemId, int stackSize)
     {
@@ -104,11 +114,12 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        Item item= ItemFactory.CreateNewItem(itemId, stackSize);
+        Item item = ItemFactory.CreateNewItem(itemId, stackSize);
         var emptyIndex = inventoryItems.FirstNullIndexAt();
 
         inventoryItems[emptyIndex.Value] = item;
         OnItemChangedCallback?.Invoke();
+        PlayerUpdateSelectedItem();
     }
 
     private void FillItemStacksById(string itemId, int stackSize)
@@ -167,6 +178,7 @@ public class Inventory : MonoBehaviour
         {
             inventoryItems[index] = null;
             OnItemChangedCallback?.Invoke();
+            PlayerUpdateSelectedItem();
         }
         else
             print($"Tried removing an item at index {index} but it couldnt be found in the inventory");
@@ -176,6 +188,7 @@ public class Inventory : MonoBehaviour
     {
         inventoryItems.Swap(indexA, indexB);
         OnItemChangedCallback?.Invoke();
+        PlayerUpdateSelectedItem();
     }
 
     public int GetItemAmountById(string itemId)
@@ -243,6 +256,7 @@ public class Inventory : MonoBehaviour
                         currentStack.StackSize -= amountToRemove;
                         amountToRemove = 0;
                         OnItemChangedCallback?.Invoke();
+                        PlayerUpdateSelectedItem();
                         return;
                     }
                 }
@@ -252,6 +266,7 @@ public class Inventory : MonoBehaviour
                     amountToRemove--;
                     RemoveItemAtIndex(i);
                     OnItemChangedCallback?.Invoke();
+                    PlayerUpdateSelectedItem();
                 }
             }
         }
@@ -295,6 +310,7 @@ public class Inventory : MonoBehaviour
                         currentStack.StackSize -= amountToRemove;
                         amountToRemove = 0;
                         OnItemChangedCallback?.Invoke();
+                        PlayerUpdateSelectedItem();
                         return;
                     }
                 }
@@ -304,6 +320,7 @@ public class Inventory : MonoBehaviour
                     amountToRemove--;
                     RemoveItemAtIndex(i);
                     OnItemChangedCallback?.Invoke();
+                    PlayerUpdateSelectedItem();
                 }
             }
         }
@@ -349,6 +366,7 @@ public class Inventory : MonoBehaviour
         Item item = ItemFactory.CreateNewItem(itemId, stackSize);
         inventoryItems[index] = item;
         OnItemChangedCallback?.Invoke();
+        PlayerUpdateSelectedItem();
         SoundManager.Instance.PlaySound(SoundManager.Sound.PICKUP);
     }
 
@@ -375,6 +393,7 @@ public class Inventory : MonoBehaviour
             var requiredItem = recipe.requiredItems[i];
             RemoveItemById(requiredItem.item.Id, requiredItem.amount * recipe.amountToCraft);
         }
+        PlayerUpdateSelectedItem();
 
         return true;
     }
@@ -404,5 +423,6 @@ public class Inventory : MonoBehaviour
             inventoryItems[i] = null;
         }
         OnItemChangedCallback?.Invoke();
+        PlayerUpdateSelectedItem();
     }
 }

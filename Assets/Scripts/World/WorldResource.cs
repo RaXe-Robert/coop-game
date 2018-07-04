@@ -49,7 +49,8 @@ public class WorldResource : MonoBehaviour, IInteractable
     {
         if (!InRange(invoker.transform.position))
             return;
-
+        
+        PlayerNetwork.LocalPlayer.GetComponent<PlayerCombatController>().TriggerHitAnimation();
         SoundManager.Instance.PlayAttackSound(attackSound);
 
         var playerMovement = PlayerNetwork.LocalPlayer.GetComponent<PlayerMovementController>();

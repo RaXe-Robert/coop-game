@@ -8201,6 +8201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dbc8101182350540b9c1280bc162f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rightHandBone: {fileID: 1021406009038390}
 --- !u!114 &114604933675997852
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8214,6 +8215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   diamond: {fileID: 11400000, guid: 11443d833939c4a4898118439e3bde86, type: 2}
   stick: {fileID: 11400000, guid: 9ea26080c595dc44d897d5fca784a3c3, type: 2}
+  hotBarSelection: 0
 --- !u!114 &114654721778694238
 MonoBehaviour:
   m_ObjectHideFlags: 1
