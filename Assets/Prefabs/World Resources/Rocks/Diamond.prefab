@@ -116,7 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Diamond Ore
   requiredToolToHarvest: 2
-  interactDistance: 5
+  interactDistance: 2
   attackSound: 1
   spawnOnDepleted: {fileID: 0}
   maxHealth: 400

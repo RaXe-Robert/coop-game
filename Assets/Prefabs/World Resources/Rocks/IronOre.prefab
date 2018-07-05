@@ -118,7 +118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Iron Ore
   requiredToolToHarvest: 2
-  interactDistance: 5
+  interactDistance: 2
   attackSound: 0
   spawnOnDepleted: {fileID: 0}
   maxHealth: 300
