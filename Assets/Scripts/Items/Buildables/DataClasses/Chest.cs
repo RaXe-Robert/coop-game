@@ -138,7 +138,7 @@ public class Chest : BuildableWorldObject
         Item item = ItemFactory.CreateNewItem(itemId, stackSize);
 
         //Check if the item to add is a Resource item.
-        if (item.GetType() == typeof(Resource))
+        if (item.GetType() == typeof(Resource) || item.GetType() == typeof(Consumable))
         {
             int itemsToAdd = item.StackSize;
 
@@ -155,7 +155,7 @@ public class Chest : BuildableWorldObject
                     if (itemsToAdd == 0)
                         return;
 
-                    Resource currentStack = existingItems[i] as Resource;
+                    Item currentStack = existingItems[i];
                     int availableAmount = Item.MAXSTACKSIZE - currentStack.StackSize;
                     if (availableAmount >= itemsToAdd)
                     {
@@ -210,7 +210,7 @@ public class Chest : BuildableWorldObject
         {
             if (chestItems[i]?.Id == itemId)
             {
-                if (chestItems[i].GetType() == typeof(Resource))
+                if (chestItems[i].GetType() == typeof(Resource) || chestItems[i].GetType() == typeof(Consumable))
                     temp += chestItems[i].StackSize;
                 else temp += 1;
             }
@@ -252,9 +252,9 @@ public class Chest : BuildableWorldObject
             if (chestItems[i]?.Id == itemId)
             {
                 //Check if the item is a resource if so, we can take items of the stacksize.
-                if (chestItems[i].GetType() == typeof(Resource))
+                if (chestItems[i].GetType() == typeof(Resource) || chestItems[i].GetType() == typeof(Consumable))
                 {
-                    Resource currentStack = (Resource)chestItems[i];
+                    Item currentStack = chestItems[i];
                     if (amountToRemove >= currentStack.StackSize)
                     {
                         amountToRemove -= currentStack.StackSize;
@@ -289,7 +289,7 @@ public class Chest : BuildableWorldObject
         if (!chestItems.FirstNullIndexAt().HasValue)
         {
             //Check if we are adding a resource item, if so we check if we have full stacks of the item.
-            if (item.GetType() == typeof(Resource))
+            if (item.GetType() == typeof(Resource) || item.GetType() == typeof(Consumable))
             {
                 if (GetItemAmountById(item.Id) % 64 != 0)
                     FillItemStacksById(itemId, stackSize);
@@ -301,7 +301,7 @@ public class Chest : BuildableWorldObject
         }
         else
         {
-            if (item.GetType() == typeof(Resource))
+            if (item.GetType() == typeof(Resource) || item.GetType() == typeof(Consumable))
                 FillItemStacksById(itemId, stackSize);
             else
                 AddNewItemStackById(itemId, stackSize);
