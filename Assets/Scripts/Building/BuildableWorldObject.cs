@@ -77,7 +77,7 @@ public class BuildableWorldObject : Photon.MonoBehaviour, IInteractable
     public void DestroyWorldObject()
     {
         ItemFactory.CreateWorldObject(transform.position, buildable.Id, buildable.StackSize);
-        FeedUI.Instance.AddFeedItem(buildable.Name + " demolished", buildable.Sprite, FeedItem.Type.World);
+        FeedUI.Instance.AddFeedItem($"{buildable.Name} demolished", buildable.Sprite, FeedItem.Type.World);
         photonView.RPC("RPC_DestroyWorldObject", PhotonTargets.AllBuffered);
     }
 

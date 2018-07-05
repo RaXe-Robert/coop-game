@@ -51,9 +51,11 @@ public class Inventory : MonoBehaviour
         if (InputManager.GetButtonDown("Spawn item"))
         {
             AddItemById(stick.Id, 64);
-            AddItemById("pickupitem_melon_small", 1);
-            AddItemById("pickupitem_berries_small", 1);
-            AddItemById("pickupitem_ironore_small", 1);
+            AddItemById("pickupitem_ironbar_small", 5);
+            AddItemById("pickupitem_pebbles_small", 5);
+            AddItemById("pickupitem_stone_small", 5);
+            AddItemById("buildable_farm", 1);
+            AddItemById("pickupitem_seeds_small", 64);
         }
 #endif
     }

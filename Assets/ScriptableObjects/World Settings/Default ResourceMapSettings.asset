@@ -18,7 +18,7 @@ MonoBehaviour:
     octaves: 3
     persistance: 0.8
     lacunarity: 2
-    seed: 1030056266
+    seed: 981980590
     offset: {x: 0, y: 0}
   worldResourceEntries:
   - worldResourcePrefab: {fileID: 1695406501947972, guid: 00e52d555c867374690f2256513d9e5a,
@@ -64,5 +64,8 @@ MonoBehaviour:
       type: 2}
     biomes: 4
   - worldResourcePrefab: {fileID: 1237483450305922, guid: 19fec315cc582474c9cde0043e30807e,
+      type: 2}
+    biomes: 3
+  - worldResourcePrefab: {fileID: 1129235480874376, guid: 211c7e8208950aa4ba5f449302358d0e,
       type: 2}
     biomes: 3

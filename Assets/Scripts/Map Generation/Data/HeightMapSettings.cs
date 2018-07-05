@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Map_Generation
 {
-    [CreateAssetMenu()]
+    [CreateAssetMenu(fileName = "New HeightMapSettings", menuName = "Terrain Generation/HeightMapSettings")]
     public class HeightMapSettings : UpdatableData
     {
         const int textureSize = 512;

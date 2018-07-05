@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts.Map_Generation
 {
-    [CreateAssetMenu()]
+    [CreateAssetMenu(fileName = "New MeshSettings", menuName = "Terrain Generation/MeshSettings")]
     public class MeshSettings : UpdatableData
     {
 
