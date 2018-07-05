@@ -28,7 +28,7 @@ public class ResourceOnFarm : Photon.MonoBehaviour, IInteractable {
         if (!farm.isGrowing)
             FarmResource();
         else
-            FeedUI.Instance.AddFeedItem("Take your time: " + farm.timeLeft + " s", feedType: FeedItem.Type.Fail);
+            FeedUI.Instance.AddFeedItem($"Time remaining: {farm.timeLeft}s", feedType: FeedItem.Type.Fail);
     }
 
     public void FarmResource()

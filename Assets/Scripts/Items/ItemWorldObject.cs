@@ -25,7 +25,7 @@ public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
         if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
         {
             inventory.AddItemById(Item.Id, Item.StackSize);
-            FeedUI.Instance.AddFeedItem("Picked up " + Item.Name, Item.Sprite, FeedItem.Type.Succes);
+            FeedUI.Instance.AddFeedItem($"Picked up '{Item.Name}'", Item.Sprite, FeedItem.Type.Succes);
             WorldItemManager.Instance.RemoveItem(photonView.viewID);
         }
         else
