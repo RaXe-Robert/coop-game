@@ -52,7 +52,7 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 
     public void TogglePlayerModel(bool showModel)
     {
-        photonView.RPC(nameof(RPC_TogglePlayerModel), PhotonTargets.AllBuffered, showModel);
+        photonView.RPC(nameof(RPC_TogglePlayerModel), PhotonTargets.All, showModel);
     }
 
     public void RespawnPlayer()
