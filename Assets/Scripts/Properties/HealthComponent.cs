@@ -52,7 +52,7 @@ public class HealthComponent : PropertyComponentBase
     private void DecreaseHealthValue(float amount)
     {
         Value -= amount;
-        if (Value <= 0)
+        if (Value <= 0 && photonView.isMine)
             OnDepletedCallback?.Invoke();
     }
 }

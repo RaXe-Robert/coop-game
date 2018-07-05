@@ -154,14 +154,23 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// </summary>
     private void HandleInteraction()
     {
-        if ((!agent.hasPath || pathUpdateTimeout <= 0) && agent.isOnNavMesh)
-        {
-            agent.SetDestination(CurrentInteraction.transform.position);
-            pathUpdateTimeout = 0.1f;
-            isMoving = true;
-        }
+        var interactable = CurrentInteraction.GetComponent<IInteractable>();
+        var enemy = CurrentInteraction.GetComponent<IAttackable>();
 
-        Interact();
+        if (interactable != null && interactable.InRange(transform.position))
+            Interact();
+        else if (enemy != null && Vector3.Distance(transform.position, enemy.GameObject.transform.position) < 3)
+            Interact();
+        else
+        {
+            if ((!agent.hasPath || pathUpdateTimeout <= 0) && agent.isOnNavMesh)
+            {
+                agent.SetDestination(CurrentInteraction.transform.position);
+                pathUpdateTimeout = 0.1f;
+                isMoving = true;
+                animator.SetBool("IsRunning", true);
+            }
+        }
     }
 
     public void Interact()

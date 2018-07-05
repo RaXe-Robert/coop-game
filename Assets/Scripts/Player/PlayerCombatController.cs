@@ -46,8 +46,8 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
             GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.DeathScreen);
             GetComponent<Inventory>().DropAllItems();
             GetComponent<PlayerMovementController>().enabled = false;
+            photonView.RPC(nameof(KillPlayer), PhotonTargets.All, Name);
         }
-        photonView.RPC(nameof(KillPlayer), PhotonTargets.All, Name);
     }
 
     public void TakeHit(IAttacker attacker)
