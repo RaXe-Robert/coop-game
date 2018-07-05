@@ -41,7 +41,7 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
             GetComponent<Inventory>().DropAllItems();
             GetComponent<PlayerMovementController>().enabled = false;
         }
-        photonView.RPC(nameof(KillPlayer), PhotonTargets.All, Name, lastAttacker == null ? "hunger" : lastAttacker.Name);
+        photonView.RPC(nameof(KillPlayer), PhotonTargets.All, Name);
     }
 
     public void TakeHit(IAttacker attacker)
@@ -122,9 +122,9 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
     }
 
     [PunRPC]
-    private void KillPlayer(string playerName, string killerName)
+    private void KillPlayer(string playerName)
     {
-        CustomInRoomChat.Instance.AddLine($"{playerName} got killed by {killerName}");
+        CustomInRoomChat.Instance.AddLine($"{playerName} died");
         IsDead = true;
 
         RPC_TogglePlayerModel(false);

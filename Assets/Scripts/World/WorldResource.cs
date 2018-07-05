@@ -59,7 +59,7 @@ public class WorldResource : MonoBehaviour, IInteractable
             return;
         }
         
-        if (requiredToolToHarvest == ToolType.None)
+        if (requiredToolToHarvest == ToolType.Nothing)
         {
             WorldResourceManager.Instance.DecreaseHealth(this, TerrainChunk, 50f);
         }
