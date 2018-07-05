@@ -69,10 +69,10 @@ public class WorldResource : MonoBehaviour, IInteractable
             if(tool.ToolType == RequiredToolToHarvest)
                 WorldResourceManager.Instance.DecreaseHealth(this, TerrainChunk, 50f);
             else
-                FeedUI.Instance.AddFeedItem($"Requires a(n) '{RequiredToolToHarvest}' to harvest!", feedType: FeedItem.Type.Fail);
+                FeedUI.Instance.AddFeedItem($"Requires {RequiredToolToHarvest}!", feedType: FeedItem.Type.Fail);
         }
         else
-            FeedUI.Instance.AddFeedItem($"Requires a(n) '{RequiredToolToHarvest}' to harvest!", feedType: FeedItem.Type.Fail);
+            FeedUI.Instance.AddFeedItem($"Requires '{RequiredToolToHarvest}!", feedType: FeedItem.Type.Fail);
     }
 
     public string TooltipText => $"{name} \nRequires {requiredToolToHarvest}";
