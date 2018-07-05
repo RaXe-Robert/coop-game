@@ -168,13 +168,19 @@ public class PlayerMovementController : Photon.MonoBehaviour
     {
         var interactable = CurrentInteraction.GetComponent<IInteractable>();
         var enemy = CurrentInteraction.GetComponent<IAttackable>();
-        if (interactable != null && interactable.InRange(transform.position))
+        var combatController = GetComponent<PlayerCombatController>();
+        
+        if (interactable != null && interactable.InRange(transform.position) )
         {
-            interactable.Interact(gameObject, inventory.inventoryItems[inventory.hotBarSelection] ?? null);
+            if(CurrentInteraction.GetComponent<WorldResource>() != null)
+                combatController.TriggerHitAnimation();
+            
+            interactable.Interact(gameObject, inventory.inventoryItems[inventory.hotBarSelection]);
             StopInteraction();
         }
         else if (enemy != null && Vector3.Distance(transform.position, enemy.GameObject.transform.position) < 3 && CanInteract)
         {
+            combatController.TriggerHitAnimation();
             enemy.TakeHit(combatController);
             AddInteractionTimeout(combatController.TimeBetweenAttacks);
             StopInteraction();
