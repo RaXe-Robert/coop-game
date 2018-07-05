@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ChoppingBlock : BuildableWorldObject
+public class Anvil : BuildableWorldObject
 {
     protected override void Start()
     {        
@@ -19,7 +19,7 @@ public class ChoppingBlock : BuildableWorldObject
     {
         return new UnityAction[]
         {
-            new UnityAction(ChopLog)
+            new UnityAction(Use)
         };
     }
 
@@ -30,7 +30,7 @@ public class ChoppingBlock : BuildableWorldObject
 
         if (item == null)
         {
-            FeedUI.Instance.AddFeedItem("You can't chop nothing", feedType: FeedItem.Type.Fail);
+            FeedUI.Instance.AddFeedItem("You can't use an anvil with nothing.", feedType: FeedItem.Type.Fail);
             return;
         }
 
@@ -40,18 +40,18 @@ public class ChoppingBlock : BuildableWorldObject
             if (tool.ToolType == ToolType.Hammer)
                 Actions[0].Invoke();
         }
-        else if (item.Id == "pickupitem_log_small")
+        else if (item.Id == "pickupitem_stone_small")
             Actions[1].Invoke();
         else
-            FeedUI.Instance.AddFeedItem($"You can't chop '{item.Name}'", item.Sprite, FeedItem.Type.Fail);
+            FeedUI.Instance.AddFeedItem($"You can't use an anvil with '{item.Name}'", item.Sprite, FeedItem.Type.Fail);
     }
 
-    private void ChopLog()
+    private void Use()
     {
         Inventory inv = PlayerNetwork.LocalPlayer.GetComponent<Inventory>();
         for(int i = 0; i < 5; i++)
-            ItemFactory.CreateWorldObject(transform.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2)), "pickupitem_sticks_small", 1);
-        inv.RemoveItemById("pickupitem_log_small", 1);
+            ItemFactory.CreateWorldObject(transform.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2)), "pickupitem_pebbles_small", 1);
+        inv.RemoveItemById("pickupitem_stone_small", 1);
     }
 
 }

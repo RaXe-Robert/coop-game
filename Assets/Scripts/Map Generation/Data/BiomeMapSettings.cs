@@ -10,7 +10,7 @@ namespace Assets.Scripts.Map_Generation
         Desert = 2,
     }
 
-    [CreateAssetMenu()]
+    [CreateAssetMenu(fileName = "New BiomeMapSettings", menuName = "Terrain Generation/BiomeMapSettings")]
     public class BiomeMapSettings : UpdatableData
     {
         public NoiseSettings NoiseSettings;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Map_Generation
 {
-    [CreateAssetMenu()]
+    [CreateAssetMenu(fileName = "New ResourceMapSettings", menuName = "Terrain Generation/ResourceMapSettings")]
     public class ResourceMapSettings : UpdatableData
     {
         [SerializeField]
