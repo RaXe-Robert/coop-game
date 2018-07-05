@@ -154,7 +154,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// </summary>
     private void HandleInteraction()
     {
-        if (!agent.hasPath || pathUpdateTimeout <= 0)
+        if ((!agent.hasPath || pathUpdateTimeout <= 0) && agent.isOnNavMesh)
         {
             agent.SetDestination(CurrentInteraction.transform.position);
             pathUpdateTimeout = 0.1f;
