@@ -66,25 +66,46 @@ public class InventoryItemSlot : ItemSlot {
                 chestReference.RemoveItemAtIndex(fromChest.index);
         }
 
-        ItemOutput fromOutput;
-        if((fromOutput = eventData.pointerDrag.GetComponent<ItemOutput>()) != null)
+        FurnaceItemOutput fromFurnaceOutput;
+        if((fromFurnaceOutput = eventData.pointerDrag.GetComponent<FurnaceItemOutput>()) != null)
         {
-            inventory.AddItemAtIndex(fromOutput.CurrentItem.Id, index, fromOutput.CurrentItem.StackSize);
-            fromOutput.CurrentItem = null;
+            inventory.AddItemAtIndex(fromFurnaceOutput.CurrentItem.Id, index, fromFurnaceOutput.CurrentItem.StackSize);
+            fromFurnaceOutput.CurrentItem = null;
         }
 
-        ItemInput fromInput;
-        if ((fromInput = eventData.pointerDrag.GetComponent<ItemInput>()) != null)
+        FurnaceItemInput fromFurnaceInput;
+        if ((fromFurnaceInput = eventData.pointerDrag.GetComponent<FurnaceItemInput>()) != null)
         {
-            inventory.AddItemAtIndex(fromInput.CurrentItem.Id, index, fromInput.CurrentItem.StackSize);
-            fromInput.CurrentItem = null;
+            inventory.AddItemAtIndex(fromFurnaceInput.CurrentItem.Id, index, fromFurnaceInput.CurrentItem.StackSize);
+            fromFurnaceInput.CurrentItem = null;
         }
 
-        FuelInput fromFuel;
-        if ((fromFuel = eventData.pointerDrag.GetComponent<FuelInput>()) != null)
+        FurnaceFuelInput fromFurnaceFuel;
+        if ((fromFurnaceFuel = eventData.pointerDrag.GetComponent<FurnaceFuelInput>()) != null)
         {
-            inventory.AddItemAtIndex(fromFuel.CurrentItem.Id, index, fromFuel.CurrentItem.StackSize);
-            fromFuel.CurrentItem = null;
+            inventory.AddItemAtIndex(fromFurnaceFuel.CurrentItem.Id, index, fromFurnaceFuel.CurrentItem.StackSize);
+            fromFurnaceFuel.CurrentItem = null;
+        }
+
+        CampfireItemOutput fromCampfireOutput;
+        if ((fromCampfireOutput = eventData.pointerDrag.GetComponent<CampfireItemOutput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromCampfireOutput.CurrentItem.Id, index, fromCampfireOutput.CurrentItem.StackSize);
+            fromCampfireOutput.CurrentItem = null;
+        }
+
+        CampfireItemInput fromCampfireInput;
+        if ((fromCampfireInput = eventData.pointerDrag.GetComponent<CampfireItemInput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromCampfireInput.CurrentItem.Id, index, fromCampfireInput.CurrentItem.StackSize);
+            fromCampfireInput.CurrentItem = null;
+        }
+
+        CampfireFuelInput fromCampfireFuel;
+        if ((fromCampfireFuel = eventData.pointerDrag.GetComponent<CampfireFuelInput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromCampfireFuel.CurrentItem.Id, index, fromCampfireFuel.CurrentItem.StackSize);
+            fromCampfireFuel.CurrentItem = null;
         }
 
         InventoryItemSlot from;

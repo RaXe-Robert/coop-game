@@ -18,6 +18,7 @@ MonoBehaviour:
   description: Looks edible
   burningTime: 0
   meltingResult: {fileID: 0}
+  cookingResult: {fileID: 11400000, guid: d2184f7db7d80cb4c8e1544b7f4094e7, type: 2}
   isConsumable: 1
   onConsumedEffects:
   - {fileID: 11400000, guid: 341c87eb0d861a84d9b199ffd612cbae, type: 2}

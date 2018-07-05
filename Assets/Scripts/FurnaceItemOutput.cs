@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemOutput : ItemSlot
+public class FurnaceItemOutput : ItemSlot
 {
     protected Furnace furnace;
 
     public delegate void OnItemUsed();
-    private Sprite initialImage;
 
     public virtual void Initialize(Furnace furnace)
     {
         this.furnace = furnace;
-        initialImage = image.sprite;
     }
 
     public override void OnDrop(PointerEventData eventData)

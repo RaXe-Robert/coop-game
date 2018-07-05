@@ -87,7 +87,7 @@ public class Farm : BuildableWorldObject
 
     public void GiveMelon()
     {
-        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().AddItemById("pickupitem_melon", PlayerNetwork.OtherPlayers.Count + 1);
+        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().AddItemById("pickupitem_melon_small", PlayerNetwork.OtherPlayers.Count + 1);
     }
 
     public void Harvest()

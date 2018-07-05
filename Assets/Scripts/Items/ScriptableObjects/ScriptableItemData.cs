@@ -9,6 +9,7 @@ public abstract class ScriptableItemData : ScriptableObject
     [SerializeField] private string description;
     [SerializeField] private float burningTime;
     [SerializeField] private ScriptableItemData meltingResult;
+    [SerializeField] private ScriptableItemData cookingResult;
     private int stackSize = 1;
 
     //No capital to override the existing Object.name
@@ -20,6 +21,7 @@ public abstract class ScriptableItemData : ScriptableObject
     public string Id { get { return id; } }
     public float BurningTime { get { return burningTime; } }
     public ScriptableItemData MeltingResult { get { return meltingResult; } }
+    public ScriptableItemData CookingResult { get { return cookingResult; } }
 
     public abstract Item InitializeItem();
 }
