@@ -14,13 +14,14 @@ public class FleeState : NPCBaseFSM {
             {
                 NPCScript.SetFleeWaypoint();
             }
-            NPCScript.Agent.SetDestination(NPCScript.Waypoint);
+            if (NPCScript.Agent.isOnNavMesh)
+                NPCScript.Agent.SetDestination(NPCScript.Waypoint);
         }
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (PhotonNetwork.isMasterClient)
+        if (PhotonNetwork.isMasterClient && NPCScript.Agent.isOnNavMesh)
         {
             NPCScript.Agent.SetDestination(NPCScript.Npc.transform.position);
         }

@@ -8,7 +8,7 @@ public class ChaseState : NPCBaseFSM {
     {
         if (PhotonNetwork.isMasterClient)
         {
-            if(NPCScript.Target)
+            if(NPCScript.Target && NPCScript.Agent.isOnNavMesh)
                 NPCScript.Agent.SetDestination(NPCScript.Target.transform.position);
         }
     }
@@ -17,7 +17,7 @@ public class ChaseState : NPCBaseFSM {
     {
         if (PhotonNetwork.isMasterClient)
         {
-            if (NPCScript.Target)
+            if (NPCScript.Target && NPCScript.Agent.isOnNavMesh)
                 NPCScript.Agent.SetDestination(NPCScript.Npc.transform.position);
         }
     }    
