@@ -59,9 +59,9 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
     {
         Vector3 position = new Vector3(UnityEngine.Random.Range(-5f, 5f), 0.2f, UnityEngine.Random.Range(0.5f, 5f));
         transform.position = position;
-        GetComponent<HealthComponent>().SetValue(100);
-        GetComponent<HungerComponent>().SetValue(100);
-        GetComponent<PhotonView>().RPC(nameof(RPC_RespawnPlayer), PhotonTargets.All);
+        healthComponent.SetValue(100);
+        GetComponent<HungerComponent>()?.SetValue(100);
+        photonView.RPC(nameof(RPC_RespawnPlayer), PhotonTargets.All);
     }
 
     public void SwitchHoldingItem(string itemId)
