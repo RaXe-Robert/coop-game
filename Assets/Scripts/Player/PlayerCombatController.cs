@@ -117,7 +117,8 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
     private void RPC_RespawnPlayer()
     {
         IsDead = false;
-        TogglePlayerModel(true);
+
+        RPC_TogglePlayerModel(true);
     }
 
     [PunRPC]
@@ -125,6 +126,7 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
     {
         CustomInRoomChat.Instance.AddLine($"{playerName} got killed by {killerName}");
         IsDead = true;
-        TogglePlayerModel(false);
+
+        RPC_TogglePlayerModel(false);
     }
 }
