@@ -5,6 +5,12 @@ using Photon;
 public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 {
     [SerializeField] private GameObject rightHandBone;
+
+    [SerializeField] private GameObject hammer;
+    [SerializeField] private GameObject sword;
+    [SerializeField] private GameObject pickaxe;
+    [SerializeField] private GameObject axe;
+
     private GameObject spawnedHoldingObject;
     
     public string Name => photonView.owner.NickName;
@@ -71,14 +77,35 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 
         if (itemId == null)
             return;
-        
-        var model = ItemFactory.GetModel(itemId);
-        if (model == null) return;
 
-        spawnedHoldingObject = Instantiate(model, rightHandBone.transform);
-        
-        if(photonView.isMine)
+        if (itemId.Substring(0, 4) == "tool")
+        {
+            switch (itemId)
+            {
+                case "tool_axe_stone":
+                    spawnedHoldingObject = Instantiate(axe, rightHandBone.transform);
+                    break;
+                case "tool_hammer_stone":
+                    spawnedHoldingObject = Instantiate(hammer, rightHandBone.transform);
+                    break;
+                case "tool_pickaxe_iron":
+                    spawnedHoldingObject = Instantiate(pickaxe, rightHandBone.transform);
+                    break;
+                case "tool_sword_iron":
+                    spawnedHoldingObject = Instantiate(sword, rightHandBone.transform);
+                    break;
+            }
+        }
+        else
+        {
+            var model = ItemFactory.GetModel(itemId);
+            if (model == null) return;
+
+            spawnedHoldingObject = Instantiate(model, rightHandBone.transform);
+        }
+        if (photonView.isMine)
             photonView.RPC("RPC_SwitchItem", PhotonTargets.All, itemId);
+
     }
 
     private void DoHitAnimation()
