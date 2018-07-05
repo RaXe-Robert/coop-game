@@ -128,13 +128,13 @@ public class Campfire : BuildableWorldObject
             return null;
         else
         {
-            if (InputItem.StackSize > 1)
+            if (InputItem.StackSize > 0)
                 InputItem.StackSize--;
             else
                 InputItem = null;
 
             OnItemChangedCallback?.Invoke();
-            return ItemFactory.CreateNewItem(InputItem.Id);
+            return InputItem != null ? ItemFactory.CreateNewItem(InputItem.Id) : null;
         }
     }
 
