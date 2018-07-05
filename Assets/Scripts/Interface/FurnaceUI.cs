@@ -18,9 +18,9 @@ public class FurnaceUI : MonoBehaviour {
     public static FurnaceUI Instance { get; private set; }
 
     private Furnace furnace;
-    public FuelInput FuelInput;
-    public ItemInput ItemInput;
-    public ItemOutput ItemOutput;
+    public FurnaceFuelInput FuelInput;
+    public FurnaceItemInput ItemInput;
+    public FurnaceItemOutput ItemOutput;
 
     private GameObject goFuelInputSlot;
     private GameObject goItemInputSlot;
@@ -78,13 +78,13 @@ public class FurnaceUI : MonoBehaviour {
         }
 
         goFuelInputSlot = Instantiate(fuelInputSlotPrefab, fuelInputPrefab.transform);
-        FuelInput = goFuelInputSlot.GetComponentInChildren<FuelInput>();
+        FuelInput = goFuelInputSlot.GetComponentInChildren<FurnaceFuelInput>();
 
         goItemInputSlot = Instantiate(itemInputSlotPrefab, itemInputPrefab.transform);
-        ItemInput = goItemInputSlot.GetComponentInChildren<ItemInput>();
+        ItemInput = goItemInputSlot.GetComponentInChildren<FurnaceItemInput>();
 
         goItemOutputSlot = Instantiate(itemOutputSlotPrefab, itemOutputPrefab.transform);
-        ItemOutput = goItemOutputSlot.GetComponentInChildren<ItemOutput>();
+        ItemOutput = goItemOutputSlot.GetComponentInChildren<FurnaceItemOutput>();
 
         FuelInput.Initialize(furnace);
         ItemInput.Initialize(furnace);

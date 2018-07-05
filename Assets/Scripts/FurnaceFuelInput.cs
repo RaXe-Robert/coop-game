@@ -1,20 +1,18 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemInput : ItemSlot
+public class FurnaceFuelInput : ItemSlot
 {
     protected Furnace furnace;
-    private Sprite initialImage;
+
+    public delegate void OnItemUsed();
+    public OnItemUsed OnItemUsedCallback;
 
     public virtual void Initialize(Furnace furnace)
     {
         this.furnace = furnace;
-        initialImage = image.sprite;
     }
 
     public override void OnBeginDrag(PointerEventData eventData)
@@ -27,17 +25,17 @@ public class ItemInput : ItemSlot
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
         transform.SetParent(transform.parent.parent.parent);
-        furnace.InputItem = null;
+        furnace.FuelItem = null;
     }
 
     public override void OnDrop(PointerEventData eventData)
     {
-        if (eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem.MeltingResult != null && furnace.InputItem == null)
+        if(eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem.BurningTime > 0 && furnace.FuelItem == null)
         {
             var from = eventData.pointerDrag.GetComponent<InventoryItemSlot>();
             CurrentItem = eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem;
             PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemAtIndex(from.index);
-            furnace.InputItem = currentItem;
+            furnace.FuelItem = currentItem;
         }
     }
 
@@ -51,13 +49,13 @@ public class ItemInput : ItemSlot
         canvasGroup.interactable = true;
         transform.SetParent(initialParentTransform);
         transform.localPosition = Vector3.zero;
-        furnace.InputItem = currentItem;
+        furnace.FuelItem = currentItem;
 
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
         ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, currentItem.Id, currentItem.StackSize);
-        furnace.InputItem = null;
+        furnace.FuelItem = null;
         CurrentItem = null;
     }
 }

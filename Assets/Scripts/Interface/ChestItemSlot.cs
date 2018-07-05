@@ -8,16 +8,13 @@ public class ChestItemSlot : ItemSlot {
     protected internal int index;
     protected Chest chest;
     protected EquipmentManager equipmentManager;
-    
-    private Sprite initialImage;
 
     public virtual void Initialize(int index, Chest chest, EquipmentManager equipmentManager)
     {
         this.index = index;
         this.chest = chest;
         this.equipmentManager = equipmentManager;
-
-        initialImage = image.sprite;
+        
         canvasGroup = GetComponent<CanvasGroup>();
     }
 

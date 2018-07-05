@@ -14,6 +14,7 @@ public class Item
         Id = itemData.Id;
         BurningTime = itemData.BurningTime;
         MeltingResult = itemData.MeltingResult;
+        CookingResult = itemData.CookingResult;
     }
     
     public string Name { get; }
@@ -23,5 +24,6 @@ public class Item
     public string Id { get; }
     public float BurningTime { get; }
     public ScriptableItemData MeltingResult { get; }
+    public ScriptableItemData CookingResult { get; }
     public int StackSize { get; set; }
 }

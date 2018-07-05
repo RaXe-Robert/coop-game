@@ -57,6 +57,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 37fb21c8749c86840a52dae87038a6a2, type: 3}
   - {fileID: 2100002, guid: 37fb21c8749c86840a52dae87038a6a2, type: 3}
@@ -132,11 +133,13 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1312758526846642}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: febef48faa00af94fb4f6f89d681ed81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interactDistance: 3
+  availableRecipes: {fileID: 11400000, guid: f6e6f11ee42c65045b0ad429c0983faa, type: 2}
   fireParticlesPrefab: {fileID: 1133957135969282, guid: b08c019126dbade48ba96f388c91450c,
     type: 2}
+  CookingProgress: 0

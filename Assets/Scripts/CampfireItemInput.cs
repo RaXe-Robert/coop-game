@@ -1,20 +1,18 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class FuelInput : ItemSlot
+public class CampfireItemInput : ItemSlot
 {
-    protected Furnace furnace;
+    protected Campfire campfire;
 
-    public delegate void OnItemUsed();
-    public OnItemUsed OnItemUsedCallback;
-    private Sprite initialImage;
-
-    public virtual void Initialize(Furnace furnace)
+    public virtual void Initialize(Campfire campfire)
     {
-        this.furnace = furnace;
-        initialImage = image.sprite;
+        this.campfire = campfire;
     }
 
     public override void OnBeginDrag(PointerEventData eventData)
@@ -27,18 +25,20 @@ public class FuelInput : ItemSlot
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
         transform.SetParent(transform.parent.parent.parent);
-        furnace.FuelItem = null;
+        campfire.InputItem = null;
     }
 
     public override void OnDrop(PointerEventData eventData)
     {
-        if(eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem.BurningTime > 0 && furnace.FuelItem == null)
+        if (eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem.CookingResult != null && campfire.InputItem == null)
         {
             var from = eventData.pointerDrag.GetComponent<InventoryItemSlot>();
             CurrentItem = eventData.pointerDrag.GetComponent<ItemSlot>().CurrentItem;
             PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemAtIndex(from.index);
-            furnace.FuelItem = currentItem;
+            campfire.InputItem = currentItem;
         }
+        else
+            FeedUI.Instance.AddFeedItem("This item cannot be cooked!", feedType: FeedItem.Type.Fail);
     }
 
     public override void OnEndDrag(PointerEventData eventData)
@@ -51,13 +51,13 @@ public class FuelInput : ItemSlot
         canvasGroup.interactable = true;
         transform.SetParent(initialParentTransform);
         transform.localPosition = Vector3.zero;
-        furnace.FuelItem = currentItem;
+        campfire.InputItem = currentItem;
 
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
         ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, currentItem.Id, currentItem.StackSize);
-        furnace.FuelItem = null;
+        campfire.InputItem = null;
         CurrentItem = null;
     }
 }
