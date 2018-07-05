@@ -18,14 +18,14 @@ MonoBehaviour:
     octaves: 6
     persistance: 0.3
     lacunarity: 2
-    seed: 1234
+    seed: 2114319874
     offset: {x: 0, y: 0}
   Biomes:
   - biomeType: 2
-    color: {r: 0.99634886, g: 1, b: 0.7352941, a: 1}
+    color: {r: 0.9676619, g: 0.9716981, b: 0.70127267, a: 1}
     resourceDensity: 0.2
   - biomeType: 1
-    color: {r: 0.2827586, g: 1, b: 0, a: 1}
+    color: {r: 0.25038844, g: 0.8867924, b: 0, a: 1}
     resourceDensity: 0.3
   - biomeType: 0
     color: {r: 0.12941173, g: 0.64705884, b: 0, a: 1}
