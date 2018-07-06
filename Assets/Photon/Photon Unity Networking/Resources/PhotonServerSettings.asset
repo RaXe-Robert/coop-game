@@ -57,4 +57,30 @@ MonoBehaviour:
   - DecreaseHungerValue
   - IncreaseHealthValue
   - IncreaseHungerValue
+  - RPC_DestroyWorldObject
+  - KillPlayer
+  - RPC_RespawnPlayer
+  - RPC_AddNetworkedWorldResource
+  - RPC_DecreaseHealth
+  - RPC_RemoveNetworkedWorldResource
+  - SendWorldData
+  - ChestCloseAnimation
+  - ChestOpenAnimation
+  - SetChestItems
+  - SetChestItem
+  - RemoveChestItem
+  - SetUser
+  - SendPlayerData
+  - DestroyWorldItem
+  - RPC_DestroyFarmObject
+  - RPC_StartFarm
+  - RPC_FarmResource
+  - RPC_SpawnResource
+  - RPC_DestroyFarm
+  - RPC_EnterBed
+  - RPC_LeaveBed
+  - RPC_TogglePlayerModel
+  - RPC_BedFeed
+  - RPC_SwitchItem
+  - RPC_HitAnimation
   DisableAutoOpenWizard: 1

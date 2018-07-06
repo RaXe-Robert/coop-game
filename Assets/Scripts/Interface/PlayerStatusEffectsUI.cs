@@ -19,7 +19,7 @@ public class PlayerStatusEffectsUI : MonoBehaviour
     {
         activeStatusEffectsDisplays = new List<StatusEffectDisplay>();
 
-        statusEffectComponent = PlayerNetwork.PlayerObject?.GetComponent<StatusEffectComponent>();
+        statusEffectComponent = PlayerNetwork.LocalPlayer?.GetComponent<StatusEffectComponent>();
         statusEffectComponent.OnstatusEffectAdded += AddNewStatusEffectDisplay;
     }
     

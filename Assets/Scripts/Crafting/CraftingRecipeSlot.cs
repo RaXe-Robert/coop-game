@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingRecipeSlot : MonoBehaviour {
-
+public class CraftingRecipeSlot : MonoBehaviour
+{
     [SerializeField] private GameObject requiredItemPrefab;
     [SerializeField] private Transform requiredItems;
     [SerializeField] private Image recipeResultImage;
     [SerializeField] private Text recipeResultText;
+    [SerializeField] private CraftingItemTooltip recipeResultTooltip;
     [SerializeField] private Text craftingTimeText;
 
     public CraftingRecipe craftingRecipe;
@@ -26,31 +27,65 @@ public class CraftingRecipeSlot : MonoBehaviour {
 
         craftingRecipe = recipe;
         this.inventory = inventory;
-        inventory.OnItemChangedCallback += UpdateRequiredItems;
 
-        //Set result
-        recipeResultImage.sprite = craftingRecipe.result.item.Sprite;
-        recipeResultText.text = craftingRecipe.result.item.name;
-        craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}s";
+        if (ValidateRecipe())
+        {
+            //Set result
+            inventory.OnItemChangedCallback += UpdateRequiredItems;
+            recipeResultImage.sprite = craftingRecipe.result.item.Sprite;
+            recipeResultText.text = craftingRecipe.result.item.name;
+            craftingTimeText.text = $"Crafting Time: {craftingRecipe.craftingTime.ToString()}";
+            recipeResultTooltip.ItemName = craftingRecipe.result.item.name;
+            InitializeRequiredItems();
+        }
+    }
 
-        InitializeRequiredItems();
+    //Logging if something is wrong with the crafting recipe    
+    private bool ValidateRecipe()
+    {
+        if (craftingRecipe.result.item == null || craftingRecipe.result.amount <= 0)
+        {
+            Debug.LogError($"There is a crafting recipe without a result or the result amount is invalid");
+            Destroy(gameObject);
+            return false;
+        }
+        foreach (var craftingItem in craftingRecipe.requiredItems)
+        {
+            if (craftingItem.item == null)
+            {
+                Debug.LogError($"{craftingRecipe.result.item.name} crafting recipe is missing some data");
+                Destroy(gameObject);
+                return false;
+            }
+            if (craftingItem.amount <= 0)
+            {
+                Debug.LogError($"{craftingRecipe.result.item.name} recipe has a required item with an invalid amount");
+                Destroy(gameObject);
+                return false;
+            }
+        }
+        return true;
     }
 
     private void InitializeRequiredItems()
     {
-        for (int i = 0; i < craftingRecipe.requiredItems.Length; i++)
+        for (int i = 0; i < craftingRecipe.requiredItems.Count; i++)
         {
             var go = Instantiate(requiredItemPrefab, requiredItems);
-            go.GetComponent<Image>().sprite = craftingRecipe.requiredItems[i].item.Sprite;
-            go.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
+
+            var item = craftingRecipe.requiredItems[i].item;
+            var amount = craftingRecipe.requiredItems[i].amount;
+            go.GetComponent<CraftingItemTooltip>().ItemName = item.name;
+            go.GetComponent<CraftingItemTooltip>().Amount = amount;
+            go.GetComponent<Image>().sprite = item.Sprite;
+            go.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(item.Id)} / {amount * amountToCraft}";
         }
     }
 
     private void UpdateRequiredItems()
     {
-        for (int i = 0; i < craftingRecipe.requiredItems.Length; i++)
+        for (int i = 0; i < craftingRecipe.requiredItems.Count; i++)
         {
-            //Debug.Log(inventory.GetItemAmountById(inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)));
             requiredItems.GetChild(i).gameObject.GetComponentInChildren<Text>().text = $"{inventory.GetItemAmountById(craftingRecipe.requiredItems[i].item.Id)} / {craftingRecipe.requiredItems[i].amount * amountToCraft}";
         }
     }

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 
-public interface IInteractable
+public interface IInteractable : ITooltip
 {
-    bool IsInteractable();
-    void Interact(Vector3 invokerPosition);
+    bool IsInteractable { get; }
+    GameObject GameObject { get; }
 
-    string TooltipText();
+    bool InRange(Vector3 invokerLocation);
+    void Interact(GameObject invoker, Item item);
 }
 

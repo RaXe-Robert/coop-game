@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
+using Assets.Scripts.Utilities;
 
 public class ArmorItemSlot : InventoryItemSlot
 {
@@ -12,14 +13,30 @@ public class ArmorItemSlot : InventoryItemSlot
         InventoryItemSlot from;
         if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
         {
-            if (from.Item.GetType() == typeof(Armor))
-                equipmentManager.EquipArmor(from.Item as Armor, from.index);
+            if (from.CurrentItem.GetType() == typeof(Armor))
+                equipmentManager.EquipArmor(from.CurrentItem as Armor, from.index);
         }
     }
 
     public override void OnPointerClick(PointerEventData eventData)
     {
-        //Just to override the base method.
+        if (eventData.button != PointerEventData.InputButton.Right)
+            return;
+
+        InventoryItemSlot from;
+        if ((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
+        {
+            if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
+            {
+                if (from.CurrentItem.GetType() == typeof(Armor))
+                {
+                    equipmentManager.UnequipArmor(from.CurrentItem as Armor, from.index);
+                    Tooltip.Instance.Hide();
+                }
+            }
+            else
+                equipmentManager.DropEquippedItem(from.CurrentItem as Item);
+        }
     }
 
     public override void OnEndDrag(PointerEventData eventData)
@@ -30,7 +47,7 @@ public class ArmorItemSlot : InventoryItemSlot
         transform.localPosition = Vector3.zero;
 
         if (!EventSystem.current.IsPointerOverGameObject())
-            equipmentManager.DropEquippedItem(Item);
+            equipmentManager.DropEquippedItem(CurrentItem as Item);
     }
 }
 

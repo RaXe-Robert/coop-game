@@ -35,20 +35,22 @@ public class PlayerCameraController : MonoBehaviour
         if (isFollowing == false)
             return;
 
-        if (Input.GetMouseButton(1))
+        if (InputManager.GetButton("Camera rotation"))
         {
-            angle += Input.GetAxisRaw("Mouse X") * angleRotationSpeed * 2 * Time.deltaTime;
+            angle += InputManager.GetAxisRaw("Mouse X") * angleRotationSpeed * 2 * Time.deltaTime;
         }
 
-        if (target && Application.isFocused)
-        {
-            if (Input.GetKey(KeyCode.Q))
-                angle -= angleRotationSpeed * Time.deltaTime;
-            if (Input.GetKey(KeyCode.E))
-                angle += angleRotationSpeed * Time.deltaTime;
+        if (!target || !Application.isFocused)
+            return;
+        
+        if (InputManager.GetButton("Left camera rotation"))
+            angle -= angleRotationSpeed * Time.deltaTime;
 
-            zoom = Mathf.Clamp(zoom - (Input.GetAxis("Mouse ScrollWheel") * zoomSpeed), zoomMinimum, zoomMaximum);
-        }
+        if (InputManager.GetButton("Right camera rotation"))
+            angle += angleRotationSpeed * Time.deltaTime;
+        
+        if (InputManager.GetButton("Zoom Modifier"))
+            zoom = Mathf.Clamp(zoom - (InputManager.GetAxis("Mouse ScrollWheel") * zoomSpeed), zoomMinimum, zoomMaximum);
     }
 
     private void LateUpdate()

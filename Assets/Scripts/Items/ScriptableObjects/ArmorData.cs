@@ -11,7 +11,7 @@ public class ArmorData : ScriptableItemData
     public ArmorType ArmorType { get { return armorType; } }
     public float Defense { get { return defense; } }
 
-    public override ItemBase InitializeItem()
+    public override Item InitializeItem()
     {
         return new Armor(this);
     }

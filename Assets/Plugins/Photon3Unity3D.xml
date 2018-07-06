@@ -770,7 +770,7 @@
             Changes of the roundtriptime as variance value. Gives a hint about how much the time is changing.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:ExitGames.Client.Photon.PhotonPeer.TimestampOfLastSocketReceive" -->
+        <!-- Ungültiger XML-Kommentar wurde für den Member "P:ExitGames.Client.Photon.PhotonPeer.TimestampOfLastSocketReceive" ignoriert -->
         <member name="P:ExitGames.Client.Photon.PhotonPeer.ServerAddress">
             <summary>
             The server address which was used in PhotonPeer.Connect() or null (before Connect() was called).

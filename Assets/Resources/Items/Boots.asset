@@ -11,12 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d11520a5ae26ca4f93acf2ea1753e64, type: 3}
   m_Name: Boots
   m_EditorClassIdentifier: 
+  id: armor_boots_black
   itemName: Boots
   sprite: {fileID: 21300000, guid: 1a186a584a31f824f9cbc0d2d0b5c1f0, type: 3}
-  model: {fileID: 100000, guid: b6fe1de474d3ee7438e5e351cb9c1904, type: 3}
+  model: {fileID: 100000, guid: 928231d188c47374dbb4568aed9f8626, type: 3}
   description: Some Boots
-  isConsumable: 0
-  onConsumedEffects: []
-  id: 96
   armorType: 3
   defense: 1

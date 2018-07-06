@@ -4,43 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler {
-    [SerializeField] protected Image image;
-    [SerializeField] private Text stackSizeText;
-    [SerializeField] private Image textBackground;
-
+public class InventoryItemSlot : ItemSlot {
     protected internal int index;
     protected Inventory inventory;
     protected EquipmentManager equipmentManager;
-
-    protected ItemBase item;
-
-    protected CanvasGroup canvasGroup;
-    protected Transform initialParentTransform;
-
-    public ItemBase Item
-    {
-        get
-        {
-            return item;
-        }
-        
-        set
-        {
-            item = value;
-            image.sprite = item?.Sprite;
-            if (item?.StackSize > 1)
-            {
-                stackSizeText.text = item.StackSize.ToString();
-                textBackground.enabled = true;
-            }
-            else
-            {
-                textBackground.enabled = false;
-                stackSizeText.text = "";
-            }
-        }
-    }
 
     public virtual void Initialize(int index, Inventory inventory, EquipmentManager equipmentManager)
     {
@@ -49,139 +16,138 @@ public class InventoryItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         this.equipmentManager = equipmentManager;
     }
 
-    public void Start()
+    public override void OnPointerClick(PointerEventData eventData)
     {
-        canvasGroup = GetComponent<CanvasGroup>();
-    }
-
-    public void Clear()
-    {
-        item = null;
-        image.sprite = null;
-    }
-
-    public void OnPointerEnter(PointerEventData pointerEventData)
-    {
-        if (item == null)
+        if (eventData.button != PointerEventData.InputButton.Right)
             return;
 
-        Tooltip.Instance.Show(item.Name, item.Description);
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        Tooltip.Instance.Hide();
-    }
-
-    public virtual void OnPointerClick(PointerEventData eventData)
-    {
-        if (item == null)
-            return;
-
-        if (eventData.button == PointerEventData.InputButton.Right)
+        var @base = currentItem as BuildableBase;
+        if (@base != null && inventory != null)
+            inventory.BuildingController.ActivateBuildMode(@base);
+        else if (CurrentItem is Armor)
         {
+            equipmentManager.EquipArmor(CurrentItem as Armor, index);
+            Tooltip.Instance.Hide();
+        }
+        else
+        {
+            var item = currentItem as Consumable;
+            if (item == null || !item.IsConsumable || item.OnConsumedEffects == null || item.OnConsumedEffects.Count <= 0)
+                return;
+            
+            PlayerNetwork.LocalPlayer.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
 
-            if (item is Buildable)
+            if (item.StackSize > 1)
             {
-                inventory.BuildingController?.ActivateBuildMode(item as Buildable);
-            }
-
-            else if (item.IsConsumable && item.OnConsumedEffects != null && item.OnConsumedEffects.Count > 0)
-            {
-                PlayerNetwork.PlayerObject.GetComponent<StatusEffectComponent>().AddStatusEffect(item.OnConsumedEffects);
-
-                if (item.StackSize > 1)
-                {
-                    item.StackSize--;
+                item.StackSize--;
+                if (inventory != null)
                     inventory.OnItemChangedCallback?.Invoke();
-                }
-                else
-                    inventory.RemoveItemAtIndex(index);
-
-                Tooltip.Instance.Hide();
             }
+            else if (inventory != null) 
+                inventory.RemoveItemAtIndex(index);
 
-            else if(item.Equippable)
-            {
-                equipmentManager.EquipItem(item, index);
-                Tooltip.Instance.Hide();
-            }
+            Tooltip.Instance.Hide();
         }
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public override void OnDrop(PointerEventData eventData)
     {
-        if (item == null)
+        //We only want draggin on left mousebutton
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+
+        ChestItemSlot fromChest;
+        if ((fromChest = eventData.pointerDrag.GetComponent<ChestItemSlot>()) != null)
         {
-            eventData.pointerDrag = null;
-            return;
+            inventory.AddItemAtIndex(fromChest.CurrentItem.Id, index, fromChest.CurrentItem.StackSize);
+
+            Chest chestReference = ChestUI.Instance.chest;            
+            if (chestReference != null)
+                chestReference.RemoveItemAtIndex(fromChest.index);
         }
 
-        initialParentTransform = transform.parent;
-        canvasGroup.blocksRaycasts = false;
-        canvasGroup.interactable = false;
-        transform.SetParent(transform.parent.parent.parent);
-    }
+        FurnaceItemOutput fromFurnaceOutput;
+        if((fromFurnaceOutput = eventData.pointerDrag.GetComponent<FurnaceItemOutput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromFurnaceOutput.CurrentItem.Id, index, fromFurnaceOutput.CurrentItem.StackSize);
+            fromFurnaceOutput.CurrentItem = null;
+        }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (item == null)
-            return;
+        FurnaceItemInput fromFurnaceInput;
+        if ((fromFurnaceInput = eventData.pointerDrag.GetComponent<FurnaceItemInput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromFurnaceInput.CurrentItem.Id, index, fromFurnaceInput.CurrentItem.StackSize);
+            fromFurnaceInput.CurrentItem = null;
+        }
 
-        transform.position = eventData.position;
-    }
+        FurnaceFuelInput fromFurnaceFuel;
+        if ((fromFurnaceFuel = eventData.pointerDrag.GetComponent<FurnaceFuelInput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromFurnaceFuel.CurrentItem.Id, index, fromFurnaceFuel.CurrentItem.StackSize);
+            fromFurnaceFuel.CurrentItem = null;
+        }
 
-    public virtual void OnDrop(PointerEventData eventData)
-    {
+        CampfireItemOutput fromCampfireOutput;
+        if ((fromCampfireOutput = eventData.pointerDrag.GetComponent<CampfireItemOutput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromCampfireOutput.CurrentItem.Id, index, fromCampfireOutput.CurrentItem.StackSize);
+            fromCampfireOutput.CurrentItem = null;
+        }
+
+        CampfireItemInput fromCampfireInput;
+        if ((fromCampfireInput = eventData.pointerDrag.GetComponent<CampfireItemInput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromCampfireInput.CurrentItem.Id, index, fromCampfireInput.CurrentItem.StackSize);
+            fromCampfireInput.CurrentItem = null;
+        }
+
+        CampfireFuelInput fromCampfireFuel;
+        if ((fromCampfireFuel = eventData.pointerDrag.GetComponent<CampfireFuelInput>()) != null)
+        {
+            inventory.AddItemAtIndex(fromCampfireFuel.CurrentItem.Id, index, fromCampfireFuel.CurrentItem.StackSize);
+            fromCampfireFuel.CurrentItem = null;
+        }
+
         InventoryItemSlot from;
         //Check what gets dropped on this.
-        if((from = eventData.pointerDrag.GetComponent<InventoryItemSlot>()))
+        if (!(@from = eventData.pointerDrag.GetComponent<ItemSlot>() as InventoryItemSlot))
+            return;
+        
+        //We got an item from our equipment.
+        if(@from.index == -1 && CurrentItem != null)
         {
-            //We got an item from our equipment.
-            if(from.index == -1 && Item != null)
-            {
-                //We cant equip a non equippable item.
-                if (!item.Equippable)
-                    return;
+            //We cant swap the items it they arent the same type
+            if (@from.CurrentItem.GetType() != CurrentItem.GetType())
+                return;
 
-                //We cant swap the items it they arent the same type
-                if (from.Item.GetType() != Item.GetType())
-                    return;
-
-                //Check if our item is an Armor and see if it's the same type of armor, if so we can swap the items around.
-                if ((from.Item.GetType() == typeof(Armor) && ((Armor)from.Item).ArmorType == ((Armor)Item).ArmorType))
-                    equipmentManager.EquipArmor(Item as Armor, index);
-
-                //Check if our item is a Tool and see if it's the same type of tool, if so we can swap the items around.
-                else if ((from.Item.GetType() == typeof(Tool) && ((Tool)from.Item).ToolType == ((Tool)Item).ToolType))
-                    equipmentManager.EquipTool(Item as Tool, index);
-
-                //Check if we both have weapons if so we can swap them around.
-                else if ((from.Item.GetType() == typeof(Weapon) && Item.GetType() == typeof(Weapon)))
-                    equipmentManager.EquipWeapon(Item as Weapon, index);
-            }
-            else if(from.index == -1 && Item == null)
-            {
-                //We are dragging an equipment piece on an empty inventory slot.
-                equipmentManager.UnEquipItem(from.Item, index);
-            }
-
-            else 
-                inventory.SwapItem(index, from.index);
+            //Check if our item is an Armor and see if it's the same type of armor, if so we can swap the items around.
+            if ((@from.CurrentItem.GetType() == typeof(Armor) && ((Armor)@from.CurrentItem).ArmorType == ((Armor)CurrentItem).ArmorType))
+                equipmentManager.EquipArmor(CurrentItem as Armor, index);
         }
+        else if(@from.index == -1 && CurrentItem == null)
+        {
+            //We are dragging an equipment piece on an empty inventory slot.
+            equipmentManager.UnequipArmor(@from.CurrentItem as Item, index);
+        }
+        else 
+            inventory.SwapItems(index, @from.index);
     }
 
-    public virtual void OnEndDrag(PointerEventData eventData)
+    public override void OnEndDrag(PointerEventData eventData)
     {
+        //We only want draggin on left mousebutton
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+        
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
         transform.SetParent(initialParentTransform);
         transform.localPosition  = Vector3.zero;
 
-        if (!EventSystem.current.IsPointerOverGameObject())
-        {
-            ItemFactory.CreateWorldObject(PlayerNetwork.PlayerObject.transform.position, item.Id, item.StackSize);
-            inventory.RemoveItemAtIndex(index);
-        }
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+        
+        ItemFactory.CreateWorldObject(PlayerNetwork.LocalPlayer.transform.position, currentItem.Id, currentItem.StackSize);
+        inventory.RemoveItemAtIndex(index);
     }
 }

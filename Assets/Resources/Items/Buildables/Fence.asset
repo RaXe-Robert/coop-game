@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22580a90e66e2f44ea7c1962e6362f2f, type: 3}
+  m_Name: Fence
+  m_EditorClassIdentifier: 
+  id: buildable_fence
+  itemName: Fence
+  sprite: {fileID: 21300000, guid: 1732664805b2b324396ce170f100fad6, type: 3}
+  model: {fileID: 100000, guid: 26f3e17827199b34cac4d4648cee07c7, type: 3}
+  description: To keep the monsters out
+  recoverable: 1
+  snapToGrid: 1
+  prefabToSpawn: {fileID: 1662888625513814, guid: 318c532c5216ad646bb3653a699d54a8,
+    type: 2}

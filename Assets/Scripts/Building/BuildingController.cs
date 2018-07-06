@@ -23,7 +23,7 @@ public class BuildingController : Photon.MonoBehaviour
     // The object that is currently selected by the player to be build.
     private GameObject buildableToBuild = null;
     private Renderer buildableToBuildRenderer = null;
-    private Buildable buildableData = null;
+    private BuildableBase buildableData = null;
 
     private Renderer gridRenderer;
 
@@ -50,7 +50,7 @@ public class BuildingController : Photon.MonoBehaviour
     /// Activates the building mode, the buildable will be instantiated and follows the mouse.
     /// </summary>
     /// <param name="buildable"></param>
-    public void ActivateBuildMode(Buildable buildable)
+    public void ActivateBuildMode(BuildableBase buildable)
     {
         ExitBuildMode();
         
@@ -59,7 +59,7 @@ public class BuildingController : Photon.MonoBehaviour
         {
             buildableData = buildable;
 
-            buildableToBuild = Instantiate(buildableResource, PlayerNetwork.PlayerObject.transform.position, Quaternion.identity);
+            buildableToBuild = Instantiate(buildableResource, PlayerNetwork.LocalPlayer.transform.position, Quaternion.identity);
             buildableToBuild.name = buildable.Name;
 
             buildableToBuildRenderer = buildableToBuild.GetComponent<Renderer>();
@@ -87,8 +87,7 @@ public class BuildingController : Photon.MonoBehaviour
         if (ConfirmBuildingConditions() == false)
             return;
 
-        FindObjectOfType<Inventory>().RemoveItemById(buildableData.Id);
-
+        PlayerNetwork.LocalPlayer.GetComponent<Inventory>().RemoveItemById(buildableData.Id);
         var photonId = PhotonNetwork.AllocateViewID();
         photonView.RPC(nameof(RPC_SpawnBuildable), PhotonTargets.AllBuffered, buildableToBuild.transform.position, photonId, buildableData.Id, buildableToBuild.transform.rotation);
 
@@ -102,15 +101,15 @@ public class BuildingController : Photon.MonoBehaviour
     {
         if (buildableToBuild == null)
             return;
-
+        
         gridRenderer.enabled = false;
         Destroy(buildableToBuild);
     }
 
     private IEnumerator FollowMouse()
     {
-        PlayerCameraController playerCameraController = PlayerNetwork.PlayerObject.GetComponent<PlayerCameraController>();
-        Transform playerTransform = PlayerNetwork.PlayerObject.transform;
+        PlayerCameraController playerCameraController = PlayerNetwork.LocalPlayer.GetComponent<PlayerCameraController>();
+        Transform playerTransform = PlayerNetwork.LocalPlayer.transform;
         Material buildingGrid = GetComponent<Renderer>().sharedMaterial;
 
         while (buildableToBuild != null)
@@ -173,7 +172,7 @@ public class BuildingController : Photon.MonoBehaviour
     /// <returns></returns>
     private bool ConfirmBuildingConditions()
     {
-        if (buildableToBuild == null || buildingRange < Vector3.Distance(PlayerNetwork.PlayerObject.transform.position, buildableToBuild.transform.position))
+        if (buildableToBuild == null || buildingRange < Vector3.Distance(PlayerNetwork.LocalPlayer.transform.position, buildableToBuild.transform.position))
             return false;
 
         if (buildableToBuildRenderer)
@@ -190,27 +189,24 @@ public class BuildingController : Photon.MonoBehaviour
     }
 
     [PunRPC]
-    private void RPC_SpawnBuildable(Vector3 position, int photonId, int itemId, Quaternion quaternion = new Quaternion())
+    private void RPC_SpawnBuildable(Vector3 position, int photonId, string itemId, Quaternion quaternion = new Quaternion())
     {
-        GameObject gameObjectResource = Resources.Load<GameObject>("Buildable");
+        BuildableBase buildable = ItemFactory.CreateNewItem(itemId) as BuildableBase;
+        var prefab = buildable.PrefabToSpawn;
 
-        Buildable buildable = ItemFactory.CreateNewItem(itemId) as Buildable;
-
-        //Get the mesh and materials from the referenced model.
-        Mesh itemMesh = buildable.Model.GetComponent<MeshFilter>().sharedMesh;
-
-        GameObject gameObj = Instantiate(gameObjectResource, position, quaternion);
+        GameObject gameObj = Instantiate(prefab, position, quaternion);
+        gameObj.GetComponent<BuildableWorldObject>().enabled = true;
         gameObj.GetComponent<BuildableWorldObject>().buildable = buildable;
+        if (gameObj.GetComponent<Collider>())
+            gameObj.GetComponent<Collider>().enabled = true;
+        else if (gameObj.GetComponentsInChildren<Collider>() != null)
+        {
+            foreach (Collider c in gameObj.GetComponentsInChildren<Collider>())
+            {
+                gameObj.GetComponentInChildren<Collider>().enabled = true;
+            }
+        }        
         gameObj.name = buildable.Name;
-
-        //Assign the mesh and materials to the new gameObject.
-        gameObj.GetComponent<MeshRenderer>().sharedMaterials = buildable.Model.GetComponent<MeshRenderer>().sharedMaterials;
-        gameObj.GetComponent<MeshFilter>().sharedMesh = itemMesh;
-
-        //Create the collider and make it convex
-        var coll = gameObj.GetComponent<MeshCollider>();
-        coll.sharedMesh = itemMesh;
-        coll.convex = true;
 
         PhotonView[] nViews = gameObj.GetComponentsInChildren<PhotonView>();
         nViews[0].viewID = photonId;

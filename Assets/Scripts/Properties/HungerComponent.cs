@@ -9,7 +9,7 @@ public class HungerComponent : PropertyComponentBase
         if (amount <= 0)
             return;
 
-        photonView.RPC("IncreaseHungerValue", PhotonTargets.MasterClient, amount);
+        photonView.RPC("IncreaseHungerValue", PhotonTargets.All, amount);
     }
 
     public override void DecreaseValue(float amount)
@@ -17,7 +17,7 @@ public class HungerComponent : PropertyComponentBase
         if (amount <= 0)
             return;
 
-        photonView.RPC("DecreaseHungerValue", PhotonTargets.MasterClient, amount);
+        photonView.RPC("DecreaseHungerValue", PhotonTargets.All, amount);
     }
 
     public bool HungerDegenerationActive { get; set; } = true;

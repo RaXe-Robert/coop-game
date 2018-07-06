@@ -4,59 +4,73 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour
+{
 
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject newGameMenuPanel;
-    [SerializeField] private GameObject singlePlayerPanel;
-    [SerializeField] private GameObject hostGamePanel;
+
+    [SerializeField] private GameObject loadSingleplayerPanel;
+    [SerializeField] private GameObject createSingleplayerPanel;
+
+    [SerializeField] private GameObject loadMultiplayerPanel;
+    [SerializeField] private GameObject createMultiplayerPanel;
+
     [SerializeField] private GameObject serverBrowserMenuPanel;
     [SerializeField] private GameObject serverBrowserPanel;
+
     [SerializeField] private GameObject optionsMenuPanel;
     [SerializeField] private GameObject controlsPanel;
     [SerializeField] private GameObject videoSettingsPanel;
     [SerializeField] private GameObject audioSettingsPanel;
+
     [SerializeField] private GameObject exitGamePanel;
+
+    [Header("Player name")]
     [SerializeField] private GameObject enterNamePanel;
     [SerializeField] private InputField inputNameText;
     [SerializeField] private Text nameText;
 
+    [Header("Error message")]
+    [SerializeField] private GameObject errorMessagePanel;
+    [SerializeField] private Text errorMessage;
 
+    private Stack<GameObject> menuStack = new Stack<GameObject>();
     private NetworkManager networkManager;
 
     private void Start()
     {
-        //Initialize volume to 50% so people don't go deaf.
-        AudioListener.volume = 0.5f;
-
         //TODO: There should be a better way to get the network manager
         networkManager = FindObjectOfType<NetworkManager>();
 
         nameText.text = PlayerPrefs.GetString("PlayerName");
+        
+        // Create a random id for players so that servers can recognize certain players (this will need to be replaced by an account database if we get that far)
+        int playerId = PlayerPrefs.GetInt("UniqueID", -1);
+        if (playerId == -1)
+        {
+            playerId = (new System.Random(System.Guid.NewGuid().GetHashCode())).Next(0, int.MaxValue);
+            PlayerPrefs.SetInt("UniqueID", playerId);
+        }
+        PhotonNetwork.player.CustomProperties["UniqueID"] = playerId;
 
         //When the player returns from the game to the main menu, the photon is still connected
         if (networkManager.Connected)
             networkManager.Disconnect();
+
+        //Sets the menu stack
+        menuStack.Clear();
+        menuStack.Push(mainMenuPanel);
     }
 
-    public void StartSinglePlayerGame()
+    public void CreateGame(string roomName, RoomOptions roomOptions, bool offlineMode)
     {
-        PhotonNetwork.offlineMode = true;
+        PhotonNetwork.offlineMode = offlineMode;
 
-        //TODO Move all room creation scripts to the NetworkManager
-        RoomOptions roomOptions = new RoomOptions()
-        {
-            IsOpen = false,
-            MaxPlayers = 1,
-            IsVisible = false,
-            CleanupCacheOnLeave = true
-        };
-        CreateGame("Singleplayer Game", roomOptions);
-    }
-
-    public void CreateGame(string roomName, RoomOptions roomOptions)
-    {
-        PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
+        if (!PhotonNetwork.connected)
+            OnPhotonCreateRoomFailed(new object[] { 1, "Not connected to master server!" });
+        else if(!PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default))
+            OnPhotonCreateRoomFailed(new object[] { 2, "Room with the same name already exists!" });
     }
 
     public void ExitGame()
@@ -81,7 +95,7 @@ public class MainMenu : MonoBehaviour {
 
     private void OnPhotonCreateRoomFailed(object[] codeAndMessage)
     {
-        print("Failed to create a room: " + codeAndMessage[1]);
+        ShowErrorMessagePanel(codeAndMessage[0].ToString(), codeAndMessage[1].ToString());
     }
 
     private void OnCreatedRoom()
@@ -94,127 +108,118 @@ public class MainMenu : MonoBehaviour {
 
     #region Panel Navigation
 
-    public void ShowMainMenuPanel(bool state)
+    public void ReturnToPreviousMenu(int levels = 1)
     {
-        mainMenuPanel.SetActive(state);
+        for (int i = levels; i > 0; --i)
+            CloseMenu();
     }
 
-    public void ShowNewGameMenuPanel(bool state)
+    public void ShowNewGameMenuPanel()
     {
-        newGameMenuPanel.SetActive(state);
+        OpenMenu(newGameMenuPanel);
 
-        if (state)
-        {
-            ShowSinglePlayerPanel(true);
-            ShowMainMenuPanel(false);
-        }
+        //First menu shown is singleplayer, so connect in offline mode
+        Connect(offlineMode: true);
+        OpenMenu(loadSingleplayerPanel, disablePrevious: false);
     }
 
-    public void ShowServerBrowserMenuPanel(bool state)
+    public void ShowServerBrowserMenuPanel()
     {
-        serverBrowserMenuPanel.SetActive(state);
+        OpenMenu(serverBrowserMenuPanel);
 
-        if (state)
-        {
-            ShowServerBrowserPanel(true);
-            ShowMainMenuPanel(false);
-        }
+        Connect();
+        OpenMenu(serverBrowserPanel, disablePrevious: false);
     }
 
-    public void ShowOptionsMenuPanel(bool state)
+    public void ShowOptionsMenuPanel()
     {
-        optionsMenuPanel.SetActive(state);
-
-        if (state)
-        {
-            ShowControlsPanel(true);
-            ShowMainMenuPanel(false);
-        }
+        OpenMenu(optionsMenuPanel);
+        OpenMenu(controlsPanel, disablePrevious: false);
     }
 
-    public void ShowSinglePlayerPanel(bool state)
+    public void ShowLoadSingleplayerPanel()
     {
-        singlePlayerPanel.SetActive(state);
-
-        if (state)
-        {
-            Connect(true);
-            ShowHostGamePanel(false);
-        }
+        Connect(offlineMode: true);
+        CloseMenu();
+        OpenMenu(loadSingleplayerPanel, disablePrevious: false);
     }
 
-    public void ShowHostGamePanel(bool state)
+    public void ShowCreateSingleplayerPanel()
     {
-        hostGamePanel.SetActive(state);
-
-        if (state)
-        {
-            Connect();
-            ShowSinglePlayerPanel(false);
-            ShowServerBrowserPanel(false);
-        }
+        CloseMenu();
+        OpenMenu(createSingleplayerPanel, disablePrevious: false);
     }
 
-    public void ShowServerBrowserPanel(bool state)
+    public void ShowLoadMupltiplayerGamePanel()
     {
-        serverBrowserPanel.SetActive(state);
-
-        if (state)
-        {
-            Connect();
-            ShowHostGamePanel(false);
-        }
+        Connect();
+        CloseMenu();
+        OpenMenu(loadMultiplayerPanel, disablePrevious: false);
     }
 
-    public void ShowControlsPanel(bool state)
+    public void ShowCreateMultiplayerPanel()
     {
-        controlsPanel.SetActive(state);
-
-        if (state)
-        {
-            ShowVideoSettingsPanel(false);
-            ShowAudioSettingsPanel(false);
-        }
+        CloseMenu();
+        OpenMenu(createMultiplayerPanel, disablePrevious: false);
     }
 
-    public void ShowVideoSettingsPanel(bool state)
+    public void ShowServerBrowserPanel()
     {
-        videoSettingsPanel.SetActive(state);
-
-        if (state)
-        {
-            ShowControlsPanel(false);
-            ShowAudioSettingsPanel(false);
-        }
+        Connect();
+        CloseMenu();
+        OpenMenu(serverBrowserPanel, disablePrevious: false);
     }
 
-    public void ShowAudioSettingsPanel(bool state)
+    public void ShowControlsPanel()
     {
-        audioSettingsPanel.SetActive(state);
-
-        if (state)
-        {
-            ShowControlsPanel(false);
-            ShowVideoSettingsPanel(false);
-        }
-    }
-   
-    public void ShowExitGamePanel(bool state)
-    {
-        exitGamePanel.SetActive(state);
-        ShowMainMenuPanel(!state);
+        CloseMenu();
+        OpenMenu(controlsPanel, disablePrevious: false);
     }
 
-    public void ShowEnterNamePanel(bool state)
+    public void ShowVideoSettingsPanel()
     {
-        enterNamePanel.SetActive(state);    
-    }    
+        CloseMenu();
+        OpenMenu(videoSettingsPanel, disablePrevious: false);
+    }
+
+    public void ShowAudioSettingsPanel()
+    {
+        CloseMenu();
+        OpenMenu(audioSettingsPanel, disablePrevious: false);
+    }
+
+    public void ShowExitGamePanel()
+    {
+        OpenMenu(exitGamePanel, disablePrevious: false);
+    }
+
+    public void ShowEnterNamePanel()
+    {
+        OpenMenu(enterNamePanel, disablePrevious: false);
+    }
 
     public void DoneEnterName()
     {
+        if(inputNameText.text.EndsWith(" ") || inputNameText.text.Length < 2)
+        {
+            ShowErrorMessagePanel("Well Well Well.", "Your name has to be more than one character and contain no spaces at the end.");
+            return;
+        }
         ChangePlayerName(inputNameText.text);
         UpdatePlayerName();
-        ShowEnterNamePanel(false);
+        CloseMenu();
+    }
+
+    private void ShowErrorMessagePanel(string code, string message)
+    {
+        errorMessage.text = $"[{code}] {message}";
+        OpenMenu(errorMessagePanel, disablePrevious: false);
+        print($"Error: [{code}] { message}");
+    }
+
+    public void CloseErrorMessagePanel()
+    {
+        CloseMenu();
     }
 
     private void UpdatePlayerName()
@@ -222,20 +227,39 @@ public class MainMenu : MonoBehaviour {
         nameText.text = PlayerNetwork.PlayerName;
     }
 
-    public void HideAllPanelsExceptMain()
+    /// <summary>
+    /// Activates a menu and adds it to the menu stack
+    /// </summary>
+    /// <param name="menu">The next window to open</param>
+    /// <param name="disablePrevious">Whether the previous menu needs to be closed</param>
+    private void OpenMenu(GameObject menu, bool disablePrevious = true)
     {
-        ShowNewGameMenuPanel(false);
-        ShowSinglePlayerPanel(false);
-        ShowHostGamePanel(false);
-        ShowServerBrowserMenuPanel(false);
-        ShowServerBrowserPanel(false);
-        ShowOptionsMenuPanel(false);
-        ShowControlsPanel(false);
-        ShowVideoSettingsPanel(false);
-        ShowAudioSettingsPanel(false);
-        ShowExitGamePanel(false);
+        //Check is the current menu is already in the stack to prevent duplicates
+        if (menuStack.Contains(menu))
+            return;
 
-        ShowMainMenuPanel(true);
+        //Retrieves the previous menu and pop and deactivate
+        var prev = menuStack.Peek();
+        if (prev != null && disablePrevious)
+            prev.SetActive(false);
+
+        //Add the next menu to the stack and enable it
+        menuStack.Push(menu);
+        menu.SetActive(true);
+    }
+
+    /// <summary>
+    /// Closes the current menu and pops it from the menu stack
+    /// </summary>
+    /// <param name="enablePrevious">Whether the previous menu needs to be shown or not</param>
+    private void CloseMenu(bool enablePrevious = true)
+    {
+        var current = menuStack.Pop();
+        current.SetActive(false);
+
+        var prev = menuStack.Peek();
+        if (prev != null && enablePrevious)
+            prev.SetActive(true);
     }
 
     /// <summary>
@@ -247,7 +271,7 @@ public class MainMenu : MonoBehaviour {
         //If connected to photon and offline mode is not correct, disconnect and reconnect
         if (!networkManager.Connected || networkManager.OfflineMode != offlineMode)
         {
-            if(networkManager.Connected)
+            if (networkManager.Connected)
                 Disconnect();
             networkManager.SetOfflineMode(offlineMode);
             networkManager.Connect();

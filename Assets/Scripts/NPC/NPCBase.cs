@@ -2,21 +2,31 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class NPCBase : Photon.MonoBehaviour, IInteractable
+public class NPCBase : Photon.MonoBehaviour, IAttackable, IAttacker
 {
-    [SerializeField] private string npcName;
-    [SerializeField] protected BaseStatsData stats;
+    [SerializeField] protected NPCStats stats;
     public GameObject Npc { get; private set; }
     public GameObject Target { get; private set; }
-    public UnityEngine.AI.NavMeshAgent Agent { get; private set; }
     public Vector3 Waypoint { get; private set; }
     public float NearWaypointRange { get; set; } = 4.0f; // The distance this has to be from the agent waypoint to reach it
-    private ItemsToDropComponent itemToDrop;
-
-    private HealthComponent healthComponent;
     private float searchNewTargetCountdown = 1f;
+    public float InteractionDistance { get; set; } = 4.0f;
+
+    //Interfaces
+    public GameObject GameObject => gameObject;
+    public float Damage => Random.Range(stats.minDamage, stats.maxDamage);
+    public string Name => stats.NPCName;
+    public string TooltipText => Name;
+
+    //Components
+    public NavMeshAgent Agent { get; private set; }
+
+    private ItemsToDropComponent itemsToDropComponent;
+    private HealthComponent healthComponent;
     private Animator animator;
+    private PlayerCombatController[] players;
 
     public delegate void OnNPCKilled();
     public OnNPCKilled OnNPCKilledCallback;
@@ -24,12 +34,15 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
     private void Awake()
     {
         Npc = gameObject;
-        Agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        Agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         healthComponent = GetComponent<HealthComponent>();
-        itemToDrop = GetComponent<ItemsToDropComponent>();
+        itemsToDropComponent = GetComponent<ItemsToDropComponent>();
+        players = FindObjectsOfType<PlayerCombatController>();
 
         healthComponent.SetValue(stats.maxHealth);
+        healthComponent.OnDepletedCallback += Die;
+
         Agent.speed = stats.movementSpeed;
 
         foreach (NPCBaseFSM fsm in animator.GetBehaviours<NPCBaseFSM>())
@@ -40,15 +53,15 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (PhotonNetwork.isMasterClient)
+        if (!PhotonNetwork.isMasterClient) return;
+        
+        if(searchNewTargetCountdown < 0 || Target == null)
         {
-            if(searchNewTargetCountdown < 0)
-            {
-                SetClosestOpponent();
-                UpdateDistanceToOpponent();
-            }
-            searchNewTargetCountdown -= Time.deltaTime;
+            SetClosestOpponent();
+            UpdateDistanceToOpponent();
+            searchNewTargetCountdown = .25f;
         }
+        searchNewTargetCountdown -= Time.deltaTime;
     }
 
     /// <summary>
@@ -56,12 +69,15 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
     /// </summary>
     public void SetClosestOpponent()
     {
-        PlayerNameTag[] players = FindObjectsOfType<PlayerNameTag>();
         GameObject closestOpponent = null;
         float distance = Mathf.Infinity;
+        players = FindObjectsOfType<PlayerCombatController>();
 
         for (int i = 0; i < players.Length; i++)
         {
+            if (players[i].IsDead)
+                continue;
+
             float distanceToObject = Vector3.Distance(players[i].transform.position, transform.position);
             if (distanceToObject < distance)
             {
@@ -70,6 +86,8 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
             }
         }
         Target = closestOpponent;
+        if(Target != null)
+            animator.SetBool("hasTarget", true);
     }
 
     /// <summary>
@@ -77,6 +95,7 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
     /// </summary>
     public void SetFleeWaypoint()
     {
+        if (Target == null) return;
         Vector3 heading = Npc.transform.position - Target.transform.position;
         Vector3 direction = heading / heading.magnitude;
         direction.y = 0f;
@@ -96,32 +115,9 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
     /// </summary>
     protected void UpdateDistanceToOpponent()
     {
+        if (Target == null) return;
+
         animator.SetFloat("Distance", Vector3.Distance(transform.position, Target.transform.position));
-    }
-
-    public void TakeDamage(float amount)
-    {
-        healthComponent.DecreaseValue(amount - stats.defense);
-
-        if (healthComponent.IsDepleted())
-        {
-            StartCoroutine(PlayDepletedAnimation());
-        }
-    }
-
-    public bool IsInteractable()
-    {
-        return true;
-    }
-
-    public void Interact(Vector3 invokerPosition)
-    {
-        //For now interaction is done with the TakeDamage method
-    }
-
-    public string TooltipText()
-    {
-        return npcName;
     }
 
     protected IEnumerator PlayDepletedAnimation()
@@ -132,9 +128,19 @@ public class NPCBase : Photon.MonoBehaviour, IInteractable
             yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0).Length + 1f);
         }
 
-        itemToDrop?.SpawnItemsOnDepleted();
+        if (itemsToDropComponent != null) itemsToDropComponent.SpawnItemsOnDepleted();
 
         photonView.RPC("DestroyObject", PhotonTargets.MasterClient);
+    }
+
+    private void Die()
+    {
+        StartCoroutine(PlayDepletedAnimation());
+    }
+
+    public void TakeHit(IAttacker attacker)
+    {
+        healthComponent.DecreaseValue(attacker.Damage - stats.defense);
     }
 
     [PunRPC]

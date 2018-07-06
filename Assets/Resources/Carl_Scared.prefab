@@ -472,6 +472,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114118434449334906
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -498,8 +499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca5057371c02a646af929ddf1533631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcName: Friendly Carl
-  stats: {fileID: 11400000, guid: 5fbd79f1c79aa13469ff4e0524e69184, type: 2}
+  stats: {fileID: 11400000, guid: 6acd0959998bec24084dfb3a419a7e47, type: 2}
 --- !u!114 &114257805978908996
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -523,30 +523,42 @@ MonoBehaviour:
     InterpolateSpeedCurve:
       serializedVersion: 2
       m_Curve:
-      - serializedVersion: 2
+      - serializedVersion: 3
         time: -1
         value: 0
         inSlope: 0
         outSlope: Infinity
         tangentMode: 0
-      - serializedVersion: 2
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
         time: 0
         value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - serializedVersion: 2
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
         time: 1
         value: 1
         inSlope: 0
         outSlope: 1
         tangentMode: 0
-      - serializedVersion: 2
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
         time: 4
         value: 4
         inSlope: 1
         outSlope: 0
         tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -630,11 +642,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc2d846c88c82048a609b8b89eb4b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemsToSpawn:
-  - {fileID: 11400000, guid: 453a7fe97a8cca04a955ee16fef2a3a3, type: 2}
-  ItemCountPerItem: 02000000
-  minRadius: -2
-  maxRadius: 2
+  itemsToSpawn:
+  - item: {fileID: 11400000, guid: d9d8376303058044aaf8aba1b193fcdb, type: 2}
+    amount: 2
+  spawnRadius: 2
 --- !u!135 &135531842032238686
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -660,6 +671,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 8bf54b3791c828243a9fd66b5b8f9b4b, type: 3}
   m_StaticBatchInfo:

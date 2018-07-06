@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public enum ToolType { Axe, Pickaxe }
+public enum ToolType { Nothing, Axe, Pickaxe, Hammer }
 
 [CreateAssetMenu(fileName = "New Tool", menuName = "Items/Tool")]
 public class ToolData : ScriptableItemData
@@ -8,7 +8,7 @@ public class ToolData : ScriptableItemData
     [SerializeField] private ToolType toolType;
     public ToolType ToolType { get { return toolType; } }
 
-    public override ItemBase InitializeItem()
+    public override Item InitializeItem()
     {
         return new Tool(this);
     }

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80064babb00250949a949aa52544650b, type: 3}
+  m_Name: Hammer
+  m_EditorClassIdentifier: 
+  id: tool_hammer_stone
+  itemName: Hammer
+  sprite: {fileID: 21300000, guid: 74974f1ffcdb2374ca36d4c082d13ff8, type: 3}
+  model: {fileID: 100000, guid: 66eff06355d50a644bcb60fa8d374d58, type: 3}
+  description: Used to remove buildables
+  burningTime: 0
+  meltingResult: {fileID: 0}
+  toolType: 3

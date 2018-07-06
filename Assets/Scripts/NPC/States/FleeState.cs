@@ -8,19 +8,20 @@ public class FleeState : NPCBaseFSM {
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (PhotonNetwork.isMasterClient)
+        if (PhotonNetwork.isMasterClient && NPCScript.Target != null)
         {
             if (Vector3.Distance(NPCScript.Waypoint, NPCScript.Npc.transform.position) < NPCScript.NearWaypointRange || Vector3.Distance(NPCScript.Target.transform.position, NPCScript.Npc.transform.position) < fleeRange)
             {
                 NPCScript.SetFleeWaypoint();
             }
-            NPCScript.Agent.SetDestination(NPCScript.Waypoint);
+            if (NPCScript.Agent.isOnNavMesh)
+                NPCScript.Agent.SetDestination(NPCScript.Waypoint);
         }
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (PhotonNetwork.isMasterClient)
+        if (PhotonNetwork.isMasterClient && NPCScript.Agent.isOnNavMesh)
         {
             NPCScript.Agent.SetDestination(NPCScript.Npc.transform.position);
         }

@@ -5,46 +5,62 @@ using System.Linq;
 
 public class ItemFactory : MonoBehaviour {
 
-    private static ScriptableItemData[] itemLookUpTable;
+    private static Dictionary<string, ScriptableItemData> itemLookupTable;
     private static PhotonView photonView;
-    public ItemBase test;
+    [SerializeField]private GameObject itemEffect;
 
     private void Awake()
     {
         photonView = GetComponent<PhotonView>();
 
-        itemLookUpTable = Resources.LoadAll<ScriptableItemData>("Items");        
+        itemLookupTable = (Resources.LoadAll<ScriptableItemData>("Items"))?.ToDictionary(x => x.Id, x => x) ?? new Dictionary<string, ScriptableItemData>();        
     }
 
-    public static ItemBase CreateNewItem(int itemId, int stackSize = 1)
+    public static Item CreateNewItem(string itemId, int stackSize = 1)
     {
-        var itemData = itemLookUpTable.First(x => x.Id == itemId);
+        if (itemLookupTable.ContainsKey(itemId))
+        {
+            var itemData = itemLookupTable[itemId];
 
-        ItemBase item = itemData.InitializeItem();
-        item.StackSize = stackSize;
-        
-        return item;
+            Item item = itemData.InitializeItem();
+            item.StackSize = stackSize;
+
+            return item;
+        }
+        else
+        {
+            Debug.LogError($"Specificied ItemId '{itemId}' does not exist!");
+            return null;
+        }
     }
 
-    public static void CreateWorldObject(Vector3 position, int itemId, int stackSize = 1, Quaternion quaternion = new Quaternion())
+    public static void CreateWorldObject(Vector3 position, string itemId, int stackSize = 1, Quaternion quaternion = new Quaternion())
     {
         var photonId = PhotonNetwork.AllocateViewID();
-        photonView.RPC("SpawnItemOnNetwork", PhotonTargets.AllBuffered, position, photonId, itemId, quaternion, stackSize);
+        photonView.RPC(nameof(SpawnItemOnNetwork), PhotonTargets.AllBuffered, position, photonId, itemId, quaternion, stackSize);
     }
 
+    public static GameObject GetModel(string itemId) => itemLookupTable[itemId]?.Model;
+
     [PunRPC]
-    private void SpawnItemOnNetwork(Vector3 position, int photonId, int itemId, Quaternion quaternion = new Quaternion(), int stackSize = 1)
+    private void SpawnItemOnNetwork(Vector3 position, int photonId, string itemId, Quaternion quaternion = new Quaternion(), int stackSize = 1)
     {
         GameObject go = Resources.Load<GameObject>("Item");
 
-        ItemBase item = CreateNewItem(itemId, stackSize);
+        Item item = CreateNewItem(itemId, stackSize);
 
         //Get the mesh and materials from the referenced model.
         var itemMesh = item.Model.GetComponent<MeshFilter>().sharedMesh;
 
         var gameObj = Instantiate(go, position, quaternion);
-        gameObj.GetComponent<ItemWorldObject>().item = item;
         gameObj.name = item.Name;
+        gameObj.transform.SetParent(WorldItemManager.Instance.transform);
+
+        var itemEffectObj = Instantiate(itemEffect, position, quaternion);
+        itemEffectObj.transform.SetParent(gameObj.transform);
+
+        ItemWorldObject itemWorldObject = gameObj.GetComponent<ItemWorldObject>();
+        itemWorldObject.Item = item;
 
         //Assign the mesh and materials to the new gameObject.
         gameObj.GetComponent<MeshRenderer>().sharedMaterials = item.Model.GetComponent<MeshRenderer>().sharedMaterials;
@@ -57,5 +73,7 @@ public class ItemFactory : MonoBehaviour {
 
         PhotonView[] nViews = gameObj.GetComponentsInChildren<PhotonView>();
         nViews[0].viewID = photonId;
+
+        WorldItemManager.Instance.AddItem(photonId);
     }
 }

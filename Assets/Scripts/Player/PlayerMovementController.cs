@@ -1,31 +1,53 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
-[RequireComponent(typeof(PlayerCameraController))]
-[RequireComponent(typeof(StatsComponent))]
+[RequireComponent(typeof(PlayerStatsComponent), typeof(PlayerCameraController))]
 public class PlayerMovementController : Photon.MonoBehaviour
 {
     private Rigidbody rigidbodyComponent;
     private Animator animator;
-    private UnityEngine.AI.NavMeshAgent agent;
+    private NavMeshAgent agent;
     private bool interruptedPickup = false;
+    private float interactionTimeout = 0f;
+    private float pathUpdateTimeout = 0f;
+    private bool isMoving = false;
+    public bool IsFrozen = false;
 
     [SerializeField] private LayerMask rotationLayerMask;
     [SerializeField] private LayerMask waterLayerMask;
-    [SerializeField] private float mouseDeadZoneFromPlayer;
 
     private PlayerCameraController cameraController = null;
-    private StatsComponent stats;
+    private PlayerStatsComponent stats;
+    private PlayerCombatController combatController;
+    private Inventory inventory;
 
-    public GameObject ItemToPickup { get; set; }
+    public GameObject CurrentInteraction { get; set; }
+
+    public void StartInteraction(GameObject interactable) =>
+        CurrentInteraction = interactable;
+
+    /// <summary>
+    /// Returns true if the player has no more interaction timeout
+    /// </summary>
+    public bool CanInteract => interactionTimeout <= 0;
+
+    /// <summary>
+    /// Adds delay to the timeout which the player needs to wait before it can interact with certain things
+    /// </summary>
+    /// <param name="timeout"></param>
+    public void AddInteractionTimeout(float timeout) =>
+        interactionTimeout += timeout;
 
     private void Awake()
     {
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
         rigidbodyComponent = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cameraController = GetComponent<PlayerCameraController>();
-        stats = GetComponent<StatsComponent>();
+        stats = GetComponent<PlayerStatsComponent>();
+        combatController = GetComponent<PlayerCombatController>();
+        inventory = GetComponent<Inventory>();
     }
 
     private void Start()
@@ -33,13 +55,9 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (photonView.isMine)
         {
             if (cameraController != null)
-            {
                 cameraController.StartFollowing();
-            }
             else
-            {
                 Debug.LogError("Missing CameraController Component on playerPrefab.");
-            }
         }
     }
 
@@ -48,17 +66,36 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (!photonView.isMine)
             return;
 
-        RotatePlayer();
+        if (IsFrozen)
+        {
+            if (!isMoving && CurrentInteraction != null)
+                Interact();
+            else if (isMoving)
+                StopInteraction();
+            return;
+        }
+
+        if (interactionTimeout > 0)
+            interactionTimeout -= Time.deltaTime;
+
+        if (pathUpdateTimeout > 0)
+            pathUpdateTimeout -= Time.deltaTime;
+
+        if (!isMoving)
+            RotatePlayer();
         
-        if (ItemToPickup == null || interruptedPickup)
-            StopAutoWalkToItem();
+        if (CurrentInteraction == null || interruptedPickup)
+            StopInteraction();
         else
-            AutoWalkToItem();
+            HandleInteraction();
     }
 
     private void FixedUpdate()
     {
         if (!photonView.isMine)
+            return;
+
+        if (IsFrozen)
             return;
 
         MovePlayer();
@@ -77,11 +114,7 @@ public class PlayerMovementController : Photon.MonoBehaviour
         if (Physics.Raycast(ray, out hit, 1000f, rotationLayerMask.value | waterLayerMask.value))
         {
             Vector3 lookPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
-            if (Vector3.Distance(transform.position, lookPos) > mouseDeadZoneFromPlayer)
-            {
-                transform.LookAt(lookPos);
-            }
+            transform.LookAt(lookPos);
         }
     }
 
@@ -94,32 +127,72 @@ public class PlayerMovementController : Photon.MonoBehaviour
         cameraDirectionForward.y = 0;
         Vector3 cameraDirectionRight = Quaternion.Euler(0, 90, 0) * cameraDirectionForward;
 
-        Vector3 movementInput = (cameraDirectionForward * Input.GetAxisRaw("Vertical") + cameraDirectionRight * Input.GetAxisRaw("Horizontal"));
+        Vector3 movementInput = (cameraDirectionForward * InputManager.GetAxisRaw("Vertical") + cameraDirectionRight * InputManager.GetAxisRaw("Horizontal"));
 
         if (movementInput != Vector3.zero)
         {
             interruptedPickup = true;
             rigidbodyComponent.AddForce(movementInput.normalized * stats.MovementSpeed);
+            transform.LookAt(transform.position + movementInput.normalized);
 
             animator.SetBool("IsRunning", true);
+            isMoving = true;
         }
         else
-            animator.SetBool("IsRunning", false);
+        {
+            if (CurrentInteraction == null)
+            {
+                animator.SetBool("IsRunning", false);
+                isMoving = false;
+            }
+        }
     }
 
     /// <summary>
     /// When there is an item to pickup this method moves to the item and checks if it needs to interact with the item.
     /// As soon as the player is near the item it will pick up the item and reset the agent.
     /// </summary>
-    private void AutoWalkToItem()
+    private void HandleInteraction()
     {
-        if (!agent.hasPath)
-            agent.SetDestination(ItemToPickup.transform.position);
+        var interactable = CurrentInteraction.GetComponent<IInteractable>();
+        var enemy = CurrentInteraction.GetComponent<IAttackable>();
 
-        if (Vector3.Distance(ItemToPickup.transform.position, transform.position) < ItemToPickup.GetComponent<ItemWorldObject>().pickupDistance)
+        if (interactable != null && interactable.InRange(transform.position))
+            Interact();
+        else if (enemy != null && Vector3.Distance(transform.position, enemy.GameObject.transform.position) < 3)
+            Interact();
+        else
         {
-            ItemToPickup.GetComponent<ItemWorldObject>().Interact(transform.position);
-            StopAutoWalkToItem();
+            if ((!agent.hasPath || pathUpdateTimeout <= 0) && agent.isOnNavMesh)
+            {
+                agent.SetDestination(CurrentInteraction.transform.position);
+                pathUpdateTimeout = 0.1f;
+                isMoving = true;
+                animator.SetBool("IsRunning", true);
+            }
+        }
+    }
+
+    public void Interact()
+    {
+        var interactable = CurrentInteraction.GetComponent<IInteractable>();
+        var enemy = CurrentInteraction.GetComponent<IAttackable>();
+        var combatController = GetComponent<PlayerCombatController>();
+        
+        if (interactable != null && interactable.InRange(transform.position) )
+        {
+            if(CurrentInteraction.GetComponent<WorldResource>() != null)
+                combatController.TriggerHitAnimation();
+            
+            interactable.Interact(gameObject, inventory.inventoryItems[inventory.hotBarSelection]);
+            StopInteraction();
+        }
+        else if (enemy != null && Vector3.Distance(transform.position, enemy.GameObject.transform.position) < 3 && CanInteract)
+        {
+            combatController.TriggerHitAnimation();
+            enemy.TakeHit(combatController);
+            AddInteractionTimeout(combatController.TimeBetweenAttacks);
+            StopInteraction();
         }
         else
             animator.SetBool("IsRunning", true);
@@ -128,12 +201,15 @@ public class PlayerMovementController : Photon.MonoBehaviour
     /// <summary>
     /// Interrupts the agent and clears the ItemToPickup.
     /// </summary>
-    private void StopAutoWalkToItem()
+    private void StopInteraction()
     {
-        ItemToPickup = null;
+        CurrentInteraction = null;
         interruptedPickup = false;
 
         if (agent.hasPath)
+        {
+            isMoving = false;
             agent.ResetPath();
+        }
     }
 }

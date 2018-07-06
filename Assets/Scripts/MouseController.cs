@@ -5,17 +5,18 @@ using UnityEngine.EventSystems;
 
 public class MouseController : MonoBehaviour
 {
-    [SerializeField] private Camera playerCamera;
-
     private Ray ray;
     private RaycastHit hit;
     private bool isMine;
-    private float interactionTimeout;
+
+    private Camera playerCamera;
+    private PlayerMovementController playerMovementController;
 
     private void Start()
     {
         playerCamera = GetComponent<PlayerCameraController>().CameraReference;
         isMine = GetComponent<PhotonView>().isMine;
+        playerMovementController = PlayerNetwork.LocalPlayer.GetComponent<PlayerMovementController>();
     }
 
     private void Update()
@@ -23,74 +24,39 @@ public class MouseController : MonoBehaviour
         if (!isMine)
             return;
 
-        if (interactionTimeout > 0)
-            interactionTimeout -= Time.deltaTime;
-
         ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity) && !EventSystem.current.IsPointerOverGameObject())
-        {
-            var interactable = hit.transform.GetComponent<IInteractable>();
-            if (interactable == null)
-            {
-                Tooltip.Instance.Hide();
-            }
-            else if(interactable != null)
-            {
-                if (Input.GetMouseButtonDown(0) && interactable.IsInteractable())
-                {
-                    if (interactable.GetType() == typeof(WorldResource))
-                        InteractWithWorldResource(interactable, hit.transform);
-                    else if (interactable.GetType() == typeof(EnemyNPC) || interactable.GetType() == typeof(FriendlyNPC))
-                        AttackEnemy(interactable, hit.transform);
-                    else
-                        interactable.Interact(gameObject.transform.position);
-                }
+        if (!Physics.Raycast(ray, out hit, Mathf.Infinity) || EventSystem.current.IsPointerOverGameObject())
+            return;
 
-                if (interactable.TooltipText() != string.Empty)
-                {
-                    //This show will not dissapear when hovering from worlditem to a UI element. {BUG}
-                    Tooltip.Instance.Show(interactable.TooltipText());
-                }                
-            }
-        }
+        var tooltip = hit.transform.GetComponent<ITooltip>();
+        if (tooltip != null && hit.transform != transform)
+            Tooltip.Instance.Show(tooltip.TooltipText);
+        else
+            Tooltip.Instance.Hide();
+
+        HandleInteractables();
+        HandleEnemies();
     }
 
-    private void InteractWithWorldResource(IInteractable interactable, Transform target)
+    private void HandleInteractables()
     {
-        if (((WorldResource)interactable).interactDistance > Vector3.Distance(transform.position, target.position))
-        {
-            if (interactionTimeout <= 0)
-            {
-                WorldResource resource = interactable as WorldResource;
-                EquipmentManager equipmentManager = GetComponent<EquipmentManager>();
-                if (equipmentManager.HasToolEquipped(resource.requiredToolToHarvest))
-                {
-                    interactionTimeout = 2;
-                    interactable.Interact(transform.position);
-                }
-                else
-                {
-                    WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Wrong tool", 1), true);
-                }
-            }
-            else
-            {
-                WorldNotificationsManager.Instance.ShowNotification(new WorldNotificationArgs(transform.position, "Not ready yet", 1), true);
-            }
-        }
+        var interactable = hit.transform.GetComponent<IInteractable>();
+        if (interactable == null)
+            return;
+
+        if (Input.GetMouseButtonDown(0) && interactable.IsInteractable)
+            playerMovementController.StartInteraction(interactable.GameObject);
     }
 
-    private void AttackEnemy(IInteractable interactable, Transform target)
+    private void HandleEnemies()
     {
-        if (Vector3.Distance(transform.position, target.position) < 3)
+        var enemy = hit.transform.GetComponent<IAttackable>();
+        if (enemy == null || hit.transform == transform)
+            return;
+
+        if (Input.GetMouseButtonDown(0))
         {
-            if (interactionTimeout <= 0)
-            {
-                StatsComponent stats = GetComponent<StatsComponent>();
-                NPCBase enemy = interactable as NPCBase;
-                enemy.TakeDamage(UnityEngine.Random.Range(stats.MinDamage, stats.MaxDamage));
-                interactionTimeout = stats.TimeBetweenAttacks;
-            }
+            playerMovementController.StartInteraction(enemy.GameObject);      
         }
     }
 }

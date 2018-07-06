@@ -8,14 +8,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d41d5a3e21dc2644e8cc66a7f7afdc88, type: 3}
+  m_Script: {fileID: 0}
   m_Name: Meat
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConsumableItemData
+  id: pickupitem_meat_normal
   itemName: Meat
-  sprite: {fileID: 21300000, guid: fe9e17c7b51bc6a43bf9853dd129cb7c, type: 3}
-  model: {fileID: 100000, guid: e143afe216cca7c4396116f3dbcc8a01, type: 3}
-  description: Meat
+  sprite: {fileID: 21300000, guid: f0c9be7a0a3c3354aa89feaee14a4d15, type: 3}
+  model: {fileID: 100000, guid: 928231d188c47374dbb4568aed9f8626, type: 3}
+  description: I should cook this.
+  burningTime: 0
+  meltingResult: {fileID: 0}
   isConsumable: 1
   onConsumedEffects:
+  - {fileID: 11400000, guid: 341c87eb0d861a84d9b199ffd612cbae, type: 2}
   - {fileID: 11400000, guid: ff3eb3dc58ddffb4991422bd58b0731a, type: 2}
-  id: 150

@@ -1,43 +1,38 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Utilities;
+
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(PhotonView))]
 public class ItemWorldObject : Photon.MonoBehaviour, IInteractable
 {
-    public ItemBase item;
+    public Item Item;
     public float pickupDistance = 1f;
-
-    [PunRPC]
-    public void DestroyWorldObject()
-    {
-        Destroy(gameObject);
-    }
-
+    
     #region IInteractable Implementation
 
-    public bool IsInteractable()
-    {
-        return true;
-    }
+    public bool IsInteractable => true;
+    public GameObject GameObject => gameObject;
+    public bool InRange(Vector3 invokerPosition) => Vector3.Distance(invokerPosition, transform.position) < pickupDistance;
 
-    public void Interact(Vector3 invokerPosition)
+    public void Interact(GameObject invoker, Item interactionItem)
     {
-        if (Vector3.Distance(transform.position, invokerPosition) > pickupDistance)
-        {
-            PlayerNetwork.PlayerObject.GetComponent<PlayerMovementController>().ItemToPickup = this.gameObject;
+        if (!InRange(invoker.transform.position))
             return;
+
+        Inventory inventory = PlayerNetwork.LocalPlayer.GetComponent<Inventory>();
+
+        // Check if inventory is not full
+        if (inventory.inventoryItems.FirstNullIndexAt().HasValue)
+        {
+            inventory.AddItemById(Item.Id, Item.StackSize);
+            FeedUI.Instance.AddFeedItem($"Picked up '{Item.Name}'", Item.Sprite, FeedItem.Type.Succes);
+            WorldItemManager.Instance.RemoveItem(photonView.viewID);
         }
-
-        PlayerNetwork.PlayerObject.GetComponent<Inventory>().AddItemById(item.Id, item.StackSize);
-        photonView.RPC(nameof(DestroyWorldObject), PhotonTargets.AllBuffered);
+        else
+            FeedUI.Instance.AddFeedItem("Inventory full", feedType: FeedItem.Type.Fail);
     }
 
-    public string TooltipText()
-    {
-        return $"{item.Name} ({item.StackSize})";
-    }
+    public string TooltipText => $"{Item.Name} ({Item.StackSize})";
 
     #endregion //IInteractable Implementation
 }
