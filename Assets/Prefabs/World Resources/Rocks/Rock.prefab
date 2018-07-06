@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Rock
   requiredToolToHarvest: 2
-  interactDistance: 2
+  interactDistance: 3
   attackSound: 1
   spawnOnDepleted: {fileID: 0}
   maxHealth: 300

@@ -10,7 +10,7 @@ public class HealthComponent : PropertyComponentBase
         if (amount <= 0 || value <= 0)
             return;
 
-        photonView.RPC("IncreaseHealthValue", PhotonTargets.AllBuffered, amount);
+        photonView.RPC("IncreaseHealthValue", PhotonTargets.All, amount);
     }
 
     public override void DecreaseValue(float amount)
@@ -18,7 +18,7 @@ public class HealthComponent : PropertyComponentBase
         if (amount <= 0 || value <= 0)
             return;
 
-        photonView.RPC("DecreaseHealthValue", PhotonTargets.AllBuffered, amount);
+        photonView.RPC("DecreaseHealthValue", PhotonTargets.All, amount);
     }
 
     protected override void ValueChangedNotification(float previousValue, float currentValue)
@@ -52,7 +52,7 @@ public class HealthComponent : PropertyComponentBase
     private void DecreaseHealthValue(float amount)
     {
         Value -= amount;
-        if (Value <= 0)
+        if (Value <= 0 && photonView.isMine)
             OnDepletedCallback?.Invoke();
     }
 }

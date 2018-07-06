@@ -5,6 +5,12 @@ using Photon;
 public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 {
     [SerializeField] private GameObject rightHandBone;
+
+    [SerializeField] private GameObject hammer;
+    [SerializeField] private GameObject sword;
+    [SerializeField] private GameObject pickaxe;
+    [SerializeField] private GameObject axe;
+
     private GameObject spawnedHoldingObject;
     
     public string Name => photonView.owner.NickName;
@@ -40,8 +46,8 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
             GameInterfaceManager.Instance.ToggleGameInterface(GameInterface.DeathScreen);
             GetComponent<Inventory>().DropAllItems();
             GetComponent<PlayerMovementController>().enabled = false;
+            photonView.RPC(nameof(KillPlayer), PhotonTargets.All, Name);
         }
-        photonView.RPC(nameof(KillPlayer), PhotonTargets.All, Name, lastAttacker == null ? "hunger" : lastAttacker.Name);
     }
 
     public void TakeHit(IAttacker attacker)
@@ -52,16 +58,16 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 
     public void TogglePlayerModel(bool showModel)
     {
-        photonView.RPC(nameof(RPC_TogglePlayerModel), PhotonTargets.AllBuffered, showModel);
+        photonView.RPC(nameof(RPC_TogglePlayerModel), PhotonTargets.All, showModel);
     }
 
     public void RespawnPlayer()
     {
         Vector3 position = new Vector3(UnityEngine.Random.Range(-5f, 5f), 0.2f, UnityEngine.Random.Range(0.5f, 5f));
         transform.position = position;
-        GetComponent<HealthComponent>().SetValue(100);
-        GetComponent<HungerComponent>().SetValue(100);
-        GetComponent<PhotonView>().RPC(nameof(RPC_RespawnPlayer), PhotonTargets.All);
+        healthComponent.SetValue(100);
+        GetComponent<HungerComponent>()?.SetValue(100);
+        photonView.RPC(nameof(RPC_RespawnPlayer), PhotonTargets.All);
     }
 
     public void SwitchHoldingItem(string itemId)
@@ -71,14 +77,35 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
 
         if (itemId == null)
             return;
-        
-        var model = ItemFactory.GetModel(itemId);
-        if (model == null) return;
 
-        spawnedHoldingObject = Instantiate(model, rightHandBone.transform);
-        
-        if(photonView.isMine)
+        if (itemId.Substring(0, 4) == "tool")
+        {
+            switch (itemId)
+            {
+                case "tool_axe_stone":
+                    spawnedHoldingObject = Instantiate(axe, rightHandBone.transform);
+                    break;
+                case "tool_hammer_stone":
+                    spawnedHoldingObject = Instantiate(hammer, rightHandBone.transform);
+                    break;
+                case "tool_pickaxe_iron":
+                    spawnedHoldingObject = Instantiate(pickaxe, rightHandBone.transform);
+                    break;
+                case "tool_sword_iron":
+                    spawnedHoldingObject = Instantiate(sword, rightHandBone.transform);
+                    break;
+            }
+        }
+        else
+        {
+            var model = ItemFactory.GetModel(itemId);
+            if (model == null) return;
+
+            spawnedHoldingObject = Instantiate(model, rightHandBone.transform);
+        }
+        if (photonView.isMine)
             photonView.RPC("RPC_SwitchItem", PhotonTargets.All, itemId);
+
     }
 
     private void DoHitAnimation()
@@ -117,14 +144,16 @@ public class PlayerCombatController : PunBehaviour, IAttackable, IAttacker
     private void RPC_RespawnPlayer()
     {
         IsDead = false;
-        TogglePlayerModel(true);
+
+        RPC_TogglePlayerModel(true);
     }
 
     [PunRPC]
-    private void KillPlayer(string playerName, string killerName)
+    private void KillPlayer(string playerName)
     {
-        CustomInRoomChat.Instance.AddLine($"{playerName} got killed by {killerName}");
+        CustomInRoomChat.Instance.AddLine($"{playerName} died");
         IsDead = true;
-        TogglePlayerModel(false);
+
+        RPC_TogglePlayerModel(false);
     }
 }
